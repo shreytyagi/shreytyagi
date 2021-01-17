@@ -37,37 +37,41 @@
 			.center{
 				text-align: center;
 			}
+			#bottom { 
+                position:absolute;                  
+                bottom:3%;                          
+                right:3%; 
+            } 
 		</style>
 		<script>
 			function generate2()
 			{
 				x=(Math.pow((((document.getElementById("100").value)/(document.getElementById("101").value))*((document.getElementById("102").value)/(document.getElementById("103").value))),0.5));
 				if (x>(16/9)){
-					document.getElementById("104").innerHTML="1920 x "+(2 * Math.round((1920/x) / 2));
+					document.getElementById("104").innerHTML="1920 x "+(2 * Math.round((1920/x) / 2))+"  ("+(Math.round( x * 100 + Number.EPSILON ) / 100).toFixed(2)+" : 1)";
 				}
 				else{
-					document.getElementById("104").innerHTML=(2 * Math.round((1080*x) / 2))+" x 1080";
+					document.getElementById("104").innerHTML=(2 * Math.round((1080*x) / 2))+" x 1080  ("+(Math.round( x * 100 + Number.EPSILON ) / 100).toFixed(2)+" : 1)";
 				}
-				
 			}
 		</script>
 
 	</head>
 	<body>
-		<h1>Median Aspect Ratio Calculator</h1><h2>By Shrey Tyagi</h2><hr>
+		<h1>Median Aspect Ratio Calculator</h1><hr>
 			<table rules="all">
 				<tr>
 					<td>
 						1st Aspect Ratio: 
 					</td>
 					<td>
-						<input type="number" id="100" class="right">
+						<input type="number" id="100" class="right" value="2048">
 					</td>
 					<td class="center">
 						<b>:</b>
 					</td>
 					<td>
-						<input type="number" id="101">
+						<input type="number" id="101" value="858">
 					</td>
 				</tr>
 				<tr>
@@ -75,13 +79,13 @@
 						2nd Aspect Ratio: 
 					</td>
 					<td>
-						<input type="number" id="102" class="right">
+						<input type="number" id="102" class="right" value="1920">
 					</td>
 					<td class="center">
 						<b>:</b>
 					</td>
 					<td>
-						<input type="number" id="103">
+						<input type="number" id="103" value="1080">
 					</td>
 				</tr>
 				<tr>
@@ -94,5 +98,6 @@
 				</tr>
 			</table>
 			<br><button type="button" onClick="generate2()">Calculate</button>
+			<h2 id="bottom">By Shrey Tyagi</h2>
 		</body>
 </html>
