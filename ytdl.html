@@ -32,7 +32,270 @@
 		<script>
 			function generate()
 			{
-				document.getElementById("2").innerHTML=".\\youtube-dl.exe --user-agent \"\" URL "+document.getElementById("1").value+" -f "+document.getElementById("10").value+document.getElementById("11").value+document.getElementById("12").value+document.getElementById("20").value;
+				audiocodec=document.getElementById("51").value;
+				audioquality=document.getElementById("52").value;
+				audiochannels=document.getElementById("53").value;
+
+				if(audiocodec==1){
+					if(audiochannels==1){
+						audionumber="???";
+						window.alert("YouTube doesn't support 5.1 Audio in \"Opus\" codec, please select \"AAC\"");
+					}
+					else if(audiochannels==2){
+						if(audioquality==2){
+							audionumber="251";
+						}
+						else if(audioquality==3){
+							audionumber="250";
+						}
+						else if(audioquality==4){
+							audionumber="249";
+						}
+					}
+				}
+				if(audiocodec==2){
+					if(audiochannels==1){
+						if(audioquality==2){
+							audionumber="258";
+						}
+						else if(audioquality==3){
+							audionumber="256";
+						}
+						else if(audioquality==4){
+							audionumber="???";
+							window.alert("YouTube doesn't support 5.1 Audio in \"Very Low\" quality, please select \"Medium\" or \"Low\"")
+						}
+					}
+					else if(audiochannels==2){
+						if(audioquality==2){
+							audionumber="140";
+						}
+						else if(audioquality==3){
+							audionumber="???";
+							window.alert("YouTube doesn't support 2.0 Audio in \"Low\" quality, please select \"Medium\"")
+						}
+						else if(audioquality==4){
+							audionumber="???";
+							window.alert("YouTube doesn't support 2.0 Audio in \"Very Low\" quality, please select \"Medium\"")
+						}
+					}
+				}
+				
+				videocodec=document.getElementById("41").value;
+				videoquality=document.getElementById("42").value;
+				videocolor=document.getElementById("43").value;
+				videoframerate=document.getElementById("44").value;
+				videotype=document.getElementById("45").value;
+				videolink=document.getElementById("1").value;
+
+				if(videotype==1){
+					if(videocodec==3){
+						if(videocolor==1){
+							videonumber="???";
+							window.alert("YouTube doesn't support HDR in \"AVC\" Codec, please select \"VP9\" or \"AV1\"");
+						}
+						else if(videocolor==2){
+							if(videoquality==1){
+								if(videoframerate==1){
+									videonumber="???";
+									window.alert("YouTube doesn't support HFR with SDR at \"144p\" quality in \"AVC\" codec, please select \"VP9\" codec with \"HDR\" enabled or select the \"AV1\" codec");
+								}
+								else if(videoframerate==2){
+									videonumber="160";
+								}
+							}
+							else if(videoquality==2){
+								if(videoframerate==1){
+									videonumber="???";
+									window.alert("YouTube doesn't support HFR with SDR at \"240p\" quality in \"AVC\" codec, please select \"VP9\" codec with \"HDR\" enabled or select the \"AV1\" codec");
+								}
+								else if(videoframerate==2){
+									videonumber="???";
+								}
+							}
+							else if(videoquality==3){
+								if(videoframerate==1){
+									videonumber="???";
+									window.alert("YouTube doesn't support HFR with SDR at \"360p\" quality in \"AVC\" codec, please select \"VP9\" codec with \"HDR\" enabled or select the \"AV1\" codec");
+								}
+								else if(videoframerate==2){
+									videonumber="134";
+								}
+							}
+							else if(videoquality==4){
+								if(videoframerate==1){
+									videonumber="???";
+									window.alert("YouTube doesn't support HFR with SDR at \"480p\" quality in \"AVC\" codec, please select \"VP9\" codec with \"HDR\" enabled or select the \"AV1\" codec");
+								}
+								else if(videoframerate==2){
+									videonumber="135";
+								}
+							}
+							else if(videoquality==5){
+								if(videoframerate==1){
+									videonumber="298";
+								}
+								else if(videoframerate==2){
+									videonumber="136";
+								}
+							}
+							else if(videoquality==6){
+								if(videoframerate==1){
+									videonumber="299";
+								}
+								else if(videoframerate==2){
+									videonumber="137";
+								}
+							}
+							else if(videoquality==7){
+								videonumber="???";
+								window.alert("YouTube doesn't support \"QHD 1440p\" quality in \"AVC\" codec, please select \"VP9\" or \"AV1\" codec");
+							}
+							else if(videoquality==8){
+								videonumber="???";
+								window.alert("YouTube doesn't support \"4K 2160p\" quality in \"AVC\" codec, please select \"VP9\" or \"AV1\" codec");
+							}
+							else if(videoquality==9){
+								videonumber="???";
+								window.alert("YouTube doesn't support \"8K 4320p\" quality in \"AVC\" codec, please select \"VP9\" or \"AV1\" codec");
+							}
+							else{
+								videonumber="???";
+							}
+						}
+					}
+					else if(videocodec==2){
+						if(videoquality==1){
+							if(videocolor==1){
+								videonumber="330";
+							}
+							else if(videocolor==2){
+								videonumber="278";
+							}
+						}
+						if(videoquality==2){
+							if(videocolor==1){
+								videonumber="331";
+							}
+							else if(videocolor==2){
+								videonumber="242";
+							}
+						}
+						if(videoquality==3){
+							if(videocolor==1){
+								videonumber="332";
+							}
+							else if(videocolor==2){
+								videonumber="243";
+							}
+						}
+						if(videoquality==4){
+							if(videocolor==1){
+								videonumber="333";
+							}
+							else if(videocolor==2){
+								videonumber="244";
+							}
+						}
+						if(videoquality==5){
+							if(videocolor==1){
+								videonumber="334";
+							}
+							else if(videocolor==2){
+								if(videoframerate=="1"){
+									videonumber="302";
+								}
+								else if(videoframerate=="2"){
+									videonumber="247";
+								}
+							}
+						}
+						if(videoquality==6){
+							if(videocolor==1){
+								videonumber="334";
+							}
+							else if(videocolor==2){
+								if(videoframerate=="1"){
+									videonumber="303";
+								}
+								else if(videoframerate=="2"){
+									videonumber="248";
+								}
+							}
+						}
+						if(videoquality==7){
+							if(videocolor==1){
+								videonumber="334";
+							}
+							else if(videocolor==2){
+								if(videoframerate=="1"){
+									videonumber="308";
+								}
+								else if(videoframerate=="2"){
+									videonumber="271";
+								}
+							}
+						}
+						if(videoquality==8){
+							if(videocolor==1){
+								videonumber="334";
+							}
+							else if(videocolor==2){
+								if(videoframerate=="1"){
+									videonumber="315";
+								}
+								else if(videoframerate=="2"){
+									videonumber="313";
+								}
+							}
+						}
+						if(videoquality==9){
+							if(videocolor==1){
+								videonumber="334";
+							}
+							else if(videocolor==2){
+								videonumber="272";
+							}
+						}
+					}
+					else if(videocodec==1){
+						if(videoquality==1){
+							videonumber="394";
+						}
+						if(videoquality==2){
+							videonumber="395";
+						}
+						if(videoquality==3){
+							videonumber="396";
+						}
+						if(videoquality==4){
+							videonumber="397";
+						}
+						if(videoquality==5){
+							videonumber="398";
+						}
+						if(videoquality==6){
+							videonumber="399";
+						}
+						if(videoquality==7){
+							videonumber="400";
+						}
+						if(videoquality==8){
+							videonumber="401";
+						}
+						if(videoquality==9){
+							videonumber="402";
+						}
+					}						
+					else{
+						videonumber="???";
+					}
+				}
+
+
+
+				document.getElementById("2").innerHTML="ffmpeg -i \""+videolink+"\" -f "+videonumber+"+"+audionumber;
+				//document.getElementById("2").innerHTML=".\\youtube-dl.exe --user-agent \"\" URL "+document.getElementById("1").value+" -f "+document.getElementById("10").value+document.getElementById("11").value+document.getElementById("12").value+document.getElementById("20").value;
 			}
 		</script>
 
@@ -43,12 +306,14 @@
 			<col width="200px" />
 			<tr><td>
 			Paste Video Link: </td><td><textarea id="1" cols=20 rows=2 style="vertical-align: middle;"></textarea></td></tr>
-			<tr><td>HDR</td><td><input type="hidden" id="20" name="box1" value="0" /><input type="checkbox" id="20" name="box1" value="1" /></td></tr>
-			<tr><td>Colour</td><td><input type="radio" id="21" name="colorspace" value="HDR"> &nbsp;HDR<br><input type="radio" id="21" name="colorspace" value="SDR" checked> &nbsp;SDR</td></tr>
-			<tr><td>Video Type</td><td><select id="10"><option value="1">Flat</option><option value="2">360° Equirectangular</option><option value="3">360° Cube-Mapped</option><option value="4">180° Equirectangular</option><option value="5">180° Cube-Mapped</option></select></td></tr>
-			<tr><td>Select Audio Quality</td><td><select id="11"><option value=394>AV1 (Beta)</option><option value=330>VP9</option><option value=133 selected>AVC (Legacy)</option></select></td></tr>
-			<tr><td>Select Video Resolution</td><td><select id="12"><option value=258>8K (4320p)</option><option value=140>4K (2160p)</option><option value=251 selected>QHD (1440p)</option><option value=256 selected>FHD (1080p)</option><option value=250>HD (720p)</option><option value=249>SD (480p)</option><option value=249>SD (360p)</option><option value=249>LD (240p)</option><option value=249>LD (144p)</option></select></td></tr>
-			<tr><td>Select Audio Quality</td><td><select id="13"><option value=258>AAC 5.1 (High Quality)</option><option value=140>AAC 2.0 (High Quality)</option><option value=251 selected>OPUS 2.0 (High Quality)</option><option value=256>AAC 5.1 (Low Quality)</option><option value=250>OPUS 2.0 (Medium Quality)</option><option value=249>OPUS 2.0 (Low Quality)</option></select></td></tr>
+			<tr><td>Select Video Codec</td><td><select id="41"><option value=1>AV1 (Beta)</option><option value=2>VP9</option><option value=3 selected>AVC (Legacy)</option></select></td></tr>
+			<tr><td>Select Video Quality</td><td><select id="42"><option value=9>8K (4320p)</option><option value=8>4K (2160p)</option><option value=7 selected>QHD (1440p)</option><option value=6 selected>FHD (1080p)</option><option value=5>HD (720p)</option><option value=4>SD (480p)</option><option value=3>SD (360p)</option><option value=2>LD (240p)</option><option value=1>LD (144p)</option></select></td></tr>
+			<tr><td>Select Colorspace</td><td><select id="43"><option value=1>HDR (Rec2020 10-bit)</option><option value=2 selected>SDR (Rec709 8-bit)</option></select></td></tr>
+			<tr><td>Select Framerate</td><td><select id="44"><option value=1>HFR (60/50/48)</option><option value=2 selected>SFR (30/25/24)</option></select></td></tr>
+			<tr><td>Video Type</td><td><select id="45"><option value="1">Flat</option><option value="2" disabled>360° Equirectangular</option><option value="3" disabled>360° Cube-Mapped</option><option value="4" disabled>180° Equirectangular</option><option value="5" disabled>180° Cube-Mapped</option></select></td></tr>
+			<tr><td>Select Audio Codec</td><td><select id="51"><option value=1>Opus</option><option value=2 selected>AAC</option></select></td></tr>
+			<tr><td>Select Audio Channels</td><td><select id="53"><option value=1>5.1 (Surround)</option><option value=2 selected>2.0 (Stereo)</option></select></td></tr>
+			<tr><td>Select Audio Quality</td><td><select id="52"><option value=1 disabled>High</option><option value=2 selected>Medium</option><option value=3>Low</option><option value=4>Very Low</option></select></td></tr>
 			<tr><td>Now run this command: </td><td id="2"></td></tr>
 			</table>
 			<table>
