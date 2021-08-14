@@ -91,9 +91,9 @@ div {
   padding-left: 10px;
 }
 
-p { font-family: 'Atkinson Hyperlegible'; font-size: 20px}
-h1 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 40px;}
-h2 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 30px;}
+p { font-family: 'Atkinson Hyperlegible';}
+h1 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 35px;}
+h2 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 25px;}
 
 hr { 
 	margin-top: 0px;
