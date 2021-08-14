@@ -93,7 +93,7 @@ div {
 
 p { font-family: 'Atkinson Hyperlegible';}
 h1 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 35px;}
-h2 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 25px;}
+h2 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 25px; margin-top: 0%;}
 
 hr { 
 	margin-top: 0px;
