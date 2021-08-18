@@ -91,7 +91,7 @@ div {
   padding-left: 10px;
 }
 
-p { font-family: 'Atkinson Hyperlegible';}
+p { font-family: 'Atkinson Hyperlegible'; max-width: 30em;}
 h1 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 35px;}
 h2 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 25px; margin-top: 0%;}
 h3 { text-align: center; font-weight: normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 12px; margin-top: 0%;;}
