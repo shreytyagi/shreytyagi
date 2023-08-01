@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shrey's Movie Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #333;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        th[scope="col"] {
+            cursor: pointer;
+        }
+
+        th[scope="col"]:hover {
+            background-color: #555;
+        }
+
+        th.sort-asc::after {
+            content: " ▲";
+        }
+
+        th.sort-desc::after {
+            content: " ▼";
+        }
+    </style>
+    <script>
+        function sortTable(n) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("movieTable");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 2; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[n];
+                    y = rows[i + 1].getElementsByTagName("td")[n];
+                    if (dir === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+
+            const headers = table.querySelectorAll("th[scope='col']");
+            headers.forEach(header => header.classList.remove("sort-asc", "sort-desc"));
+            headers[n].classList.add(dir === "asc" ? "sort-asc" : "sort-desc");
+        }
+    </script>
+</head>
+<body>
+    <h1>Shrey's Movie Collection</h1>
+    <table id="movieTable">
+        <tr>
+            <th colspan="3" scope="colgroup">Movie</th>
+            <th colspan="5" scope="colgroup">Video</th>
+            <th colspan="4" scope="colgroup">Audio 1</th>
+            <th colspan="4" scope="colgroup">Audio 2</th>
+        </tr>
+        <tr>
+            <th scope="col" onclick="sortTable(0)">Title</th>
+            <th scope="col" onclick="sortTable(1)">Year</th>
+            <th scope="col" onclick="sortTable(2)">Container</th>
+            <th scope="col" onclick="sortTable(3)">Codec</th>
+            <th scope="col" onclick="sortTable(4)">Resolution</th>
+            <th scope="col" onclick="sortTable(5)">Bit-rate</th>
+            <th scope="col" onclick="sortTable(6)">Bit-depth</th>
+            <th scope="col" onclick="sortTable(7)">HDR</th>
+            <th scope="col" onclick="sortTable(8)">Codec</th>
+            <th scope="col" onclick="sortTable(9)">Channels</th>
+            <th scope="col" onclick="sortTable(10)">Bit-rate</th>
+            <th scope="col" onclick="sortTable(11)">Language</th>
+            <th scope="col" onclick="sortTable(12)">Codec</th>
+            <th scope="col" onclick="sortTable(13)">Channels</th>
+            <th scope="col" onclick="sortTable(14)">Bit-rate</th>
+            <th scope="col" onclick="sortTable(15)">Language</th>
+        </tr>
+        <!-- Add your data rows here -->
+        <tr>
+            <td>Avatar</td>
+            <td>2009</td>
+            <td>MP4</td>
+            <td>HVC1</td>
+            <td>4K</td>
+            <td>15.1 mbps</td>
+            <td>10-bit</td>
+            <td>Dolby Vision Profile 8.1</td>
+            <td>Dolby Digital</td>
+            <td>5.1</td>
+            <td>448 kbps</td>
+            <td>Hindi</td>
+            <td>Dolby Digital Plus</td>
+            <td>Atmos</td>
+            <td>768 kbps</td>
+            <td>English</td>
+        </tr>
+        <tr>
+            <td>Avatar: The Way of Water</td>
+            <td>2022</td>
+            <td>MP4</td>
+            <td>HVC1</td>
+            <td>4K</td>
+            <td>25 mbps</td>
+            <td>10-bit</td>
+            <td>Dolby Vision Profile 5</td>
+            <td>Dolby Digital Plus</td>
+            <td>5.1</td>
+            <td>192 kbps</td>
+            <td>Hindi</td>
+            <td>Dolby Digital Plus</td>
+            <td>Atmos</td>
+            <td>768 kbps</td>
+            <td>English</td>
+        </tr>
+        <tr>
+            <td>Jurassic World: Dominion</td>
+            <td>2022</td>
+            <td>MP4</td>
+            <td>HVC1</td>
+            <td>4K</td>
+            <td>25 mbps</td>
+            <td>10-bit</td>
+            <td>Dolby Vision Profile 5</td>
+            <td>Dolby Digital Plus</td>
+            <td>5.1</td>
+            <td>640 kbps</td>
+            <td>Hindi</td>
+            <td>Dolby Digital Plus</td>
+            <td>Atmos</td>
+            <td>768 kbps</td>
+            <td>English</td>
+        </tr>
+        <tr>
+            <td>The Batman</td>
+            <td>2021</td>
+            <td>MP4</td>
+            <td>HVC1</td>
+            <td>4K</td>
+            <td>25 mbps</td>
+            <td>10-bit</td>
+            <td>SDR</td>
+            <td>Dolby Digital Plus</td>
+            <td>5.1</td>
+            <td>448 kbps</td>
+            <td>Hindi</td>
+            <td>Dolby Digital Plus</td>
+            <td>Atmos</td>
+            <td>768 kbps</td>
+            <td>English</td>
+        </tr>
+        <tr>
+            <td>The Batman</td>
+            <td>2021</td>
+            <td>MP4</td>
+            <td>HVC1</td>
+            <td>4K</td>
+            <td>25 mbps</td>
+            <td>10-bit</td>
+            <td>Dolby Vision Profile 5</td>
+            <td>Dolby Digital Plus</td>
+            <td>5.1</td>
+            <td>448 kbps</td>
+            <td>Hindi</td>
+            <td>Dolby Digital Plus</td>
+            <td>Atmos</td>
+            <td>768 kbps</td>
+            <td>English</td>
+        </tr>
+        <!-- Add more data rows if needed -->
+    </table>
+</body>
+</html>

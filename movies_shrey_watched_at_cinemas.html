@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movies Shrey Watched At Cinemas</title>
+    <style>
+        /* Same CSS styles as the previous page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #333;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        th[scope="col"] {
+            cursor: pointer;
+        }
+
+        th[scope="col"]:hover {
+            background-color: #555;
+        }
+
+        th.sort-asc::after {
+            content: " ▲";
+        }
+
+        th.sort-desc::after {
+            content: " ▼";
+        }
+    </style>
+    <script>
+        /* Same sorting JavaScript function as the previous page */
+        function sortTable(n) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("cinemaTable");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 2; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[n];
+                    y = rows[i + 1].getElementsByTagName("td")[n];
+                    if (dir === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+
+            const headers = table.querySelectorAll("th[scope='col']");
+            headers.forEach(header => header.classList.remove("sort-asc", "sort-desc"));
+            headers[n].classList.add(dir === "asc" ? "sort-asc" : "sort-desc");
+        }
+    </script>
+</head>
+<body>
+    <h1>Movies Shrey Watched At Cinemas</h1>
+    <table id="cinemaTable">
+        <tr>
+            <th colspan="2" scope="colgroup">Movie</th>
+            <th colspan="3" scope="colgroup">Version</th>
+            <th colspan="3" scope="colgroup">Auditorium</th>
+            <th colspan="3" scope="colgroup">Venue</th>
+        </tr>
+        <tr>
+            <th scope="col" onclick="sortTable(0)">Title</th>
+            <th scope="col" onclick="sortTable(1)">Release</th>
+            <th scope="col" onclick="sortTable(2)">Format</th>
+            <th scope="col" onclick="sortTable(3)">Language</th>
+            <th scope="col" onclick="sortTable(4)">Sound</th>
+            <th scope="col" onclick="sortTable(5)">Screen Type</th>
+            <th scope="col" onclick="sortTable(6)">Projection</th>
+            <th scope="col" onclick="sortTable(7)">Speakers</th>
+            <th scope="col" onclick="sortTable(8)">City</th>
+            <th scope="col" onclick="sortTable(9)">Location</th>
+            <th scope="col" onclick="sortTable(10)">Date Watched</th>
+        </tr>
+        <tr>
+            <td>Spider-Man 2</td>
+            <td>2004</td>
+            <td>2D</td>
+            <td>Hindi</td>
+            <td>5.1</td>
+            <td>Scope</td>
+            <td>35mm</td>
+            <td>Surround</td>
+            <td>Kanpur</td>
+            <td>Pammi Gurudev</td>
+            <td>2004-07</td>
+        </tr>
+        <tr>
+            <td>Movie 2</td>
+            <td>2023</td>
+            <td>3D</td>
+            <td>French</td>
+            <td>DTS:X</td>
+            <td>Standard</td>
+            <td>35mm Film</td>
+            <td>5.1</td>
+            <td>Paris</td>
+            <td>Theater B</td>
+            <td>2023-07-28</td>
+        </tr>
+        <tr>
+            <td>Movie 3</td>
+            <td>2021</td>
+            <td>2D</td>
+            <td>Spanish</td>
+            <td>THX</td>
+            <td>Standard</td>
+            <td>Digital</td>
+            <td>7.1</td>
+            <td>Los Angeles</td>
+            <td>Theater C</td>
+            <td>2023-07-30</td>
+        </tr>
+        <tr>
+            <td>Movie 4</td>
+            <td>2020</td>
+            <td>2D</td>
+            <td>Japanese</td>
+            <td>SDDS</td>
+            <td>Standard</td>
+            <td>Digital</td>
+            <td>5.1</td>
+            <td>Tokyo</td>
+            <td>Theater D</td>
+            <td>2023-08-01</td>
+        </tr>
+        <tr>
+            <td>Movie 5</td>
+            <td>2023</td>
+            <td>2D</td>
+            <td>German</td>
+            <td>DTS</td>
+            <td>Standard</td>
+            <td>Digital</td>
+            <td>7.1</td>
+            <td>Berlin</td>
+            <td>Theater E</td>
+            <td>2023-08-03</td>
+        </tr>
+    </table>
+</body>
+</html>
