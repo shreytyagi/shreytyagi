@@ -1,0 +1,7 @@
+@font-face {
+	font-family: "Borel-Regular";
+	src: url(../fonts/Borel-Regular.ttf)
+}
+* {
+	font-family: "Borel-Regular";
+}
