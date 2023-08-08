@@ -3,5 +3,66 @@
 	src: url(../fonts/Borel-Regular.ttf)
 }
 * {
-	font-family: "Borel-Regular";
+	/* font-family: "Borel-Regular"; */
 }
+
+/* CARDS */
+
+.card {
+  margin: 15px 0; /* Adjust top and bottom spacing */
+  transition: transform 0.3s;
+  max-width: 100%; /* Set maximum width to take full available width */
+  aspect-ratio: 1; /* Maintain square aspect ratio */
+  overflow: hidden; /* Ensure content doesn't overflow */
+  position: relative;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-inner {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	border: 1px solid #ddd;
+	background-size: cover;
+	background-position: center;
+  }
+  
+  .card-content {
+	flex: 1;
+	padding: 15px; /* Adjust the padding for spacing */
+	background-color: rgba(255, 255, 255, 0.85);
+  }
+
+@media (max-width: 992px) {
+  .card {
+    margin: 15px 0;
+    max-width: 100%; /* Set maximum width to take full available width */
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    margin: 15px auto;
+    max-width: 300px; /* Set maximum width to take full available width */
+  }
+}
+
+@media (min-width: 1200px) {
+  .row-cols-lg-3 .card {
+    margin: 15px 0; /* Adjust top and bottom spacing for large screens */
+    max-width: calc(33.33% - 30px); /* Distribute space evenly for 3 cards */
+  }
+}
+
+@media (max-width: 575px) {
+  .card {
+    margin: 15px auto;
+    max-width: 300px; /* Set maximum width to take full available width */
+  }
+}  
+
+
+  
