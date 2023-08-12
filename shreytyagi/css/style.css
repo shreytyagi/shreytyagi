@@ -6,7 +6,7 @@
 	/* font-family: "Borel-Regular"; */
 }
 body{
-background-color: #f6f6f6;
+background-color: #eeefe7;
 color: black;
 }
 
@@ -75,6 +75,9 @@ color: black;
 	color: none; /* Inherit the parent's text color */
 	text-decoration: none; /* Remove underline, if any */
 	border-radius: 20px; /* Increase or decrease as needed */
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
   }
 
   .card-content {
@@ -109,3 +112,30 @@ color: black;
 .nav-bottom {
 	margin-top: auto;
 }
+
+/* Custom CSS to increase spacing between navigation items when the navbar is not collapsed */
+@media (min-width: 768px) {
+    .navbar-nav {
+        margin-left: auto; /* Move the navigation items to the right */
+    }
+    
+    .navbar-nav .nav-item {
+        margin-right: 12px; /* Adjust the margin between navigation items */
+    }
+}
+
+        /* Style for content container */
+        .content-container {
+            max-width: 800px; /* Adjust this value based on your design */
+            margin: 0 auto; /* Center the container horizontally */
+            padding: 20px; /* Add some padding for spacing */
+            line-height: 1.5; /* Adjust line height for better readability */
+        }
+		
+		/* Aspect ratio for cards with both .card and .card-photo classes (1:1) */
+		.card.card-photo {
+			aspect-ratio: 1;
+			/* background-size: 100% 100%;  */ /*  Use this to stretch the images*/
+			/* background-position: center;
+			background-repeat: no-repeat; */
+		}
