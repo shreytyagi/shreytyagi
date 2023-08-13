@@ -141,5 +141,5 @@ color: black;
 		}
 
 .dropdown-item {
-    max-height: none; /* or set an appropriate value */
+    max-height: 100px; /* or set an appropriate value */
 }
