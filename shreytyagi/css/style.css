@@ -139,3 +139,11 @@ color: black;
 			/* background-position: center;
 			background-repeat: no-repeat; */
 		}
+
+.dropdown-item.g-ytsubscribe[title] {
+    pointer-events: none;
+}
+
+.g-ytsubscribe[title] {
+    pointer-events: none;
+}
