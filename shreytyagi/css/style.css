@@ -147,3 +147,9 @@ color: black;
 #current-year {
     font-size: smaller;
 }
+
+@media (max-width: 767px) {
+    #current-year {
+        font-size: 8px; /* Adjust this value for smaller screens */
+    }
+}
