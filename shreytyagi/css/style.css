@@ -139,3 +139,7 @@ color: black;
 			/* background-position: center;
 			background-repeat: no-repeat; */
 		}
+
+.dropdown-menu {
+    max-height: none; /* or set an appropriate value */
+}
