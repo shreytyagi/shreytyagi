@@ -143,3 +143,7 @@ color: black;
 .deadinside {
     pointer-events: none; /* Disable mouse events */
 }
+
+#current-year {
+    font-size: smaller;
+}
