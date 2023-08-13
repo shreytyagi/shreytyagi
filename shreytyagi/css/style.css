@@ -140,10 +140,6 @@ color: black;
 			background-repeat: no-repeat; */
 		}
 
-.dropdown-item.g-ytsubscribe[title] {
-    pointer-events: none;
-}
-
-.g-ytsubscribe[title] {
+.g-ytsubscribe {
     pointer-events: none;
 }
