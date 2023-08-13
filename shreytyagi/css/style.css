@@ -150,6 +150,6 @@ color: black;
 
 @media (max-width: 767px) {
     #current-year {
-        font-size: 8px; /* Adjust this value for smaller screens */
+        font-size: 12px; /* Adjust this value for smaller screens */
     }
 }
