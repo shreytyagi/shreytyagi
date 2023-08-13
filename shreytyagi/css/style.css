@@ -246,17 +246,3 @@ padding: 0;
     font-size: 14px;
     text-align: center;
 }
-
-@media (max-width: 575px) {
-    .row {
-        flex-direction: row;
-        flex-wrap: wrap;
-        margin: -10px; /* Adjust the margin as needed */
-    }
-
-    .col-sm-6 {
-        flex: 0 0 calc(50% - 20px); /* Adjust the value to leave space between columns */
-        max-width: calc(50% - 20px); /* Adjust the value to leave space between columns */
-        margin: 10px; /* Adjust the margin to create space between columns */
-    }
-}
