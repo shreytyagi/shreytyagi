@@ -248,6 +248,6 @@ padding: 0;
 }
 
 .card-link.nottoobig {
-	max-width: 65vw; /* Adjust the maximum width as needed */
+	max-width: 60vw; /* Adjust the maximum width as needed */
 	margin: 0 auto; /* Center the card horizontally */
 }
