@@ -140,6 +140,6 @@ color: black;
 			background-repeat: no-repeat; */
 		}
 
-.dropdown-menu {
+.dropdown-item {
     max-height: none; /* or set an appropriate value */
 }
