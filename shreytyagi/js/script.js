@@ -41,3 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
         overlay.style.display = "none";
     });
 });
+
+$(document).ready(function () {
+    $('.card').hover(
+        function () {
+            $(this).find('.card-caption').addClass('show-full');
+        },
+        function () {
+            $(this).find('.card-caption').removeClass('show-full');
+        }
+    );
+});
