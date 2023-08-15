@@ -137,6 +137,7 @@ padding: 0;
 		/* Aspect ratio for cards with both .card and .card-photo classes (1:1) */
 		.card.card-photo {
 			aspect-ratio: 1;
+			border-radius: 0px; /* Increase or decrease as needed */
 			/* background-size: 100% 100%;  */ /*  Use this to stretch the images*/
 			/* background-position: center;
 			background-repeat: no-repeat; */
