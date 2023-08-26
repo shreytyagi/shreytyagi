@@ -334,10 +334,14 @@ document.addEventListener("DOMContentLoaded", function() {
     youtubeDropdownLi.innerHTML = `
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownYouTube" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">YouTube</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownYouTube">
-            <a class="dropdown-item" href="https://www.youtube.com/channel/UCCJT8WfnCjflckjAoxxCoiA" target="_blank">Channel 1</a>
-            <a class="dropdown-item" href="https://www.youtube.com/channel/UCBgc_s9bZcC7_VPC7Qyegfw" target="_blank">Channel 2</a>
-            <!-- Add more dropdown items as needed -->
-        </div>
+			<a class="dropdown-item" href="https://www.youtube.com/channel/UCCJT8WfnCjflckjAoxxCoiA" target="_blank"><div class="deadinside"><div class="g-ytsubscribe" data-channelid="UCCJT8WfnCjflckjAoxxCoiA" data-layout="full" data-count="default" style="height: 50px; width: 250px;"></div></div></a>
+			<a class="dropdown-item" href="https://www.youtube.com/channel/UCBgc_s9bZcC7_VPC7Qyegfw" target="_blank"><div class="deadinside"><div class="g-ytsubscribe" data-channelid="UCBgc_s9bZcC7_VPC7Qyegfw" data-layout="full" data-count="default" style="height: 50px; width: 250px;"></div></div></a>
+			<a class="dropdown-item" href="https://www.youtube.com/channel/UCnv-wyenxwz2LZtSRwVNWNg" target="_blank"><div class="deadinside"><div class="g-ytsubscribe" data-channelid="UCnv-wyenxwz2LZtSRwVNWNg" data-layout="full" data-count="default" style="height: 50px; width: 250px;"></div></div></a>
+			<a class="dropdown-item" href="https://www.youtube.com/channel/UCx56_WYLdDB3tEPycBCai_g" target="_blank"><div class="deadinside"><div class="g-ytsubscribe" data-channelid="UCx56_WYLdDB3tEPycBCai_g" data-layout="full" data-count="default" style="height: 50px; width: 250px;"></div></div></a>
+			<a class="dropdown-item" href="https://www.youtube.com/channel/UCI89YThnnAIir0RLnpznyog" target="_blank"><div class="deadinside"><div class="g-ytsubscribe" data-channelid="UCI89YThnnAIir0RLnpznyog" data-layout="full" data-count="default" style="height: 50px; width: 250px;"></div></div></a>
+			<a class="dropdown-item" href="https://www.youtube.com/channel/UCqIm5-PSK5YDFM_cAbdFqrA" target="_blank"><div class="deadinside"><div class="g-ytsubscribe" data-channelid="UCqIm5-PSK5YDFM_cAbdFqrA" data-layout="full" data-count="default" style="height: 50px; width: 250px;"></div></div></a>
+			<a class="dropdown-item" href="https://www.youtube.com/channel/UCc_lxgyKjvxO-lHHa03pUhw" target="_blank"><div class="deadinside"><div class="g-ytsubscribe" data-channelid="UCc_lxgyKjvxO-lHHa03pUhw" data-layout="full" data-count="default" style="height: 50px; width: 250px;"></div></div></a>
+		</div>
     `;
 
     var socialMediaDropdownLi = document.createElement("li");
@@ -347,7 +351,14 @@ document.addEventListener("DOMContentLoaded", function() {
         <div class="dropdown-menu" aria-labelledby="navbarDropdownSocialMedia">
             <a class="dropdown-item" href="https://x.com/iamshreytyagi" target="_blank">X (Twitter)</a>
             <a class="dropdown-item" href="https://instagram.com/iamshreytyagi" target="_blank">Instagram</a>
-            <!-- Add more dropdown items as needed -->
+            <a class="dropdown-item" href="https://facebook.com/iamshreytyagi" target="_blank">Facebook</a>
+            <a class="dropdown-item" href="https://BeRe.al/shreytyagi" target="_blank">BeReal</a>
+            <a class="dropdown-item" href="https://reddit.com/user/iamshreytyagi" target="_blank">Reddit</a>
+            <a class="dropdown-item" href="https://snapchat.com/add/shreytyagi" target="_blank">Snapchat</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="https://linkedin/in/iamshreytyagi" target="_blank">LinkedIn</a>
+            <a class="dropdown-item" href="https://github.com/shreytyagi" target="_blank">GitHub</a>
+            <a class="dropdown-item" href="https://quora.com/profile/Shrey-Tyagi" target="_blank">Quora</a>
         </div>
     `;
 
