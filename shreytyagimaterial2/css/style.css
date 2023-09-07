@@ -382,7 +382,7 @@ padding: 0;
 	font-weight: bold ;
 	overflow: hidden;
 	display: -webkit-box;
-	-webkit-line-clamp: 3; /* Limit to two lines */
+	-webkit-line-clamp: 2; /* Limit to two lines */
 	-webkit-box-orient: vertical;
 	white-space: normal;
 }
