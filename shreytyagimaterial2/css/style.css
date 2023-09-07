@@ -364,7 +364,7 @@ padding: 0;
 
 .card.film {
 	flex-direction: row;
-	aspect-ratio: 2;
+	aspect-ratio: 2.67;
 
 
   }
@@ -382,7 +382,7 @@ padding: 0;
 	font-weight: bold ;
 	overflow: hidden;
 	display: -webkit-box;
-	-webkit-line-clamp: 2; /* Limit to two lines */
+	-webkit-line-clamp: 3; /* Limit to two lines */
 	-webkit-box-orient: vertical;
 	white-space: normal;
 }
@@ -400,10 +400,10 @@ padding: 0;
 }
   .card.film img {
 	width: 25%;
-	height: 70%;
-	padding: 5px;
+	height: 100%;
+	padding: 0px;
 	align-self: top; /* Make it center to align the image vertically middle */
-	border-radius: 20px;
+	border-radius: 0px;
   }
 
   .card-date.film img{
