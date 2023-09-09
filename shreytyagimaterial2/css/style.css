@@ -375,14 +375,22 @@ padding: 0;
 	-webkit-line-clamp: 1; /* Limit to two lines */
 	-webkit-box-orient: vertical;
 	white-space: normal;
+	background-color: blue;
 }
 .card-text.filmtitle  {
-	font-weight: bold ;
-	overflow: hidden;
-	display: -webkit-box;
-	-webkit-line-clamp: 3; /* Limit to two lines */
-	-webkit-box-orient: vertical;
-	white-space: normal;
+    font-weight: bold;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    background-color: red;
+    
+    /* Add these properties to vertically align the text */
+    display: flex;
+    align-items: center;
+	text-align: left;
+    height: 75%; /* Make sure the element takes up the full height */
 }
 
 .card-date.film  {
