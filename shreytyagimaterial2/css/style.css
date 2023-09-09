@@ -45,6 +45,7 @@ padding: 0;
     height: 100%;
     padding: 15px;
     background-color: rgba(255, 255, 255, 0.85);
+	padding: 10px;
   }
 
 @media (max-width: 992px) {
@@ -374,7 +375,6 @@ padding: 0;
 	-webkit-line-clamp: 1; /* Limit to two lines */
 	-webkit-box-orient: vertical;
 	white-space: normal;
-	background-color: blue;
 }
 .card-text.filmtitle  {
 	font-weight: bold ;
@@ -383,8 +383,6 @@ padding: 0;
 	-webkit-line-clamp: 3; /* Limit to two lines */
 	-webkit-box-orient: vertical;
 	white-space: normal;
-	background-color: red;
-	padding-bottom: 1px;
 }
 
 .card-date.film  {
