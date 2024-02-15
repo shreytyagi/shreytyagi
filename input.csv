@@ -1,4 +1,4 @@
-Name,Year,Container,Vid Codec,Vid Res,Aud Codec,Aud Channels,Vid Bitrate,Aud Bitrate,Size
+Name,Year,Container,Vid Codec,Vid Res,Vid Bit-depth, Vid Bit-rate,Aud1 Lang,Aud1 Codec,Aud1 Channels,Aud1 Bit-rate,Aud2 Lang, Aud2 Codec,Aud2 Channels,Aud2 Bitrate,Size
 Inception,2010,MP4,HVC1,4K,EC3,5.1 Atmos,24.2mbps,768kbps,20.5GB
 Inception,2010,MP4,HVC1,4K,EC3,5.1 Atmos,24.2mbps,768kbps,20.5GB
 Inception,2010,MP4,HVC1,4K,EC3,5.1 Atmos,24.2mbps,768kbps,20.5GB
