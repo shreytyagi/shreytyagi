@@ -21,7 +21,49 @@
 
 	<!-- YouTube JS -->
 	<script src="https://apis.google.com/js/platform.js"></script>
-	
+
+	  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      cursor: pointer;
+      text-align: center; /* Center the superheader contents */
+    }
+
+    input[type="text"] {
+      width: 80%; /* Adjust the width as needed */
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+    }
+  </style>
 
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
@@ -178,56 +220,7 @@
 </div>
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSV Table</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-
-    th {
-      cursor: pointer;
-      text-align: center; /* Center the superheader contents */
-    }
-
-    input[type="text"] {
-      width: 80%; /* Adjust the width as needed */
-      padding: 8px;
-      margin-bottom: 10px;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #4CAF50;
-      color: #fff;
-      padding: 10px;
-      border-radius: 5px;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
 
 <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for data...">
 
@@ -376,9 +369,9 @@
   }
 </script>
 
-</body>
-</html>
 
+
+	
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom"><div class="container">
