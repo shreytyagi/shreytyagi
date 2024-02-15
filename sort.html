@@ -113,11 +113,15 @@
 
   // Sort the table based on the clicked column
   function sortTable(columnIndex) {
-    data.sort((a, b) => {
+    // Exclude the header row from sorting
+    const sortedData = data.slice(1).sort((a, b) => {
       const valA = a[columnIndex];
       const valB = b[columnIndex];
       return ascending ? valA.localeCompare(valB) : valB.localeCompare(valA);
     });
+
+    // Reconstruct the data array with the header row at index 0
+    data = [data[0], ...sortedData];
 
     generateTable(data);
     ascending = !ascending; // Toggle sorting order
