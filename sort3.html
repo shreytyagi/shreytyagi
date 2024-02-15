@@ -109,12 +109,14 @@
     const superHeaderRow = header.insertRow(0);
     data[0].forEach((superHeader, index) => {
       if (superHeaderMap.get(superHeader) > 1) {
-        // Span the super header cell if repetition is detected
-        const colspan = superHeaderMap.get(superHeader);
-        const th = document.createElement('th');
-        th.innerHTML = superHeader;
-        th.colSpan = colspan;
-        superHeaderRow.appendChild(th);
+        // Span the super header cell only once for repeated super headers
+        if (index === 0 || superHeader !== data[0][index - 1]) {
+          const colspan = superHeaderMap.get(superHeader);
+          const th = document.createElement('th');
+          th.innerHTML = superHeader;
+          th.colSpan = colspan;
+          superHeaderRow.appendChild(th);
+        }
       } else {
         // If no repetition, create a regular super header cell
         const th = document.createElement('th');
@@ -185,9 +187,7 @@
     popup.style.display = 'block';
     setTimeout(() => {
       popup.style.display = 'none';
-    }, 3000);
-
- // Hide the popup after 3 seconds
+    }, 3000); // Hide the popup after 3 seconds
   }
 </script>
 
