@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      cursor: pointer;
+    }
+
+    input[type="text"] {
+      width: 80%; /* Adjust the width as needed */
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for data...">
+
+<table id="csvTable">
+  <!-- Table content will be generated dynamically using JavaScript -->
+</table>
+
+<div id="popupSuccess" class="popup">CSV loaded successfully!</div>
+<div id="popupError" class="popup" style="background-color: #f44336;">Error loading CSV!</div>
+
+<script>
+  let data = []; // To store CSV data
+  let originalData = []; // To store the original CSV data for resetting
+  let ascending = true; // Default sorting order
+
+  // Fetch CSV data and initialize the table
+  fetch('your_file.csv')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to load CSV');
+      }
+      return response.text();
+    })
+    .then(csvData => {
+      data = parseCSV(csvData);
+      originalData = [...data]; // Store a copy of the original data for resetting
+      generateTable(data);
+      showPopup('popupSuccess');
+    })
+    .catch(error => {
+      console.error('Error fetching CSV data:', error);
+      showPopup('popupError');
+    });
+
+  // Parse CSV data into a 2D array
+  function parseCSV(csv) {
+    return csv.trim().split('\n').map(row => row.split(','));
+  }
+
+  // Generate the table dynamically based on the CSV data
+  function generateTable(data) {
+    const table = document.getElementById('csvTable');
+    table.innerHTML = '';
+
+    const header = table.createTHead();
+    const headerRow = header.insertRow(0);
+
+    // Create header based on the first row of the CSV
+    data[0].forEach((col, index) => {
+      const th = document.createElement('th');
+      th.innerHTML = col;
+      th.addEventListener('click', () => sortTable(index));
+      headerRow.appendChild(th);
+    });
+
+    // Create table body
+    const body = table.createTBody();
+    for (let i = 1; i < data.length; i++) {
+      const row = body.insertRow();
+      data[i].forEach(cell => {
+        const td = row.insertCell();
+        td.innerHTML = cell;
+      });
+    }
+  }
+
+  // Sort the table based on the clicked column
+  function sortTable(columnIndex) {
+    // Exclude the header row from sorting
+    const sortedData = data.slice(1).sort((a, b) => {
+      const valA = a[columnIndex];
+      const valB = b[columnIndex];
+
+      // Extract numeric part if applicable
+      const numA = parseFloat(valA);
+      const numB = parseFloat(valB);
+
+      // Check if both values are numbers
+      const areBothNumbers = !isNaN(numA) && !isNaN(numB);
+
+      // Compare based on numeric or string comparison
+      if (areBothNumbers) {
+        return ascending ? numA - numB : numB - numA;
+      } else {
+        return ascending ? valA.localeCompare(valB) : valB.localeCompare(valA);
+      }
+    });
+
+    // Reconstruct the data array with the header row at index 0
+    data = [data[0], ...sortedData];
+
+    generateTable(data);
+    ascending = !ascending; // Toggle sorting order
+  }
+
+  // Real-time search function
+  function filterTable() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const filteredData = originalData.filter(row => row.some(cell => cell.toLowerCase().includes(input)));
+    generateTable([data[0], ...filteredData]);
+  }
+
+  // Display a popup message
+  function showPopup(id) {
+    const popup = document.getElementById(id);
+    popup.style.display = 'block';
+    setTimeout(() => {
+      popup.style.display = 'none';
+    }, 3000); // Hide the popup after 3 seconds
+  }
+</script>
+
+</body>
+</html>
