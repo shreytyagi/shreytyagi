@@ -1,5 +1,5 @@
-Movie Name,Year,Video Format,Video Resolution,Audio Format,Audio Channels,Video Bitrate,Audio Bitrate,Size
-Inception,2010,MKV,1080p,H.264,5.1,8000,384,2.5GB
+Name,Year,Container,Vid Codec,Vid Res,Aud Codec,Aud Channels,Vid Bitrate,Aud Bitrate,Size
+Inception,2010,MP4,HVC1,4K,EC3,5.1 Atmos,24.2mbps,768kbps,20.5GB
 The Shawshank Redemption,1994,MP4,720p,H.265,5.1,6000,320,1.8GB
 The Dark Knight,2008,AVI,1080p,H.264,7.1,9000,448,3.2GB
 Pulp Fiction,1994,MPEG,720p,H.265,5.1,5500,320,1.6GB
