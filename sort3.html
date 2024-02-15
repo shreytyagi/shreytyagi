@@ -177,7 +177,7 @@
   // Real-time search function
   function filterTable() {
     const input = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = originalData.filter(row => row.some(cell => cell.toLowerCase().includes(input)));
+    const filteredData = originalData.slice(2).filter(row => row.some(cell => cell.toLowerCase().includes(input)));
     generateTable([data[0], data[1], ...filteredData]);
   }
 
@@ -186,7 +186,9 @@
     const popup = document.getElementById(id);
     popup.style.display = 'block';
     setTimeout(() => {
-      popup.style.display = 'none';
+      popup.style
+
+.display = 'none';
     }, 3000); // Hide the popup after 3 seconds
   }
 </script>
