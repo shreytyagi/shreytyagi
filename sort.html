@@ -59,6 +59,7 @@
 
 <script>
   let data = []; // To store CSV data
+  let originalData = []; // To store the original CSV data for resetting
   let ascending = true; // Default sorting order
 
   // Fetch CSV data and initialize the table
@@ -71,6 +72,7 @@
     })
     .then(csvData => {
       data = parseCSV(csvData);
+      originalData = [...data]; // Store a copy of the original data for resetting
       generateTable(data);
       showPopup('popupSuccess');
     })
@@ -130,8 +132,8 @@
   // Real-time search function
   function filterTable() {
     const input = document.getElementById('searchInput').value.toLowerCase();
-    const filteredData = data.filter(row => row.some(cell => cell.toLowerCase().includes(input)));
-    generateTable(filteredData);
+    data = originalData.filter(row => row.some(cell => cell.toLowerCase().includes(input)));
+    generateTable(data);
   }
 
   // Display a popup message
