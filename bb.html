@@ -48,6 +48,10 @@
             flex-direction: column;
             align-items: flex-start;
             margin-bottom: 15px;
+            max-width: 400px; /* Set a maximum width for the input containers */
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 15px; /* Add some padding to the input containers */
         }
 
         .input-container label {
@@ -57,7 +61,7 @@
         .input-container input {
             padding: 8px;
             box-sizing: border-box;
-            width: 200px;
+            width: 100%;
         }
 
         #generateButton {
@@ -83,10 +87,6 @@
         @media (max-width: 600px) {
             #canvasContainer {
                 margin-top: 25px;
-            }
-
-            .input-container input {
-                width: 100%;
             }
         }
     </style>
