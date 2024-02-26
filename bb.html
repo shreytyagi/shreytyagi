@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rectangles Generator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        #canvasContainer {
+            position: relative;
+            display: none;
+            margin-top: 50px;
+        }
+
+        .rectangle {
+            position: absolute;
+            box-sizing: border-box;
+            outline: none;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #rectangleC {
+            background-color: #ccc;
+        }
+
+        #rectangleB {
+            background-color: #000;
+        }
+
+        #rectangleA {
+            background-color: #00ff00;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .input-container label {
+            margin-bottom: 5px;
+        }
+
+        .input-container input {
+            padding: 8px;
+            box-sizing: border-box;
+            width: 200px;
+        }
+
+        #generateButton {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #4285f4;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #generateButton:hover {
+            background-color: #3b79db;
+        }
+
+        #errorMessage {
+            color: #ff0000;
+            margin-top: 10px;
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 600px) {
+            #canvasContainer {
+                margin-top: 25px;
+            }
+
+            .input-container input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <label for="aspectA">Content Ratio:</label>
+        <input type="text" id="aspectA" placeholder="e.g., 2.39:1">
+    </div>
+    <div class="input-container">
+        <label for="aspectB">Container Ratio:</label>
+        <input type="text" id="aspectB" placeholder="e.g., 1.90:1">
+    </div>
+    <div class="input-container">
+        <label for="aspectC">Screen Ratio:</label>
+        <input type="text" id="aspectC" placeholder="e.g., 1.43:1">
+    </div>
+    <button id="generateButton" onclick="generateRectangles()">Generate Rectangles</button>
+    <div id="errorMessage"></div>
+    <div id="canvasContainer">
+        <div id="rectangleC" class="rectangle"></div>
+        <div id="rectangleB" class="rectangle"></div>
+        <div id="rectangleA" class="rectangle"></div>
+    </div>
+
+    <script>
+        function generateRectangles() {
+            const aspectAInput = document.getElementById('aspectA');
+            const aspectBInput = document.getElementById('aspectB');
+            const aspectCInput = document.getElementById('aspectC');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Function to convert a:b ratio to x:1
+            const convertToX1 = (ratio) => {
+                const [a, b] = ratio.split(':').map(Number);
+                const x1Value = a / Math.max(1, b);
+                return x1Value.toFixed(2);
+            };
+
+            // Function to show error message
+            const showError = (message) => {
+                errorMessage.textContent = message;
+            };
+
+            // Clear previous error messages
+            showError('');
+
+            // Convert ratios to x:1 format
+            const aspectA = parseFloat(convertToX1(aspectAInput.value)) || 1;
+            const aspectB = parseFloat(convertToX1(aspectBInput.value)) || 1;
+            const aspectC = parseFloat(convertToX1(aspectCInput.value)) || 1;
+
+            // Validate inputs
+            if (aspectA <= 0 || aspectB <= 0 || aspectC <= 0) {
+                showError('Ratios must be greater than zero.');
+                return;
+            }
+
+            const canvasContainer = document.getElementById('canvasContainer');
+            const rectangleA = document.getElementById('rectangleA');
+            const rectangleB = document.getElementById('rectangleB');
+            const rectangleC = document.getElementById('rectangleC');
+
+            // Initial dimensions based on aspect ratio of C
+            const widthC = 400;
+            const heightC = widthC / aspectC;
+
+            const widthB = Math.min(widthC, heightC * aspectB);
+            const heightB = widthB / aspectB;
+
+            const widthA = Math.min(widthB, heightB * aspectA);
+            const heightA = widthA / aspectA;
+
+            // Set dimensions and positions
+            rectangleC.style.width = widthC + 'px';
+            rectangleC.style.height = heightC + 'px';
+            rectangleC.style.left = '50%';
+            rectangleC.style.top = '50%';
+            rectangleC.style.transform = 'translate(-50%, -50%)';
+
+            rectangleB.style.width = widthB + 'px';
+            rectangleB.style.height = heightB + 'px';
+            rectangleB.style.left = '50%';
+            rectangleB.style.top = '50%';
+            rectangleB.style.transform = 'translate(-50%, -50%)';
+
+            rectangleA.style.width = widthA + 'px';
+            rectangleA.style.height = heightA + 'px';
+            rectangleA.style.left = '50%';
+            rectangleA.style.top = '50%';
+            rectangleA.style.transform = 'translate(-50%, -50%)';
+
+            // Calculate the necessary margin-top based on the height of rectangleC
+            const marginNeeded = heightC / 2 + 20; // 20 is the margin-top for the button
+
+            // Set margin-top for canvasContainer, ensuring a minimum margin-top
+            canvasContainer.style.marginTop = `max(${marginNeeded}px, 50px)`;
+
+            // Display rectangles
+            canvasContainer.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
