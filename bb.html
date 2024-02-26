@@ -112,12 +112,57 @@
         <div id="rectangleA" class="rectangle"></div>
     </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
         function generateRectangles() {
             const aspectAInput = document.getElementById('aspectA');
             const aspectBInput = document.getElementById('aspectB');
             const aspectCInput = document.getElementById('aspectC');
             const errorMessage = document.getElementById('errorMessage');
+            const canvasContainer = document.getElementById('canvasContainer');
 
             // Function to convert a:b ratio to x:1
             const convertToX1 = (ratio) => {
@@ -145,13 +190,18 @@
                 return;
             }
 
-            const canvasContainer = document.getElementById('canvasContainer');
-            const rectangleA = document.getElementById('rectangleA');
-            const rectangleB = document.getElementById('rectangleB');
-            const rectangleC = document.getElementById('rectangleC');
+            // Calculate available space below the button
+            const buttonContainer = document.querySelector('.input-container');
+            const availableHeight = window.innerHeight - buttonContainer.getBoundingClientRect().bottom - 20; // 20 is a margin for safety
 
-            // Initial dimensions based on aspect ratio of C
-            const widthC = 70vw;
+            // Calculate width based on 80% of viewport width, capped at 400px
+            const maxWidth = Math.min(400, window.innerWidth * 0.8);
+
+            // Calculate height based on 80% of viewport width, but not so tall to invoke vertical scrollbars
+            const maxHeight = Math.min(window.innerWidth * 0.8 * (1 / aspectC), availableHeight);
+
+            // Set dimensions and positions
+            const widthC = maxWidth;
             const heightC = widthC / aspectC;
 
             const widthB = Math.min(widthC, heightC * aspectB);
@@ -160,34 +210,33 @@
             const widthA = Math.min(widthB, heightB * aspectA);
             const heightA = widthA / aspectA;
 
-            // Set dimensions and positions
+            // Set styles for rectangles
+            canvasContainer.style.width = widthC + 'px';
+            canvasContainer.style.height = heightC + 'px';
+            canvasContainer.style.marginTop = 'max(50px, 20px)';
+            canvasContainer.style.display = 'flex';
+
+            const rectangles = document.querySelectorAll('.rectangle');
+            rectangles.forEach(rectangle => {
+                rectangle.style.left = '50%';
+                rectangle.style.top = '50%';
+                rectangle.style.transform = 'translate(-50%, -50%)';
+            });
+
+            const rectangleA = document.getElementById('rectangleA');
+            const rectangleB = document.getElementById('rectangleB');
+            const rectangleC = document.getElementById('rectangleC');
+
             rectangleC.style.width = widthC + 'px';
             rectangleC.style.height = heightC + 'px';
-            rectangleC.style.left = '50%';
-            rectangleC.style.top = '50%';
-            rectangleC.style.transform = 'translate(-50%, -50%)';
 
             rectangleB.style.width = widthB + 'px';
             rectangleB.style.height = heightB + 'px';
-            rectangleB.style.left = '50%';
-            rectangleB.style.top = '50%';
-            rectangleB.style.transform = 'translate(-50%, -50%)';
 
             rectangleA.style.width = widthA + 'px';
             rectangleA.style.height = heightA + 'px';
-            rectangleA.style.left = '50%';
-            rectangleA.style.top = '50%';
-            rectangleA.style.transform = 'translate(-50%, -50%)';
-
-            // Calculate the necessary margin-top based on the height of rectangleC
-            const marginNeeded = heightC / 2 + 20; // 20 is the margin-top for the button
-
-            // Set margin-top for canvasContainer, ensuring a minimum margin-top
-            canvasContainer.style.marginTop = `max(${marginNeeded}px, 50px)`;
-
-            // Display rectangles
-            canvasContainer.style.display = 'block';
         }
     </script>
 </body>
+
 </html>
