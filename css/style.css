@@ -290,5 +290,27 @@ padding: 0;
     padding-bottom: 4vh !important;
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex-grow: 1;
+}
+
+#footer-container {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.navbar-collapse {
+    transition: height 0.3s ease; /* Smooth transition for better collapsing effect */
+}
 
 
