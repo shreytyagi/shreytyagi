@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded", function() {
+/* document.addEventListener("DOMContentLoaded", function() {
 	const yearElement = document.getElementById("current-year");
 	const currentYear = new Date().getFullYear();
 	yearElement.textContent = "Copyright © "+currentYear+" by Shrey Tyagi. All rights reserved.";
-});
+});*/
 
 /* document.addEventListener("DOMContentLoaded", function () {
     const photoLink = document.querySelector(".photo-link");
