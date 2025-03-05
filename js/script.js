@@ -84,3 +84,15 @@ $(document).ready(function () {
 });
 
 */
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Check if YouTube API has loaded
+    setTimeout(() => {
+        let ytElements = document.querySelectorAll(".g-ytsubscribe");
+        ytElements.forEach(el => {
+            if (el.innerHTML.trim() !== "") {
+                el.nextElementSibling.style.display = "none"; // Hide fallback text
+            }
+        });
+    }, 3000); // Wait 3 sec to ensure API loads
+});

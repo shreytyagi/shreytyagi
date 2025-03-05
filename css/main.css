@@ -112,3 +112,11 @@ hr {
 div{
 	border: 2px;
 }
+
+.yt-fallback {
+    display: block; /* Default is visible if API fails */
+    color: #ff0000; /* YouTube red */
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0;
+}
