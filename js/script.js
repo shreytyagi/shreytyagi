@@ -84,23 +84,3 @@ $(document).ready(function () {
 });
 
 */
-
-
-window.onload = function () {
-    setTimeout(() => {
-        let ytWidgets = document.querySelectorAll(".g-ytsubscribe");
-
-        ytWidgets.forEach(widget => {
-            // Get the fallback text inside the same parent container
-            let fallbackText = widget.parentElement.querySelector(".yt-fallback");
-
-            // If YouTube API has loaded, it will insert an iframe inside the div
-            if (widget.innerHTML.trim() !== "" && widget.querySelector("iframe")) {
-                if (fallbackText) {
-                    fallbackText.style.display = "none"; // Hide fallback
-                }
-            }
-        });
-    }, 3000); // Delay to allow API time to load
-};
-
