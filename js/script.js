@@ -85,10 +85,17 @@ $(document).ready(function () {
 
 */
 
-$(document).ready(function () {
-    $('.navbar-toggler').click(function () {
-        setTimeout(function () {
-            $('#footer-container').show(); // Ensure footer is visible
-        }, 300); // Small delay to allow navbar animation to complete
+
+
+$(document).ready(function(){
+    $("#navbar-container").load("navbar.html", function() {
+        // Ensure navbar toggle does not hide the footer
+        $(".navbar-toggler").click(function() {
+            setTimeout(function() {
+                $("#footer-container").css("display", "block");
+            }, 300);
+        });
     });
+
+    $("#footer-container").load("footer.html");
 });

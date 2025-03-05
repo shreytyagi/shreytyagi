@@ -122,5 +122,6 @@ div{
 }
 
 #footer-container {
+    min-height: 50px;
     display: block !important;
 }
