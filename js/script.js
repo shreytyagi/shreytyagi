@@ -5,10 +5,14 @@
 }); */
 
 
-        $(document).ready(function(){
-            $("#navbar-container").load("navbar.html");
-            $("#footer-container").load("footer.html");
+    $(document).ready(function(){
+        $("#navbar-container").load("navbar.html");
+        $("#footer-container").load("footer.html");
+
+        $(".navbar-toggler").on("click", function () {
+            $("body").toggleClass("navbar-expanded");
         });
+    });
 
 /* document.addEventListener("DOMContentLoaded", function () {
     const photoLink = document.querySelector(".photo-link");
