@@ -4,6 +4,12 @@
 	yearElement.textContent = "Copyright © "+currentYear+" by Shrey Tyagi. All rights reserved.";
 }); */
 
+
+        $(document).ready(function(){
+            $("#navbar-container").load("navbar.html");
+            $("#footer-container").load("footer.html");
+        });
+
 /* document.addEventListener("DOMContentLoaded", function () {
     const photoLink = document.querySelector(".photo-link");
     const overlay = document.querySelector(".overlay");
