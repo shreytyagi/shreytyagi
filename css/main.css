@@ -120,3 +120,7 @@ div{
     text-align: center;
     padding: 10px 0;
 }
+
+#footer-container {
+    display: block !important;
+}

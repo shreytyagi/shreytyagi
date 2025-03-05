@@ -84,3 +84,11 @@ $(document).ready(function () {
 });
 
 */
+
+$(document).ready(function () {
+    $('.navbar-toggler').click(function () {
+        setTimeout(function () {
+            $('#footer-container').show(); // Ensure footer is visible
+        }, 300); // Small delay to allow navbar animation to complete
+    });
+});
