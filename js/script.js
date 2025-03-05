@@ -87,19 +87,20 @@ $(document).ready(function () {
 
 
 window.onload = function () {
-    // Wait for YouTube API to load
     setTimeout(() => {
         let ytWidgets = document.querySelectorAll(".g-ytsubscribe");
-        let fallbackText = document.querySelectorAll(".yt-fallback");
 
-        ytWidgets.forEach((widget, index) => {
-            // Check if YouTube widget loaded correctly
-            if (widget.innerHTML.trim() !== "") {
-                // Hide fallback text if API loaded
-                if (fallbackText[index]) {
-                    fallbackText[index].style.display = "none";
+        ytWidgets.forEach(widget => {
+            // Get the fallback text inside the same parent container
+            let fallbackText = widget.parentElement.querySelector(".yt-fallback");
+
+            // If YouTube API has loaded, it will insert an iframe inside the div
+            if (widget.innerHTML.trim() !== "" && widget.querySelector("iframe")) {
+                if (fallbackText) {
+                    fallbackText.style.display = "none"; // Hide fallback
                 }
             }
         });
     }, 3000); // Delay to allow API time to load
 };
+
