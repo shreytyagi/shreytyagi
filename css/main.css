@@ -91,6 +91,12 @@ div {
   padding-left: 10px;
 }
 
+.nav-bottom {
+    margin-top: auto;
+    width: 100%;
+}
+
+
 p { font-family: 'Atkinson Hyperlegible'; max-width: 31em; margin: 0 auto;}
 h1 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 35px;}
 h2 { font-weight:normal; font-family: 'Atkinson Hyperlegible'; margin-bottom: 0%; font-size: 25px; margin-top: 0%;}
