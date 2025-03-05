@@ -21,12 +21,11 @@
 
 	<!-- YouTube JS -->
 	<script src="https://apis.google.com/js/platform.js"></script>
-	
 
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
 
-    <!-- Load Top Navbar -->
+    <!-- Navbar will be loaded here -->
     <div id="navbar-container"></div>
 
 <div class="container mt-5 text-justify flex-grow-1">
@@ -38,12 +37,12 @@
 								<p>Para 4</p>
 	</div>
 </div>
-
-    <!-- Load Bottom Navbar -->
+	
+    <!-- Footer will be loaded here -->
     <div id="footer-container"></div>
 
+    <!-- Load Navbar & Footer -->
     <script>
-        // Load the navbar and footer dynamically
         $(document).ready(function(){
             $("#navbar-container").load("navbar.html");
             $("#footer-container").load("footer.html");

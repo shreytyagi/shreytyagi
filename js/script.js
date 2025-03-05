@@ -52,3 +52,29 @@ $(document).ready(function () {
         }
     );
 });
+
+$(document).ready(function () {
+    // Load the navbar
+    $("#navbar-container").load("navbar.html", function () {
+        console.log("Navbar loaded successfully!");
+        
+        // Reinitialize dropdown and any other necessary scripts
+        initializeYouTubeDropdown();
+    });
+
+    // Load the footer
+    $("#footer-container").load("footer.html");
+
+    // Function to reinitialize YouTube dropdown
+    function initializeYouTubeDropdown() {
+        console.log("Reinitializing YouTube dropdown...");
+
+        // If your dropdown depends on an API call, call the function here
+        if (typeof fetchYouTubeData === "function") {
+            fetchYouTubeData();
+        }
+
+        // Manually trigger any event listeners if needed
+        $(".dropdown-toggle").dropdown();
+    }
+});
