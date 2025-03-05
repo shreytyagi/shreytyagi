@@ -5,37 +5,10 @@
 }); */
 
 
-        /* $(document).ready(function(){
+        $(document).ready(function(){
             $("#navbar-container").load("navbar.html");
             $("#footer-container").load("footer.html");
-        }); */
-		
-		
-    $(document).ready(function(){
-        $("#navbar-container").load("navbar.html", function () {
-            $(".navbar-toggler").on("click", function () {
-                setTimeout(function () {
-                    adjustFooter();
-                }, 300);
-            });
         });
-
-        $("#footer-container").load("footer.html");
-
-        function adjustFooter() {
-            var footer = $("#footer-container");
-            var windowHeight = $(window).height();
-            var bodyHeight = $("body").outerHeight();
-            if (bodyHeight < windowHeight) {
-                footer.css("position", "absolute");
-            } else {
-                footer.css("position", "relative");
-            }
-        }
-
-        $(window).resize(adjustFooter);
-    });
-
 
 /* document.addEventListener("DOMContentLoaded", function () {
     const photoLink = document.querySelector(".photo-link");
@@ -132,31 +105,3 @@ $(document).ready(function(){
 
     $("#footer-container").load("footer.html");
 });
-
-$(document).ready(function () {
-    $("#navbar-container").load("navbar.html", function () {
-        // Add an event listener for the navbar toggle button
-        $(".navbar-toggler").on("click", function () {
-            setTimeout(function () {
-                adjustFooter();
-            }, 300); // Delay to wait for animation
-        });
-    });
-
-    $("#footer-container").load("footer.html");
-
-    function adjustFooter() {
-        var footer = $("#footer-container");
-        var windowHeight = $(window).height();
-        var bodyHeight = $("body").outerHeight();
-        if (bodyHeight < windowHeight) {
-            footer.css("position", "absolute");
-        } else {
-            footer.css("position", "relative");
-        }
-    }
-
-    // Adjust on window resize (for responsive behavior)
-    $(window).resize(adjustFooter);
-});
-
