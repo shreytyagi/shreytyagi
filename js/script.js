@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
+
 $(document).ready(function () {
     $('.card').hover(
         function () {
@@ -52,6 +54,8 @@ $(document).ready(function () {
         }
     );
 });
+
+/*
 
 $(document).ready(function () {
     // Load the navbar
@@ -79,3 +83,4 @@ $(document).ready(function () {
     }
 });
 
+*/
