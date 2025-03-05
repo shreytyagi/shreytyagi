@@ -85,14 +85,21 @@ $(document).ready(function () {
 
 */
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Check if YouTube API has loaded
+
+window.onload = function () {
+    // Wait for YouTube API to load
     setTimeout(() => {
-        let ytElements = document.querySelectorAll(".g-ytsubscribe");
-        ytElements.forEach(el => {
-            if (el.innerHTML.trim() !== "") {
-                el.nextElementSibling.style.display = "none"; // Hide fallback text
+        let ytWidgets = document.querySelectorAll(".g-ytsubscribe");
+        let fallbackText = document.querySelectorAll(".yt-fallback");
+
+        ytWidgets.forEach((widget, index) => {
+            // Check if YouTube widget loaded correctly
+            if (widget.innerHTML.trim() !== "") {
+                // Hide fallback text if API loaded
+                if (fallbackText[index]) {
+                    fallbackText[index].style.display = "none";
+                }
             }
         });
-    }, 3000); // Wait 3 sec to ensure API loads
-});
+    }, 3000); // Delay to allow API time to load
+};
