@@ -47,6 +47,11 @@
             $("#navbar-container").load("navbar.html");
             $("#footer-container").load("footer.html");
         });
+		document.addEventListener("DOMContentLoaded", function() {
+	const yearElement = document.getElementById("current-year");
+	const currentYear = new Date().getFullYear();
+	yearElement.textContent = "Copyright © "+currentYear+" by Shrey Tyagi. All rights reserved.";
+});
     </script>
 
 </body>
