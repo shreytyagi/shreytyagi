@@ -116,7 +116,6 @@ $(document).ready(function () {
 
 });
 
-
 function loadCSVAndGenerateCards() {
     fetch("index.csv")
         .then(response => response.text())
@@ -127,12 +126,12 @@ function loadCSVAndGenerateCards() {
             rows.forEach((row, index) => {
                 if (index === 0) return; // Skip the header if present
                 
-                const [category, title, date] = row.split(",");
+                const [category, title, date, link] = row.split(",");
 
                 html += `
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="card-link">
-                            <a href="https://google.com" class="card-link">
+                            <a href="${link}" class="card-link" target="_blank">
                                 <div class="card custom-card article">
                                     <div class="card-inner">
                                         <div class="card-content">
