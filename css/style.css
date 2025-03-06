@@ -340,6 +340,12 @@ body {
     visibility: visible !important; /* 💖 Ensures the content inside stays visible */
 }
 
+/* 💖 Fix: Ensure footer nav content is always visible */
+#footer-container nav {
+    display: block !important;
+    visibility: visible !important;
+}
+
 /* Ensure the body takes full height */
 html, body {
     height: 100%;
@@ -354,5 +360,3 @@ body {
 .container {
     flex: 1;
 }
-
-

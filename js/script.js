@@ -61,181 +61,6 @@ $(document).ready(function () {
     );
 });
 
-/*
-
-$(document).ready(function () {
-    // Load the navbar
-    $("#navbar-container").load("navbar.html", function () {
-        console.log("Navbar loaded successfully!");
-        
-        // Reinitialize dropdown and any other necessary scripts
-        initializeYouTubeDropdown();
-    });
-
-    // Load the footer
-    $("#footer-container").load("footer.html");
-
-    // Function to reinitialize YouTube dropdown
-    function initializeYouTubeDropdown() {
-        console.log("Reinitializing YouTube dropdown...");
-
-        // If your dropdown depends on an API call, call the function here
-        if (typeof fetchYouTubeData === "function") {
-            fetchYouTubeData();
-        }
-
-        // Manually trigger any event listeners if needed
-        $(".dropdown-toggle").dropdown();
-    }
-});
-
-*/
-
-/*
-
-$(document).ready(function(){
-    $("#navbar-container").load("navbar.html", function() {
-        // Ensure navbar toggle does not hide the footer
-        $(".navbar-toggler").click(function() {
-            setTimeout(function() {
-                $("#footer-container").css("display", "block");
-            }, 300);
-        });
-    });
-
-    $("#footer-container").load("footer.html");
-}); */
-
-
-/*
-$(document).ready(function () {
-    $("#navbar-container").load("navbar.html", function() {
-        $(".navbar-toggler").click(function() {
-            setTimeout(function() {
-                $("#footer-container").css("display", "block");
-
-                // Adjust the footer height dynamically
-                let bodyHeight = $("body").outerHeight();
-                let windowHeight = $(window).height();
-                
-                if (bodyHeight < windowHeight) {
-                    $("#footer-container").css("position", "absolute").css("bottom", "0").css("width", "100%");
-                } else {
-                    $("#footer-container").css("position", "relative");
-                }
-            }, 300);
-        });
-    });
-
-    $("#footer-container").load("footer.html");
-});
-
-
-*/
-
-
-/*
-
-$(document).ready(function () {
-    $("#navbar-container").load("navbar.html", function () {
-        $(".navbar-toggler").click(function () {
-            setTimeout(function () {
-                $("#footer-container").css("display", "block");
-
-                // Adjust footer position dynamically
-                let bodyHeight = $("body").outerHeight();
-                let windowHeight = $(window).height();
-
-                if (bodyHeight < windowHeight) {
-                    $("#footer-container").css({
-                        "position": "absolute",
-                        "bottom": "0",
-                        "width": "100%"
-                    });
-                } else {
-                    $("#footer-container").css("position", "relative");
-                }
-            }, 300);
-        });
-    });
-
-    $("#footer-container").load("footer.html");
-});
-*/
-
-/**
-
-$(document).ready(function () {
-    $("#navbar-container").load("navbar.html", function () {
-        $(".navbar-toggler").click(function () {
-            setTimeout(function () {
-                $("#footer-container").css("display", "block");
-
-                // Adjust the footer dynamically
-                let bodyHeight = $("body").outerHeight();
-                let windowHeight = $(window).height();
-
-                if (bodyHeight < windowHeight) {
-                    $("#footer-container").css({
-                        "position": "absolute",
-                        "bottom": "0",
-                        "width": "100%",
-                        "min-height": "50px",
-                        "display": "block"
-                    });
-                } else {
-                    $("#footer-container").css({
-                        "position": "relative",
-                        "min-height": "50px",
-                        "display": "block"
-                    });
-                }
-            }, 500);
-        });
-
-        // Ensure the footer remains visible after collapsing
-        $(".navbar-toggler").on("click", function () {
-            setTimeout(function () {
-                $("#footer-container").show();
-            }, 600);
-        });
-    });
-
-    $("#footer-container").load("footer.html");
-});
-
-*/
-/*
-$(document).ready(function () {
-    $("#navbar-container").load("navbar.html", function () {
-        $(".navbar-toggler").click(function () {
-            setTimeout(function () {
-                // Ensure footer is always visible
-                $("#footer-container").css("display", "block");
-
-                // Recalculate the height
-                let bodyHeight = $("body").outerHeight();
-                let windowHeight = $(window).height();
-
-                // If page content is smaller than viewport, keep footer at bottom
-                if (bodyHeight < windowHeight) {
-                    $("#footer-container").css({
-                        "position": "relative", /* 🌟 Fix: Keep it in normal flow */
-                        "bottom": "auto",
-                        "width": "100%"
-                    });
-                } else {
-                    $("#footer-container").css({
-                        "position": "relative"
-                    });
-                }
-            }, 300);
-        });
-    });
-
-    $("#footer-container").load("footer.html");
-});
-*/
 
 $(document).ready(function () {
     $("#navbar-container").load("navbar.html", function () {
@@ -246,6 +71,12 @@ $(document).ready(function () {
                     "display": "block",
                     "visibility": "visible",
                     "min-height": "50px"
+                });
+
+                // 🌟 Restore footer content visibility
+                $("#footer-container nav").css({
+                    "display": "block",
+                    "visibility": "visible"
                 });
 
                 // 🌟 Recalculate the height
@@ -267,13 +98,17 @@ $(document).ready(function () {
             }, 300);
         });
 
-        // 🌟 Restore footer content visibility after menu retracts
+        // 🌟 Extra Fix: Restore footer content visibility after menu retracts
         $(".navbar-toggler").on("click", function () {
             setTimeout(function () {
-                $("#footer-container").show().css("visibility", "visible"); // 💖 FIX: Ensure content is always visible
+                $("#footer-container").show().css("visibility", "visible"); // 💖 Fix: Ensure content is always visible
+                $("#footer-container nav").show().css("visibility", "visible"); // 💖 Fix: Ensure nav inside footer is also visible
             }, 600);
         });
     });
 
-    $("#footer-container").load("footer.html");
+    $("#footer-container").load("footer.html", function () {
+        // 💖 Fix: Ensure footer content is visible on page load
+        $("#footer-container nav").css("display", "block");
+    });
 });
