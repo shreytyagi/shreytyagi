@@ -291,12 +291,6 @@ padding: 0;
 }
 
 
-
-
-
-
-
-
 #footer-container {
     width: 100%;
     background-color: #343a40;
@@ -304,6 +298,8 @@ padding: 0;
     padding: 10px 0;
     text-align: center;
     position: relative;
+    min-height: 50px; /* Prevents the footer from becoming too small */
+    display: block !important;
 }
 
 @media (max-width: 992px) {
@@ -311,12 +307,13 @@ padding: 0;
         position: relative;
         bottom: 0;
         width: 100%;
-        min-height: 50px; /* Ensures it doesn't collapse */
+        min-height: 50px;
     }
 }
 
+/* Ensure the body takes the full viewport height */
 html, body {
-    height: 100%; /* Ensure full height */
+    height: 100%;
 }
 
 body {
@@ -325,5 +322,5 @@ body {
 }
 
 .container {
-    flex: 1; /* Push footer down */
+    flex: 1;
 }

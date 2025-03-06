@@ -134,6 +134,7 @@ $(document).ready(function () {
 */
 
 
+/*
 
 $(document).ready(function () {
     $("#navbar-container").load("navbar.html", function () {
@@ -155,6 +156,48 @@ $(document).ready(function () {
                     $("#footer-container").css("position", "relative");
                 }
             }, 300);
+        });
+    });
+
+    $("#footer-container").load("footer.html");
+});
+*/
+
+
+
+$(document).ready(function () {
+    $("#navbar-container").load("navbar.html", function () {
+        $(".navbar-toggler").click(function () {
+            setTimeout(function () {
+                $("#footer-container").css("display", "block");
+
+                // Adjust the footer dynamically
+                let bodyHeight = $("body").outerHeight();
+                let windowHeight = $(window).height();
+
+                if (bodyHeight < windowHeight) {
+                    $("#footer-container").css({
+                        "position": "absolute",
+                        "bottom": "0",
+                        "width": "100%",
+                        "min-height": "50px",
+                        "display": "block"
+                    });
+                } else {
+                    $("#footer-container").css({
+                        "position": "relative",
+                        "min-height": "50px",
+                        "display": "block"
+                    });
+                }
+            }, 500);
+        });
+
+        // Ensure the footer remains visible after collapsing
+        $(".navbar-toggler").on("click", function () {
+            setTimeout(function () {
+                $("#footer-container").show();
+            }, 600);
         });
     });
 
