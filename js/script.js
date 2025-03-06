@@ -144,89 +144,117 @@ $(document).ready(function () {
 
 
 
-let articles = []; // Store articles globally for searching
 
-function loadCSVAndGenerateCards() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-input");
+    const cardContainer = document.getElementById("card-container");
+    let articles = []; // To store CSV data globally
+
+    // Load and Parse CSV
     fetch("index.csv")
         .then(response => response.text())
-        .then(data => {
-            const rows = data.trim().split("\n");
-
-            articles = []; // Clear existing articles
-
-            rows.forEach((row, index) => {
-                if (index === 0) return; // Skip header if present
-                
-                const [category, title, date, link] = row.split(",");
-
-                // Ensure date is in YYYY.MM.DD format
-                const dateParts = date.split(".");
-                if (dateParts.length !== 3) {
-                    console.error(`Invalid date format in CSV: ${date}`);
-                    return;
-                }
-
-                const year = dateParts[0];
-                const month = dateParts[1] - 1; // Month index starts from 0 in JavaScript
-                const day = dateParts[2];
-
-                let formattedDate = new Date(year, month, day);
-
-                // Convert to "DD MMMM, YYYY" format (e.g., "25 January, 1998")
-                const options = { day: "2-digit", month: "long", year: "numeric" };
-                const displayDate = formattedDate.toLocaleDateString("en-US", options);
-
-                // Store parsed data
-                articles.push({ category, title, displayDate, link, formattedDate });
-            });
-
-            // Sort by date (newest first)
-            articles.sort((a, b) => b.formattedDate - a.formattedDate);
-
-            renderArticles(articles);
+        .then(csvData => {
+            articles = parseCSV(csvData);
+            renderArticles(articles); // Initial rendering
         })
         .catch(error => console.error("Error loading CSV:", error));
-}
 
-// Function to render articles (used for both initial load and search filtering)
-function renderArticles(filteredArticles) {
-    let html = "";
-    filteredArticles.forEach(({ category, title, displayDate, link }) => {
-        html += `
-            <div class="col-lg-4 col-md-6 col-sm-12 article-card">
-                <div class="card-link">
-                    <a href="${link}" class="card-link" target="_blank">
-                        <div class="card custom-card article">
-                            <div class="card-inner">
-                                <div class="card-content">
-                                    <p class="card-text">${category}</p>
-                                    <h5 class="card-title">${title}</h5>
-                                    <p class="card-date">${displayDate}</p>
+    // Function to parse CSV
+    function parseCSV(data) {
+        return data.trim().split("\n").map(row => {
+            const [category, title, date, link] = row.split(",").map(item => item.trim());
+            return { category, title, date, link };
+        }).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
+    }
+
+    // Function to format date
+    function formatDate(isoDate) {
+        const [year, month, day] = isoDate.split(".");
+        const dateObj = new Date(year, month - 1, day);
+        return dateObj.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+    }
+
+    // Function to render articles
+    function renderArticles(articleList) {
+        cardContainer.innerHTML = "";
+        articleList.forEach(({ category, title, date, link }) => {
+            const formattedDate = formatDate(date);
+            const cardHTML = `
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card-link">
+                        <a href="${link}" class="card-link">
+                            <div class="card custom-card article">
+                                <div class="card-inner">
+                                    <div class="card-content">
+                                        <p class="card-text">${category}</p>
+                                        <h5 class="card-title">${title}</h5>
+                                        <p class="card-date">${formattedDate}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
-            </div>
-        `;
-    });
+            `;
+            cardContainer.insertAdjacentHTML("beforeend", cardHTML);
+        });
+    }
 
-    document.getElementById("card-container").innerHTML = html;
-}
+    // Function to filter articles on search input
+    function searchArticles() {
+        const searchText = searchInput.value.toLowerCase();
+        const filteredArticles = articles.filter(({ category, title }) =>
+            category.toLowerCase().includes(searchText) || title.toLowerCase().includes(searchText)
+        );
+        renderArticles(filteredArticles);
+    }
 
-// Function to filter articles based on search input
-function searchArticles() {
-    const searchText = document.getElementById("search-input").value.toLowerCase();
-
-    const filteredArticles = articles.filter(({ category, title }) =>
-        category.toLowerCase().includes(searchText) || title.toLowerCase().includes(searchText)
-    );
-
-    renderArticles(filteredArticles);
-}
-
-// Call the function after DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-    loadCSVAndGenerateCards();
-    document.getElementById("search-input").addEventListener("input", searchArticles);
+    // Event listener for real-time search
+    searchInput.addEventListener("input", searchArticles);
 });
