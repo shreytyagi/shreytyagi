@@ -137,19 +137,29 @@ $(document).ready(function () {
 
 
 
+
+
+
+
+
+
+
+let articles = []; // Store articles globally for searching
+
 function loadCSVAndGenerateCards() {
     fetch("index.csv")
         .then(response => response.text())
         .then(data => {
             const rows = data.trim().split("\n");
-            let articles = [];
+
+            articles = []; // Clear existing articles
 
             rows.forEach((row, index) => {
-                if (index === 0) return; // Skip the header row if present
+                if (index === 0) return; // Skip header if present
                 
                 const [category, title, date, link] = row.split(",");
 
-                // Ensure the date is in YYYY.MM.DD format and split it
+                // Ensure date is in YYYY.MM.DD format
                 const dateParts = date.split(".");
                 if (dateParts.length !== 3) {
                     console.error(`Invalid date format in CSV: ${date}`);
@@ -160,10 +170,9 @@ function loadCSVAndGenerateCards() {
                 const month = dateParts[1] - 1; // Month index starts from 0 in JavaScript
                 const day = dateParts[2];
 
-                // Convert to Date object
                 let formattedDate = new Date(year, month, day);
 
-                // Format date for display as "DD MMMM, YYYY" (e.g., "25 January, 1998")
+                // Convert to "DD MMMM, YYYY" format (e.g., "25 January, 1998")
                 const options = { day: "2-digit", month: "long", year: "numeric" };
                 const displayDate = formattedDate.toLocaleDateString("en-US", options);
 
@@ -171,34 +180,53 @@ function loadCSVAndGenerateCards() {
                 articles.push({ category, title, displayDate, link, formattedDate });
             });
 
-            // Sort articles by date in descending order
+            // Sort by date (newest first)
             articles.sort((a, b) => b.formattedDate - a.formattedDate);
 
-            let html = "";
-            articles.forEach(({ category, title, displayDate, link }) => {
-                html += `
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="card-link">
-                            <a href="${link}" class="card-link" target="_blank">
-                                <div class="card custom-card article">
-                                    <div class="card-inner">
-                                        <div class="card-content">
-                                            <p class="card-text">${category}</p>
-                                            <h5 class="card-title">${title}</h5>
-                                            <p class="card-date">${displayDate}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                `;
-            });
-
-            document.getElementById("card-container").innerHTML = html;
+            renderArticles(articles);
         })
         .catch(error => console.error("Error loading CSV:", error));
 }
 
+// Function to render articles (used for both initial load and search filtering)
+function renderArticles(filteredArticles) {
+    let html = "";
+    filteredArticles.forEach(({ category, title, displayDate, link }) => {
+        html += `
+            <div class="col-lg-4 col-md-6 col-sm-12 article-card">
+                <div class="card-link">
+                    <a href="${link}" class="card-link" target="_blank">
+                        <div class="card custom-card article">
+                            <div class="card-inner">
+                                <div class="card-content">
+                                    <p class="card-text">${category}</p>
+                                    <h5 class="card-title">${title}</h5>
+                                    <p class="card-date">${displayDate}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        `;
+    });
+
+    document.getElementById("card-container").innerHTML = html;
+}
+
+// Function to filter articles based on search input
+function searchArticles() {
+    const searchText = document.getElementById("search-input").value.toLowerCase();
+
+    const filteredArticles = articles.filter(({ category, title }) =>
+        category.toLowerCase().includes(searchText) || title.toLowerCase().includes(searchText)
+    );
+
+    renderArticles(filteredArticles);
+}
+
 // Call the function after DOM is loaded
-document.addEventListener("DOMContentLoaded", loadCSVAndGenerateCards);
+document.addEventListener("DOMContentLoaded", () => {
+    loadCSVAndGenerateCards();
+    document.getElementById("search-input").addEventListener("input", searchArticles);
+});
