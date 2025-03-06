@@ -116,18 +116,66 @@ $(document).ready(function () {
 
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function loadCSVAndGenerateCards() {
     fetch("index.csv")
         .then(response => response.text())
         .then(data => {
             const rows = data.trim().split("\n");
-            let html = "";
+            let articles = [];
 
             rows.forEach((row, index) => {
-                if (index === 0) return; // Skip the header if present
+                if (index === 0) return; // Skip the header row if present
                 
                 const [category, title, date, link] = row.split(",");
 
+                // Ensure the date is in YYYY.MM.DD format and split it
+                const dateParts = date.split(".");
+                if (dateParts.length !== 3) {
+                    console.error(`Invalid date format in CSV: ${date}`);
+                    return;
+                }
+
+                const year = dateParts[0];
+                const month = dateParts[1] - 1; // Month index starts from 0 in JavaScript
+                const day = dateParts[2];
+
+                // Convert to Date object
+                let formattedDate = new Date(year, month, day);
+
+                // Format date for display as "DD MMMM, YYYY" (e.g., "25 January, 1998")
+                const options = { day: "2-digit", month: "long", year: "numeric" };
+                const displayDate = formattedDate.toLocaleDateString("en-US", options);
+
+                // Store parsed data
+                articles.push({ category, title, displayDate, link, formattedDate });
+            });
+
+            // Sort articles by date in descending order
+            articles.sort((a, b) => b.formattedDate - a.formattedDate);
+
+            let html = "";
+            articles.forEach(({ category, title, displayDate, link }) => {
                 html += `
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="card-link">
@@ -137,7 +185,7 @@ function loadCSVAndGenerateCards() {
                                         <div class="card-content">
                                             <p class="card-text">${category}</p>
                                             <h5 class="card-title">${title}</h5>
-                                            <p class="card-date">${date}</p>
+                                            <p class="card-date">${displayDate}</p>
                                         </div>
                                     </div>
                                 </div>
