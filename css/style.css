@@ -114,7 +114,7 @@ padding: 0;
     margin-top: auto;
 	margin-bottom: 0px; /* Adjust this value to increase or decrease the spacing */
 	text-align: right;
-	background-color: #343a40;
+	color: #343a40;
 }
 
 .card-text {
@@ -160,11 +160,11 @@ padding: 0;
 		/* Aspect ratio for cards with both .card and .card-photo classes (1:1) */
 		.card.card-photo {
 			aspect-ratio: 1;
-			border-radius: 0px; /* Increase or decrease as needed */
+			border-radius: 10px; /* Increase or decrease as needed */
 			/* background-size: 100% 100%;  */ /*  Use this to stretch the images*/
 			/* background-position: center;
 			background-repeat: no-repeat; */
-			border: 5px solid white; /* Specify border style */
+			border: 2px solid #343a40
 		}
 
 .deadinside {
@@ -209,24 +209,23 @@ padding: 0;
     background-color: rgba(0, 0, 0, 0.8); /* Optional: Add a semi-transparent background */
 }
 
-.close-btn {
-    cursor: pointer;
 
-	position: absolute;
-	top: 15px;
-	right: 15px;
-	width: 40px; /* Adjust the size of the circular button */
-	height: 40px;
-	background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-	color: white;
-	font-size: 32px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-radius: 50%; /* Make the button circular */
-	line-height: 1; /* Reset the line height */
-    padding-bottom: 5px; /* Adjust the padding to vertically center the "x" */
+
+.close-btn {
+    position: fixed; /* Adjust as needed */
+    inset: 10px 15px auto auto; /* Positions it at the top-right */
+    width: 40px;
+    height: 40px;
+    background: url('close-btn.png') center/contain no-repeat; /* Set GIF */
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
 }
+
+
+
+
 
 .preview-image {
     max-width: 100%;
