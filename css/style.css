@@ -412,10 +412,11 @@ body {
 }
 
 
-/* Ensure the card container always starts at the top */
+/* Ensure the card container does not vertically center results */
 .row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start; /* Align items to the top */
-    align-items: flex-start; /* Prevents vertical centering */
+    justify-content: flex-start; /* Align items from the top */
+    align-items: flex-start; /* Prevents centering */
+    align-content: flex-start; /* Ensures the first row always starts from the top */
 }
