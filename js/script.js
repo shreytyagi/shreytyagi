@@ -205,7 +205,7 @@ $(document).ready(function () {
 });
 
 */
-
+/*
 $(document).ready(function () {
     $("#navbar-container").load("navbar.html", function () {
         $(".navbar-toggler").click(function () {
@@ -230,6 +230,48 @@ $(document).ready(function () {
                     });
                 }
             }, 300);
+        });
+    });
+
+    $("#footer-container").load("footer.html");
+});
+*/
+
+$(document).ready(function () {
+    $("#navbar-container").load("navbar.html", function () {
+        $(".navbar-toggler").click(function () {
+            setTimeout(function () {
+                // 🌟 Ensure footer is always visible
+                $("#footer-container").css({
+                    "display": "block",
+                    "visibility": "visible",
+                    "min-height": "50px"
+                });
+
+                // 🌟 Recalculate the height
+                let bodyHeight = $("body").outerHeight();
+                let windowHeight = $(window).height();
+
+                // 🌟 If page content is smaller than viewport, keep footer at bottom
+                if (bodyHeight < windowHeight) {
+                    $("#footer-container").css({
+                        "position": "relative",
+                        "bottom": "auto",
+                        "width": "100%"
+                    });
+                } else {
+                    $("#footer-container").css({
+                        "position": "relative"
+                    });
+                }
+            }, 300);
+        });
+
+        // 🌟 Restore footer content visibility after menu retracts
+        $(".navbar-toggler").on("click", function () {
+            setTimeout(function () {
+                $("#footer-container").show().css("visibility", "visible"); // 💖 FIX: Ensure content is always visible
+            }, 600);
         });
     });
 

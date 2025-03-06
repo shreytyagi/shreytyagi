@@ -334,9 +334,10 @@ body {
     color: white;
     padding: 10px 0;
     text-align: center;
-    position: relative; /* 🌟 Fix: Keep it in normal document flow */
-    min-height: 50px; /* 🌟 Prevents it from disappearing */
-    display: block;
+    position: relative;
+    min-height: 50px; /* 💖 Prevents it from disappearing */
+    display: block !important; /* 💖 Ensures it never disappears */
+    visibility: visible !important; /* 💖 Ensures the content inside stays visible */
 }
 
 /* Ensure the body takes full height */
@@ -353,3 +354,5 @@ body {
 .container {
     flex: 1;
 }
+
+
