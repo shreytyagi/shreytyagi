@@ -335,18 +335,18 @@ body {
     padding: 10px 0;
     text-align: center;
     position: relative;
-    min-height: 50px; /* 💖 Prevents it from disappearing */
-    display: block !important; /* 💖 Ensures it never disappears */
-    visibility: visible !important; /* 💖 Ensures the content inside stays visible */
-}
-
-/* 💖 Fix: Ensure footer nav content is always visible */
-#footer-container nav {
-    display: block !important;
+    min-height: 50px;
+    display: block !important; /* 💖 Always visible */
     visibility: visible !important;
 }
 
-/* Ensure the body takes full height */
+/* Ensure footer content inside nav is never hidden */
+#footer-container nav {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+/* Fix collapsing issues */
 html, body {
     height: 100%;
 }
@@ -356,7 +356,6 @@ body {
     flex-direction: column;
 }
 
-/* Push content down so footer always sits at the bottom */
 .container {
     flex: 1;
 }
