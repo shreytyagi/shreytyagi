@@ -361,14 +361,23 @@ body {
 }
 
 
-/* Search Box Styling */
+
+
+
+
+
+/* Ensure the search container stays fixed at the top */
 .search-container {
     display: flex;
     justify-content: center;
-    width: 100%;
-    margin-bottom: 20px;
+    position: sticky; /* Keeps it in place */
+    top: 0; /* Sticks to the top */
+    background: white; /* Prevents transparency issues */
+    z-index: 100; /* Ensures it stays above other content */
+    padding: 10px 0; /* Adds space around it */
 }
 
+/* Improved search box styling */
 .search-box {
     display: flex;
     align-items: center;
@@ -378,7 +387,6 @@ body {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px; /* Limited width on large screens */
-    transition: all 0.3s ease-in-out;
 }
 
 .search-box i {
@@ -395,10 +403,10 @@ body {
     padding: 5px;
 }
 
-/* Responsive Design */
+/* Responsive: Full width on small screens */
 @media (max-width: 600px) {
     .search-box {
         max-width: 100%;
-        margin: 0 10px; /* Add padding so it doesn't touch screen edges */
+        margin: 0 10px; /* Adds space on mobile */
     }
 }
