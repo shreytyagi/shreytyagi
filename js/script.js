@@ -4,11 +4,11 @@
 	yearElement.textContent = "Copyright © "+currentYear+" by Shrey Tyagi. All rights reserved.";
 }); */
 
-
+/*
         $(document).ready(function(){
             $("#navbar-container").load("navbar.html");
             $("#footer-container").load("footer.html");
-        });
+        }); */
 
 /* document.addEventListener("DOMContentLoaded", function () {
     const photoLink = document.querySelector(".photo-link");
@@ -91,7 +91,7 @@ $(document).ready(function () {
 
 */
 
-
+/*
 
 $(document).ready(function(){
     $("#navbar-container").load("navbar.html", function() {
@@ -99,6 +99,61 @@ $(document).ready(function(){
         $(".navbar-toggler").click(function() {
             setTimeout(function() {
                 $("#footer-container").css("display", "block");
+            }, 300);
+        });
+    });
+
+    $("#footer-container").load("footer.html");
+}); */
+
+
+/*
+$(document).ready(function () {
+    $("#navbar-container").load("navbar.html", function() {
+        $(".navbar-toggler").click(function() {
+            setTimeout(function() {
+                $("#footer-container").css("display", "block");
+
+                // Adjust the footer height dynamically
+                let bodyHeight = $("body").outerHeight();
+                let windowHeight = $(window).height();
+                
+                if (bodyHeight < windowHeight) {
+                    $("#footer-container").css("position", "absolute").css("bottom", "0").css("width", "100%");
+                } else {
+                    $("#footer-container").css("position", "relative");
+                }
+            }, 300);
+        });
+    });
+
+    $("#footer-container").load("footer.html");
+});
+
+
+*/
+
+
+
+$(document).ready(function () {
+    $("#navbar-container").load("navbar.html", function () {
+        $(".navbar-toggler").click(function () {
+            setTimeout(function () {
+                $("#footer-container").css("display", "block");
+
+                // Adjust footer position dynamically
+                let bodyHeight = $("body").outerHeight();
+                let windowHeight = $(window).height();
+
+                if (bodyHeight < windowHeight) {
+                    $("#footer-container").css({
+                        "position": "absolute",
+                        "bottom": "0",
+                        "width": "100%"
+                    });
+                } else {
+                    $("#footer-container").css("position", "relative");
+                }
             }, 300);
         });
     });
