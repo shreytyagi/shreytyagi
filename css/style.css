@@ -410,3 +410,12 @@ body {
         margin: 0 10px; /* Adds space on mobile */
     }
 }
+
+
+/* Ensure the card container always starts at the top */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Align items to the top */
+    align-items: flex-start; /* Prevents vertical centering */
+}
