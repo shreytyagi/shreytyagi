@@ -114,7 +114,7 @@ padding: 0;
     margin-top: auto;
 	margin-bottom: 0px; /* Adjust this value to increase or decrease the spacing */
 	text-align: right;
-	color: #343a40;
+	background-color: #343a40;
 }
 
 .card-text {
