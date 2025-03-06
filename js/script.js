@@ -117,3 +117,41 @@ $(document).ready(function () {
 });
 
 
+function loadCSVAndGenerateCards() {
+    fetch("index.csv")
+        .then(response => response.text())
+        .then(data => {
+            const rows = data.trim().split("\n");
+            let html = "";
+
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip the header if present
+                
+                const [category, title, date] = row.split(",");
+
+                html += `
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card-link">
+                            <a href="https://google.com" class="card-link">
+                                <div class="card custom-card article">
+                                    <div class="card-inner">
+                                        <div class="card-content">
+                                            <p class="card-text">${category}</p>
+                                            <h5 class="card-title">${title}</h5>
+                                            <p class="card-date">${date}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById("card-container").innerHTML = html;
+        })
+        .catch(error => console.error("Error loading CSV:", error));
+}
+
+// Call the function after DOM is loaded
+document.addEventListener("DOMContentLoaded", loadCSVAndGenerateCards);
