@@ -96,7 +96,7 @@ padding: 0;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add a shadow */
 	color: none; /* Inherit the parent's text color */
 	text-decoration: none; /* Remove underline, if any */
-	border-radius: 0px; /* Increase or decrease as needed */
+	border-radius: 30px; /* Increase or decrease as needed */
 	background-size: cover;
 	background-position: center;
 	box-shadow: 0 8px 16px 2px rgba(0, 0, 0, 0.3); /* Adjust the shadow values */
