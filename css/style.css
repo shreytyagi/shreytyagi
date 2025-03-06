@@ -290,6 +290,7 @@ padding: 0;
     padding-bottom: 4vh !important;
 }
 
+/*
 
 #footer-container {
     width: 100%;
@@ -298,7 +299,7 @@ padding: 0;
     padding: 10px 0;
     text-align: center;
     position: relative;
-    min-height: 50px; /* Prevents the footer from becoming too small */
+    min-height: 50px; 
     display: block !important;
 }
 
@@ -311,7 +312,7 @@ padding: 0;
     }
 }
 
-/* Ensure the body takes the full viewport height */
+
 html, body {
     height: 100%;
 }
@@ -321,6 +322,34 @@ body {
     flex-direction: column;
 }
 
+.container {
+    flex: 1;
+}
+
+*/
+
+#footer-container {
+    width: 100%;
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: relative; /* 🌟 Fix: Keep it in normal document flow */
+    min-height: 50px; /* 🌟 Prevents it from disappearing */
+    display: block;
+}
+
+/* Ensure the body takes full height */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push content down so footer always sits at the bottom */
 .container {
     flex: 1;
 }

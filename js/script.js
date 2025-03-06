@@ -163,7 +163,7 @@ $(document).ready(function () {
 });
 */
 
-
+/**
 
 $(document).ready(function () {
     $("#navbar-container").load("navbar.html", function () {
@@ -198,6 +198,38 @@ $(document).ready(function () {
             setTimeout(function () {
                 $("#footer-container").show();
             }, 600);
+        });
+    });
+
+    $("#footer-container").load("footer.html");
+});
+
+*/
+
+$(document).ready(function () {
+    $("#navbar-container").load("navbar.html", function () {
+        $(".navbar-toggler").click(function () {
+            setTimeout(function () {
+                // Ensure footer is always visible
+                $("#footer-container").css("display", "block");
+
+                // Recalculate the height
+                let bodyHeight = $("body").outerHeight();
+                let windowHeight = $(window).height();
+
+                // If page content is smaller than viewport, keep footer at bottom
+                if (bodyHeight < windowHeight) {
+                    $("#footer-container").css({
+                        "position": "relative", /* 🌟 Fix: Keep it in normal flow */
+                        "bottom": "auto",
+                        "width": "100%"
+                    });
+                } else {
+                    $("#footer-container").css({
+                        "position": "relative"
+                    });
+                }
+            }, 300);
         });
     });
 
