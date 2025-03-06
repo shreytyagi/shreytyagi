@@ -111,4 +111,9 @@ $(document).ready(function () {
         // 💖 Fix: Ensure footer content is visible on page load
         $("#footer-container nav").css("display", "block");
     });
+	
+	$("#current-year").text("Copyright © " + new Date().getFullYear() + " by Shrey Tyagi. All rights reserved.");
+
 });
+
+
