@@ -372,7 +372,6 @@ body {
     justify-content: center;
     position: sticky; /* Keeps it in place */
     top: 0; /* Sticks to the top */
-    background: white; /* Prevents transparency issues */
     z-index: 100; /* Ensures it stays above other content */
     padding: 10px 0; /* Adds space around it */
 }
@@ -387,6 +386,7 @@ body {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px; /* Limited width on large screens */
+	    border: 2px solid #ccc; /* Added outline */
 }
 
 .search-box i {
