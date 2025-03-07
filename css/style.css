@@ -373,7 +373,7 @@ body {
     justify-content: center;
     position: sticky; /* Keeps it in place */
     top: 0; /* Sticks to the top */
-    z-index: 100; /* Ensures it stays above other content */
+    /* z-index: 100; /* Ensures it stays above other content */
     padding: 10px 0; /* Adds space around it */
 }
 
