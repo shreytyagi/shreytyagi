@@ -121,6 +121,7 @@ padding: 0;
     margin-top: 0px;
 	margin-bottom: auto; /* Adjust this value to increase or decrease the spacing */
 	text-align: left;
+	color: red;
 }
 
 .card-title {
