@@ -1,15 +1,15 @@
-Category,Title,Date,Link
-Movie Review,Review of XYZ Movie,2024.03.12,https://example.com/moviexyz
-Tech,AI in 2025,2025.02.01,https://example.com/ai2025
-Travel,Hidden Gems of India,2023.01.10,https://example.com/travelindia
-Movie Review,Review of XYZ Movie,2027.03.12,https://example.com/moviexyz
-Tech,AI in 2025,2025.02.01,https://example.com/ai2025
-Travel,Hidden Gems of India,2029.01.10,https://example.com/travelindia
-Travel,Hidden Gems of India,2023.01.10,https://example.com/travelindia
-Movie Review,Review of XYZ Movie,2027.03.12,https://example.com/moviexyz
-Tech,AI in 2025,2025.02.01,https://example.com/ai2025
-Travel,Hidden Gems of India,2029.01.10,https://example.com/travelindia
-Travel,Hidden Gems of India,2023.01.10,https://example.com/travelindia
-Movie Review,Review of XYZ Movie,2027.03.12,https://example.com/moviexyz
-Tech,AI in 2025,2025.02.01,https://example.com/ai2025
-Travel,Hidden Gems of India,2029.01.10,https://example.com/travelindia
+Master Category,Category,Title,Date,Link
+Blog,Movie Review,Review of XYZ Movie,2024.03.12,https://example.com/moviexyz
+Blog,Tech,AI in 2025,2025.02.01,https://example.com/ai2025
+Blog,Travel,Hidden Gems of India,2023.01.10,https://example.com/travelindia
+Blog,Movie Review,Review of XYZ Movie,2027.03.12,https://example.com/moviexyz
+Blog,Tech,AI in 2025,2025.02.01,https://example.com/ai2025
+Blog,Travel,Hidden Gems of India,2029.01.10,https://example.com/travelindia
+Blog,Travel,Hidden Gems of India,2023.01.10,https://example.com/travelindia
+Blog,Movie Review,Review of XYZ Movie,2027.03.12,https://example.com/moviexyz
+Blog,Tech,AI in 2025,2025.02.01,https://example.com/ai2025
+Article,Travel,Hidden Gems of India,2029.01.10,https://example.com/travelindia
+Article,Travel,Hidden Gems of India,2023.01.10,https://example.com/travelindia
+Article,Movie Review,Review of XYZ Movie,2027.03.12,https://example.com/moviexyz
+Article,Tech,AI in 2025,2025.02.01,https://example.com/ai2025
+Article,Travel,Hidden Gems of India,2029.01.10,https://example.com/travelindia
