@@ -339,6 +339,7 @@ body {
     min-height: 50px;
     display: block !important; /* 💖 Always visible */
     visibility: visible !important;
+	margin-top: 50px; /* 👈 Adds space above the footer */
 }
 
 /* Ensure footer content inside nav is never hidden */
