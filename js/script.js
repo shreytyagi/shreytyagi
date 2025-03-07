@@ -182,8 +182,6 @@ $(document).ready(function () {
 
 
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
