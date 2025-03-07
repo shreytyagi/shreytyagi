@@ -184,9 +184,6 @@ $(document).ready(function () {
 
 
 
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
@@ -200,7 +197,11 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.text())
         .then(csvData => {
             articles = parseCSV(csvData);
-            renderArticles(articles); // Initial rendering
+            // Filter based on master category before rendering
+            const filteredArticles = masterCategoryFilter
+                ? articles.filter(article => article.masterCategory === masterCategoryFilter)
+                : articles;
+            renderArticles(filteredArticles); // Initial rendering with filter applied
         })
         .catch(error => console.error("Error loading CSV:", error));
 
@@ -209,9 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return data.trim().split("\n").map(row => {
             const [masterCategory, category, title, date, link] = row.split(",").map(item => item.trim());
             return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
-        }).filter(article => 
-            masterCategoryFilter === "" || article.masterCategory === masterCategoryFilter
-        ).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
+        }).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
     }
 
     // Function to format date
@@ -250,9 +249,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to filter articles on search input
     function searchArticles() {
         const searchText = searchInput.value.toLowerCase();
-        const filteredArticles = articles.filter(({ category, title }) =>
-            category.toLowerCase().includes(searchText) || title.toLowerCase().includes(searchText)
-        );
+        const filteredArticles = articles
+            .filter(({ category, title }) =>
+                category.toLowerCase().includes(searchText) || title.toLowerCase().includes(searchText)
+            )
+            .filter(({ masterCategory }) =>
+                masterCategoryFilter === "" || masterCategory === masterCategoryFilter
+            ); // Ensure master category filtering is always applied
         renderArticles(filteredArticles);
     }
 
