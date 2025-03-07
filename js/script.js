@@ -187,17 +187,13 @@ $(document).ready(function () {
 
 
 
-
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
     let articles = []; // To store CSV data globally
 
     // Get master category filter from <body> attribute
-    const masterCategoryFilter = document.body.getAttribute("data-master-category") || "";
+    const masterCategoryFilter = document.body.getAttribute("data-master-category")?.toLowerCase() || "";
 
     // Load and Parse CSV
     fetch("index.csv")
@@ -212,9 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function parseCSV(data) {
         return data.trim().split("\n").map(row => {
             const [masterCategory, category, title, date, link] = row.split(",").map(item => item.trim());
-            return { masterCategory, category, title, date, link };
+            return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
         }).filter(article => 
-            masterCategoryFilter === "" || article.masterCategory.toLowerCase() === masterCategoryFilter.toLowerCase()
+            masterCategoryFilter === "" || article.masterCategory === masterCategoryFilter
         ).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
     }
 
