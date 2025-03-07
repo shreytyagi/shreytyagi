@@ -196,6 +196,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const cardContainer = document.getElementById("card-container");
     let articles = []; // To store CSV data globally
 
+    // Get master category filter from <body> attribute
+    const masterCategoryFilter = document.body.getAttribute("data-master-category") || "";
+
     // Load and Parse CSV
     fetch("index.csv")
         .then(response => response.text())
@@ -208,9 +211,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to parse CSV
     function parseCSV(data) {
         return data.trim().split("\n").map(row => {
-            const [category, title, date, link] = row.split(",").map(item => item.trim());
-            return { category, title, date, link };
-        }).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
+            const [masterCategory, category, title, date, link] = row.split(",").map(item => item.trim());
+            return { masterCategory, category, title, date, link };
+        }).filter(article => 
+            masterCategoryFilter === "" || article.masterCategory.toLowerCase() === masterCategoryFilter.toLowerCase()
+        ).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
     }
 
     // Function to format date
