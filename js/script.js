@@ -203,13 +203,15 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-    // Function to parse CSV
-    function parseCSV(data) {
-        return data.trim().split("\n").map(row => {
-            const [masterCategory, category, title, date, link] = row.split(",").map(item => item.trim());
-            return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
-        }).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
-    }
+// Function to parse CSV (skips the header row)
+function parseCSV(data) {
+    const rows = data.trim().split("\n");
+    return rows.slice(1).map(row => { // Slice(1) to skip the first row
+        const [masterCategory, category, title, date, link] = row.split(",").map(item => item.trim());
+        return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
+    }).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
+}
+
 
     // Function to format date
     function formatDate(isoDate) {
