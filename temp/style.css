@@ -432,10 +432,3 @@ body {
     z-index: 1000; /* Ensures it stays above other content */
     background-color: white; /* Prevents content overlap */
 }
-
-
-.photo-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50%, 1fr)); /* At least 2 per row */
-    gap: 10px; /* Adjust spacing between images */
-}
