@@ -262,3 +262,56 @@ function parseCSV(data) {
     // Event listener for real-time search
     searchInput.addEventListener("input", searchArticles);
 });
+
+
+// This code will generate the images section
+
+document.addEventListener("DOMContentLoaded", function () {
+    const galleryContainer = document.querySelector(".gallery-container .row");
+
+    // Inject the overlay section once at the beginning of the body
+    if (!document.querySelector(".overlay")) {
+        document.body.insertAdjacentHTML("afterbegin", `
+            <div class="overlay" style="padding: 0%;">
+                <div class="photo-preview">
+                    <span class="close-btn"></span>
+                    <img class="preview-image" src="">
+                </div>
+            </div>
+        `);
+    }
+
+    fetch("photos.csv")
+        .then(response => response.text())
+        .then(data => {
+            const rows = parseCSV(data).slice(1); // Skip header row
+            let galleryHTML = "";
+
+            rows.forEach(([url, caption]) => {
+                if (url) {
+                    galleryHTML += `
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
+                            <div class="card-link nottoobig">
+                                <a href="#" target="_blank" class="photo-link" data-image="${url}">
+                                    <div class="card custom-card card-photo" style="background-image: url('${url}');">
+                                        ${caption ? `<div class="card-caption">${caption}</div>` : ""}
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            galleryContainer.innerHTML = galleryHTML;
+        })
+        .catch(error => console.error("Error loading CSV:", error));
+
+    // ✅ Correct CSV parsing for "quoted","values"
+    function parseCSV(data) {
+        return data.trim().split("\n").map(line => {
+            const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
+            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
+});
