@@ -440,3 +440,16 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(50%, 1fr)); /* Always at least 2 per row */
     gap: 10px; /* Adjust spacing */
 }
+
+
+/* Ensure a minimum of 2 images per row on all screen sizes */
+@media (max-width: 600px) {  /* Apply only to narrow devices */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .row > div { 
+        flex: 1 1 50% !important; /* Forces 2 images per row */
+        max-width: 50% !important; /* Ensures no more than 2 per row */
+    }
+}
