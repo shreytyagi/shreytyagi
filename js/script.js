@@ -266,21 +266,34 @@ function parseCSV(data) {
 
 // This code will generate the images section
 
+
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
 
-    /* Inject the overlay section once at the beginning of the body
+    // Inject the overlay section once at the beginning of the body
     if (!document.querySelector(".overlay")) {
         document.body.insertAdjacentHTML("afterbegin", `
             <div class="overlay" style="padding: 0%;">
                 <div class="photo-preview">
-                    <span class="close-btn"></span>
+                    <span class="close-btn">&times;</span>
                     <img class="preview-image" src="">
                 </div>
             </div>
         `);
-    } */
+    }
 
+    const overlay = document.querySelector(".overlay");
+    const previewImage = document.querySelector(".preview-image");
+    const closeBtn = document.querySelector(".close-btn");
+
+    // Fetch and parse CSV data
     fetch("photos.csv")
         .then(response => response.text())
         .then(data => {
@@ -292,9 +305,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     galleryHTML += `
                         <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
                             <div class="card-link nottoobig">
-                                <a href="#" target="_blank" class="photo-link" data-image="${url}">
+                                <a href="#" class="photo-link" data-image="${url}">
                                     <div class="card custom-card card-photo" style="background-image: url('${url}');">
-                                        <div class="card-caption">${caption}</div>
+                                        ${caption ? `<div class="card-caption">${caption}</div>` : ""}
                                     </div>
                                 </a>
                             </div>
@@ -304,14 +317,39 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             galleryContainer.innerHTML = galleryHTML;
+            bindImageClickEvents(); // Re-apply click event listeners
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-    // ✅ Correct CSV parsing for "quoted","values"
+    // ✅ Function to parse CSV with "quoted","values"
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
             const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
+
+    // ✅ Function to bind click events for newly added images
+    function bindImageClickEvents() {
+        document.querySelectorAll(".photo-link").forEach(link => {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const imageUrl = this.getAttribute("data-image");
+                previewImage.src = imageUrl;
+                overlay.style.display = "flex"; // Show overlay
+            });
+        });
+
+        // Close overlay when clicking the close button
+        closeBtn.addEventListener("click", function () {
+            overlay.style.display = "none";
+        });
+
+        // Close overlay when clicking outside the image
+        overlay.addEventListener("click", function (event) {
+            if (event.target === overlay) {
+                overlay.style.display = "none";
+            }
         });
     }
 });
