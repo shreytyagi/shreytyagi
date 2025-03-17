@@ -226,7 +226,7 @@ function parseCSV(data) {
         articleList.forEach(({ category, title, date, link }) => {
             const formattedDate = formatDate(date);
             const cardHTML = `
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12">
+                <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="card-link">
                         <a href="${link}" class="card-link">
                             <div class="card custom-card article">
