@@ -269,7 +269,7 @@ function parseCSV(data) {
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
 
-    // Inject the overlay section once at the beginning of the body
+    /* Inject the overlay section once at the beginning of the body
     if (!document.querySelector(".overlay")) {
         document.body.insertAdjacentHTML("afterbegin", `
             <div class="overlay" style="padding: 0%;">
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             </div>
         `);
-    }
+    } */
 
     fetch("photos.csv")
         .then(response => response.text())
