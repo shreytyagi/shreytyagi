@@ -434,8 +434,9 @@ body {
 }
 
 
+
 .photo-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50%, 1fr)); /* At least 2 per row */
-    gap: 10px; /* Adjust spacing between images */
+    display: grid !important; /* Force grid layout */
+    grid-template-columns: repeat(auto-fit, minmax(50%, 1fr)); /* Always at least 2 per row */
+    gap: 10px; /* Adjust spacing */
 }
