@@ -294,7 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="card-link nottoobig">
                                 <a href="#" target="_blank" class="photo-link" data-image="${url}">
                                     <div class="card custom-card card-photo" style="background-image: url('${url}');">
-                                        ${caption ? `<div class="card-caption">${caption}</div>` : ""}
+                                        <div class="card-caption">${caption}</div>
                                     </div>
                                 </a>
                             </div>
