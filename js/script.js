@@ -362,13 +362,20 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv"; // Default CSV file
+    const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
 
-    // Apply full-width style if attribute fullwidth="true" is present
-    if (tableContainer.getAttribute("fullwidth") === "true") {
+    // Apply full-width style if fullwidth="true"
+    if (isFullWidth) {
         tableContainer.classList.add("full-width");
 
         // Ensure table inside expands too
         document.querySelector("#dynamic-table").style.width = "100%";
+
+        // Break out of the `.container` width limits
+        const parentContainer = tableContainer.closest(".container");
+        if (parentContainer) {
+            parentContainer.classList.add("full-width-container");
+        }
     }
 
     fetch(csvFile)

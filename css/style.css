@@ -461,49 +461,34 @@ body {
 
 
 /* This code is for tables */
+/* ✅ Default: Table stays within a readable width */
 .table-container {
-    max-width: 900px; /* Default max width for readability */
+    max-width: 900px;
     margin: 20px auto;
     padding: 20px;
     overflow-x: auto;
-    transition: max-width 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-th {
-    background-color: #333; /* Dark header */
-    color: white;
-    font-weight: bold;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    th, td {
-        padding: 8px;
-        font-size: 14px;
-    }
-}
-
-/* Full-width override if the attribute fullwidth="true" is set */
+/* ✅ Full-width override when fullwidth="true" is set */
 .full-width {
-    max-width: 100% !important;
+    max-width: 100vw !important; /* Break free from container */
+    width: 100vw !important;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%); /* Center the table */
+    margin: 0;
+    padding: 10px;
+}
+
+/* Ensure the table itself expands fully */
+.full-width table {
+    width: 100%;
+}
+
+/* Prevent `.container` from restricting width */
+.container.full-width-container {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    padding: 0 !important;
 }
