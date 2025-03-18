@@ -517,7 +517,7 @@ th {
 td {
     /* background-color: white; /* Colorless */
     border: 1px solid black; /* Solid black borders */
-	padding: 10px 12px;
+	padding: 1px 3px;
 }
 
 /* ✅ Ensure table structure has solid black lines */
