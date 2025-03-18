@@ -363,49 +363,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv"; // Default CSV file
     const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
+    
+    let originalData = []; // Stores original CSV order
+    let currentSortColumn = null; // Tracks which column is currently sorted
+    let sortOrder = 0; // 0 = original order, 1 = ascending, 2 = descending
 
     // Apply full-width style if fullwidth="true"
     if (isFullWidth) {
         tableContainer.classList.add("full-width");
-
-        // Ensure table inside expands too
         document.querySelector("#dynamic-table").style.width = "100%";
-
-        // Break out of the `.container` width limits
         const parentContainer = tableContainer.closest(".container");
-        if (parentContainer) {
-            parentContainer.classList.add("full-width-container");
-        }
+        if (parentContainer) parentContainer.classList.add("full-width-container");
     }
 
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
-            const rows = parseCSV(data);
-            if (rows.length === 0) return;
-
-            const tableHead = document.querySelector("#dynamic-table thead");
-            const tableBody = document.querySelector("#dynamic-table tbody");
-
-            // Generate Header Row
-            const headerRow = document.createElement("tr");
-            rows[0].forEach(header => {
-                const th = document.createElement("th");
-                th.textContent = header;
-                headerRow.appendChild(th);
-            });
-            tableHead.appendChild(headerRow);
-
-            // Generate Table Body
-            rows.slice(1).forEach(rowData => {
-                const row = document.createElement("tr");
-                rowData.forEach(cellData => {
-                    const td = document.createElement("td");
-                    td.textContent = cellData;
-                    row.appendChild(td);
-                });
-                tableBody.appendChild(row);
-            });
+            originalData = parseCSV(data); // Store original order
+            if (originalData.length === 0) return;
+            renderTable(originalData);
         })
         .catch(error => console.error("Error loading CSV:", error));
 
@@ -415,5 +391,65 @@ document.addEventListener("DOMContentLoaded", function () {
             const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
+    }
+
+    // ✅ Function to render the table
+    function renderTable(data) {
+        const tableHead = document.querySelector("#dynamic-table thead");
+        const tableBody = document.querySelector("#dynamic-table tbody");
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        // Generate Header Row
+        const headerRow = document.createElement("tr");
+        data[0].forEach((header, index) => {
+            const th = document.createElement("th");
+            th.textContent = header;
+            th.setAttribute("data-column-index", index); // Store column index
+            th.style.cursor = "pointer"; // Indicate clickability
+            th.addEventListener("click", () => sortTableByColumn(index)); // Attach click event
+            headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        // Generate Table Body
+        data.slice(1).forEach(rowData => {
+            const row = document.createElement("tr");
+            rowData.forEach(cellData => {
+                const td = document.createElement("td");
+                td.textContent = cellData;
+                row.appendChild(td);
+            });
+            tableBody.appendChild(row);
+        });
+    }
+
+    // ✅ Function to sort table by column
+    function sortTableByColumn(columnIndex) {
+        if (columnIndex !== currentSortColumn) {
+            sortOrder = 1; // If new column, reset sort order to ascending
+            currentSortColumn = columnIndex;
+        } else {
+            sortOrder = (sortOrder + 1) % 3; // Cycle between 0 (original), 1 (asc), 2 (desc)
+        }
+
+        let sortedData;
+        if (sortOrder === 0) {
+            sortedData = [...originalData]; // Reset to original order
+        } else {
+            sortedData = [originalData[0], ...originalData.slice(1).sort((a, b) => {
+                if (!isNaN(a[columnIndex]) && !isNaN(b[columnIndex])) {
+                    return sortOrder === 1
+                        ? a[columnIndex] - b[columnIndex] // Sort numbers
+                        : b[columnIndex] - a[columnIndex];
+                } else {
+                    return sortOrder === 1
+                        ? a[columnIndex].localeCompare(b[columnIndex]) // Sort strings
+                        : b[columnIndex].localeCompare(a[columnIndex]);
+                }
+            })];
+        }
+
+        renderTable(sortedData);
     }
 });
