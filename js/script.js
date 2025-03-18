@@ -366,6 +366,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Apply full-width style if attribute fullwidth="true" is present
     if (tableContainer.getAttribute("fullwidth") === "true") {
         tableContainer.classList.add("full-width");
+
+        // Ensure table inside expands too
+        document.querySelector("#dynamic-table").style.width = "100%";
     }
 
     fetch(csvFile)
