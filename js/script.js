@@ -180,8 +180,6 @@ $(document).ready(function () {
 
 
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
@@ -203,15 +201,17 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-// Function to parse CSV (skips the header row)
-function parseCSV(data) {
-    const rows = data.trim().split("\n");
-    return rows.slice(1).map(row => { // Slice(1) to skip the first row
-        const [masterCategory, category, title, date, link] = row.split(",").map(item => item.trim());
-        return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
-    }).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
-}
-
+    // ✅ Function to parse CSV (Strict `""` format, Skips Header Row)
+    function parseCSV(data) {
+        const rows = data.trim().split("\n").slice(1); // Slice(1) to skip the first row (header)
+        return rows.map(row => {
+            const matches = row.match(/"([^"]*)"/g); // Extract values inside quotes
+            if (!matches || matches.length < 5) return null; // Ensure all fields exist
+            const [masterCategory, category, title, date, link] = matches.map(val => val.replace(/"/g, "").trim());
+            return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
+        }).filter(item => item !== null) // Remove any invalid rows
+        .sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
+    }
 
     // Function to format date
     function formatDate(isoDate) {
@@ -262,6 +262,7 @@ function parseCSV(data) {
     // Event listener for real-time search
     searchInput.addEventListener("input", searchArticles);
 });
+
 
 
 // This code will generate the images section
