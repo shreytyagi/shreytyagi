@@ -185,11 +185,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const cardContainer = document.getElementById("card-container");
     let articles = []; // To store CSV data globally
 
-    // Get master category filter from <body> attribute
+    // Get attributes from <body>
     const masterCategoryFilter = document.body.getAttribute("data-master-category")?.toLowerCase() || "";
+    const csvFile = document.body.getAttribute("csvfile") || "index.csv"; // Default to "index.csv"
 
     // Load and Parse CSV
-    fetch("index.csv")
+    fetch(csvFile)
         .then(response => response.text())
         .then(csvData => {
             articles = parseCSV(csvData);
@@ -203,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // ✅ Function to parse CSV (Strict `""` format, Skips Header Row)
     function parseCSV(data) {
-        const rows = data.trim().split("\n").slice(1); // Slice(1) to skip the first row (header)
+        const rows = data.trim().split("\n").slice(1); // Skip header row
         return rows.map(row => {
             const matches = row.match(/"([^"]*)"/g); // Extract values inside quotes
             if (!matches || matches.length < 5) return null; // Ensure all fields exist
@@ -262,6 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event listener for real-time search
     searchInput.addEventListener("input", searchArticles);
 });
+
 
 
 
