@@ -278,6 +278,8 @@ padding: 0;
     overflow: hidden; /* Hide any overflowed content */
     white-space: nowrap; /* Prevent line breaks within the caption */
     text-overflow: ellipsis; /* Show an ellipsis (...) when text is truncated */
+	margin: 0;
+	box-sizing: border-box;
 }
 
 .card-link.nottoobig {
