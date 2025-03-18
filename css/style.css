@@ -505,11 +505,12 @@ th {
     background-color: rgb(230, 230, 230); /* 20% gray */
     color: black;
     font-weight: bold;
+	border: 1px solid black;
 }
 
 /* ✅ Normal rows: No background color but with solid black borders */
 td {
-    background-color: white; /* Colorless */
+    /* background-color: white; /* Colorless */
     border: 1px solid black; /* Solid black borders */
 }
 
