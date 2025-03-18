@@ -461,11 +461,12 @@ body {
 
 
 /* This code is for tables */
-
 .table-container {
-    width: 100%;
-    overflow-x: auto;
+    max-width: 900px; /* Default max width for readability */
+    margin: 20px auto;
     padding: 20px;
+    overflow-x: auto;
+    transition: max-width 0.3s ease-in-out;
 }
 
 table {
@@ -482,7 +483,7 @@ th, td {
 
 th {
     background-color: #333; /* Dark header */
-    color: white; /* White text */
+    color: white;
     font-weight: bold;
 }
 
@@ -494,10 +495,15 @@ tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Make it responsive */
+/* Responsive adjustments */
 @media (max-width: 600px) {
     th, td {
         padding: 8px;
         font-size: 14px;
     }
+}
+
+/* Full-width override if the attribute fullwidth="true" is set */
+.full-width {
+    max-width: 100% !important;
 }

@@ -359,15 +359,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // This code is for tables
-
 document.addEventListener("DOMContentLoaded", function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv"; // Default CSV file
 
+    // Apply full-width style if attribute fullwidth="true" is present
+    if (tableContainer.getAttribute("fullwidth") === "true") {
+        tableContainer.classList.add("full-width");
+    }
+
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
-            const rows = parseCSV(data); // Parse CSV properly
+            const rows = parseCSV(data);
             if (rows.length === 0) return;
 
             const tableHead = document.querySelector("#dynamic-table thead");
