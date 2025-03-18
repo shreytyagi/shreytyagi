@@ -492,3 +492,23 @@ body {
     max-width: 100vw !important;
     padding: 0 !important;
 }
+
+/* ✅ Header row with light gray background */
+th {
+    background-color: rgb(230, 230, 230); /* 20% gray */
+    color: black;
+    font-weight: bold;
+}
+
+/* ✅ Normal rows: No background color but with solid black borders */
+td {
+    background-color: white; /* Colorless */
+    border: 1px solid black; /* Solid black borders */
+}
+
+/* ✅ Ensure table structure has solid black lines */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid black; /* Ensures table has a solid black outline */
+}
