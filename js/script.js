@@ -347,3 +347,59 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+// This code is for tables
+
+document.addEventListener("DOMContentLoaded", function () {
+    const tableContainer = document.querySelector(".table-container");
+    const csvFile = tableContainer.getAttribute("csvfile") || "data.csv"; // Default CSV file
+
+    fetch(csvFile)
+        .then(response => response.text())
+        .then(data => {
+            const rows = parseCSV(data); // Parse CSV properly
+            if (rows.length === 0) return;
+
+            const tableHead = document.querySelector("#dynamic-table thead");
+            const tableBody = document.querySelector("#dynamic-table tbody");
+
+            // Generate Header Row
+            const headerRow = document.createElement("tr");
+            rows[0].forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            tableHead.appendChild(headerRow);
+
+            // Generate Table Body
+            rows.slice(1).forEach(rowData => {
+                const row = document.createElement("tr");
+                rowData.forEach(cellData => {
+                    const td = document.createElement("td");
+                    td.textContent = cellData;
+                    row.appendChild(td);
+                });
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error("Error loading CSV:", error));
+
+    // ✅ Function to parse CSV with "quoted","values"
+    function parseCSV(data) {
+        return data.trim().split("\n").map(line => {
+            const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
+            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
+});
