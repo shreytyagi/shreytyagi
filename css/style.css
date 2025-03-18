@@ -470,21 +470,28 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
-/* ✅ Full-width override when fullwidth="true" is set */
+
+
 .full-width {
-    max-width: 100vw !important; /* Break free from container */
-    width: 100vw !important;
+    max-width: 95vw !important; /* Prevents extreme full width */
+    width: 95vw !important; /* Allows space on edges */
     position: relative;
     left: 50%;
-    transform: translateX(-50%); /* Center the table */
+    transform: translateX(-50%);
     margin: 0;
     padding: 10px;
+    overflow-x: auto; /* Prevents unnecessary scrolling */
 }
 
-/* Ensure the table itself expands fully */
+/* Ensure table itself doesn't exceed container */
 .full-width table {
     width: 100%;
+    max-width: 100%; /* Prevents table from exceeding full width */
+    overflow-x: auto;
 }
+
+
+
 
 /* Prevent `.container` from restricting width */
 .container.full-width-container {
