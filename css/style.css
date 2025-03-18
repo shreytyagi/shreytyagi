@@ -472,33 +472,33 @@ body {
 
 
 
+/* ✅ Allow table to expand but stay within the viewport */
 .full-width {
-    max-width: 95vw !important; /* Prevents extreme full width */
-    width: 95vw !important; /* Allows space on edges */
+    max-width: 100vw; /* No more than full viewport width */
+    width: calc(100vw - 20px); /* Adjust to prevent forced overflow */
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0; /* No shifting */
+    transform: none; /* Prevents any unintended movement */
     margin: 0;
     padding: 10px;
-    overflow-x: auto; /* Prevents unnecessary scrolling */
+    overflow-x: auto; /* Allows internal scrolling if needed */
 }
 
-/* Ensure table itself doesn't exceed container */
+/* ✅ Prevent table from exceeding container */
 .full-width table {
     width: 100%;
-    max-width: 100%; /* Prevents table from exceeding full width */
-    overflow-x: auto;
+    max-width: 100%; /* Ensures table does not go beyond container */
+    table-layout: fixed; /* Ensures consistent column sizes */
 }
 
-
-
-
-/* Prevent `.container` from restricting width */
+/* ✅ Ensure `.container` does not restrict full width */
 .container.full-width-container {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    padding: 0 !important;
+    max-width: 100vw;
+    width: 100%;
+    padding: 0; /* Remove default padding */
+    margin: 0;
 }
+
 
 /* ✅ Header row with light gray background */
 th {
