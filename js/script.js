@@ -267,18 +267,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// This code will generate the images section
-
-
-
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
+    const csvFile = document.querySelector(".gallery-container")?.getAttribute("csvfile") || "photos.csv"; // Get CSV from attribute or default to "photos.csv"
 
     // Inject the overlay section once at the beginning of the body
     if (!document.querySelector(".overlay")) {
@@ -297,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeBtn = document.querySelector(".close-btn");
 
     // Fetch and parse CSV data
-    fetch("photos.csv")
+    fetch(csvFile)
         .then(response => response.text())
         .then(data => {
             const rows = parseCSV(data).slice(1); // Skip header row
