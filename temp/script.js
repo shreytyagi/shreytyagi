@@ -180,18 +180,17 @@ $(document).ready(function () {
 
 
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
     let articles = []; // To store CSV data globally
 
-    // Get master category filter from <body> attribute
+    // Get attributes from <body>
     const masterCategoryFilter = document.body.getAttribute("data-master-category")?.toLowerCase() || "";
+    const csvFile = document.body.getAttribute("csvfile") || "index.csv"; // Default to "index.csv"
 
     // Load and Parse CSV
-    fetch("index.csv")
+    fetch(csvFile)
         .then(response => response.text())
         .then(csvData => {
             articles = parseCSV(csvData);
@@ -203,15 +202,17 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-// Function to parse CSV (skips the header row)
-function parseCSV(data) {
-    const rows = data.trim().split("\n");
-    return rows.slice(1).map(row => { // Slice(1) to skip the first row
-        const [masterCategory, category, title, date, link] = row.split(",").map(item => item.trim());
-        return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
-    }).sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
-}
-
+    // ✅ Function to parse CSV (Strict `""` format, Skips Header Row)
+    function parseCSV(data) {
+        const rows = data.trim().split("\n").slice(1); // Skip header row
+        return rows.map(row => {
+            const matches = row.match(/"([^"]*)"/g); // Extract values inside quotes
+            if (!matches || matches.length < 5) return null; // Ensure all fields exist
+            const [masterCategory, category, title, date, link] = matches.map(val => val.replace(/"/g, "").trim());
+            return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
+        }).filter(item => item !== null) // Remove any invalid rows
+        .sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
+    }
 
     // Function to format date
     function formatDate(isoDate) {
@@ -261,4 +262,194 @@ function parseCSV(data) {
 
     // Event listener for real-time search
     searchInput.addEventListener("input", searchArticles);
+});
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const galleryContainer = document.querySelector(".gallery-container .row");
+    const csvFile = document.querySelector(".gallery-container")?.getAttribute("csvfile") || "photos.csv"; // Get CSV from attribute or default to "photos.csv"
+
+    // Inject the overlay section once at the beginning of the body
+    if (!document.querySelector(".overlay")) {
+        document.body.insertAdjacentHTML("afterbegin", `
+            <div class="overlay" style="padding: 0%;">
+                <div class="photo-preview">
+                    <span class="close-btn">&times;</span>
+                    <img class="preview-image" src="">
+                </div>
+            </div>
+        `);
+    }
+
+    const overlay = document.querySelector(".overlay");
+    const previewImage = document.querySelector(".preview-image");
+    const closeBtn = document.querySelector(".close-btn");
+
+    // Fetch and parse CSV data
+    fetch(csvFile)
+        .then(response => response.text())
+        .then(data => {
+            const rows = parseCSV(data).slice(1); // Skip header row
+            let galleryHTML = "";
+
+            rows.forEach(([url, caption]) => {
+                if (url) {
+                    galleryHTML += `
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
+                            <div class="card-link nottoobig">
+                                <a href="#" class="photo-link" data-image="${url}">
+                                    <div class="card custom-card card-photo" style="background-image: url('${url}');">
+                                        ${caption ? `<div class="card-caption">${caption}</div>` : ""}
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            galleryContainer.innerHTML = galleryHTML;
+            bindImageClickEvents(); // Re-apply click event listeners
+        })
+        .catch(error => console.error("Error loading CSV:", error));
+
+    // ✅ Function to parse CSV with "quoted","values"
+    function parseCSV(data) {
+        return data.trim().split("\n").map(line => {
+            const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
+            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
+
+    // ✅ Function to bind click events for newly added images
+    function bindImageClickEvents() {
+        document.querySelectorAll(".photo-link").forEach(link => {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const imageUrl = this.getAttribute("data-image");
+                previewImage.src = imageUrl;
+                overlay.style.display = "flex"; // Show overlay
+            });
+        });
+
+        // Close overlay when clicking the close button
+        closeBtn.addEventListener("click", function () {
+            overlay.style.display = "none";
+        });
+
+        // Close overlay when clicking outside the image
+        overlay.addEventListener("click", function (event) {
+            if (event.target === overlay) {
+                overlay.style.display = "none";
+            }
+        });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+// This code is for tables
+document.addEventListener("DOMContentLoaded", function () {
+    const tableContainer = document.querySelector(".table-container");
+    const csvFile = tableContainer.getAttribute("csvfile") || "data.csv"; // Default CSV file
+    const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
+    
+    let originalData = []; // Stores original CSV order
+    let currentSortColumn = null; // Tracks which column is currently sorted
+    let sortOrder = 0; // 0 = original order, 1 = ascending, 2 = descending
+
+    // Apply full-width style if fullwidth="true"
+    if (isFullWidth) {
+        tableContainer.classList.add("full-width");
+        document.querySelector("#dynamic-table").style.width = "100%";
+        const parentContainer = tableContainer.closest(".container");
+        if (parentContainer) parentContainer.classList.add("full-width-container");
+    }
+
+    fetch(csvFile)
+        .then(response => response.text())
+        .then(data => {
+            originalData = parseCSV(data); // Store original order
+            if (originalData.length === 0) return;
+            renderTable(originalData);
+        })
+        .catch(error => console.error("Error loading CSV:", error));
+
+    // ✅ Function to parse CSV with "quoted","values"
+    function parseCSV(data) {
+        return data.trim().split("\n").map(line => {
+            const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
+            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
+
+    // ✅ Function to render the table
+    function renderTable(data) {
+        const tableHead = document.querySelector("#dynamic-table thead");
+        const tableBody = document.querySelector("#dynamic-table tbody");
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        // Generate Header Row
+        const headerRow = document.createElement("tr");
+        data[0].forEach((header, index) => {
+            const th = document.createElement("th");
+            th.textContent = header;
+            th.setAttribute("data-column-index", index); // Store column index
+            th.style.cursor = "pointer"; // Indicate clickability
+            th.addEventListener("click", () => sortTableByColumn(index)); // Attach click event
+            headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        // Generate Table Body
+        data.slice(1).forEach(rowData => {
+            const row = document.createElement("tr");
+            rowData.forEach(cellData => {
+                const td = document.createElement("td");
+                td.textContent = cellData;
+                row.appendChild(td);
+            });
+            tableBody.appendChild(row);
+        });
+    }
+
+    // ✅ Function to sort table by column
+    function sortTableByColumn(columnIndex) {
+        if (columnIndex !== currentSortColumn) {
+            sortOrder = 1; // If new column, reset sort order to ascending
+            currentSortColumn = columnIndex;
+        } else {
+            sortOrder = (sortOrder + 1) % 3; // Cycle between 0 (original), 1 (asc), 2 (desc)
+        }
+
+        let sortedData;
+        if (sortOrder === 0) {
+            sortedData = [...originalData]; // Reset to original order
+        } else {
+            sortedData = [originalData[0], ...originalData.slice(1).sort((a, b) => {
+                if (!isNaN(a[columnIndex]) && !isNaN(b[columnIndex])) {
+                    return sortOrder === 1
+                        ? a[columnIndex] - b[columnIndex] // Sort numbers
+                        : b[columnIndex] - a[columnIndex];
+                } else {
+                    return sortOrder === 1
+                        ? a[columnIndex].localeCompare(b[columnIndex]) // Sort strings
+                        : b[columnIndex].localeCompare(a[columnIndex]);
+                }
+            })];
+        }
+
+        renderTable(sortedData);
+    }
 });
