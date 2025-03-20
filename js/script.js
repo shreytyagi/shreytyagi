@@ -278,36 +278,43 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
     const csvFile = document.querySelector(".gallery-container")?.getAttribute("csvfile") || "photos.csv";
-    
+
+    // Ensure overlay exists
     if (!document.querySelector(".overlay")) {
-        document.body.insertAdjacentHTML("afterbegin", `
+        const overlayHTML = `
             <div class="overlay">
                 <div class="photo-preview">
                     <span class="close-btn">&times;</span>
+                    <button class="prev-btn">&#10094;</button>
                     <img class="preview-image" src="">
+                    <button class="next-btn">&#10095;</button>
                 </div>
             </div>
-        `);
+        `;
+        document.body.insertAdjacentHTML("beforeend", overlayHTML);
     }
 
     const overlay = document.querySelector(".overlay");
     const previewImage = document.querySelector(".preview-image");
     const closeBtn = document.querySelector(".close-btn");
-	const nextBtn = document.querySelector(".next-btn");
-	const prevBtn = document.querySelector(".prev-btn");
-    
+    const nextBtn = document.querySelector(".next-btn");
+    const prevBtn = document.querySelector(".prev-btn");
+
+    let images = []; // Store image list
+    let currentIndex = -1; // Track current image index
+
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
-            const images = parseCSV(data).slice(1); // Skip header row
+            images = parseCSV(data).slice(1); // Skip header row
             let galleryHTML = "";
 
-            images.forEach(([thumb, fullres, caption]) => {
+            images.forEach(([thumb, fullres, caption], index) => {
                 if (thumb && fullres) {
                     galleryHTML += `
                         <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
                             <div class="card-link nottoobig">
-                                <a href="#" class="photo-link" data-image="${fullres}">
+                                <a href="#" class="photo-link" data-index="${index}" data-image="${fullres}">
                                     <div class="card custom-card card-photo" style="background-image: url('${thumb}');">
                                         ${caption ? `<div class="card-caption">${caption}</div>` : ""}
                                     </div>
@@ -334,21 +341,27 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".photo-link").forEach(link => {
             link.addEventListener("click", function (event) {
                 event.preventDefault();
-                previewImage.src = this.getAttribute("data-image");
-                overlay.style.display = "flex";
+                currentIndex = parseInt(this.getAttribute("data-index"), 10);
+                showImage(currentIndex);
             });
         });
 
         closeBtn.addEventListener("click", function () {
             overlay.style.display = "none";
         });
-		
-		nextBtn.addEventListener("click", function () {
-            /* overlay.style.display = "none"; */
+
+        nextBtn.addEventListener("click", function () {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                showImage(currentIndex);
+            }
         });
-		
-		prevBtn.addEventListener("click", function () {
-            /* overlay.style.display = "none"; */
+
+        prevBtn.addEventListener("click", function () {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showImage(currentIndex);
+            }
         });
 
         overlay.addEventListener("click", function (event) {
@@ -357,7 +370,19 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    function showImage(index) {
+        if (index >= 0 && index < images.length) {
+            previewImage.src = images[index][1]; // Load full-size image
+            overlay.style.display = "flex";
+
+            // Hide prev/next buttons when at the start or end
+            prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
+            nextBtn.style.visibility = index === images.length - 1 ? "hidden" : "visible";
+        }
+    }
 });
+
 
 
 
