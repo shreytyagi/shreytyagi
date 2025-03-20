@@ -269,38 +269,45 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
-    const csvFile = document.querySelector(".gallery-container")?.getAttribute("csvfile") || "photos.csv"; // Get CSV from attribute or default to "photos.csv"
-
-    // Inject the overlay section once at the beginning of the body
+    const csvFile = document.querySelector(".gallery-container")?.getAttribute("csvfile") || "photos.csv";
+    
     if (!document.querySelector(".overlay")) {
         document.body.insertAdjacentHTML("afterbegin", `
-            <div class="overlay" style="padding: 0%;">
+            <div class="overlay">
                 <div class="photo-preview">
                     <span class="close-btn">&times;</span>
                     <img class="preview-image" src="">
+                    <div class="nav-buttons">
+                        <button class="prev-btn">&#10094;</button>
+                        <button class="next-btn">&#10095;</button>
+                    </div>
                 </div>
             </div>
         `);
     }
-
+    
     const overlay = document.querySelector(".overlay");
     const previewImage = document.querySelector(".preview-image");
     const closeBtn = document.querySelector(".close-btn");
-
-    // Fetch and parse CSV data
+    const prevBtn = document.querySelector(".prev-btn");
+    const nextBtn = document.querySelector(".next-btn");
+    
+    let images = [];
+    let currentIndex = 0;
+    
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
-            const rows = parseCSV(data).slice(1); // Skip header row
+            images = parseCSV(data).slice(1); // Skip header row
             let galleryHTML = "";
 
-            rows.forEach(([url, caption]) => {
-                if (url) {
+            images.forEach(([thumb, fullres, caption], index) => {
+                if (thumb && fullres) {
                     galleryHTML += `
                         <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
                             <div class="card-link nottoobig">
-                                <a href="#" class="photo-link" data-image="${url}">
-                                    <div class="card custom-card card-photo" style="background-image: url('${url}');">
+                                <a href="#" class="photo-link" data-index="${index}" data-image="${fullres}">
+                                    <div class="card custom-card card-photo" style="background-image: url('${thumb}');">
                                         ${caption ? `<div class="card-caption">${caption}</div>` : ""}
                                     </div>
                                 </a>
@@ -311,42 +318,54 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             galleryContainer.innerHTML = galleryHTML;
-            bindImageClickEvents(); // Re-apply click event listeners
+            bindImageClickEvents();
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-    // ✅ Function to parse CSV with "quoted","values"
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
+            const matches = line.match(/"([^"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
     }
 
-    // ✅ Function to bind click events for newly added images
     function bindImageClickEvents() {
         document.querySelectorAll(".photo-link").forEach(link => {
             link.addEventListener("click", function (event) {
                 event.preventDefault();
-                const imageUrl = this.getAttribute("data-image");
-                previewImage.src = imageUrl;
-                overlay.style.display = "flex"; // Show overlay
+                currentIndex = parseInt(this.getAttribute("data-index"), 10);
+                showImage(currentIndex);
             });
         });
 
-        // Close overlay when clicking the close button
         closeBtn.addEventListener("click", function () {
             overlay.style.display = "none";
         });
 
-        // Close overlay when clicking outside the image
         overlay.addEventListener("click", function (event) {
             if (event.target === overlay) {
                 overlay.style.display = "none";
             }
         });
+
+        prevBtn.addEventListener("click", function () {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage(currentIndex);
+        });
+
+        nextBtn.addEventListener("click", function () {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage(currentIndex);
+        });
+    }
+
+    function showImage(index) {
+        const [_, fullres] = images[index];
+        previewImage.src = fullres;
+        overlay.style.display = "flex";
     }
 });
+
 
 
 

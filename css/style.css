@@ -18,7 +18,7 @@ padding: 0;
   margin: 15px 0; /* Adjust top and bottom spacing */
   transition: transform 0.3s;
   max-width: 100%; /* Set maximum width to take full available width */
-  aspect-ratio: 2; /* Maintain square aspect ratio */
+  aspect-ratio: 2.5; /* Maintain square aspect ratio */
   overflow: hidden; /* Ensure content doesn't overflow */
   position: relative;
   color: black;
@@ -121,7 +121,8 @@ padding: 0;
     margin-top: 0px;
 	margin-bottom: auto; /* Adjust this value to increase or decrease the spacing */
 	text-align: left;
-	font-weight: bold; /* Now bold */
+	color: #343a40;
+	text-transform: uppercase;
 }
 
 .card-title {
