@@ -598,13 +598,13 @@ td {
     background-color: transparent;
 }
 
-/* Preview image */
+/* Preview image
 .preview-image {
     max-width: 100%;
     max-height: 80vh;
     display: block;
     margin: 0 auto;
-}
+} */
 
 /* Navigation buttons */
 .prev-btn, .next-btn {
