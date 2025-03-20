@@ -554,7 +554,7 @@ td {
 
 
 
-/* Overlay container */
+/* 
 .overlay {
     display: none;
     position: fixed;
@@ -564,7 +564,7 @@ td {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 999;
-}
+} */
 
 /* Preview container */
 .photo-preview {
