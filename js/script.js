@@ -382,56 +382,61 @@ document.addEventListener("DOMContentLoaded", function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv"; // Default CSV file
     const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
-    
-    let originalData = []; // Stores original CSV order
-    let currentSortColumn = null; // Tracks which column is currently sorted
-    let sortOrder = 0; // 0 = original order, 1 = ascending, 2 = descending
 
-    // Apply full-width style if fullwidth="true"
     if (isFullWidth) {
         tableContainer.classList.add("full-width");
-        document.querySelector("#dynamic-table").style.width = "100%";
+        tableContainer.style.overflowX = "auto"; // Enable horizontal scrolling
+        tableContainer.style.whiteSpace = "nowrap"; // Prevent text wrapping
+        tableContainer.style.display = "block"; // Ensure it behaves as a block element
+
+        const dynamicTable = document.querySelector("#dynamic-table");
+        if (dynamicTable) {
+            dynamicTable.style.width = "max-content"; // Prevent forced column squeezing
+            dynamicTable.style.minWidth = "100%"; // Ensures table takes at least full container width
+            dynamicTable.style.tableLayout = "auto"; // Allows natural column sizing
+        }
+
         const parentContainer = tableContainer.closest(".container");
         if (parentContainer) parentContainer.classList.add("full-width-container");
     }
 
+    let originalData = []; // Stores original CSV order
+    let currentSortColumn = null; // Tracks sorted column
+    let sortOrder = 0; // 0 = original, 1 = ascending, 2 = descending
+
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
-            originalData = parseCSV(data); // Store original order
+            originalData = parseCSV(data);
             if (originalData.length === 0) return;
             renderTable(originalData);
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-    // ✅ Function to parse CSV with "quoted","values"
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^"]*)"/g); // Extract values inside quotes
+            const matches = line.match(/"([^"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
     }
 
-    // ✅ Function to render the table
     function renderTable(data) {
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
         tableHead.innerHTML = "";
         tableBody.innerHTML = "";
 
-        // Generate Header Row
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
             th.textContent = header;
-            th.setAttribute("data-column-index", index); // Store column index
-            th.style.cursor = "pointer"; // Indicate clickability
-            th.addEventListener("click", () => sortTableByColumn(index)); // Attach click event
+            th.setAttribute("data-column-index", index);
+            th.style.cursor = "pointer";
+            th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
         tableHead.appendChild(headerRow);
 
-        // Generate Table Body
         data.slice(1).forEach(rowData => {
             const row = document.createElement("tr");
             rowData.forEach(cellData => {
@@ -443,28 +448,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ✅ Function to sort table by column
     function sortTableByColumn(columnIndex) {
         if (columnIndex !== currentSortColumn) {
-            sortOrder = 1; // If new column, reset sort order to ascending
+            sortOrder = 1;
             currentSortColumn = columnIndex;
         } else {
-            sortOrder = (sortOrder + 1) % 3; // Cycle between 0 (original), 1 (asc), 2 (desc)
+            sortOrder = (sortOrder + 1) % 3;
         }
 
         let sortedData;
         if (sortOrder === 0) {
-            sortedData = [...originalData]; // Reset to original order
+            sortedData = [...originalData];
         } else {
             sortedData = [originalData[0], ...originalData.slice(1).sort((a, b) => {
                 if (!isNaN(a[columnIndex]) && !isNaN(b[columnIndex])) {
-                    return sortOrder === 1
-                        ? a[columnIndex] - b[columnIndex] // Sort numbers
-                        : b[columnIndex] - a[columnIndex];
+                    return sortOrder === 1 ? a[columnIndex] - b[columnIndex] : b[columnIndex] - a[columnIndex];
                 } else {
-                    return sortOrder === 1
-                        ? a[columnIndex].localeCompare(b[columnIndex]) // Sort strings
-                        : b[columnIndex].localeCompare(a[columnIndex]);
+                    return sortOrder === 1 ? a[columnIndex].localeCompare(b[columnIndex]) : b[columnIndex].localeCompare(a[columnIndex]);
                 }
             })];
         }
