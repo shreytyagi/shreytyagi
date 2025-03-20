@@ -49,10 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
         overlay.style.display = "none";
     });
 	    nextButton.addEventListener("click", function () {
-        overlay.style.display = "none";
+        /* overlay.style.display = "none"; */
     });
 	    prevButton.addEventListener("click", function () {
-        overlay.style.display = "none";
+        /* overlay.style.display = "none"; */
     });
 });
 
