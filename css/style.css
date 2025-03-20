@@ -643,6 +643,6 @@ td {
 }
 
 /* Hover effect */
-.prev-btn:hover, .next-btn:hover .close-btn:hover {
+.prev-btn:hover, .next-btn:hover, .close-btn:hover {
     background-color: rgba(0, 0, 0, 0.8);
 }
