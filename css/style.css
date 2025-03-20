@@ -585,22 +585,7 @@ td {
 } */
 
 /* Close button */
-.close-btn {
-    position: absolute;
-    top: 5%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    /* background-color: rgba(0, 0, 0, 0.5); */
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    color: white;
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 
 /* Preview image
 .preview-image {
