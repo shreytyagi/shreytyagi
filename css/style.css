@@ -115,7 +115,7 @@ padding: 0;
 	margin-bottom: 0px; /* Adjust this value to increase or decrease the spacing */
 	text-align: right;
 	color: #343a40;
-	font-size: 9px;
+	font-size: 12px;
 }
 
 .card-text {
@@ -125,7 +125,7 @@ padding: 0;
 	color: #343a40;
 	text-transform: uppercase;
 	font-weight: bold;
-	font-size: 9px;
+	font-size: 12px;
 }
 
 .card-title {
@@ -138,7 +138,7 @@ padding: 0;
 	-webkit-box-orient: vertical;
 	white-space: normal;
 	font-weight: normal; /* Now non-bold */
-	font-size: 12px;
+	font-size: 18px;
 }
 
 .nav-bottom {
