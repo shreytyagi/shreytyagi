@@ -277,36 +277,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="photo-preview">
                     <span class="close-btn">&times;</span>
                     <img class="preview-image" src="">
-                    <div class="nav-buttons">
-                        <button class="prev-btn">&#10094;</button>
-                        <button class="next-btn">&#10095;</button>
-                    </div>
                 </div>
             </div>
         `);
     }
-    
+
     const overlay = document.querySelector(".overlay");
     const previewImage = document.querySelector(".preview-image");
     const closeBtn = document.querySelector(".close-btn");
-    const prevBtn = document.querySelector(".prev-btn");
-    const nextBtn = document.querySelector(".next-btn");
-    
-    let images = [];
-    let currentIndex = 0;
     
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
-            images = parseCSV(data).slice(1); // Skip header row
+            const images = parseCSV(data).slice(1); // Skip header row
             let galleryHTML = "";
 
-            images.forEach(([thumb, fullres, caption], index) => {
+            images.forEach(([thumb, fullres, caption]) => {
                 if (thumb && fullres) {
                     galleryHTML += `
                         <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
                             <div class="card-link nottoobig">
-                                <a href="#" class="photo-link" data-index="${index}" data-image="${fullres}">
+                                <a href="#" class="photo-link" data-image="${fullres}">
                                     <div class="card custom-card card-photo" style="background-image: url('${thumb}');">
                                         ${caption ? `<div class="card-caption">${caption}</div>` : ""}
                                     </div>
@@ -333,8 +324,8 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".photo-link").forEach(link => {
             link.addEventListener("click", function (event) {
                 event.preventDefault();
-                currentIndex = parseInt(this.getAttribute("data-index"), 10);
-                showImage(currentIndex);
+                previewImage.src = this.getAttribute("data-image");
+                overlay.style.display = "flex";
             });
         });
 
@@ -347,24 +338,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 overlay.style.display = "none";
             }
         });
-
-        prevBtn.addEventListener("click", function () {
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            showImage(currentIndex);
-        });
-
-        nextBtn.addEventListener("click", function () {
-            currentIndex = (currentIndex + 1) % images.length;
-            showImage(currentIndex);
-        });
-    }
-
-    function showImage(index) {
-        const [_, fullres] = images[index];
-        previewImage.src = fullres;
-        overlay.style.display = "flex";
     }
 });
+
 
 
 
