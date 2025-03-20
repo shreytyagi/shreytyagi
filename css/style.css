@@ -252,7 +252,7 @@ padding: 0;
     inset: 300px 300px auto auto; /* Positions it at the top-right */
     width: 40px;
     height: 40px;
-    background: url('close-btn.png') center/contain no-repeat; /* Set GIF */
+    background: url('dp.png') center/contain no-repeat; /* Set GIF */
     border-radius: 50%;
     cursor: pointer;
     border: none;
