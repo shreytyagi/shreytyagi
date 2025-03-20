@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const overlay = document.querySelector(".overlay");
     const previewImage = document.querySelector(".preview-image");
     const closeButton = document.querySelector(".close-btn");
+	const nextButton = document.querySelector(".next-btn");
+	const prevButton = document.querySelector(".prev-btn");
 
     photoLinks.forEach(function (photoLink) {
         photoLink.addEventListener("click", function (event) {
@@ -44,6 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     closeButton.addEventListener("click", function () {
+        overlay.style.display = "none";
+    });
+	    nextButton.addEventListener("click", function () {
+        overlay.style.display = "none";
+    });
+	    prevButton.addEventListener("click", function () {
         overlay.style.display = "none";
     });
 });
@@ -285,6 +293,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const overlay = document.querySelector(".overlay");
     const previewImage = document.querySelector(".preview-image");
     const closeBtn = document.querySelector(".close-btn");
+	const nextBtn = document.querySelector(".next-btn");
+	const prevBtn = document.querySelector(".prev-btn");
     
     fetch(csvFile)
         .then(response => response.text())
@@ -330,6 +340,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         closeBtn.addEventListener("click", function () {
+            overlay.style.display = "none";
+        });
+		
+		nextBtn.addEventListener("click", function () {
+            overlay.style.display = "none";
+        });
+		
+		prevBtn.addEventListener("click", function () {
             overlay.style.display = "none";
         });
 
