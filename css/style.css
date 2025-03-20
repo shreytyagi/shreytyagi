@@ -108,6 +108,7 @@ padding: 0;
     display: flex;
     flex-direction: column;
     height: 100%;
+	background-color: green;
 }
 
 .card-date {
@@ -116,6 +117,7 @@ padding: 0;
 	text-align: right;
 	color: #343a40;
 	font-size: 12px;
+	background-color: blue;
 }
 
 .card-text {
@@ -126,6 +128,7 @@ padding: 0;
 	text-transform: uppercase;
 	font-weight: bold;
 	font-size: 12px;
+	background-color: red;
 }
 
 .card-title {
@@ -137,8 +140,9 @@ padding: 0;
 	-webkit-line-clamp: 2; /* Limit to two lines */
 	-webkit-box-orient: vertical;
 	white-space: normal;
-	font-weight: normal; /* Now non-bold */
+	font-weight: bold; /* Now non-bold */
 	font-size: 18px;
+	background-color: yellow;
 }
 
 .nav-bottom {
