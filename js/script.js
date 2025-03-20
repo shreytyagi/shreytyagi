@@ -344,11 +344,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 		
 		nextBtn.addEventListener("click", function () {
-            overlay.style.display = "none";
+            /* overlay.style.display = "none"; */
         });
 		
 		prevBtn.addEventListener("click", function () {
-            overlay.style.display = "none";
+            /* overlay.style.display = "none"; */
         });
 
         overlay.addEventListener("click", function (event) {
