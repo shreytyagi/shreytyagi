@@ -606,7 +606,7 @@ td {
     width: 30px;
     height: 30px;
     /* background-color: rgba(0, 0, 0, 0.5); */
-    border: 5px solid #FFFFFF;
+    border: 3px solid #FFFFFF;
     border-radius: 50%;
     cursor: pointer;
     color: white;
@@ -643,7 +643,7 @@ td {
     width: 30px;
     height: 30px;
     /* background-color: rgba(0, 0, 0, 0.5); */
-    border: 5px solid #FFFFFF;
+    border: 3px solid #FFFFFF;
     border-radius: 50%;
     cursor: pointer;
     color: white;
