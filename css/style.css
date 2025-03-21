@@ -603,10 +603,10 @@ td {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     /* background-color: rgba(0, 0, 0, 0.5); */
-    border: 2px solid #FFFFF;
+    border: 5px solid #FFFFFF;
     border-radius: 50%;
     cursor: pointer;
     color: white;
@@ -640,10 +640,10 @@ td {
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     /* background-color: rgba(0, 0, 0, 0.5); */
-    border: 2px solid #FFFFF;
+    border: 5px solid #FFFFFF;
     border-radius: 50%;
     cursor: pointer;
     color: white;
