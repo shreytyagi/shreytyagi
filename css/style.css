@@ -242,11 +242,11 @@ padding: 0;
     width: 30px;
     height: 30px;
     background: url('next-btn.png') center/contain no-repeat; /* Set GIF */
-    border-radius: 50%;
+    border-radius: 30%;
     cursor: pointer;
     border: none;
     background-color: transparent;
-	border: 2px solid #7F7F7F;
+	border-color: 10px solid #FFFFFF;
 }
 
 .prev-btn {
