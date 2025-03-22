@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    $("#navbar-container").load("navbar.html", function () {
+    $("#navbar-container").load("/navbar.html", function () {
         $(".navbar-toggler").click(function () {
             setTimeout(function () {
                 // Ensure footer is always visible
