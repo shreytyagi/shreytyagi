@@ -516,11 +516,11 @@ body {
 
 /* Table header styling */
 th {
-    background-color: rgb(230, 230, 230);
+    background-color: rgb(190, 190, 190);
     color: black;
     font-weight: bold;
     border: 1px solid black;
-    padding: 10px;
+    padding: 8px;
     cursor: pointer; /* Makes it clear sorting is available */
 }
 

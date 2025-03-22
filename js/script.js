@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function () {
     $('.card').hover(
         function () {
@@ -17,24 +14,24 @@ $(document).ready(function () {
     $("#navbar-container").load("navbar.html", function () {
         $(".navbar-toggler").click(function () {
             setTimeout(function () {
-                // 🌟 Ensure footer is always visible
+                // Ensure footer is always visible
                 $("#footer-container").css({
                     "display": "block",
                     "visibility": "visible",
                     "min-height": "50px"
                 });
 
-                // 🌟 Restore footer content visibility
+                // Restore footer content visibility
                 $("#footer-container nav").css({
                     "display": "block",
                     "visibility": "visible"
                 });
 
-                // 🌟 Recalculate the height
+                // Recalculate the height
                 let bodyHeight = $("body").outerHeight();
                 let windowHeight = $(window).height();
 
-                // 🌟 If page content is smaller than viewport, keep footer at bottom
+                // If page content is smaller than viewport, keep footer at bottom
                 if (bodyHeight < windowHeight) {
                     $("#footer-container").css({
                         "position": "relative",
@@ -49,17 +46,17 @@ $(document).ready(function () {
             }, 300);
         });
 
-        // 🌟 Extra Fix: Restore footer content visibility after menu retracts
+        // Extra Fix: Restore footer content visibility after menu retracts
         $(".navbar-toggler").on("click", function () {
             setTimeout(function () {
-                $("#footer-container").show().css("visibility", "visible"); // 💖 Fix: Ensure content is always visible
-                $("#footer-container nav").show().css("visibility", "visible"); // 💖 Fix: Ensure nav inside footer is also visible
+                $("#footer-container").show().css("visibility", "visible"); // Fix: Ensure content is always visible
+                $("#footer-container nav").show().css("visibility", "visible"); // Fix: Ensure nav inside footer is also visible
             }, 600);
         });
     });
 
     $("#footer-container").load("footer.html", function () {
-        // 💖 Fix: Ensure footer content is visible on page load
+        // Fix: Ensure footer content is visible on page load
         $("#footer-container nav").css("display", "block");
     });
 	
@@ -153,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-    // ✅ Function to parse CSV (Strict `""` format, Skips Header Row)
+    // Function to parse CSV (Strict `""` format, Skips Header Row)
     function parseCSV(data) {
         const rows = data.trim().split("\n").slice(1); // Skip header row
         return rows.map(row => {
