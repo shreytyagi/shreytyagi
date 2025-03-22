@@ -399,7 +399,7 @@ body {
 }
 
 .container {
-	    width: 100vw !important; /* Ensure it always takes full viewport width */
+	width: 100vw !important; /* Ensure it always takes full viewport width */
     max-width: 100% !important; /* Override Bootstrap’s max-width */
     padding-left: 0 !important;
     padding-right: 0 !important;
