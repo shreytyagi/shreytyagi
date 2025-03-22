@@ -1,0 +1,132 @@
+<html>
+<head>
+	<title>Articles by Shrey Tyagi</title>
+
+	<!-- Bootstrap CSS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<!-- Botstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<!-- Local CSS -->
+	<link href="css/style.css" rel="stylesheet">
+
+	<!-- Local JS -->
+	<script src="js/script.js"></script>
+
+	<!-- YouTube JS -->
+	<script src="https://apis.google.com/js/platform.js"></script>
+
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
+
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+
+<div class="container mt-5 text-justify flex-grow-1">
+	<div class="content-container">
+	<h2 class="text-center mb-4">Articles</h2>
+	<p>Shrey has written researched articles on various topics such as technology, travel, art, culture, religion, etc. He is a Computer Science Engineer and has had keen interest in technology since childhood. He is the go-to person in his friend circles when it comes to tech advice and has more than 4 years of experience as a software engineer in Infosys. He is also an avid traveller and has explored hundreds of tourist destinations on minimal budget across India gaining experience on grass-root level. He loves socialising, public speaking, and reading about space, wildlife and nutrition. Find and read the latest articles written by him below.</p>
+<!--		<h2 class="text-center mb-4">About Me</h2>
+			<h3>WORK</h3>
+			<p>4+ years of experience at Infosys in SAP MII application support (including 2+ years currently as a team lead) for KraftHeinz client. Handling ServiceNow tickets with zero escalations, delivering complex enhancements, and regularly communicating with business stakeholders. Skilled in SAP MII, SAP UI5, JavaScript, and SQL. Received client appreciations and commendable ratings from manager for three consecutive years. Public speaker at Infosys Toastmasters Chandigarh Club.</p>
+			<h3>HOBBIES</h3>
+			<p>Passionate about cinema technologies and creating content on social media, with 10K+ YouTube subscribers and 1K+ Twitter followers. Received appreciation for my knowledge from leading screen manufacturer Harkness Screens, Warner Bros. India’s VP, and multiple cinema exhibitors across India. Skilled in video editing, 4K HDR color grading, 5.1 surround-sound mixing, VR 360, and 3D videography/editing. I like to read about outer-space, pre-history and wildlife. I have been practicing daily yoga, meditation and healthy diet. I love cycling and long walks.</p>
+			<h3>TRAVEL EXPERIENCE</h3>
+			<p>I travel on a minimal budget to experience places at a grassroots level, staying close to local cultures and everyday life. Traveling this way has shaped me as a person and has made me more adaptable, aware, and open-minded. It has taught me to navigate challenges, think on my feet, and embrace different perspectives, which in turn helps me communicate better, make informed decisions, and handle unexpected situations at work with a calm and practical approach.
+			<br>I have explored diverse destinations across India, including:</br>
+			<ul>
+			<li>Andaman Islands (Sri Vijaya Puram, Netaji Subhash Chandra Bose Island, Swaraj Dweep)</li>
+			<li>Kashmir (Srinagar, Pahalgam, Gulmarg, Ganderbal)</li>
+			<li>Sikkim (Ravangla, Namchi, Namphing-Bermiok)</li>
+			<li>Gujarat (Surat, Ahmedabad, Bhuj, Jamnagar, Dwarka, Vadodara, Rajkot, Statue of Unity)</li>
+			<li>Rajasthan (Jaisalmer, Jodhpur, Jaipur, Udaipur, Bikaner, Pushkar)</li>
+			<li>Himachal Pradesh (Manali, Shimla, Mashobra, Kufri, Kasauli, Narkanda, Kinnaur, Chail, Kullu)</li>
+			<li>Tamil Nadu (Rameswaram, Madurai, Kanyakumari, Chennai, Dhanushkodi)</li>
+			<li>Karnataka (Bengaluru, Mysuru)</li>
+			<li>Uttar Pradesh (Kanpur, Lucknow, Meerut, Saharanpur, Noida)</li>
+			<li>West Bengal (Siliguri)</li>
+			<li>Uttarakhand (Haridwar, Rishikesh, Roorkee)</li>
+			<li>Haryana (Bhiwani, Karnal, Gurugram, Panchkula, Yamunanagar, Faridabad)</li>
+			<li>Punjab (Nangal, Rajpura, Anandpur Sahib)</li>
+			<li>Delhi</li></ul></p>		-->				
+								
+	</div>
+	
+<!--	<div id="footer-container">
+    <nav class="navbar nav-bottom">
+        <div class="container">
+            <div class="navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" id="current-year">
+                            Copyright © 2025 by Shrey Tyagi. All rights reserved.
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>  -->
+	
+	
+		<div class="search-container">
+    <div class="search-box">
+        <i class="fas fa-search"></i> <!-- Search Icon -->
+        <input type="text" id="search-input" placeholder="Search articles...">
+    </div>
+</div>
+
+
+			<div class="container">
+				<div class="row" id="card-container">
+				</div>
+			</div>
+
+	
+</div>
+	
+	
+
+
+		
+
+			
+			
+
+
+		
+    <!-- Footer will be loaded here
+    <div id="footer-container"></div> -->
+	
+	<div id="footer-container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+        <div class="container">
+            <div class="navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" id="current-year">
+                            Copyright © 2027 by Shrey Tyagi. All rights reserved.
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+    <!-- Load Navbar & Footer -->
+<!--    <script>
+        $(document).ready(function(){
+            $("#navbar-container").load("navbar.html");
+            $("#footer-container").load("footer.html");
+        });
+    </script> -->
+
+</body>
+</html>
