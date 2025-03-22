@@ -652,3 +652,26 @@ td {
     justify-content: center;
     align-items: center;
 }
+
+
+
+/* For small screens, ensure one card per row */
+@media (max-width: 575px) {
+    .card {
+        width: 100%; /* Full width */
+    }
+}
+
+/* When transitioning from single card to two cards per row */
+@media (min-width: 576px) and (max-width: 991px) {
+    .card {
+        width: calc(50% - 10px); /* Two cards per row with some spacing */
+    }
+}
+
+/* When there is enough space for three cards per row */
+@media (min-width: 992px) {
+    .card {
+        width: calc(33.33% - 10px); /* Three cards per row */
+    }
+}
