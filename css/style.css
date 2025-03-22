@@ -143,6 +143,7 @@ padding: 0;
 	white-space: normal;
 	font-weight: bold; /* Now non-bold */
 	font-size: 18px;
+	text-align: left !important;
 	/* background-color: yellow; */
 }
 
