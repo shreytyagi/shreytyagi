@@ -355,18 +355,18 @@ $(document).ready(function () {
         .then(data => {
             originalData = parseCSV(data);
             if (originalData.length === 0) return;
-            renderTable(originalData);
+            renderTable(originalData, isFullWidth);
         })
         .catch(error => console.error("Error loading CSV:", error));
 
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^"]*)"/g);
+            const matches = line.match(/"([^\"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
     }
 
-    function renderTable(data) {
+    function renderTable(data, isFullWidth) {
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
         const dynamicTable = document.querySelector("#dynamic-table");
@@ -378,13 +378,13 @@ $(document).ready(function () {
             tableContainer.style.overflowX = "auto";
             tableContainer.style.whiteSpace = "nowrap";
             tableContainer.style.display = "block";
-            dynamicTable.style.width = "100%";
-            dynamicTable.style.tableLayout = "fixed";
+            dynamicTable.style.width = "max-content";
+            dynamicTable.style.tableLayout = "auto";
         } else {
             tableContainer.classList.remove("full-width");
             tableContainer.style.overflowX = "hidden";
-            dynamicTable.style.width = "auto";
-            dynamicTable.style.tableLayout = "auto";
+            dynamicTable.style.width = "100%";
+            dynamicTable.style.tableLayout = "fixed";
         }
 
         const headerRow = document.createElement("tr");
@@ -437,6 +437,6 @@ $(document).ready(function () {
             })];
         }
 
-        renderTable(sortedData);
+        renderTable(sortedData, isFullWidth);
     }
 });
