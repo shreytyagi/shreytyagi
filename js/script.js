@@ -341,28 +341,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
 $(document).ready(function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
     const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
-
-    if (isFullWidth) {
-        tableContainer.classList.add("full-width");
-        tableContainer.style.overflowX = "auto";
-        tableContainer.style.whiteSpace = "nowrap";
-        tableContainer.style.display = "block";
-
-        const dynamicTable = document.querySelector("#dynamic-table");
-        if (dynamicTable) {
-            dynamicTable.style.width = "max-content";
-            dynamicTable.style.minWidth = "100%";
-            dynamicTable.style.tableLayout = "auto";
-        }
-
-        const parentContainer = tableContainer.closest(".container");
-        if (parentContainer) parentContainer.classList.add("full-width-container");
-    }
 
     let originalData = [];
     let currentSortColumn = null;
@@ -379,7 +361,7 @@ $(document).ready(function () {
 
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^\"]*)"/g);
+            const matches = line.match(/"([^"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
     }
@@ -387,8 +369,23 @@ $(document).ready(function () {
     function renderTable(data) {
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
+        const dynamicTable = document.querySelector("#dynamic-table");
         tableHead.innerHTML = "";
         tableBody.innerHTML = "";
+
+        if (isFullWidth) {
+            tableContainer.classList.add("full-width");
+            tableContainer.style.overflowX = "auto";
+            tableContainer.style.whiteSpace = "nowrap";
+            tableContainer.style.display = "block";
+            dynamicTable.style.width = "100%";
+            dynamicTable.style.tableLayout = "fixed";
+        } else {
+            tableContainer.classList.remove("full-width");
+            tableContainer.style.overflowX = "hidden";
+            dynamicTable.style.width = "auto";
+            dynamicTable.style.tableLayout = "auto";
+        }
 
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
@@ -396,6 +393,9 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
+            th.style.whiteSpace = "normal";
+            th.style.wordBreak = "break-word";
+            th.style.padding = "8px";
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -408,6 +408,8 @@ $(document).ready(function () {
                 td.textContent = cellData;
                 td.style.whiteSpace = "normal";
                 td.style.wordBreak = "break-word";
+                td.style.padding = "8px";
+                td.style.maxWidth = isFullWidth ? "none" : "200px";
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
