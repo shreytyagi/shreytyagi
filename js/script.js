@@ -340,7 +340,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
 $(document).ready(function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
@@ -377,17 +376,14 @@ $(document).ready(function () {
             });
         });
 
-        // Normalize column widths based on character count
         let calculatedWidths = columnWidths.map(width => (width / totalCharacters) * 100);
 
-        // Ensure total width does not exceed 100% and fairly distribute space
         const widthSum = calculatedWidths.reduce((a, b) => a + b, 0);
         if (widthSum > 100) {
             calculatedWidths = calculatedWidths.map(width => (width / widthSum) * 100);
         }
 
-        // Avoid shrinking last columns too much
-        const minWidth = 8; // Minimum width percentage for any column
+        const minWidth = 8;
         calculatedWidths = calculatedWidths.map(width => (width < minWidth ? minWidth : width));
         
         return calculatedWidths;
@@ -405,11 +401,15 @@ $(document).ready(function () {
             tableContainer.style.overflowX = "auto";
             tableContainer.style.whiteSpace = "nowrap";
             tableContainer.style.display = "block";
+            tableContainer.style.width = "100vw";
+            tableContainer.style.maxWidth = "100vw";
+            tableContainer.style.position = "relative";
             dynamicTable.style.width = "100%";
             dynamicTable.style.tableLayout = "auto";
         } else {
             tableContainer.classList.remove("full-width");
             tableContainer.style.overflowX = "hidden";
+            tableContainer.style.width = "100%";
             dynamicTable.style.width = "100%";
             dynamicTable.style.tableLayout = "fixed";
         }
