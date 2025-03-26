@@ -361,9 +361,22 @@ $(document).ready(function () {
 
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^\"]*)"/g);
+            const matches = line.match(/"([^"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
+    }
+
+    function calculateColumnWidths(data) {
+        const columnWidths = new Array(data[0].length).fill(0);
+        
+        data.forEach(row => {
+            row.forEach((cell, index) => {
+                columnWidths[index] = Math.max(columnWidths[index], cell.length);
+            });
+        });
+
+        const totalWidth = columnWidths.reduce((a, b) => a + b, 0);
+        return columnWidths.map(width => `${(width / totalWidth) * 100}%`);
     }
 
     function renderTable(data, isFullWidth) {
@@ -387,6 +400,8 @@ $(document).ready(function () {
             dynamicTable.style.tableLayout = "fixed";
         }
 
+        const columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
@@ -396,6 +411,7 @@ $(document).ready(function () {
             th.style.whiteSpace = "normal";
             th.style.wordBreak = "break-word";
             th.style.padding = "8px";
+            if (!isFullWidth) th.style.width = columnWidths[index];
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -403,13 +419,13 @@ $(document).ready(function () {
 
         data.slice(1).forEach(rowData => {
             const row = document.createElement("tr");
-            rowData.forEach(cellData => {
+            rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
                 td.style.whiteSpace = "normal";
                 td.style.wordBreak = "break-word";
                 td.style.padding = "8px";
-                td.style.maxWidth = isFullWidth ? "none" : "200px";
+                if (!isFullWidth) td.style.width = columnWidths[index];
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
