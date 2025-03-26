@@ -368,22 +368,28 @@ $(document).ready(function () {
 
     function calculateColumnWidths(data) {
         const columnWidths = new Array(data[0].length).fill(0);
+        let totalCharacters = 0;
         
         data.forEach(row => {
             row.forEach((cell, index) => {
                 columnWidths[index] = Math.max(columnWidths[index], cell.length);
+                totalCharacters += cell.length;
             });
         });
 
-        const totalWidth = columnWidths.reduce((a, b) => a + b, 0);
-        let calculatedWidths = columnWidths.map(width => (width / totalWidth) * 100);
+        // Normalize column widths based on character count
+        let calculatedWidths = columnWidths.map(width => (width / totalCharacters) * 100);
 
-        // Ensure total width does not exceed 100%
+        // Ensure total width does not exceed 100% and fairly distribute space
         const widthSum = calculatedWidths.reduce((a, b) => a + b, 0);
         if (widthSum > 100) {
             calculatedWidths = calculatedWidths.map(width => (width / widthSum) * 100);
         }
 
+        // Avoid shrinking last columns too much
+        const minWidth = 8; // Minimum width percentage for any column
+        calculatedWidths = calculatedWidths.map(width => (width < minWidth ? minWidth : width));
+        
         return calculatedWidths;
     }
 
