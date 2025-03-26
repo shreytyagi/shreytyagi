@@ -404,8 +404,8 @@ $(document).ready(function () {
             tableContainer.style.width = "100vw";
             tableContainer.style.maxWidth = "100vw";
             tableContainer.style.position = "relative";
-            dynamicTable.style.width = "max-content";
-            dynamicTable.style.minWidth = "100%";
+            dynamicTable.style.width = "100%";
+            dynamicTable.style.minWidth = "100vw";
             dynamicTable.style.tableLayout = "auto";
         } else {
             tableContainer.classList.remove("full-width");
@@ -424,8 +424,8 @@ $(document).ready(function () {
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
             th.style.whiteSpace = "nowrap";
-            th.style.wordBreak = "break-word";
-            th.style.hyphens = "auto";
+            th.style.wordBreak = "keep-all";
+            th.style.hyphens = "manual";
             th.style.padding = "8px";
             if (!isFullWidth) th.style.width = columnWidths[index] + "%";
             th.addEventListener("click", () => sortTableByColumn(index));
@@ -438,9 +438,9 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";
-                td.style.wordBreak = "break-word";
-                td.style.hyphens = "auto";
+                td.style.whiteSpace = "nowrap";
+                td.style.wordBreak = "keep-all";
+                td.style.hyphens = "manual";
                 td.style.padding = "8px";
                 if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
