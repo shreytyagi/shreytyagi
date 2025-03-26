@@ -361,7 +361,7 @@ $(document).ready(function () {
 
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^"]*)"/g);
+            const matches = line.match(/"([^\"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
     }
@@ -376,7 +376,31 @@ $(document).ready(function () {
         });
 
         const totalWidth = columnWidths.reduce((a, b) => a + b, 0);
-        return columnWidths.map(width => `${(width / totalWidth) * 100}%`);
+        let calculatedWidths = columnWidths.map(width => (width / totalWidth) * 100);
+
+        // Adjust columns dynamically to prevent breaking small words awkwardly
+        calculatedWidths = calculatedWidths.map(width => {
+            return width < 10 ? 10 : width; // Ensure a minimum width to prevent tiny words from breaking badly
+        });
+        
+        return calculatedWidths;
+    }
+
+    function adjustColumnWidthsForSmallBreaks(columnWidths, data) {
+        const adjustedWidths = [...columnWidths];
+        
+        data.slice(1).forEach(row => {
+            row.forEach((cell, index) => {
+                const words = cell.split(" ");
+                words.forEach(word => {
+                    if (word.length > 6 && word.length <= 10 && word.slice(-2).length <= 3) {
+                        adjustedWidths[index] += 2; // Slightly increase width if only 2-3 characters are breaking
+                    }
+                });
+            });
+        });
+        
+        return adjustedWidths.map(width => `${width}%`);
     }
 
     function renderTable(data, isFullWidth) {
@@ -400,7 +424,10 @@ $(document).ready(function () {
             dynamicTable.style.tableLayout = "fixed";
         }
 
-        const columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+        if (!isFullWidth) {
+            columnWidths = adjustColumnWidthsForSmallBreaks(columnWidths, data);
+        }
 
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
@@ -408,8 +435,9 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "normal";
+            th.style.whiteSpace = "nowrap";
             th.style.wordBreak = "break-word";
+            th.style.hyphens = "auto";
             th.style.padding = "8px";
             if (!isFullWidth) th.style.width = columnWidths[index];
             th.addEventListener("click", () => sortTableByColumn(index));
@@ -422,8 +450,9 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";
+                td.style.whiteSpace = "nowrap";
                 td.style.wordBreak = "break-word";
+                td.style.hyphens = "auto";
                 td.style.padding = "8px";
                 if (!isFullWidth) td.style.width = columnWidths[index];
                 row.appendChild(td);
