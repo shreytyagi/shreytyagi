@@ -390,14 +390,6 @@ $(document).ready(function () {
     }
 
     function renderTable(data, isFullWidth) {
-        const tableWrapper = document.createElement("div");
-        tableWrapper.classList.add("table-wrapper");
-        tableWrapper.style.overflowX = "auto";
-        tableWrapper.style.width = "100vw";
-        tableWrapper.style.maxWidth = "100vw";
-        tableWrapper.style.margin = "0 auto";
-        tableWrapper.style.position = "relative";
-
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
         const dynamicTable = document.querySelector("#dynamic-table");
@@ -406,16 +398,15 @@ $(document).ready(function () {
 
         if (isFullWidth) {
             tableContainer.classList.add("full-width");
-            tableContainer.style.overflow = "hidden";
-            tableContainer.style.display = "flex";
-            tableContainer.style.justifyContent = "center";
+            tableContainer.style.overflowX = "auto";
+            tableContainer.style.whiteSpace = "nowrap";
+            tableContainer.style.display = "block";
             tableContainer.style.width = "100vw";
             tableContainer.style.maxWidth = "100vw";
             tableContainer.style.position = "relative";
-            dynamicTable.style.width = "100%";
+            dynamicTable.style.width = "max-content";
+            dynamicTable.style.minWidth = "100%";
             dynamicTable.style.tableLayout = "auto";
-            tableContainer.appendChild(tableWrapper);
-            tableWrapper.appendChild(dynamicTable);
         } else {
             tableContainer.classList.remove("full-width");
             tableContainer.style.overflowX = "hidden";
