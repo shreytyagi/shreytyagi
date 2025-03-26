@@ -401,9 +401,7 @@ $(document).ready(function () {
             tableContainer.style.overflowX = "auto";
             tableContainer.style.whiteSpace = "nowrap";
             tableContainer.style.display = "block";
-            tableContainer.style.width = "100vw";
-            tableContainer.style.maxWidth = "100vw";
-            tableContainer.style.position = "relative";
+
             dynamicTable.style.width = "max-content";
             dynamicTable.style.minWidth = "100%";
             dynamicTable.style.tableLayout = "auto";
@@ -424,8 +422,8 @@ $(document).ready(function () {
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
             th.style.whiteSpace = "nowrap";
-            th.style.wordBreak = "break-word";
-            th.style.hyphens = "auto";
+            th.style.wordBreak = isFullWidth ? "normal" : "break-word";
+            th.style.hyphens = isFullWidth ? "none" : "auto";
             th.style.padding = "8px";
             if (!isFullWidth) th.style.width = columnWidths[index] + "%";
             th.addEventListener("click", () => sortTableByColumn(index));
@@ -438,9 +436,9 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";
-                td.style.wordBreak = "break-word";
-                td.style.hyphens = "auto";
+                td.style.whiteSpace = isFullWidth ? "nowrap" : "normal";
+                td.style.wordBreak = isFullWidth ? "normal" : "break-word";
+                td.style.hyphens = isFullWidth ? "none" : "auto";
                 td.style.padding = "8px";
                 if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
