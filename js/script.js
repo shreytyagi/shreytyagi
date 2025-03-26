@@ -405,7 +405,7 @@ $(document).ready(function () {
             tableContainer.style.overflowX = "auto";
             tableContainer.style.whiteSpace = "nowrap";
             tableContainer.style.display = "block";
-            dynamicTable.style.width = "max-content";
+            dynamicTable.style.width = "100%";
             dynamicTable.style.tableLayout = "auto";
         } else {
             tableContainer.classList.remove("full-width");
