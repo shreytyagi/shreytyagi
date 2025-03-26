@@ -337,36 +337,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // This code is for tables
-
-
-
-
-
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
     const tableContainer = document.querySelector(".table-container");
-    const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
+    const csvFile = tableContainer.getAttribute("csvfile") || "data.csv"; // Default CSV file
     const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
 
     if (isFullWidth) {
         tableContainer.classList.add("full-width");
-        tableContainer.style.overflowX = "auto";
-        tableContainer.style.whiteSpace = "nowrap";
-        tableContainer.style.display = "block";
+        tableContainer.style.overflowX = "auto"; // Enable horizontal scrolling
+        tableContainer.style.whiteSpace = "nowrap"; // Prevent text wrapping
+        tableContainer.style.display = "block"; // Ensure it behaves as a block element
 
         const dynamicTable = document.querySelector("#dynamic-table");
         if (dynamicTable) {
-            dynamicTable.style.width = "max-content";
-            dynamicTable.style.minWidth = "100%";
-            dynamicTable.style.tableLayout = "auto";
+            dynamicTable.style.width = "max-content"; // Prevent forced column squeezing
+            dynamicTable.style.minWidth = "100%"; // Ensures table takes at least full container width
+            dynamicTable.style.tableLayout = "auto"; // Allows natural column sizing
         }
 
         const parentContainer = tableContainer.closest(".container");
         if (parentContainer) parentContainer.classList.add("full-width-container");
     }
 
-    let originalData = [];
-    let currentSortColumn = null;
-    let sortOrder = 0;
+    let originalData = []; // Stores original CSV order
+    let currentSortColumn = null; // Tracks sorted column
+    let sortOrder = 0; // 0 = original, 1 = ascending, 2 = descending
 
     fetch(csvFile)
         .then(response => response.text())
@@ -379,7 +374,7 @@ $(document).ready(function () {
 
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^\"]*)"/g);
+            const matches = line.match(/"([^"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
     }
@@ -406,8 +401,6 @@ $(document).ready(function () {
             rowData.forEach(cellData => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";
-                td.style.wordBreak = "break-word";
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
