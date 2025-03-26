@@ -31,21 +31,22 @@
 
 
 <div class="container mt-1 text-justify flex-grow-1">
+    <h1>Heading of the Page</h1>
+    <p>Some introductory text about the content.</p>
+</div>
 
-
-
-	<div class="content-container">
-	<h3>IMAX Movies</h3>
-	<p>This is a list that provides technical information about the movies released in IMAX.</p>
-	</div>
-
-	    <div class="table-container" csvfile="/data/imaxmovies.csv" fullwidth="true">
+<!-- New separate container for the table -->
+<div class="table-wrapper">
+    <div class="table-container" csvfile="/data/imaxmovies.csv" fullwidth="true">
         <table id="dynamic-table">
             <thead></thead>
             <tbody></tbody>
         </table>
-    </div>		
+    </div>
+</div>
 
+<div class="container mt-1 text-justify flex-grow-1">
+    <p>The list is maintained unofficially by Shrey Tyagi and does not guarantee 100% correct data, though it has been tried to verify all data and provide as accurate information as possible.</p>
 </div>
 	
 	
