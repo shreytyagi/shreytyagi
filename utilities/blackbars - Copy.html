@@ -1,28 +1,10 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>Black Bars Visualiser | Utilities | Shrey Tyagi</title>
-
-	<!-- Bootstrap CSS -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-	<!-- JQuery -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-	
-	<!-- Botstrap JS -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	
-	<!-- Local CSS -->
-	<link href="/css/style.css" rel="stylesheet">
-
-	<!-- Local JS -->
-	<script src="/js/script.js"></script>
-
-	<!-- YouTube JS -->
-	<script src="https://apis.google.com/js/platform.js"></script>
-	
-	<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Rectangles</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -37,6 +19,8 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            background-color: rgba(0, 0, 255, 0.5);
+            border: 2px solid blue;
         }
         #errorMessage {
             color: red;
@@ -46,8 +30,33 @@
             margin-top: 20px; /* Default spacing */
         }
     </style>
-	
-	<script>
+</head>
+<body>
+
+    <h1>Dynamic Rectangle Generator</h1>
+
+    <label for="aspectA">Aspect Ratio A (a:b):</label>
+    <input type="text" id="aspectA" placeholder="e.g., 16:9">
+
+    <label for="aspectB">Aspect Ratio B (a:b):</label>
+    <input type="text" id="aspectB" placeholder="e.g., 4:3">
+
+    <label for="aspectC">Aspect Ratio C (a:b):</label>
+    <input type="text" id="aspectC" placeholder="e.g., 1:1">
+
+    <button onclick="generateRectangles()">Generate Rectangles</button>
+
+    <p id="errorMessage"></p>
+
+    <div id="canvasContainer">
+        <div id="rectangleC" class="rectangle"></div>
+        <div id="rectangleB" class="rectangle"></div>
+        <div id="rectangleA" class="rectangle"></div>
+    </div>
+
+    <div id="moveThisDown">Move This Down</div>
+
+    <script>
         function generateRectangles() {
             const aspectAInput = document.getElementById('aspectA');
             const aspectBInput = document.getElementById('aspectB');
@@ -119,95 +128,6 @@
             canvasContainer.style.display = 'block';
         }
     </script>
-
-</head>
-<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
-
-    <!-- Navbar will be loaded here -->
-    <div id="navbar-container"></div>
-
-
-
-<div class="container mt-1 text-justify flex-grow-1">
-
-
-
-	<div class="content-container">
-		
-
-
-
-
-
-
-    <h1>Black Bars Visualiser</h1>
-
-    <label for="aspectA">Aspect Ratio A (a:b):</label>
-    <input type="text" id="aspectA" placeholder="e.g., 16:9">
-
-    <label for="aspectB">Aspect Ratio B (a:b):</label>
-    <input type="text" id="aspectB" placeholder="e.g., 4:3">
-
-    <label for="aspectC">Aspect Ratio C (a:b):</label>
-    <input type="text" id="aspectC" placeholder="e.g., 1:1">
-
-    <button onclick="generateRectangles()">Generate Rectangles</button>
-
-    <p id="errorMessage"></p>
-
-    <div id="canvasContainer">
-        <div id="rectangleC" class="rectangle" style="background-color: grey; outline: solid red"></div>
-        <div id="rectangleB" class="rectangle" style="background-color: black;"></div>
-        <div id="rectangleA" class="rectangle" style="background-color: green;"></div>
-    </div>
-
-    <div id="moveThisDown">Move This Down</div>
-
-
-
-
-
-
-
-</div></div>
-	
-	
-
-
-		
-
-			
-			
-
-
-		
-    <!-- Footer will be loaded here
-    <div id="footer-container"></div> -->
-	
-	<div id="footer-container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
-        <div class="container">
-            <div class="navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" id="current-year">
-                            Copyright © 2027 by Shrey Tyagi. All rights reserved.
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
-
-
-    <!-- Load Navbar & Footer -->
-<!--    <script>
-        $(document).ready(function(){
-            $("#navbar-container").load("navbar.html");
-            $("#footer-container").load("footer.html");
-        });
-    </script> -->
 
 </body>
 </html>
