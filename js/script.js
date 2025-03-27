@@ -356,7 +356,7 @@ $(document).ready(function () {
         .then(data => {
             originalData = parseCSV(data);
             if (originalData.length === 0) return;
-            if (currentSortColumn !== null) {
+            if (currentSortColumn !== null && sortOrder !== 0) {
                 originalData = sortData(originalData, currentSortColumn, sortOrder);
             }
             renderTable(originalData, isFullWidth);
@@ -475,4 +475,3 @@ $(document).ready(function () {
         renderTable(sortedData, isFullWidth);
     }
 });
-
