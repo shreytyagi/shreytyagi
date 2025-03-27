@@ -349,7 +349,7 @@ $(document).ready(function () {
 
     let originalData = [];
     let currentSortColumn = defaultSortColumn ? parseInt(defaultSortColumn, 10) : null;
-    let sortOrder = defaultSortOrder === "asc" ? 1 : defaultSortOrder === "desc" ? -1 : 0;
+    let sortOrder = defaultSortOrder ? parseInt(defaultSortOrder, 10) : 0;
 
     fetch(csvFile)
         .then(response => response.text())
@@ -456,23 +456,21 @@ $(document).ready(function () {
 
     function sortData(data, columnIndex, order) {
         if (order === 0) return [...data];
-
         return [data[0], ...data.slice(1).sort((a, b) => {
-            const aVal = isNaN(a[columnIndex]) ? a[columnIndex].toLowerCase() : parseFloat(a[columnIndex]);
-            const bVal = isNaN(b[columnIndex]) ? b[columnIndex].toLowerCase() : parseFloat(b[columnIndex]);
-
-            if (aVal < bVal) return order === 1 ? -1 : 1;
-            if (aVal > bVal) return order === 1 ? 1 : -1;
-            return 0;
+            if (!isNaN(a[columnIndex]) && !isNaN(b[columnIndex])) {
+                return order === 1 ? a[columnIndex] - b[columnIndex] : b[columnIndex] - a[columnIndex];
+            } else {
+                return order === 1 ? a[columnIndex].localeCompare(b[columnIndex]) : b[columnIndex].localeCompare(a[columnIndex]);
+            }
         })];
     }
 
     function sortTableByColumn(columnIndex) {
         if (columnIndex !== currentSortColumn) {
-            sortOrder = 1; // Set to ascending first
+            sortOrder = 1;
             currentSortColumn = columnIndex;
         } else {
-            sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
+            sortOrder = (sortOrder + 1) % 3;
         }
 
         let sortedData = sortOrder === 0 ? [...originalData] : sortData(originalData, columnIndex, sortOrder);
