@@ -383,11 +383,9 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        // Ensure no column (except `"#"`) gets below 12%
-        const minWidth = 12;
-        let adjustedWidths = calculatedWidths.map((width, index) => {
-            return data[0][index] === "#" ? width : Math.max(width, minWidth);
-        });
+        // Ensure no column gets below a minimum width (e.g., 12%)
+        const minWidth = 30;
+        let adjustedWidths = calculatedWidths.map(width => Math.max(width, minWidth));
 
         // Normalize if total width exceeds 100%
         let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
@@ -410,6 +408,7 @@ $(document).ready(function () {
             tableContainer.style.overflowX = "auto";
             tableContainer.style.whiteSpace = "nowrap";
             tableContainer.style.display = "block";
+
             dynamicTable.style.width = "max-content";
             dynamicTable.style.minWidth = "100%";
             dynamicTable.style.tableLayout = "auto";
@@ -422,18 +421,21 @@ $(document).ready(function () {
         }
 
         let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-        
+
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "normal";  // Allow headers to wrap
-            th.style.wordBreak = "break-word";
-            th.style.hyphens = "auto";
             th.style.padding = "8px";
+
+            // ✅ Ensuring text wrap when fullwidth is false
+            th.style.whiteSpace = isFullWidth ? "nowrap" : "normal";
+            th.style.wordBreak = isFullWidth ? "normal" : "break-word";
+            th.style.hyphens = isFullWidth ? "none" : "auto";
             if (!isFullWidth) th.style.width = columnWidths[index] + "%";
+
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -446,11 +448,14 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";  // Allow text to wrap
-                td.style.wordBreak = "break-word";
-                td.style.hyphens = "auto";
                 td.style.padding = "8px";
+
+                // ✅ Ensuring text wrap for table data
+                td.style.whiteSpace = isFullWidth ? "nowrap" : "normal";
+                td.style.wordBreak = isFullWidth ? "normal" : "break-word";
+                td.style.hyphens = isFullWidth ? "none" : "auto";
                 if (!isFullWidth) td.style.width = columnWidths[index] + "%";
+
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
