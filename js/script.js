@@ -384,7 +384,7 @@ $(document).ready(function () {
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
         // Ensure no column gets below a minimum width (e.g., 12%)
-        const minWidth = 12;
+        const minWidth = 20;
         let adjustedWidths = calculatedWidths.map(width => Math.max(width, minWidth));
 
         // Normalize if total width exceeds 100%
