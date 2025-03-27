@@ -339,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // This code is for tables
 
 
+
 $(document).ready(function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
@@ -372,6 +373,7 @@ $(document).ready(function () {
     function calculateColumnWidths(data) {
         const columnWidths = new Array(data[0].length).fill(0);
 
+        // Determine max length of any cell in each column
         data.forEach(row => {
             row.forEach((cell, index) => {
                 columnWidths[index] = Math.max(columnWidths[index], cell.length);
@@ -381,18 +383,18 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        const minWidth = 27;  
+        // Minimum column width rules
+        const minWidth = 27;  // Minimum for normal columns
+        const minHashWidth = 18; // Minimum for "#" column
 
         let adjustedWidths = calculatedWidths.map((width, index) => {
-            if (data[0][index] === "#") {
-                return "auto"; // We will handle # column differently
-            }
-            return Math.max(width, minWidth);
+            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
         });
 
-        let widthSum = adjustedWidths.reduce((a, b) => a + (typeof b === "number" ? b : 0), 0);
+        // Normalize if total width exceeds 100%
+        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
         if (widthSum > 100) {
-            adjustedWidths = adjustedWidths.map(width => (typeof width === "number" ? (width / widthSum) * 100 : "auto"));
+            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
         }
 
         return adjustedWidths;
@@ -422,25 +424,18 @@ $(document).ready(function () {
         }
 
         let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-
+        
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "normal";  
+            th.style.whiteSpace = "normal";  // Allow headers to wrap
             th.style.wordBreak = "break-word";
             th.style.hyphens = "auto";
             th.style.padding = "8px";
-
-            if (!isFullWidth) {
-                if (header === "#") {
-                    th.style.width = "6ch"; // Enough space for "999"
-                } else {
-                    th.style.width = columnWidths[index] + "%";
-                }
-            }
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -453,18 +448,11 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";  
+                td.style.whiteSpace = "normal";  // Allow text to wrap
                 td.style.wordBreak = "break-word";
                 td.style.hyphens = "auto";
                 td.style.padding = "8px";
-
-                if (!isFullWidth) {
-                    if (data[0][index] === "#") {
-                        td.style.width = "6ch"; // Just enough for "999"
-                    } else {
-                        td.style.width = columnWidths[index] + "%";
-                    }
-                }
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
@@ -486,7 +474,7 @@ $(document).ready(function () {
 
     function sortTableByColumn(columnIndex) {
         if (columnIndex !== currentSortColumn) {
-            sortOrder = 1; 
+            sortOrder = 1; // Set to ascending first
             currentSortColumn = columnIndex;
         } else {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
