@@ -381,8 +381,6 @@ $(document).ready(function () {
         });
 
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
-
-        // Calculate initial width percentages
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
         // Ensure no column gets below a minimum width
@@ -430,11 +428,14 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "nowrap";
+            th.style.padding = "8px";
+            
+            // ✅ Ensuring text wrap when fullwidth is false
+            th.style.whiteSpace = isFullWidth ? "nowrap" : "normal";
             th.style.wordBreak = isFullWidth ? "normal" : "break-word";
             th.style.hyphens = isFullWidth ? "none" : "auto";
-            th.style.padding = "8px";
             if (!isFullWidth) th.style.width = columnWidths[index] + "%";
+
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -447,11 +448,14 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
+                td.style.padding = "8px";
+
+                // ✅ Ensuring text wrap for table data
                 td.style.whiteSpace = isFullWidth ? "nowrap" : "normal";
                 td.style.wordBreak = isFullWidth ? "normal" : "break-word";
                 td.style.hyphens = isFullWidth ? "none" : "auto";
-                td.style.padding = "8px";
                 if (!isFullWidth) td.style.width = columnWidths[index] + "%";
+
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
