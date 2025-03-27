@@ -135,22 +135,22 @@
 
 
 
-    <h1>Black Bars Visualiser</h1>
+    <h3>Black Bars Visualiser</h3>
 
-    <label for="aspectA" style="margin: 0;">Aspect Ratio A (a:b):</label>
+    <label for="aspectA" style="margin: auto;">Aspect Ratio A (a:b):</label>
     <input type="text" id="aspectA" placeholder="e.g., 16:9"><br>
 
-    <label for="aspectB" style="margin: 0;">Aspect Ratio B (a:b):</label>
+    <label for="aspectB" style="margin: auto;">Aspect Ratio B (a:b):</label>
     <input type="text" id="aspectB" placeholder="e.g., 4:3"><br>
 
-    <label for="aspectC" style="margin: 0;">Aspect Ratio C (a:b):</label>
+    <label for="aspectC" style="margin: auto;">Aspect Ratio C (a:b):</label>
     <input type="text" id="aspectC" placeholder="e.g., 1:1"><br>
 
-    <button onclick="generateRectangles()" style="margin: 0;">Generate Rectangles</button>
+    <button onclick="generateRectangles()" style="margin: auto;">Generate Rectangles</button>
 
     <p id="errorMessage"></p>
 
-    <div id="canvasContainer">
+    <div id="canvasContainer" style="margin-left: 10px; margin-right: 10px;">
         <div id="rectangleC" class="rectangle" style="background-color: grey; outline: solid red"></div>
         <div id="rectangleB" class="rectangle" style="background-color: black;"></div>
         <div id="rectangleA" class="rectangle" style="background-color: green;"></div>
