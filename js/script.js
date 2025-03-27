@@ -384,7 +384,7 @@ $(document).ready(function () {
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
         // Ensure no column (except `"#"`) gets below 12%
-        const minWidth = 12;
+        const minWidth = 27;
         let adjustedWidths = calculatedWidths.map((width, index) => {
             return data[0][index] === "#" ? width : Math.max(width, minWidth);
         });
