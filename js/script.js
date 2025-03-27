@@ -385,7 +385,7 @@ $(document).ready(function () {
 
         // Minimum column width rules
         const minWidth = 27;  // Minimum for normal columns
-        const minHashWidth = 5; // Minimum for "#" column
+        const minHashWidth = 10; // Minimum for "#" column
 
         let adjustedWidths = calculatedWidths.map((width, index) => {
             return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
