@@ -339,7 +339,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // This code is for tables
 
 
-
 $(document).ready(function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
@@ -382,20 +381,18 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        const minWidth = 27;  
-        const maxHashWidth = 20;  
+        const minWidth = 12;  
 
         let adjustedWidths = calculatedWidths.map((width, index) => {
             if (data[0][index] === "#") {
-                let autoWidth = (width / totalMaxLength) * 100;
-                return Math.min(Math.max(autoWidth, 5), maxHashWidth); 
+                return "auto"; // We will handle # column differently
             }
             return Math.max(width, minWidth);
         });
 
-        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
+        let widthSum = adjustedWidths.reduce((a, b) => a + (typeof b === "number" ? b : 0), 0);
         if (widthSum > 100) {
-            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
+            adjustedWidths = adjustedWidths.map(width => (typeof width === "number" ? (width / widthSum) * 100 : "auto"));
         }
 
         return adjustedWidths;
@@ -436,7 +433,14 @@ $(document).ready(function () {
             th.style.wordBreak = "break-word";
             th.style.hyphens = "auto";
             th.style.padding = "8px";
-            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
+
+            if (!isFullWidth) {
+                if (header === "#") {
+                    th.style.width = "3ch"; // Enough space for "999"
+                } else {
+                    th.style.width = columnWidths[index] + "%";
+                }
+            }
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -453,7 +457,14 @@ $(document).ready(function () {
                 td.style.wordBreak = "break-word";
                 td.style.hyphens = "auto";
                 td.style.padding = "8px";
-                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
+
+                if (!isFullWidth) {
+                    if (data[0][index] === "#") {
+                        td.style.width = "3ch"; // Just enough for "999"
+                    } else {
+                        td.style.width = columnWidths[index] + "%";
+                    }
+                }
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
