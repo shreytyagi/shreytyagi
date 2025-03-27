@@ -436,7 +436,9 @@ $(document).ready(function () {
         });
         tableHead.appendChild(headerRow);
 
-        data.slice(1).forEach(rowData => {
+        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
+
+        sortedData.slice(1).forEach(rowData => {
             const row = document.createElement("tr");
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
