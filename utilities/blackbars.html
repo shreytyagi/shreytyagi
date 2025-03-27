@@ -26,7 +26,9 @@
         #canvasContainer {
             display: none;
             position: relative;
-            margin: 20px auto;
+			max-width: calc(100% - 30px); /* Ensures at least 15px margin on both sides */
+            margin: 15px auto; /* Centers and adds top/bottom spacing */
+			text-align: center; /* Center-aligns its content */
         }
         .rectangle {
             position: absolute;
@@ -40,6 +42,10 @@
         #moveThisDown {
             margin-top: 20px; /* Default spacing */
         }
+		label, input, button {
+        display: block; /* Makes them block elements so margin auto works */
+        margin: 10px auto; /* Centers horizontally */
+    }
     </style>
 	
 	<script>
@@ -137,20 +143,20 @@
 
     <h3>Black Bars Visualiser</h3>
 
-    <label for="aspectA" style="margin: auto;">Aspect Ratio A (a:b):</label>
+    <label for="aspectA">Aspect Ratio A (a:b):</label>
     <input type="text" id="aspectA" placeholder="e.g., 16:9"><br>
 
-    <label for="aspectB" style="margin: auto;">Aspect Ratio B (a:b):</label>
+    <label for="aspectB">Aspect Ratio B (a:b):</label>
     <input type="text" id="aspectB" placeholder="e.g., 4:3"><br>
 
-    <label for="aspectC" style="margin: auto;">Aspect Ratio C (a:b):</label>
+    <label for="aspectC">Aspect Ratio C (a:b):</label>
     <input type="text" id="aspectC" placeholder="e.g., 1:1"><br>
 
-    <button onclick="generateRectangles()" style="margin: auto;">Generate Rectangles</button>
+    <button onclick="generateRectangles()">Generate Rectangles</button>
 
     <p id="errorMessage"></p>
 
-    <div id="canvasContainer" style="margin-left: 10px; margin-right: 10px;">
+    <div id="canvasContainer">
         <div id="rectangleC" class="rectangle" style="background-color: grey; outline: solid red"></div>
         <div id="rectangleB" class="rectangle" style="background-color: black;"></div>
         <div id="rectangleA" class="rectangle" style="background-color: green;"></div>
