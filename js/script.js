@@ -381,7 +381,7 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        const minWidth = 12;  
+        const minWidth = 27;  
 
         let adjustedWidths = calculatedWidths.map((width, index) => {
             if (data[0][index] === "#") {
@@ -436,7 +436,7 @@ $(document).ready(function () {
 
             if (!isFullWidth) {
                 if (header === "#") {
-                    th.style.width = "3ch"; // Enough space for "999"
+                    th.style.width = "6ch"; // Enough space for "999"
                 } else {
                     th.style.width = columnWidths[index] + "%";
                 }
@@ -460,7 +460,7 @@ $(document).ready(function () {
 
                 if (!isFullWidth) {
                     if (data[0][index] === "#") {
-                        td.style.width = "3ch"; // Just enough for "999"
+                        td.style.width = "6ch"; // Just enough for "999"
                     } else {
                         td.style.width = columnWidths[index] + "%";
                     }
