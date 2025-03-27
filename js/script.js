@@ -344,23 +344,28 @@ $(document).ready(function () {
     const tableContainer = document.querySelector(".table-container");
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
     const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
+    const defaultSortColumn = tableContainer.getAttribute("sortcolumn");
+    const defaultSortOrder = tableContainer.getAttribute("sortorder");
 
     let originalData = [];
-    let currentSortColumn = null;
-    let sortOrder = 0;
+    let currentSortColumn = defaultSortColumn ? parseInt(defaultSortColumn, 10) : null;
+    let sortOrder = defaultSortOrder ? parseInt(defaultSortOrder, 10) : 0;
 
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
             originalData = parseCSV(data);
             if (originalData.length === 0) return;
+            if (currentSortColumn !== null) {
+                originalData = sortData(originalData, currentSortColumn, sortOrder);
+            }
             renderTable(originalData, isFullWidth);
         })
         .catch(error => console.error("Error loading CSV:", error));
 
     function parseCSV(data) {
         return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^\"]*)"/g);
+            const matches = line.match(/"([^"]*)"/g);
             return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
         });
     }
@@ -447,6 +452,17 @@ $(document).ready(function () {
         });
     }
 
+    function sortData(data, columnIndex, order) {
+        if (order === 0) return [...data];
+        return [data[0], ...data.slice(1).sort((a, b) => {
+            if (!isNaN(a[columnIndex]) && !isNaN(b[columnIndex])) {
+                return order === 1 ? a[columnIndex] - b[columnIndex] : b[columnIndex] - a[columnIndex];
+            } else {
+                return order === 1 ? a[columnIndex].localeCompare(b[columnIndex]) : b[columnIndex].localeCompare(a[columnIndex]);
+            }
+        })];
+    }
+
     function sortTableByColumn(columnIndex) {
         if (columnIndex !== currentSortColumn) {
             sortOrder = 1;
@@ -455,19 +471,8 @@ $(document).ready(function () {
             sortOrder = (sortOrder + 1) % 3;
         }
 
-        let sortedData;
-        if (sortOrder === 0) {
-            sortedData = [...originalData];
-        } else {
-            sortedData = [originalData[0], ...originalData.slice(1).sort((a, b) => {
-                if (!isNaN(a[columnIndex]) && !isNaN(b[columnIndex])) {
-                    return sortOrder === 1 ? a[columnIndex] - b[columnIndex] : b[columnIndex] - a[columnIndex];
-                } else {
-                    return sortOrder === 1 ? a[columnIndex].localeCompare(b[columnIndex]) : b[columnIndex].localeCompare(a[columnIndex]);
-                }
-            })];
-        }
-
+        let sortedData = sortOrder === 0 ? [...originalData] : sortData(originalData, columnIndex, sortOrder);
         renderTable(sortedData, isFullWidth);
     }
 });
+
