@@ -373,6 +373,7 @@ $(document).ready(function () {
     function calculateColumnWidths(data) {
         const columnWidths = new Array(data[0].length).fill(0);
 
+        // Determine max length of any cell in each column
         data.forEach(row => {
             row.forEach((cell, index) => {
                 columnWidths[index] = Math.max(columnWidths[index], cell.length);
@@ -382,17 +383,15 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        const minWidth = 27;  
-        const maxHashWidth = 20;  
+        // Minimum column width rules
+        const minWidth = 27;  // Minimum for normal columns
+        const minHashWidth = 18; // Minimum for "#" column
 
         let adjustedWidths = calculatedWidths.map((width, index) => {
-            if (data[0][index] === "#") {
-                let autoWidth = (width / totalMaxLength) * 100;
-                return Math.min(Math.max(autoWidth, 5), maxHashWidth); 
-            }
-            return Math.max(width, minWidth);
+            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
         });
 
+        // Normalize if total width exceeds 100%
         let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
         if (widthSum > 100) {
             adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
@@ -425,14 +424,14 @@ $(document).ready(function () {
         }
 
         let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-
+        
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "normal";  
+            th.style.whiteSpace = "normal";  // Allow headers to wrap
             th.style.wordBreak = "break-word";
             th.style.hyphens = "auto";
             th.style.padding = "8px";
@@ -449,7 +448,7 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";  
+                td.style.whiteSpace = "normal";  // Allow text to wrap
                 td.style.wordBreak = "break-word";
                 td.style.hyphens = "auto";
                 td.style.padding = "8px";
@@ -475,7 +474,7 @@ $(document).ready(function () {
 
     function sortTableByColumn(columnIndex) {
         if (columnIndex !== currentSortColumn) {
-            sortOrder = 1; 
+            sortOrder = 1; // Set to ascending first
             currentSortColumn = columnIndex;
         } else {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
