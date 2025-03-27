@@ -383,10 +383,12 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        // Ensure no column (except `"#"`) gets below 12%
-        const minWidth = 27;
+        // Minimum column width rules
+        const minWidth = 27;  // Minimum for normal columns
+        const minHashWidth = 5; // Minimum for "#" column
+
         let adjustedWidths = calculatedWidths.map((width, index) => {
-            return data[0][index] === "#" ? width : Math.max(width, minWidth);
+            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
         });
 
         // Normalize if total width exceeds 100%
