@@ -372,30 +372,26 @@ $(document).ready(function () {
 
     function calculateColumnWidths(data) {
         const columnWidths = new Array(data[0].length).fill(0);
-
-        // Determine max length of any cell in each column
+        let totalCharacters = 0;
+        
         data.forEach(row => {
             row.forEach((cell, index) => {
                 columnWidths[index] = Math.max(columnWidths[index], cell.length);
+                totalCharacters += cell.length;
             });
         });
 
-        let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
+        let calculatedWidths = columnWidths.map(width => (width / totalCharacters) * 100);
 
-        // Calculate initial width percentages
-        let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
-
-        // Ensure no column gets below a minimum width
-        const minWidth = 8;
-        let adjustedWidths = calculatedWidths.map(width => Math.max(width, minWidth));
-
-        // Normalize if total width exceeds 100%
-        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
+        const widthSum = calculatedWidths.reduce((a, b) => a + b, 0);
         if (widthSum > 100) {
-            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
+            calculatedWidths = calculatedWidths.map(width => (width / widthSum) * 100);
         }
 
-        return adjustedWidths;
+        const minWidth = 8;
+        calculatedWidths = calculatedWidths.map(width => (width < minWidth ? minWidth : width));
+        
+        return calculatedWidths;
     }
 
     function renderTable(data, isFullWidth) {
