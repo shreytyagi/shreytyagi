@@ -383,8 +383,8 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        // Ensure no column gets below a minimum width
-        const minWidth = 8;
+        // Ensure no column gets below a minimum width (e.g., 12%)
+        const minWidth = 12;
         let adjustedWidths = calculatedWidths.map(width => Math.max(width, minWidth));
 
         // Normalize if total width exceeds 100%
@@ -421,7 +421,7 @@ $(document).ready(function () {
         }
 
         let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-        
+
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
@@ -429,7 +429,7 @@ $(document).ready(function () {
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
             th.style.padding = "8px";
-            
+
             // ✅ Ensuring text wrap when fullwidth is false
             th.style.whiteSpace = isFullWidth ? "nowrap" : "normal";
             th.style.wordBreak = isFullWidth ? "normal" : "break-word";
