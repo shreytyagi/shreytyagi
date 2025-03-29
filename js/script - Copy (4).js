@@ -385,10 +385,10 @@ $(document).ready(function () {
 
         // Minimum column width rules
         const minWidth = 27;  // Minimum for normal columns
-        const minHashWidth = 5; // Minimum width for "#" column
+        const minHashWidth = 17; // Minimum for "#" column
 
         let adjustedWidths = calculatedWidths.map((width, index) => {
-            return data[0][index] === "#" ? minHashWidth : Math.max(width, minWidth);
+            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
         });
 
         // Normalize if total width exceeds 100%
@@ -431,21 +431,11 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
+            th.style.whiteSpace = "normal";  // Allow headers to wrap
             th.style.wordBreak = "break-word";
             th.style.hyphens = "auto";
             th.style.padding = "8px";
-
-            if (!isFullWidth) {
-                if (header === "#") {
-                    th.style.whiteSpace = "nowrap";
-                    th.style.textAlign = "center";
-                    th.style.width = "5%";
-                } else {
-                    th.style.whiteSpace = "normal";
-                    th.style.width = columnWidths[index] + "%";
-                }
-            }
-
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -458,21 +448,11 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
+                td.style.whiteSpace = "normal";  // Allow text to wrap
                 td.style.wordBreak = "break-word";
                 td.style.hyphens = "auto";
                 td.style.padding = "8px";
-
-                if (!isFullWidth) {
-                    if (data[0][index] === "#") {
-                        td.style.whiteSpace = "nowrap";
-                        td.style.textAlign = "center";
-                        td.style.width = "5%";
-                    } else {
-                        td.style.whiteSpace = "normal";
-                        td.style.width = columnWidths[index] + "%";
-                    }
-                }
-
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
