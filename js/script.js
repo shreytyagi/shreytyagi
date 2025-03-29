@@ -175,12 +175,12 @@ document.addEventListener("DOMContentLoaded", function () {
         articleList.forEach(({ category, title, date, link }) => {
             const formattedDate = formatDate(date);
             const cardHTML = `
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="card-link">
-                        <a href="${link}" class="card-link">
-                            <div class="card custom-card article">
-                                <div class="card-inner">
-                                    <div class="card-content">
+                <div class="col-lg-4 col-md-6 col-sm-12" style="background-color: blue">
+                    <div class="card-link" style="background-color: green">
+                        <a href="${link}" class="card-link" style="background-color: yellow">
+                            <div class="card custom-card article" style="background-color: orange">
+                                <div class="card-inner" style="background-color: red">
+                                    <div class="card-content" style="background-color: pink">
                                         <p class="card-text">${category}</p>
                                         <h5 class="card-title">${title}</h5>
                                         <p class="card-date">${formattedDate}</p>
