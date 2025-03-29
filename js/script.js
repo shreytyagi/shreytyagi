@@ -370,6 +370,36 @@ $(document).ready(function () {
         });
     }
 
+    function calculateColumnWidths(data) {
+        const columnWidths = new Array(data[0].length).fill(0);
+
+        // Determine max length of any cell in each column
+        data.forEach(row => {
+            row.forEach((cell, index) => {
+                columnWidths[index] = Math.max(columnWidths[index], cell.length);
+            });
+        });
+
+        let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
+        let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
+
+        // Minimum column width rules
+        const minWidth = 27;  // Minimum for normal columns
+        const minHashWidth = 17; // Minimum for "#" column
+
+        let adjustedWidths = calculatedWidths.map((width, index) => {
+            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
+        });
+
+        // Normalize if total width exceeds 100%
+        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
+        if (widthSum > 100) {
+            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
+        }
+
+        return adjustedWidths;
+    }
+
     function renderTable(data, isFullWidth) {
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
@@ -380,6 +410,7 @@ $(document).ready(function () {
         if (isFullWidth) {
             tableContainer.classList.add("full-width");
             tableContainer.style.overflowX = "auto";
+            tableContainer.style.whiteSpace = "nowrap";
             tableContainer.style.display = "block";
             dynamicTable.style.width = "max-content";
             dynamicTable.style.minWidth = "100%";
@@ -392,26 +423,19 @@ $(document).ready(function () {
             dynamicTable.style.tableLayout = "fixed";
         }
 
+        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+        
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
+            th.style.whiteSpace = "normal";  // Allow headers to wrap
+            th.style.wordBreak = "break-word";
+            th.style.hyphens = "auto";
             th.style.padding = "8px";
-
-            if (!isFullWidth) {
-                if (header === "#") {
-                    th.style.whiteSpace = "nowrap";
-                    th.style.textAlign = "center";
-                    th.style.width = "10%"; // Increased for better readability
-                } else {
-                    th.style.width = "auto";
-                    th.style.wordBreak = "break-word";
-                    th.style.hyphens = "auto";
-                }
-            }
-
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -424,27 +448,15 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
+                td.style.whiteSpace = "normal";  // Allow text to wrap
+                td.style.wordBreak = "break-word";
+                td.style.hyphens = "auto";
                 td.style.padding = "8px";
-
-                if (!isFullWidth) {
-                    if (data[0][index] === "#") {
-                        td.style.whiteSpace = "nowrap";
-                        td.style.textAlign = "center";
-                        td.style.width = "10%"; // Adjusted for better visibility
-                    } else {
-                        td.style.width = "auto";
-                        td.style.wordBreak = "break-word";
-                        td.style.hyphens = "auto";
-                    }
-                }
-
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
         });
-
-        // Apply responsive styling
-        applyResponsiveStyles();
     }
 
     function sortData(data, columnIndex, order) {
@@ -470,42 +482,5 @@ $(document).ready(function () {
 
         let sortedData = sortOrder === 0 ? [...originalData] : sortData(originalData, columnIndex, sortOrder);
         renderTable(sortedData, isFullWidth);
-    }
-
-    function applyResponsiveStyles() {
-        const style = document.createElement("style");
-        style.textContent = `
-            @media (max-width: 768px) {
-                #dynamic-table th, #dynamic-table td {
-                    padding: 6px;
-                    font-size: 14px;
-                }
-                #dynamic-table th {
-                    text-align: center;
-                }
-                #dynamic-table td {
-                    word-break: break-word;
-                    hyphens: auto;
-                }
-                #dynamic-table th:first-child, #dynamic-table td:first-child {
-                    min-width: 40px;
-                    max-width: 50px;
-                    text-align: center;
-                    white-space: nowrap;
-                }
-            }
-
-            @media (max-width: 480px) {
-                #dynamic-table th, #dynamic-table td {
-                    padding: 4px;
-                    font-size: 12px;
-                }
-                #dynamic-table th:first-child, #dynamic-table td:first-child {
-                    min-width: 30px;
-                    max-width: 40px;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     }
 });
