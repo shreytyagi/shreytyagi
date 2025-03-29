@@ -382,22 +382,12 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        const minWidth = 27;
-        const minHashWidth = 17;
-        
-        let adjustedWidths = calculatedWidths.map((width, index) => {
+        return calculatedWidths.map((width, index) => {
             if (data[0][index] === "#") {
-                return `min-content`;
+                return "auto";
             }
-            return Math.max(width, minWidth);
+            return Math.max(width, 10) + "%";
         });
-
-        let widthSum = adjustedWidths.filter(w => w !== `min-content`).reduce((a, b) => a + b, 0);
-        if (widthSum > 100) {
-            adjustedWidths = adjustedWidths.map(width => (width !== `min-content`) ? (width / widthSum) * 100 : width);
-        }
-
-        return adjustedWidths;
     }
 
     function renderTable(data, isFullWidth) {
@@ -437,7 +427,7 @@ $(document).ready(function () {
             th.style.padding = "8px";
             
             if (!isFullWidth) {
-                th.style.width = header === "#" ? `min-content` : columnWidths[index] + "%";
+                th.style.width = columnWidths[index];
             }
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
@@ -457,7 +447,7 @@ $(document).ready(function () {
                 td.style.padding = "8px";
                 
                 if (!isFullWidth) {
-                    td.style.width = data[0][index] === "#" ? `min-content` : columnWidths[index] + "%";
+                    td.style.width = columnWidths[index];
                 }
                 row.appendChild(td);
             });
