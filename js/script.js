@@ -373,6 +373,7 @@ $(document).ready(function () {
     function calculateColumnWidths(data) {
         const columnWidths = new Array(data[0].length).fill(0);
 
+        // Determine max length of any cell in each column
         data.forEach(row => {
             row.forEach((cell, index) => {
                 columnWidths[index] = Math.max(columnWidths[index], cell.length);
@@ -382,12 +383,21 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        return calculatedWidths.map((width, index) => {
-            if (index === 0) { // Assuming the first column is "#"
-                return "min-content";
-            }
-            return Math.max(width, 10) + "%";
+        // Minimum column width rules
+        const minWidth = 27;  // Minimum for normal columns
+        const minHashWidth = 17; // Minimum for "#" column
+
+        let adjustedWidths = calculatedWidths.map((width, index) => {
+            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
         });
+
+        // Normalize if total width exceeds 100%
+        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
+        if (widthSum > 100) {
+            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
+        }
+
+        return adjustedWidths;
     }
 
     function renderTable(data, isFullWidth) {
@@ -421,14 +431,11 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "nowrap";
-            th.style.overflow = "hidden";
-            th.style.textOverflow = "ellipsis";
+            th.style.whiteSpace = "normal";  // Allow headers to wrap
+            th.style.wordBreak = "break-word";
+            th.style.hyphens = "auto";
             th.style.padding = "8px";
-            
-            if (!isFullWidth) {
-                th.style.width = columnWidths[index];
-            }
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -441,14 +448,11 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "nowrap";
-                td.style.overflow = "hidden";
-                td.style.textOverflow = "ellipsis";
+                td.style.whiteSpace = "normal";  // Allow text to wrap
+                td.style.wordBreak = "break-word";
+                td.style.hyphens = "auto";
                 td.style.padding = "8px";
-                
-                if (!isFullWidth) {
-                    td.style.width = columnWidths[index];
-                }
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
@@ -470,7 +474,7 @@ $(document).ready(function () {
 
     function sortTableByColumn(columnIndex) {
         if (columnIndex !== currentSortColumn) {
-            sortOrder = 1;
+            sortOrder = 1; // Set to ascending first
             currentSortColumn = columnIndex;
         } else {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
