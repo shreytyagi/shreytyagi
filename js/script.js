@@ -373,7 +373,6 @@ $(document).ready(function () {
     function calculateColumnWidths(data) {
         const columnWidths = new Array(data[0].length).fill(0);
 
-        // Determine max length of any cell in each column
         data.forEach(row => {
             row.forEach((cell, index) => {
                 columnWidths[index] = Math.max(columnWidths[index], cell.length);
@@ -383,18 +382,20 @@ $(document).ready(function () {
         let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
-        // Minimum column width rules
-        const minWidth = 27;  // Minimum for normal columns
-        const minHashWidth = 17; // Default minimum for "#" column
-
+        const minWidth = 27;
+        const minHashWidth = 17;
+        
         let adjustedWidths = calculatedWidths.map((width, index) => {
             if (data[0][index] === "#") {
-                // Dynamic width for "#" column
-                const maxCharWidth = Math.max(...data.slice(1).map(row => row[index].length));
-                return `${maxCharWidth}ch`; // Set width in characters
+                return `min-content`;
             }
             return Math.max(width, minWidth);
         });
+
+        let widthSum = adjustedWidths.filter(w => w !== `min-content`).reduce((a, b) => a + b, 0);
+        if (widthSum > 100) {
+            adjustedWidths = adjustedWidths.map(width => (width !== `min-content`) ? (width / widthSum) * 100 : width);
+        }
 
         return adjustedWidths;
     }
@@ -430,11 +431,14 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "normal";  // Allow headers to wrap
+            th.style.whiteSpace = "normal";
             th.style.wordBreak = "break-word";
             th.style.hyphens = "auto";
             th.style.padding = "8px";
-            if (!isFullWidth) th.style.width = columnWidths[index];
+            
+            if (!isFullWidth) {
+                th.style.width = header === "#" ? `min-content` : columnWidths[index] + "%";
+            }
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
@@ -447,11 +451,14 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";  // Allow text to wrap
+                td.style.whiteSpace = "normal";
                 td.style.wordBreak = "break-word";
                 td.style.hyphens = "auto";
                 td.style.padding = "8px";
-                if (!isFullWidth) td.style.width = columnWidths[index];
+                
+                if (!isFullWidth) {
+                    td.style.width = data[0][index] === "#" ? `min-content` : columnWidths[index] + "%";
+                }
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
@@ -473,7 +480,7 @@ $(document).ready(function () {
 
     function sortTableByColumn(columnIndex) {
         if (columnIndex !== currentSortColumn) {
-            sortOrder = 1; // Set to ascending first
+            sortOrder = 1;
             currentSortColumn = columnIndex;
         } else {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
