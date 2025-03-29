@@ -383,8 +383,8 @@ $(document).ready(function () {
         let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
 
         return calculatedWidths.map((width, index) => {
-            if (data[0][index] === "#") {
-                return "auto";
+            if (index === 0) { // Assuming the first column is "#"
+                return "min-content";
             }
             return Math.max(width, 10) + "%";
         });
@@ -421,9 +421,9 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "normal";
-            th.style.wordBreak = "break-word";
-            th.style.hyphens = "auto";
+            th.style.whiteSpace = "nowrap";
+            th.style.overflow = "hidden";
+            th.style.textOverflow = "ellipsis";
             th.style.padding = "8px";
             
             if (!isFullWidth) {
@@ -441,9 +441,9 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";
-                td.style.wordBreak = "break-word";
-                td.style.hyphens = "auto";
+                td.style.whiteSpace = "nowrap";
+                td.style.overflow = "hidden";
+                td.style.textOverflow = "ellipsis";
                 td.style.padding = "8px";
                 
                 if (!isFullWidth) {
