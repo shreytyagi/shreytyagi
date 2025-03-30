@@ -693,21 +693,4 @@ td, th {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive Grid Breakpoints */
-@media (min-width: 768px) {
-    #card-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
-@media (min-width: 992px) {
-    #card-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (min-width: 1200px) {
-    #card-container {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
