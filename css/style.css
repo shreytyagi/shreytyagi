@@ -673,7 +673,10 @@ td, th {
 
 
 
-
+#card-container {
+	margin-left: 80px;
+	margin-right: 80px;
+}
 
 
 
