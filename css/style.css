@@ -18,7 +18,7 @@ padding: 0;
   margin: 15px 0; /* Adjust top and bottom spacing */
   transition: transform 0.3s;
   max-width: 100%; /* Set maximum width to take full available width */
-  aspect-ratio: 2.5; /* Maintain square aspect ratio */
+  /* aspect-ratio: 2.5; Maintain square aspect ratio */
   overflow: hidden; /* Ensure content doesn't overflow */
   position: relative;
   color: black;
