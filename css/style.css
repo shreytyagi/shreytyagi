@@ -324,6 +324,11 @@ padding: 0;
 	margin: 0 auto; /* Center the card horizontally */
 }
 
+.card-link {
+	width: 100%;
+	margin: 0 auto;
+}
+
 /* Override left and right padding for gallery container */
 .gallery-container {
     padding-left: 4vw !important;
