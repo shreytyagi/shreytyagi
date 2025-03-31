@@ -18,7 +18,7 @@ padding: 0;
   margin: 15px 0; /* Adjust top and bottom spacing */
   transition: transform 0.3s;
   max-width: 100%; /* Set maximum width to take full available width */
-  /* aspect-ratio: 2.5; Maintain square aspect ratio */
+  aspect-ratio: 2.5; /* Maintain square aspect ratio */
   overflow: hidden; /* Ensure content doesn't overflow */
   position: relative;
   color: black;
@@ -322,11 +322,6 @@ padding: 0;
 .card-link.nottoobig {
 	max-width: 60vw; /* Adjust the maximum width as needed */
 	margin: 0 auto; /* Center the card horizontally */
-}
-
-.card-link {
-	width: 100%;
-	margin: 0 auto;
 }
 
 /* Override left and right padding for gallery container */
@@ -670,15 +665,3 @@ h1, h2, h3, h4, h5, h6 {
 td, th {
     hyphens: auto; /* Enables hyphenation */
 }
-
-
-
-#card-container {
-	margin-left: 20px;
-	margin-right: 20px;
-}
-
-
-
-
-
