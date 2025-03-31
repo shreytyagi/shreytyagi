@@ -325,10 +325,8 @@ padding: 0;
 }
 
 .card-link {
-    min-height: 100%; /* Fixed height */
-	max-height: 100%;
-    min-width: 100%; /* Set a minimum width */
-    max-width: 100%; /* Allows it to expand within the container */
+	width: 100%;
+	margin: 0 auto;
 }
 
 /* Override left and right padding for gallery container */
