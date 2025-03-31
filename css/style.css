@@ -325,8 +325,9 @@ padding: 0;
 }
 
 .card-link {
-    height: 120px; /* Fixed height */
-    min-width: 100px; /* Set a minimum width */
+    min-height: 100px; /* Fixed height */
+	max-height: 100px;
+    min-width: 100%; /* Set a minimum width */
     max-width: 100%; /* Allows it to expand within the container */
 }
 
