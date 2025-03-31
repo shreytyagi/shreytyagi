@@ -325,20 +325,8 @@ padding: 0;
 }
 
 .card-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px; /* Fixed height */
-    min-width: 100px; /* Set a minimum width */
-    max-width: 100%; /* Allows it to expand within the container */
-    flex-grow: 1; /* Enables flexible width */
-    text-align: center;
-    border: 1px solid #ddd; /* Optional: Adds a subtle border */
-    border-radius: 5px; /* Optional: Rounded corners */
-    padding: 5px; /* Adjust padding if necessary */
-    overflow: hidden; /* Prevents overflow issues */
-    white-space: nowrap; /* Prevents text wrapping */
-    text-overflow: ellipsis; /* Adds "..." if text overflows */
+	width: 100%;
+	margin: 0 auto;
 }
 
 /* Override left and right padding for gallery container */
