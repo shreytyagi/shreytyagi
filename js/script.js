@@ -484,3 +484,6 @@ $(document).ready(function () {
         renderTable(sortedData, isFullWidth);
     }
 });
+
+
+document.documentElement.lang = "en"; // just in case it's missing or changed
