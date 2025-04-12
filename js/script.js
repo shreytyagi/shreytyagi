@@ -492,7 +492,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ✅ Function: Inserts &shy; and recalculates on resize
     function insertSoftHyphensInTableCells() {
         const cellSelector = "td, th";
-        const breakPattern = /([a-z]{5,}?)(?=[a-z])/gi;
+        const breakPattern = /([a-z]{1,}?)(?=[a-z])/gi;
 
         document.querySelectorAll(cellSelector).forEach(cell => {
             const originalText = cell.textContent;
