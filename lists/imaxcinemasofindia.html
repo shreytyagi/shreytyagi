@@ -23,21 +23,35 @@
 	<!-- YouTube JS -->
 	<script src="https://apis.google.com/js/platform.js"></script>
 	
-	<script>
-  Hyphenopoly.config({
-    require: {
-      "en-us": "FORCE"  // Ensure English hyphenation is always applied
-    },
-    setup: {
-      selectors: {
-        "td": {},       // Apply to table cells
-        "th": {}        // Apply to table headers
-        // You can add more selectors like "p", "h1", etc. if needed
-      }
-    }
-  });
-</script>
-<script src="https://unpkg.com/hyphenopoly@5/Hyphenopoly_Loader.js"></script>
+        <script src="./Hyphenopoly_Loader.js"></script>
+        <script>
+        Hyphenopoly.config({
+            "paths": {
+                "maindir": "./",
+                "patterndir": "./patterns/"
+            },
+            "require": {
+                "de": "Silbentrennungsalgorithmus",
+                "en-us": "Supercalifragilisticexpialidocious",
+                "la": "honorificabilitudinitas"
+            },
+            "setup": {
+                "selectors": {
+                    ".container": {}
+                }
+            }
+        });
+        </script>
+        <style type="text/css">
+            }
+            body {
+                display: flex;
+                hyphens: auto;
+                -ms-hyphens: auto;
+                -moz-hyphens: auto;
+                -webkit-hyphens: auto;
+            }
+        </style>
 
 
 </head>
