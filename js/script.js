@@ -1,174 +1,3 @@
-function initHyphenation(callback) {
-    const script = document.createElement("script");
-    script.src = "https://unpkg.com/hyphenopoly@5/Hyphenopoly_Loader.js";
-    script.onload = () => {
-        Hyphenopoly.config({
-            require: { "en-us": "FORCE" },
-            setup: { selectors: { "td": {}, "th": {} } }
-        });
-        callback();
-    };
-    document.head.appendChild(script);
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    initHyphenation(() => {
-// This code is for tables
-
-
-
-$(document).ready(function () {
-    const tableContainer = document.querySelector(".table-container");
-    const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
-    const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
-    const defaultSortColumn = tableContainer.getAttribute("sortcolumn");
-    const defaultSortOrder = tableContainer.getAttribute("sortorder");
-
-    let originalData = [];
-    let currentSortColumn = defaultSortColumn ? parseInt(defaultSortColumn, 10) : null;
-    let sortOrder = defaultSortOrder === "asc" ? 1 : defaultSortOrder === "desc" ? -1 : 0;
-
-    fetch(csvFile)
-        .then(response => response.text())
-        .then(data => {
-            originalData = parseCSV(data);
-            if (originalData.length === 0) return;
-            if (currentSortColumn !== null && sortOrder !== 0) {
-                originalData = sortData(originalData, currentSortColumn, sortOrder);
-            }
-            renderTable(originalData, isFullWidth);
-        })
-        .catch(error => console.error("Error loading CSV:", error));
-
-    function parseCSV(data) {
-        return data.trim().split("\n").map(line => {
-            const matches = line.match(/"([^"]*)"/g);
-            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
-        });
-    }
-
-    function calculateColumnWidths(data) {
-        const columnWidths = new Array(data[0].length).fill(0);
-
-        // Determine max length of any cell in each column
-        data.forEach(row => {
-            row.forEach((cell, index) => {
-                columnWidths[index] = Math.max(columnWidths[index], cell.length);
-            });
-        });
-
-        let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
-        let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
-
-        // Minimum column width rules
-        const minWidth = 27;  // Minimum for normal columns
-        const minHashWidth = 17; // Minimum for "#" column
-
-        let adjustedWidths = calculatedWidths.map((width, index) => {
-            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
-        });
-
-        // Normalize if total width exceeds 100%
-        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
-        if (widthSum > 100) {
-            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
-        }
-
-        return adjustedWidths;
-    }
-
-    function renderTable(data, isFullWidth) {
-        const tableHead = document.querySelector("#dynamic-table thead");
-        const tableBody = document.querySelector("#dynamic-table tbody");
-        const dynamicTable = document.querySelector("#dynamic-table");
-        tableHead.innerHTML = "";
-        tableBody.innerHTML = "";
-
-        if (isFullWidth) {
-            tableContainer.classList.add("full-width");
-            tableContainer.style.overflowX = "auto";
-            tableContainer.style.whiteSpace = "nowrap";
-            tableContainer.style.display = "block";
-            dynamicTable.style.width = "max-content";
-            dynamicTable.style.minWidth = "100%";
-            dynamicTable.style.tableLayout = "auto";
-        } else {
-            tableContainer.classList.remove("full-width");
-            tableContainer.style.overflowX = "hidden";
-            tableContainer.style.width = "100%";
-            dynamicTable.style.width = "100%";
-            dynamicTable.style.tableLayout = "fixed";
-        }
-
-        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-        
-        const headerRow = document.createElement("tr");
-        data[0].forEach((header, index) => {
-            const th = document.createElement("th");
-            th.textContent = header;
-            th.setAttribute("data-column-index", index);
-            th.style.cursor = "pointer";
-            /* th.style.whiteSpace = "normal";  // Allow headers to wrap
-            th.style.wordBreak = "break-word";
-            //th.style.hyphens = "auto"; */
-            th.style.padding = "8px";
-            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
-            th.addEventListener("click", () => sortTableByColumn(index));
-            headerRow.appendChild(th);
-        });
-        tableHead.appendChild(headerRow);
-
-        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
-
-        sortedData.slice(1).forEach(rowData => {
-            const row = document.createElement("tr");
-            rowData.forEach((cellData, index) => {
-                const td = document.createElement("td");
-                td.textContent = cellData;
-                /* td.style.whiteSpace = "normal";  // Allow text to wrap
-                td.style.wordBreak = "break-word";
-                td.style.hyphens = "auto"; */
-                td.style.padding = "8px";
-                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
-                row.appendChild(td);
-            });
-            tableBody.appendChild(row);
-        });
-    }
-
-    function sortData(data, columnIndex, order) {
-        if (order === 0) return [...data];
-
-        return [data[0], ...data.slice(1).sort((a, b) => {
-            const aVal = isNaN(a[columnIndex]) ? a[columnIndex].toLowerCase() : parseFloat(a[columnIndex]);
-            const bVal = isNaN(b[columnIndex]) ? b[columnIndex].toLowerCase() : parseFloat(b[columnIndex]);
-
-            if (aVal < bVal) return order === 1 ? -1 : 1;
-            if (aVal > bVal) return order === 1 ? 1 : -1;
-            return 0;
-        })];
-    }
-
-    function sortTableByColumn(columnIndex) {
-        if (columnIndex !== currentSortColumn) {
-            sortOrder = 1; // Set to ascending first
-            currentSortColumn = columnIndex;
-        } else {
-            sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
-        }
-
-        let sortedData = sortOrder === 0 ? [...originalData] : sortData(originalData, columnIndex, sortOrder);
-        renderTable(sortedData, isFullWidth);
-    }
-});
-
-
-document.documentElement.lang = "en"; // just in case it's missing or changed
-    });
-});
-
-
-
 $(document).ready(function () {
     $('.card').hover(
         function () {
@@ -507,4 +336,154 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+// This code is for tables
 
+
+
+$(document).ready(function () {
+    const tableContainer = document.querySelector(".table-container");
+    const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
+    const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
+    const defaultSortColumn = tableContainer.getAttribute("sortcolumn");
+    const defaultSortOrder = tableContainer.getAttribute("sortorder");
+
+    let originalData = [];
+    let currentSortColumn = defaultSortColumn ? parseInt(defaultSortColumn, 10) : null;
+    let sortOrder = defaultSortOrder === "asc" ? 1 : defaultSortOrder === "desc" ? -1 : 0;
+
+    fetch(csvFile)
+        .then(response => response.text())
+        .then(data => {
+            originalData = parseCSV(data);
+            if (originalData.length === 0) return;
+            if (currentSortColumn !== null && sortOrder !== 0) {
+                originalData = sortData(originalData, currentSortColumn, sortOrder);
+            }
+            renderTable(originalData, isFullWidth);
+        })
+        .catch(error => console.error("Error loading CSV:", error));
+
+    function parseCSV(data) {
+        return data.trim().split("\n").map(line => {
+            const matches = line.match(/"([^"]*)"/g);
+            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
+
+    function calculateColumnWidths(data) {
+        const columnWidths = new Array(data[0].length).fill(0);
+
+        // Determine max length of any cell in each column
+        data.forEach(row => {
+            row.forEach((cell, index) => {
+                columnWidths[index] = Math.max(columnWidths[index], cell.length);
+            });
+        });
+
+        let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
+        let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
+
+        // Minimum column width rules
+        const minWidth = 27;  // Minimum for normal columns
+        const minHashWidth = 17; // Minimum for "#" column
+
+        let adjustedWidths = calculatedWidths.map((width, index) => {
+            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
+        });
+
+        // Normalize if total width exceeds 100%
+        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
+        if (widthSum > 100) {
+            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
+        }
+
+        return adjustedWidths;
+    }
+
+    function renderTable(data, isFullWidth) {
+        const tableHead = document.querySelector("#dynamic-table thead");
+        const tableBody = document.querySelector("#dynamic-table tbody");
+        const dynamicTable = document.querySelector("#dynamic-table");
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        if (isFullWidth) {
+            tableContainer.classList.add("full-width");
+            tableContainer.style.overflowX = "auto";
+            tableContainer.style.whiteSpace = "nowrap";
+            tableContainer.style.display = "block";
+            dynamicTable.style.width = "max-content";
+            dynamicTable.style.minWidth = "100%";
+            dynamicTable.style.tableLayout = "auto";
+        } else {
+            tableContainer.classList.remove("full-width");
+            tableContainer.style.overflowX = "hidden";
+            tableContainer.style.width = "100%";
+            dynamicTable.style.width = "100%";
+            dynamicTable.style.tableLayout = "fixed";
+        }
+
+        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+        
+        const headerRow = document.createElement("tr");
+        data[0].forEach((header, index) => {
+            const th = document.createElement("th");
+            th.textContent = header;
+            th.setAttribute("data-column-index", index);
+            th.style.cursor = "pointer";
+            /* th.style.whiteSpace = "normal";  // Allow headers to wrap
+            th.style.wordBreak = "break-word";
+            //th.style.hyphens = "auto"; */
+            th.style.padding = "8px";
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
+            th.addEventListener("click", () => sortTableByColumn(index));
+            headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
+
+        sortedData.slice(1).forEach(rowData => {
+            const row = document.createElement("tr");
+            rowData.forEach((cellData, index) => {
+                const td = document.createElement("td");
+                td.textContent = cellData;
+                /* td.style.whiteSpace = "normal";  // Allow text to wrap
+                td.style.wordBreak = "break-word";
+                td.style.hyphens = "auto"; */
+                td.style.padding = "8px";
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
+                row.appendChild(td);
+            });
+            tableBody.appendChild(row);
+        });
+    }
+
+    function sortData(data, columnIndex, order) {
+        if (order === 0) return [...data];
+
+        return [data[0], ...data.slice(1).sort((a, b) => {
+            const aVal = isNaN(a[columnIndex]) ? a[columnIndex].toLowerCase() : parseFloat(a[columnIndex]);
+            const bVal = isNaN(b[columnIndex]) ? b[columnIndex].toLowerCase() : parseFloat(b[columnIndex]);
+
+            if (aVal < bVal) return order === 1 ? -1 : 1;
+            if (aVal > bVal) return order === 1 ? 1 : -1;
+            return 0;
+        })];
+    }
+
+    function sortTableByColumn(columnIndex) {
+        if (columnIndex !== currentSortColumn) {
+            sortOrder = 1; // Set to ascending first
+            currentSortColumn = columnIndex;
+        } else {
+            sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
+        }
+
+        let sortedData = sortOrder === 0 ? [...originalData] : sortData(originalData, columnIndex, sortOrder);
+        renderTable(sortedData, isFullWidth);
+    }
+});
+
+
+document.documentElement.lang = "en"; // just in case it's missing or changed
