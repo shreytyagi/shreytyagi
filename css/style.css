@@ -15,15 +15,13 @@ padding: 0;
 /* CARDS */
 
 .card {
-  display: flex;
-  flex-direction: column;
-  height: 100%; /* 🔥 Ensures all cards stretch to same height */
-  margin: 15px 0;
+  margin: 15px 0; /* Adjust top and bottom spacing */
   transition: transform 0.3s;
-  overflow: hidden;
+  max-width: 100%; /* Set maximum width to take full available width */
+  aspect-ratio: 3.5; /* Maintain square aspect ratio */
+  overflow: hidden; /* Ensure content doesn't overflow */
   position: relative;
   color: black;
-  
 }
 
 .card:hover {
@@ -31,12 +29,12 @@ padding: 0;
 }
 
 .card-inner {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-size: cover;
-  background-position: center;
-	
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	/* border: 5px solid #000000; */
+	background-size: cover;
+	background-position: center;
   }
   
   .card-content {
@@ -464,10 +462,6 @@ body {
     justify-content: flex-start; /* Align items from the top */
     align-items: flex-start; /* Prevents centering */
     align-content: flex-start; /* Ensures the first row always starts from the top */
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch; /* 🔥 Forces all columns to match height *
-
 }
 
 
