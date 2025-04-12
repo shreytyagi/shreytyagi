@@ -22,6 +22,23 @@
 
 	<!-- YouTube JS -->
 	<script src="https://apis.google.com/js/platform.js"></script>
+	
+	<script>
+  Hyphenopoly.config({
+    require: {
+      "en-us": "FORCE"  // Ensure English hyphenation is always applied
+    },
+    setup: {
+      selectors: {
+        "td": {},       // Apply to table cells
+        "th": {}        // Apply to table headers
+        // You can add more selectors like "p", "h1", etc. if needed
+      }
+    }
+  });
+</script>
+<script src="https://unpkg.com/hyphenopoly@5/Hyphenopoly_Loader.js"></script>
+
 
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
