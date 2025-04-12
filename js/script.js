@@ -431,9 +431,9 @@ $(document).ready(function () {
             th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
-            th.style.whiteSpace = "normal";  // Allow headers to wrap
+            /* th.style.whiteSpace = "normal";  // Allow headers to wrap
             th.style.wordBreak = "break-word";
-            th.style.hyphens = "auto";
+            //th.style.hyphens = "auto"; */
             th.style.padding = "8px";
             if (!isFullWidth) th.style.width = columnWidths[index] + "%";
             th.addEventListener("click", () => sortTableByColumn(index));
@@ -448,9 +448,9 @@ $(document).ready(function () {
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
                 td.textContent = cellData;
-                td.style.whiteSpace = "normal";  // Allow text to wrap
+                /* td.style.whiteSpace = "normal";  // Allow text to wrap
                 td.style.wordBreak = "break-word";
-                td.style.hyphens = "auto";
+                td.style.hyphens = "auto"; */
                 td.style.padding = "8px";
                 if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
