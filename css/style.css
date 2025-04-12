@@ -670,7 +670,7 @@ body {
 
 /* 🛠️ Override aspect ratio only for article cards */
 .card.custom-card.article {
-  height: 100px; /* 🎯 Set fixed height */
+  height: 130px; /* 🎯 Set fixed height */
   aspect-ratio: unset !important; /* Ensure aspect-ratio is not applied */
 }
 
