@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (isFullWidth) {
             tableContainer.classList.add("full-width");
-            tableContainer.style.overflowX = "visible";
+            tableContainer.style.overflowX = "auto";
             dynamicTable.style.width = "max-content";
             dynamicTable.style.tableLayout = "auto";
 			/* tableContainer.style.whiteSpace = "nowrap";
