@@ -692,7 +692,7 @@ td, th, tr {
 }
 
 .articleauth {
-	text-align: right;
+	/* text-align: right; */
 	color: #343a40;
 	/* text-transform: uppercase; */
 	font-weight: bold;
