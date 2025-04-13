@@ -694,7 +694,7 @@ td, th, tr {
 .articleauth {
 	text-align: right;
 	color: #343a40;
-	text-transform: uppercase;
+	/* text-transform: uppercase; */
 	font-weight: bold;
 	font-size: 12px;
 }
