@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to render articles
     function renderArticles(articleList) {
         cardContainer.innerHTML = "";
-        articleList.forEach(({ masterCategory, category, title, date, link }) => {
+        articleList.forEach(({ category, title, date, link }) => {
             const formattedDate = formatDate(date);
             const cardHTML = `
                 <div class="col-lg-4 col-md-6 col-12"">
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="card custom-card article">
                                 <div class="card-inner">
                                     <div class="card-content">
-										<p class="card-text">${masterCategory} &raquo; ${category}</p>
+										<p class="card-text">${category}</p>
                                         <h5 class="card-title">${title}</h5>
                                         <p class="card-date">${formattedDate}</p>
                                     </div>
