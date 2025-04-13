@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="card custom-card article">
                                 <div class="card-inner">
                                     <div class="card-content">
-                                        <p class="card-text">${category}</p>
+										<p class="card-text">${masterCategory} >> ${category}</p>
                                         <h5 class="card-title">${title}</h5>
                                         <p class="card-date">${formattedDate}</p>
                                     </div>
