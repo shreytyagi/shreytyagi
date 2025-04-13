@@ -743,7 +743,12 @@ td, th, tr {
   100% { transform: translate(2%, -4%) rotate(-1deg); }
 }
 
-.bottomless {
+.bottomfree {
 	padding-bottom: 0 !important;
 	background-color: grey;
+}
+
+.topfree {
+	padding-top: 0 !important;
+	background-color: blue;
 }
