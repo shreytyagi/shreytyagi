@@ -742,3 +742,8 @@ td, th, tr {
   90% { transform: translate(2%, 4%) rotate(0deg); }
   100% { transform: translate(2%, -4%) rotate(-1deg); }
 }
+
+.bottomless {
+	padding-bottom: 0 !important;
+	background-color: yellow;"
+}
