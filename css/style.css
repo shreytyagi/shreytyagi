@@ -745,10 +745,8 @@ td, th, tr {
 
 .bottomfree {
 	padding-bottom: 0 !important;
-	background-color: grey;
 }
 
 .topfree {
 	padding-top: 0 !important;
-	background-color: blue;
 }
