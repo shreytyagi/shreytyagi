@@ -750,3 +750,7 @@ td, th, tr {
 .topfree {
 	padding-top: 0 !important;
 }
+
+#canvasContainer {
+	padding-left: 30px;
+}
