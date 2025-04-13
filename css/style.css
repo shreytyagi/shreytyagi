@@ -634,9 +634,7 @@ td {
     right: 10px;
 }
 
-.close-btn {
-    right: 10px;
-	
+.prev-btn, .next-btn, .close-btn {
 	  /* Start the shake animation and make the animation last for 0.5 seconds */
   animation: shake 0.5s;
 
@@ -648,7 +646,7 @@ td {
 .prev-btn:hover, .next-btn:hover, .close-btn:hover {
 
 	  /* Start the shake animation and make the animation last for 0.5 seconds */
-  animation: shake 0.5s;
+  animation: shakemore 0.5s;
 
   /* When the animation is finished, start again */
   animation-iteration-count: infinite;
@@ -729,4 +727,18 @@ td, th, tr {
   80% { transform: translate(-1%, -1%) rotate(1deg); }
   90% { transform: translate(1%, 2%) rotate(0deg); }
   100% { transform: translate(1%, -2%) rotate(-1deg); }
+}
+
+@keyframes shakemore {
+  0% { transform: translate(2%, 2%) rotate(0deg); }
+  10% { transform: translate(-2%, -4%) rotate(-1deg); }
+  20% { transform: translate(-6%, 0%) rotate(1deg); }
+  30% { transform: translate(6%, 4%) rotate(0deg); }
+  40% { transform: translate(2%, -2%) rotate(1deg); }
+  50% { transform: translate(-2%, 4%) rotate(-1deg); }
+  60% { transform: translate(-6%, 2%) rotate(0deg); }
+  70% { transform: translate(6%, 2%) rotate(-1deg); }
+  80% { transform: translate(-2%, -2%) rotate(1deg); }
+  90% { transform: translate(2%, 4%) rotate(0deg); }
+  100% { transform: translate(2%, -4%) rotate(-1deg); }
 }
