@@ -690,3 +690,9 @@ td, th, tr {
   flex: 1;
   overflow-y: auto; /* Allows scroll if content overflows */
 }
+
+.articleauth {
+	text-align: right;
+	font-size: 40px;
+	color: blue;
+}
