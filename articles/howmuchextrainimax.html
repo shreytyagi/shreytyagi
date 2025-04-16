@@ -37,9 +37,9 @@
 	<div class="container mt-1 text-justify flex-grow-1">
 
 		<div class="content-container">
-			<h3>[SAMPLE TITLE]</h3>
-			<p class="articleauth">Shrey Tyagi • 25 Jan, 1998<p>
-			<p>[CONTENT]
+			<h3>Formula to calculate IMAX Benefit %</h3>
+			<p class="articleauth">Shrey Tyagi • 16 April, 2025<p>
+			<p>IMAX advertises 26% extra image for their expanded aspect ratio movies. But that holds true only if the entire movie is expanded. If the movie only has 10-20% scenes expanded, is it not wrong to say 26% more? Because for 80% of the runtime you'll still be watching the exact image as non-IMAX venues. So to calculate the effective extra image, we need to consider the duration of IMAX scenes. This below formula should help which I constructed.
 			<ul>
 			<li>Df = Duration of Full Movie</li>
 			<li>Di = Duration of IMAX Scenes</li>
@@ -47,18 +47,32 @@
 			<li>De = Duration of End Credits</li>
 			<li>An = Aspect Ratio of non-IMAX Scenes</li>
 			<li>Ai = Aspect Ratio of IMAX Scenes</li>
-			</ul>
-			
-			
-			
-			
-			
+			</ul>			
 			</p>
 <div style="overflow-x: auto;">
   \[
-    \text{ExtraImageFraction} = \frac{D_i}{D_f - D_o - D_e} \times \left( \frac{A_n}{A_i} - 1 \right)
+    \text{B} = \frac{D_i}{D_f - D_o - D_e} \times \left( \frac{A_n}{A_i} - 1 \right) \times 100
   \]
 </div>
+
+<p>Example for the movie Sinners which has 25 mins of IMAX footage and a runtime of 137 mins, the values will be:
+			<ul>
+			<li>Df = 137</li>
+			<li>Di = 25</li>
+			<li>Do = 1</li>
+			<li>De = 5</li>
+			<li>An = 2.76</li>
+			<li>Ai = 1.43</li>
+			</ul>
+			</p>
+
+<div style="overflow-x: auto;">
+  \[
+    \text{B} = \frac{25}{137 - 1 - 5} \times \left( \frac{2.76}{1.43} - 1 \right) \times 100
+  \]
+</div>
+
+<p> = 16% </p>
 
 
 			</div>
