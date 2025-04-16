@@ -751,6 +751,11 @@ td, th, tr {
 	padding-top: 0 !important;
 }
 
-#canvasContainer {
-	padding-left: 30px;
+.above-table {
+	padding-bottom: 0 !important;
 }
+
+.below-table {
+	padding-top: 0 !important;
+}
+
