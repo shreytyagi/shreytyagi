@@ -39,10 +39,24 @@
 		<div class="content-container">
 			<h3>[SAMPLE TITLE]</h3>
 			<p class="articleauth">Shrey Tyagi • 25 Jan, 1998<p>
-			<p>[CONTENT]</p>
+			<p>[CONTENT]
+			<ul>
+			<li>Df = Duration of Full Movie</li>
+			<li>Di = Duration of IMAX Scenes</li>
+			<li>Do = Duration of Opening Credits</li>
+			<li>De = Duration of End Credits</li>
+			<li>An = Aspect Ratio of non-IMAX Scenes</li>
+			<li>Ai = Aspect Ratio of IMAX Scenes</li>
+			</ul>
+			
+			
+			
+			
+			
+			</p>
 <div style="overflow-x: auto;">
   \[
-    \text{IMAX Advantage} = \frac{Duration_Expanded}{Duration_Total - Duration_EndCredits - Duration_OpeningCredits} \times \left( \frac{AR_n}{AR_i} - 1 \right)
+    \text{ExtraImageFraction} = \frac{D_i}{D_f - D_o - D_e} \times \left( \frac{A_n}{A_i} - 1 \right)
   \]
 </div>
 
