@@ -22,10 +22,33 @@
 	<!-- YouTube JS -->
 	<script src="https://apis.google.com/js/platform.js"></script>
 	
-	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']]
+    },
+    options: {
+      renderActions: {
+        addMenu: []
+      }
+    },
+    chtml: {
+      matchFontHeight: true
+    }
+  };
 </script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  .mjx-container {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+  }
+</style>
+
+
 
 
 </head>
@@ -68,7 +91,7 @@
 
 <div style="overflow-x: auto;">
   \[
-    \text{B} = \frac{25}{137 - 1 - 5} \times \left( \frac{2.76}{1.43} - 1 \right) \times 100
+    \frac{25}{137 - 1 - 5} \times \left( \frac{2.76}{1.43} - 1 \right) \times 100
   \]
 </div>
 
