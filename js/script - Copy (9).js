@@ -196,35 +196,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to filter articles on search input
-function searchArticles() {
-    const searchText = searchInput.value.toLowerCase();
-
-    if (searchText.trim() === "") {
-        // Return to default state — re-filtered and sorted by date
-        const defaultList = masterCategoryFilter
-            ? articles.filter(({ masterCategory }) => masterCategory === masterCategoryFilter)
-            : articles;
-
-        renderArticles(defaultList);
-        return;
+    function searchArticles() {
+        const searchText = searchInput.value.toLowerCase();
+        const filteredArticles = articles
+            .filter(({ category, title }) =>
+                category.toLowerCase().includes(searchText) || title.toLowerCase().includes(searchText)
+            )
+            .filter(({ masterCategory }) =>
+                masterCategoryFilter === "" || masterCategory === masterCategoryFilter
+            ); // Ensure master category filtering is always applied
+        renderArticles(filteredArticles);
     }
-
-    const sortedArticles = [...articles].sort((a, b) => {
-        const aMatch = a.title.toLowerCase().includes(searchText) || a.category.toLowerCase().includes(searchText);
-        const bMatch = b.title.toLowerCase().includes(searchText) || b.category.toLowerCase().includes(searchText);
-
-        if (aMatch && !bMatch) return -1;
-        if (!aMatch && bMatch) return 1;
-        return 0; // keep original order otherwise
-    });
-
-    const filteredForCategory = masterCategoryFilter
-        ? sortedArticles.filter(({ masterCategory }) => masterCategory === masterCategoryFilter)
-        : sortedArticles;
-
-    renderArticles(filteredForCategory);
-}
-
 
     // Event listener for real-time search
     searchInput.addEventListener("input", searchArticles);
