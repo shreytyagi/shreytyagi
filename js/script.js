@@ -451,7 +451,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
-            th.textContent = header;
+            th.innerHTML = header; //Change 3 th.textContent = header;
             th.setAttribute("data-column-index", index);
             th.style.cursor = "pointer";
             /* th.style.whiteSpace = "normal";  // Allow headers to wrap
@@ -470,7 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const row = document.createElement("tr");
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
-                td.textContent = cellData;
+                td.innerHTML = cellData; //Change 1 td.textContent = cellData;
                 /* td.style.whiteSpace = "normal";  // Allow text to wrap
                 td.style.wordBreak = "break-word";
                 td.style.hyphens = "auto"; */
@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const breakPattern = /([a-z]{1,}?)(?=[a-z])/gi;
 
         document.querySelectorAll(cellSelector).forEach(cell => {
-            const originalText = cell.textContent;
+            const originalText = cell.innerHTML; //Change 2 const originalText = cell.textContent;
             const words = originalText.split(/\s+/);
             const hyphenatedWords = words.map(word => {
                 if (word.length < 10 || /[<>]/.test(word)) return word;
