@@ -1,7 +1,27 @@
 // Robust CSV parser
 function parseCSVRaw(data) {
-    const lines = data.trim().split(/\r?\n/);
-    return lines.map(line => {
+    const rows = [];
+    const lines = data.split(/\r?\n/);
+    let currentLine = '';
+    let quoteCount = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        currentLine += (currentLine ? '\n' : '') + line;
+        quoteCount += (line.match(/"/g) || []).length;
+
+        if (quoteCount % 2 === 0) {
+            rows.push(currentLine);
+            currentLine = '';
+            quoteCount = 0;
+        }
+    }
+
+    if (currentLine) {
+        rows.push(currentLine); // leftover row
+    }
+
+    return rows.map(line => {
         const result = [];
         let current = '';
         let inQuotes = false;
@@ -13,7 +33,7 @@ function parseCSVRaw(data) {
             if (inQuotes) {
                 if (char === '"') {
                     if (nextChar === '"') {
-                        current += '"'; // Escaped quote
+                        current += '"';
                         i++;
                     } else {
                         inQuotes = false;
@@ -36,6 +56,7 @@ function parseCSVRaw(data) {
         return result;
     });
 }
+
 
 
 
