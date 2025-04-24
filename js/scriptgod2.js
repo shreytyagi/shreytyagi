@@ -1,25 +1,7 @@
 // Robust CSV parser
 function parseCSVRaw(data) {
-    const rows = [];
-    const lines = data.split(/\r?\n/);
-    let currentLine = '';
-    let quoteBalance = 0;
-
-    for (let line of lines) {
-        currentLine += (currentLine ? '\n' : '') + line;
-        const quoteMatches = (line.match(/"/g) || []).length;
-        quoteBalance += quoteMatches;
-
-        // If quote count is even, row is complete
-        if (quoteBalance % 2 === 0) {
-            rows.push(currentLine);
-            currentLine = '';
-            quoteBalance = 0;
-        }
-    }
-    if (currentLine) rows.push(currentLine); // Add final row if any
-
-    return rows.map(line => {
+    const lines = data.trim().split(/\r?\n/);
+    return lines.map(line => {
         const result = [];
         let current = '';
         let inQuotes = false;
@@ -43,25 +25,19 @@ function parseCSVRaw(data) {
                 if (char === '"') {
                     inQuotes = true;
                 } else if (char === ',') {
-                    result.push(current);
+                    result.push(current.trim());
                     current = '';
                 } else {
                     current += char;
                 }
             }
         }
-        result.push(current);
+        result.push(current.trim());
         return result;
     });
 }
 
 
-function escapeHTML(str) {
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-}
 
 
 
@@ -361,8 +337,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseGalleryCSV(data) {
-    return parseCSVRaw(data).slice(1); // Skip header row
+function parseCSV(data) {
+    return parseCSVRaw(data).slice(1); // Skipping header
 }
 
 
@@ -457,10 +433,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseTableCSV(data) {
-    return parseCSVRaw(data).map(row =>
-        row.map(cell => cell.replace(/\n/g, "<br>"))
-    );
+function parseCSV(data) {
+    return parseCSVRaw(data);
 }
 
 	
