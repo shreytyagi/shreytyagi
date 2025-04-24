@@ -363,8 +363,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseCSV(data) {
-    return parseCSVRaw(data).slice(1); // Skipping header
+function parseGalleryCSV(data) {
+    return parseCSVRaw(data).slice(1); // Skip header row
 }
 
 
@@ -459,8 +459,10 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseCSV(data) {
-    return parseCSVRaw(data);
+function parseTableCSV(data) {
+    return parseCSVRaw(data).map(row =>
+        row.map(cell => cell.replace(/\n/g, "<br>"))
+    );
 }
 
 	
