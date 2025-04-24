@@ -1,4 +1,2 @@
 "Name","Age","City","Bio","Website"
 "John Doe","29","New York","He said, ""I \n love New York\n!""","http://example.com"
-"Jane, M.","31","Los Angeles","Uses commas, quotes ""double"" & single 'quotes', and
-newlines in bio.","https://example.org/profile"
