@@ -1,46 +1,3 @@
-// Robust CSV parser
-function parseCSVRaw(data) {
-    const lines = data.trim().split(/\r?\n/);
-    return lines.map(line => {
-        const result = [];
-        let current = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            const nextChar = line[i + 1];
-
-            if (inQuotes) {
-                if (char === '"') {
-                    if (nextChar === '"') {
-                        current += '"'; // Escaped quote
-                        i++;
-                    } else {
-                        inQuotes = false;
-                    }
-                } else {
-                    current += char;
-                }
-            } else {
-                if (char === '"') {
-                    inQuotes = true;
-                } else if (char === ',') {
-                    result.push(current.trim());
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-        }
-        result.push(current.trim());
-        return result;
-    });
-}
-
-
-
-
-
 $(document).ready(function () {
     $('.card').hover(
         function () {
@@ -194,22 +151,16 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Error loading CSV:", error));
 
     // Function to parse CSV (Strict `""` format, Skips Header Row)
-function parseCSV(data) {
-    const rows = parseCSVRaw(data);
-    return rows.slice(1).map(fields => {
-        if (fields.length < 5) return null;
-        const [masterCategory, category, title, date, link] = fields;
-        return {
-            masterCategory: masterCategory.toLowerCase(),
-            category,
-            title,
-            date,
-            link
-        };
-    }).filter(item => item !== null)
-      .sort((a, b) => b.date.localeCompare(a.date));
-}
-
+    function parseCSV(data) {
+        const rows = data.trim().split("\n").slice(1); // Skip header row
+        return rows.map(row => {
+            const matches = row.match(/"([^"]*)"/g); // Extract values inside quotes
+            if (!matches || matches.length < 5) return null; // Ensure all fields exist
+            const [masterCategory, category, title, date, link] = matches.map(val => val.replace(/"/g, "").trim());
+            return { masterCategory: masterCategory.toLowerCase(), category, title, date, link };
+        }).filter(item => item !== null) // Remove any invalid rows
+        .sort((a, b) => b.date.localeCompare(a.date)); // Sort by date (descending)
+    }
 
     // Function to format date
     function formatDate(isoDate) {
@@ -337,10 +288,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseCSV(data) {
-    return parseCSVRaw(data).slice(1); // Skipping header
-}
-
+    function parseCSV(data) {
+        return data.trim().split("\n").map(line => {
+            const matches = line.match(/"([^"]*)"/g);
+            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
 
     function bindImageClickEvents() {
         document.querySelectorAll(".photo-link").forEach(link => {
@@ -433,10 +386,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseCSV(data) {
-    return parseCSVRaw(data);
-}
-
+    function parseCSV(data) {
+        return data.trim().split("\n").map(line => {
+            const matches = line.match(/"([^"]*)"/g);
+            return matches ? matches.map(val => val.replace(/"/g, "").trim()) : [];
+        });
+    }
 	
 	    function calculateColumnWidths(data) {
         const columnWidths = new Array(data[0].length).fill(0);
