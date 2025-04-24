@@ -1,0 +1,13 @@
+"Name","Age","City","Bio","Website"
+"John Doe","29","New York","He said, ""I love New York!""","http://example.com"
+"Jane, M.","31","Los Angeles","Uses commas, quotes ""double"" & single 'quotes', and
+newlines in bio.","https://example.org/profile"
+"Émilie","27","Montréal","French speaker – très bien!","https://example.ca"
+"O'Connor","40","Dublin","Line with 'single quotes' and special chars: @$&*!","http://oconnor.ie"
+"Zhang Wei","33","Beijing","Mix of everything:
+- Comma,
+- ""Double quote"",
+- 'Single quote',
+- Multiline
+Done.","https://zhang.cn"
+"Alex","","Unknown","Empty age field, unquoted city.","http://noage.com"
