@@ -1,22 +1,7 @@
 // Robust CSV parser
 function parseCSVRaw(data) {
-    const rows = [];
-    const lines = data.split(/\r?\n/);
-    let currentLine = '';
-
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        currentLine += (currentLine ? '\n' : '') + line;
-
-        const quoteCount = (currentLine.match(/"/g) || []).length;
-        if (quoteCount % 2 === 0) {
-            rows.push(currentLine);
-            currentLine = '';
-        }
-    }
-    if (currentLine) rows.push(currentLine);
-
-    return rows.map(line => {
+    const lines = data.trim().split(/\r?\n/);
+    return lines.map(line => {
         const result = [];
         let current = '';
         let inQuotes = false;
@@ -28,7 +13,7 @@ function parseCSVRaw(data) {
             if (inQuotes) {
                 if (char === '"') {
                     if (nextChar === '"') {
-                        current += '"';
+                        current += '"'; // Escaped quote
                         i++;
                     } else {
                         inQuotes = false;
@@ -40,26 +25,19 @@ function parseCSVRaw(data) {
                 if (char === '"') {
                     inQuotes = true;
                 } else if (char === ',') {
-                    result.push(current);
+                    result.push(current.trim());
                     current = '';
                 } else {
                     current += char;
                 }
             }
         }
-
-        result.push(current);
+        result.push(current.trim());
         return result;
     });
 }
 
 
-function escapeHTML(str) {
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-}
 
 
 
@@ -359,8 +337,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseGalleryCSV(data) {
-    return parseCSVRaw(data).slice(1); // Skip header row
+function parseCSV(data) {
+    return parseCSVRaw(data).slice(1); // Skipping header
 }
 
 
@@ -455,10 +433,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseTableCSV(data) {
-    return parseCSVRaw(data).map(row =>
-        row.map(cell => cell.replace(/\n/g, "<br>"))
-    );
+function parseCSV(data) {
+    return parseCSVRaw(data);
 }
 
 	
