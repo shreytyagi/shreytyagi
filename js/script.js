@@ -3,21 +3,18 @@ function parseCSVRaw(data) {
     const rows = [];
     const lines = data.split(/\r?\n/);
     let currentLine = '';
-    let quoteBalance = 0;
 
-    for (let line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
         currentLine += (currentLine ? '\n' : '') + line;
-        const quoteMatches = (line.match(/"/g) || []).length;
-        quoteBalance += quoteMatches;
 
-        // If quote count is even, row is complete
-        if (quoteBalance % 2 === 0) {
+        const quoteCount = (currentLine.match(/"/g) || []).length;
+        if (quoteCount % 2 === 0) {
             rows.push(currentLine);
             currentLine = '';
-            quoteBalance = 0;
         }
     }
-    if (currentLine) rows.push(currentLine); // Add final row if any
+    if (currentLine) rows.push(currentLine);
 
     return rows.map(line => {
         const result = [];
@@ -31,7 +28,7 @@ function parseCSVRaw(data) {
             if (inQuotes) {
                 if (char === '"') {
                     if (nextChar === '"') {
-                        current += '"'; // Escaped quote
+                        current += '"';
                         i++;
                     } else {
                         inQuotes = false;
@@ -50,6 +47,7 @@ function parseCSVRaw(data) {
                 }
             }
         }
+
         result.push(current);
         return result;
     });
