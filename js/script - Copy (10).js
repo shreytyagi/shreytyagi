@@ -1,52 +1,60 @@
 // Robust CSV parser
 function parseCSVRaw(data) {
     const rows = [];
-    let currentField = '';
-    let currentRow = [];
-    let inQuotes = false;
-    let i = 0;
+    const lines = data.split(/\r?\n/);
+    let currentLine = '';
+    let quoteCount = 0;
 
-    while (i < data.length) {
-        const char = data[i];
-        const nextChar = data[i + 1];
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        currentLine += (currentLine ? '\n' : '') + line;
+        quoteCount += (line.match(/"/g) || []).length;
 
-        if (char === '"') {
-            if (inQuotes && nextChar === '"') {
-                // Escaped quote ("")
-                currentField += '"';
-                i++; // skip next quote
-            } else {
-                // Toggle in/out of quotes
-                inQuotes = !inQuotes;
-            }
-        } else if (char === ',' && !inQuotes) {
-            // Field separator
-            currentRow.push(currentField);
-            currentField = '';
-        } else if ((char === '\n' || char === '\r') && !inQuotes) {
-            // End of row
-            if (char === '\r' && nextChar === '\n') {
-                i++; // handle Windows-style \r\n
-            }
-            currentRow.push(currentField);
-            rows.push(currentRow);
-            currentField = '';
-            currentRow = [];
-        } else {
-            // Normal character
-            currentField += char;
+        if (quoteCount % 2 === 0) {
+            rows.push(currentLine);
+            currentLine = '';
+            quoteCount = 0;
         }
-
-        i++;
     }
 
-    // Add last field/row if needed
-    if (currentField.length > 0 || currentRow.length > 0) {
-        currentRow.push(currentField);
-        rows.push(currentRow);
+    if (currentLine) {
+        rows.push(currentLine); // leftover row
     }
 
-    return rows;
+    return rows.map(line => {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            const nextChar = line[i + 1];
+
+            if (inQuotes) {
+                if (char === '"') {
+                    if (nextChar === '"') {
+                        current += '"';
+                        i++;
+                    } else {
+                        inQuotes = false;
+                    }
+                } else {
+                    current += char;
+                }
+            } else {
+                if (char === '"') {
+                    inQuotes = true;
+                } else if (char === ',') {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+        }
+        result.push(current.trim());
+        return result;
+    });
 }
 
 
