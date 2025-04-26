@@ -1,4 +1,3 @@
-// Robust CSV parser
 function parseCSVRaw(data) {
     const rows = [];
     let currentField = '';
@@ -14,35 +13,36 @@ function parseCSVRaw(data) {
             if (inQuotes && nextChar === '"') {
                 // Escaped quote ("")
                 currentField += '"';
-                i++; // skip next quote
+                i++; // Skip next quote
             } else {
                 // Toggle in/out of quotes
                 inQuotes = !inQuotes;
             }
         } else if (char === ',' && !inQuotes) {
             // Field separator
-            currentRow.push(currentField);
+            currentRow.push(currentField.trim()); // 🔥 Trim before pushing
             currentField = '';
         } else if ((char === '\n' || char === '\r') && !inQuotes) {
             // End of row
-            if (char === '\r' && nextChar === '\n') {
-                i++; // handle Windows-style \r\n
-            }
-            currentRow.push(currentField);
+            if (char === '\r' && nextChar === '\n') i++; // Handle \r\n
+            currentRow.push(currentField.trim()); // 🔥 Trim before pushing
             rows.push(currentRow);
             currentField = '';
             currentRow = [];
         } else {
-            // Normal character
-            currentField += char;
+            if (char === '\n' && inQuotes) {
+                currentField += '<br>'; // 🔥 Replace newline with <br> if inside quotes
+            } else {
+                currentField += char;
+            }
         }
 
         i++;
     }
 
-    // Add last field/row if needed
+    // Add last field/row if any
     if (currentField.length > 0 || currentRow.length > 0) {
-        currentRow.push(currentField);
+        currentRow.push(currentField.trim()); // 🔥 Trim last field
         rows.push(currentRow);
     }
 
