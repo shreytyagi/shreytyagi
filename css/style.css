@@ -22,6 +22,7 @@ padding: 0;
   overflow: hidden; /* Ensure content doesn't overflow */
   position: relative;
   color: black;
+  	background-color: none;
 }
 
 
@@ -33,11 +34,13 @@ padding: 0;
 	/* border: 5px solid #000000; */
 	background-size: cover;
 	background-position: center;
+		background-color: none;
   }
   
   .card-content {
 	flex: 1;
 	padding: 15px; /* Adjust the padding for spacing */
+		background-color: none;
   }
 
 @media (max-width: 992px) {
@@ -94,6 +97,7 @@ padding: 0;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
+		background-color: none;
   }
 
   .card-content {
@@ -101,6 +105,7 @@ padding: 0;
     flex-direction: column;
     height: 100%;
 	padding: 10px;
+		background-color: none;
 }
 
 .card-date {
@@ -109,7 +114,7 @@ padding: 0;
 	text-align: right;
 	color: #343a40;
 	font-size: 12px;
-	/* background-color: blue; */
+		background-color: none;
 }
 
 .card-text {
@@ -120,7 +125,7 @@ padding: 0;
 	text-transform: uppercase;
 	font-weight: bold;
 	font-size: 12px;
-	background-color: red;
+	background-color: none;
 }
 
 .card-title {
@@ -135,7 +140,7 @@ padding: 0;
 	font-weight: bold; /* Now non-bold */
 	font-size: 18px;
 	text-align: left !important;
-	/* background-color: yellow; */
+		background-color: none;
 }
 
 .nav-bottom {
