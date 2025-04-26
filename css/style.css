@@ -318,6 +318,7 @@ padding: 0;
 .card-link.nottoobig {
 	max-width: 60vw; /* Adjust the maximum width as needed */
 	margin: 0 auto; /* Center the card horizontally */
+		background-color: none;
 }
 
 /* Override left and right padding for gallery container */
@@ -397,6 +398,7 @@ body {
 
 .container {
     flex: 1;
+		background-color: none;
 }
 
 
@@ -688,6 +690,7 @@ td, th, tr {
 .card.custom-card.article {
   height: 120px; /* 🎯 Set fixed height */
   aspect-ratio: unset !important; /* Ensure aspect-ratio is not applied */
+  	background-color: none;
 }
 
 /* Make inner elements stretch and behave correctly */
@@ -695,11 +698,13 @@ td, th, tr {
   height: 100%;
   display: flex;
   flex-direction: column;
+  	background-color: none;
 }
 
 .card.custom-card.article .card-content {
   flex: 1;
   overflow-y: auto; /* Allows scroll if content overflows */
+  	background-color: none;
 }
 
 .articleauth {
