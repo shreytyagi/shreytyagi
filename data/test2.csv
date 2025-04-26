@@ -1,0 +1,17 @@
+"Name","Age","Address","Notes"
+"John ""Johnny"" Doe","27","1234 Test St., Apt #56","Likes: ""Pizza, Pasta""
+Favorite quote: ""Life, uh, finds a way.""
+New hobbies: ""Reading
+Swimming
+Coding"""
+"Jane, ""JJ"" Smith","34","4567 Another Rd., Suite 101","Prefers: ""Coffee, Tea""
+Allergies: ""Pollen, ""Dust"" particles""
+Pet names: ""Fluffy
+Mittens"""
+"Bob","42","Somewhere\nOver\nThe Rainbow","No notes\n\nAvailable"
+",,","",","
+"Last Guy","31","Unknown","Multiline\nComment\n""Nested quotes, commas, and \nnewlines all together"""
+
+
+
+
