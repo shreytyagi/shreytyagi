@@ -759,3 +759,11 @@ td, th, tr {
 	padding-top: 0 !important;
 }
 
+.card.article {
+    margin: 0 !important; /* Remove top and bottom margin */
+    border: none; /* Optional: if you want absolutely no visible separation */
+}
+
+.row-cols-lg-3 .card.article {
+    margin: 0 !important; /* Also for larger screens if needed */
+}
