@@ -790,16 +790,3 @@ td, th, tr {
         border-right: none; /* No right border at end of each row */
     }
 }
-
-#card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1px;
-    background-color: #343a40; /* Line color */
-}
-
-.card.article {
-    background-color: white; /* Or your desired card background */
-    border: none !important; /* Remove all per-card borders */
-    margin: 0 !important;
-}
