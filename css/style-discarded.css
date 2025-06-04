@@ -22,11 +22,10 @@ padding: 0;
   overflow: hidden; /* Ensure content doesn't overflow */
   position: relative;
   color: black;
+  	background-color: transparent;
 }
 
-.card:hover {
-  transform: scale(1.05);
-}
+
 
 .card-inner {
 	display: flex;
@@ -35,13 +34,13 @@ padding: 0;
 	/* border: 5px solid #000000; */
 	background-size: cover;
 	background-position: center;
-	background-color: red;
+		background-color: transparent;
   }
   
   .card-content {
 	flex: 1;
 	padding: 15px; /* Adjust the padding for spacing */
-	background-color: rgba(255, 255, 255, 0.85);
+		background-color: transparent;
   }
 
 @media (max-width: 992px) {
@@ -93,24 +92,20 @@ padding: 0;
 }  
 
 .custom-card {
-	background-color: #ffffff; /* Change to your desired background color */
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add a shadow */
 	color: none; /* Inherit the parent's text color */
 	text-decoration: none; /* Remove underline, if any */
-	border-radius: 15px; /* Increase or decrease as needed */
 	background-size: cover;
 	background-position: center;
-	box-shadow: 0 8px 16px 2px rgba(0, 0, 0, 0.3); /* Adjust the shadow values */
 	background-repeat: no-repeat;
-	border: 2px solid #7F7F7F;
+		background-color: transparent;
   }
 
   .card-content {
     display: flex;
     flex-direction: column;
     height: 100%;
-	background-color: #FFFFFF;
 	padding: 10px;
+		background-color: transparent;
 }
 
 .card-date {
@@ -119,7 +114,7 @@ padding: 0;
 	text-align: right;
 	color: #343a40;
 	font-size: 12px;
-	/* background-color: blue; */
+		background-color: transparent;
 }
 
 .card-text {
@@ -130,7 +125,7 @@ padding: 0;
 	text-transform: uppercase;
 	font-weight: bold;
 	font-size: 12px;
-	/* background-color: red; */
+	background-color: transparent;
 }
 
 .card-title {
@@ -145,7 +140,7 @@ padding: 0;
 	font-weight: bold; /* Now non-bold */
 	font-size: 18px;
 	text-align: left !important;
-	/* background-color: yellow; */
+		background-color: transparent;
 }
 
 .nav-bottom {
@@ -323,6 +318,7 @@ padding: 0;
 .card-link.nottoobig {
 	max-width: 60vw; /* Adjust the maximum width as needed */
 	margin: 0 auto; /* Center the card horizontally */
+		background-color: transparent;
 }
 
 /* Override left and right padding for gallery container */
@@ -402,6 +398,7 @@ body {
 
 .container {
     flex: 1;
+		background-color: transparent;
 }
 
 
@@ -693,6 +690,7 @@ td, th, tr {
 .card.custom-card.article {
   height: 120px; /* 🎯 Set fixed height */
   aspect-ratio: unset !important; /* Ensure aspect-ratio is not applied */
+  	background-color: transparent;
 }
 
 /* Make inner elements stretch and behave correctly */
@@ -700,11 +698,13 @@ td, th, tr {
   height: 100%;
   display: flex;
   flex-direction: column;
+  	background-color: transparent;
 }
 
 .card.custom-card.article .card-content {
   flex: 1;
   overflow-y: auto; /* Allows scroll if content overflows */
+  	background-color: transparent;
 }
 
 .articleauth {
@@ -759,3 +759,34 @@ td, th, tr {
 	padding-top: 0 !important;
 }
 
+.card.article {
+    margin: 0 !important; /* Remove top and bottom margin */
+    border: none; /* Optional: if you want absolutely no visible separation */
+}
+
+.row-cols-lg-3 .card.article {
+    margin: 0 !important; /* Also for larger screens if needed */
+}
+
+.card.article {
+    margin: 0 !important;
+    border-bottom: 1px solid #343a40; /* Always show bottom border */
+    border-right: 1px solid #343a40; /* Right border only by default */
+    border-left: none;
+    border-top: none;
+    border-radius: 0; /* Optional: square corners */
+}
+
+
+.row .card.article:last-child {
+    border-right: none; /* Remove right border for the last card */
+}
+
+/* Also for multiple cards per row — every nth card */
+@media (min-width: 768px) {
+    .row-cols-2 .card.article:nth-child(2n),
+    .row-cols-3 .card.article:nth-child(3n),
+    .row-cols-4 .card.article:nth-child(4n) {
+        border-right: none; /* No right border at end of each row */
+    }
+}
