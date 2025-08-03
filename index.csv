@@ -1,11 +1,12 @@
-"Master Category","Category","Title","Date","Link"
-"Articles","Movie Review","Rocky Aur Raani Ki Prem Kahaani","2023.07.07","/articles/moviereviews/rockyaurranikiipremkahaani.html"
-"Articles","Movie Review","Crazxy","2025.03.22","/articles/moviereviews/crazxy.html"
-"Blogs","Travel","A Rare Experience At Air Force Station Bhuj","2025.03.22","/blogs/arareexperienceattheairforcestationinbhuj.html"
-"Lists","Cinemas","Flat Screens off India","2025.03.26","/lists/flatscreensofindia.html"
-"Lists","Movies","IMAX Movies","2025.03.26","/lists/imaxmovies.html"
-"Lists","Cinemas","IMAX Cinemas of India","2025.03.27","/lists/imaxcinemasofindia.html"
-"Lists","Movies","I've Seen At IMAX","2025.03.27","/lists/seenatimax.html"
-"Lists","Movies","I've Seen At Cinemas","2025.03.27","/lists/seenatcinema.html"
-"Lists","Cinemas","Biggest Screens of India","2025.03.31","/lists/biggestscreensofindia.html"
-"Articles","Cinemas","Calculating Effective % Extra IMAX Image for Variable Aspect Ratio Movies","2025.04.16","/articles/howmuchextrainimax.html"
+Master Category,Category,Title,Date,Link
+Articles,Movie Review,Rocky Aur Raani Ki Prem Kahaani,2023.07.07,/articles/moviereviews/rockyaurranikiipremkahaani.html
+Articles,Movie Review,Crazxy,2025.03.22,/articles/moviereviews/crazxy.html
+Blogs,Travel,A Rare Experience At Air Force Station Bhuj,2025.03.22,/blogs/arareexperienceattheairforcestationinbhuj.html
+Lists,Cinemas,Flat Screens off India,2025.03.26,/lists/flatscreensofindia.html
+Lists,Movies,IMAX Movies,2025.03.26,/lists/imaxmovies.html
+Lists,Cinemas,IMAX Cinemas of India,2025.03.27,/lists/imaxcinemasofindia.html
+Lists,Movies,I've Seen At IMAX,2025.03.27,/lists/seenatimax.html
+Lists,Movies,I've Seen At Cinemas,2025.03.27,/lists/seenatcinema.html
+Lists,Cinemas,Biggest Screens of India,2025.03.31,/lists/biggestscreensofindia.html
+Articles,Cinemas,Calculating Effective % Extra IMAX Image for Variable Aspect Ratio Movies,2025.04.16,/articles/howmuchextrainimax.html
+Photos,Travel,Jaipur 2014,2014.12.25,/photos/jaipur2014.html
