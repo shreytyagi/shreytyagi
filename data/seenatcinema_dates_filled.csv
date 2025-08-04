@@ -1,29 +1,29 @@
 #,Title,Audio Lang,Subtitles,Picture,Format,Projection,Resolution,Sound,Screen Aspect Ratio,Content Aspect Ratio,Fit,Release Date,Watch Date,Cinema,Audi No.,Seat No.,Company
-1,Spider-Man 2,Hindi,None,2D,35mm,Xenon,N/A,5.1,2.39:1,2.39:1,FS,2004.07.23,2004.07.23,"Jugal Palace, Kanpur, Uttar Pradesh, India",,,Alone
-2,Superman Returns,Hindi,None,2D,35mm,Xenon,N/A,5.1,2.39:1,2.39:1,FS,2006.06.30,2006.06.30,"Pammi Gurudev, Kanpur, Uttar Pradesh",,,Alone
-3,8 x 10 Tasveer,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2009.04.03,2009.04.05,"Centra Mall, Chandigarh, India",PVR,,Alone
-4,Love Aaj Kal,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2009.07.31,2009.08.01,"Paras Downtown Square, Zirakpur, Punjab, India",PVR,,Alone
-5,All the Best: Fun Begins,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2009.10.16,2009.10.16,"DLF Centre Mall, Chandigarh, India",,,Alone
-6,Ra.One,Hindi,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2011.10.26,2011.10.26,"DLF Centre Mall, Chandigarh, India",,,Alone
-7,The Avengers,English,None,3D,,Xenon,2K,5.1,2.39:1,1.85:1,FS,2012.04.27,,"DLF Centre Mall, Chandigarh, India",,,Alone
-8,OMG - Oh My God!,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2012.09.28,,"Centra Mall, Chandigarh, India",,,Alone
-9,Iron-Man 3,English,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2013.04.26,,"DLF Centre Mall, Chandigarh, India",,,Alone
-10,Krrish 3,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2013.11.01,2013.11.01,"Paras Downtown Square, Zirakpur, Punjab, India",,,Alone
-11,Bhoothnath Returns,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.04.11,,"Centra Mall, Chandigarh, India",,,Alone
-12,X-Men: The Days of Future Past,English,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.05.23,,"DLF Centre Mall, Chandigarh, India",,,Alone
-13,PK,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.12.19,2014.12.19,"Centra Mall, Chandigarh, India",,,Alone
-14,Dil Dhadakne Do,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.06.05,,"Elante Mall, Chandigarh, India",,,Alone
-15,Bajrangi Bhaijaan,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2015.07.17,,"Emporium Mall, Chandigarh, India",,,Alone
-16,Shaandaar,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2015.10.22,,"DLF Centre Mall, Chandigarh, India",,,Alone
-17,Bajirao Mastani,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2015.12.28,,"Emporium Mall, Chandigarh, India",,,Alone
-18,The Jungle Book,Hindi,None,3D,RealD,Xenon,2K,5.1,2.39:1,1.85:1,FS,2016.04.08,,"TDI Jagat, Chandigarh, India",,,Alone
-19,A Flying Jatt,Hindi,None,2D,Atmos,Xenon,2K,5.1,2.39:1,2.39:1,FS,2016.08.25,,"TDI Jagat, Chandigarh, India",,,Alone
-20,Dangal,Hindi,None,2D,Atmos,Xenon,2K,5.1,2.39:1,2.39:1,FS,2016.12.23,,"TDI Jagat, Chandigarh, India",,,Alone
-21,Baahubali: The Conclusion,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.04.28,2017.04.29,"Elante Mall, Chandigarh, India",,,Alone
-22,Baahubali: The Conclusion,Hindi,None,2D,Atmos,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.04.28,2017.05.05,"TDI Jagat, Chandigarh, India",,,Alone
-23,Spider-Man: Homecoming,Hindi ,None,3D,RealD,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.07.07,,"TDI Jagat, Chandigarh, India",,,Alone
-24,Thor: Ragnarok,Hindi,None,3D,RealD,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.11.03,,"TDI Jagat, Chandigarh, India",,,Alone
-25,Justice League,English,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.11.17,,"Elante Mall, Chandigarh, India",,,Alone
+1.0,Spider-Man 2,Hindi,None,2D,35mm,Xenon,,5.1,2.39:1,2.39:1,FS,2004.07.23,2004.07.23,"Jugal Palace, Kanpur, Uttar Pradesh, India",,,Alone
+2.0,Superman Returns,Hindi,None,2D,35mm,Xenon,,5.1,2.39:1,2.39:1,FS,2006.06.30,2006.06.30,"Pammi Gurudev, Kanpur, Uttar Pradesh",,,Alone
+3.0,8 x 10 Tasveer,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2009.04.03,2009.04.05,"Centra Mall, Chandigarh, India",PVR,,Alone
+4.0,Love Aaj Kal,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2009.07.31,2009.08.01,"Paras Downtown Square, Zirakpur, Punjab, India",PVR,,Alone
+5.0,All the Best: Fun Begins,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2009.10.16,2009.10.16,"DLF Centre Mall, Chandigarh, India",,,Alone
+6.0,Ra.One,Hindi,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2011.10.26,2011.10.26,"DLF Centre Mall, Chandigarh, India",,,Alone
+7.0,The Avengers,English,None,3D,,Xenon,2K,5.1,2.39:1,1.85:1,FS,2012.04.27,,"DLF Centre Mall, Chandigarh, India",,,Alone
+8.0,OMG - Oh My God!,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2012.09.28,,"Centra Mall, Chandigarh, India",,,Alone
+9.0,Iron-Man 3,English,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2013.04.26,,"DLF Centre Mall, Chandigarh, India",,,Alone
+10.0,Krrish 3,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2013.11.01,2013.11.01,"Paras Downtown Square, Zirakpur, Punjab, India",,,Alone
+11.0,Bhoothnath Returns,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.04.11,,"Centra Mall, Chandigarh, India",,,Alone
+12.0,X-Men: The Days of Future Past,English,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.05.23,,"DLF Centre Mall, Chandigarh, India",,,Alone
+13.0,PK,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.12.19,2014.12.19,"Centra Mall, Chandigarh, India",,,Alone
+14.0,Dil Dhadakne Do,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2014.06.05,,"Elante Mall, Chandigarh, India",,,Alone
+15.0,Bajrangi Bhaijaan,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2015.07.17,,"Emporium Mall, Chandigarh, India",,,Alone
+16.0,Shaandaar,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2015.10.22,,"DLF Centre Mall, Chandigarh, India",,,Alone
+17.0,Bajirao Mastani,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2015.12.28,,"Emporium Mall, Chandigarh, India",,,Alone
+18.0,The Jungle Book,Hindi,None,3D,RealD,Xenon,2K,5.1,2.39:1,1.85:1,FS,2016.04.08,,"TDI Jagat, Chandigarh, India",,,Alone
+19.0,A Flying Jatt,Hindi,None,2D,Atmos,Xenon,2K,5.1,2.39:1,2.39:1,FS,2016.08.25,,"TDI Jagat, Chandigarh, India",,,Alone
+20.0,Dangal,Hindi,None,2D,Atmos,Xenon,2K,5.1,2.39:1,2.39:1,FS,2016.12.23,,"TDI Jagat, Chandigarh, India",,,Alone
+21.0,Baahubali: The Conclusion,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.04.28,2017.04.29,"Elante Mall, Chandigarh, India",,,Alone
+22.0,Baahubali: The Conclusion,Hindi,None,2D,Atmos,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.04.28,2017.05.05,"TDI Jagat, Chandigarh, India",,,Alone
+23.0,Spider-Man: Homecoming,Hindi ,None,3D,RealD,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.07.07,,"TDI Jagat, Chandigarh, India",,,Alone
+24.0,Thor: Ragnarok,Hindi,None,3D,RealD,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.11.03,,"TDI Jagat, Chandigarh, India",,,Alone
+25.0,Justice League,English,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.11.17,,"Elante Mall, Chandigarh, India",,,Alone
 ,Tiger Zinda Hai,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2017.12.22,,"Emporium Mall, Chandigarh, India",,,Alone
 ,Two Point O,Hindi,None,3D,RealD,Xenon,2K,5.1,2.39:1,2.39:1,FS,2018.11.29,,"TDI Jagat, Chandigarh, India",,,Alone
 ,Two Point O,Hindi,None,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2018.11.29,,"Paras Downtown Square, Zirakpur",,,Alone
@@ -78,7 +78,7 @@
 ,Eternals,Hindi,None,3D,RealD,Xenon,2K,5.1,2.39:1,2.39:1,FS,2021.11.05,,"Bestech Square Mall, Mohali",,,Alone
 ,Ghostbusters: Afterlife,English,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2021.11.19,,"Bestech Square Mall, Mohali",,,Alone
 ,Spider-Man: No Way Home,English,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2021.12.16,,"Elante Mall, Chandigarh, India",,,Alone
-,Spider-Man: No Way Home,English,None,3D,IMAX,Xenon,2K,5.1,2.39:1,2.39:1,FS,2021.12.19,,"Vegas Mall, Dwarka, Delhi",,,Alone
+,Spider-Man: No Way Home,English,None,3D,IMAX,Xenon,2K,5.1,2.39:1,2.39:1,FS,2021.12.16,,"Vegas Mall, Dwarka, Delhi",,,Alone
 ,Scream,English,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2022.01.14,,"TDI Jagat, Chandigarh, India",,,Alone
 ,The Kashmir Files,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,,,"TDI Jagat, Chandigarh, India",,,Alone
 ,Bhool Bhulaiyaa 2,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,,,"TDI Jagat, Chandigarh, India",,,Alone
@@ -149,7 +149,7 @@
 ,Gran Turismo,English,None,2D,,Xenon,2K,5.1,2.39:1,1.85:1,FS,2023.08.25,2023.08.27,"TDI Jagat, Chandigarh, India",,,Alone
 ,Killers of the Flower Moon,English,None,2D,P[XL],Xenon,2K,5.1,2.39:1,2.39:1,FS,2023.10.27,2023.11.02,"CP67 Mall, Mohali",,,Alone
 ,The Marvels,English,None,3D,IMAX with Laser,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.11.10,2023.11.11,"Paras Cinema, Nehru Enclave, Delhi",,,Alone
-,The Marvels,English,None,2D,ScreenX,Xenon,2K,5.1,2.39:1,2.39:1,FS,2023.11.10,2023.11.11,"Pacific Outlet Mall, Jasola, Delhi",,,Alone
+,The Marvels,English,None,2D,ScreenX,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.11.10,2023.11.11,"Pacific Outlet Mall, Jasola, Delhi",,,Alone
 ,Sam Bahaadur,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2023.12.01,2023.12.02,"Centra Mall, Chandigarh, India",,,Alone
 ,Animal,Hindi,None,2D,P[XL],Xenon,2K,5.1,1.85:1,2.39:1,FS,2023.12.01,2023.12.03,"CP67 Mall, Mohali",,,Alone
 ,Tiger 3,Hindi,English,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2023.11.12,2023.12.14,"CP67 Mall, Mohali",,,Alone
@@ -162,7 +162,7 @@
 ,Anyone But You,English,English,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2023.12.31,2024.01.01,"Elante Mall, Chandigarh, India",,,Alone
 ,Dune,English,English,2D,IMAX with Laser,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.01.01,2024.01.02,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,Dune Part Two,English,English,2D,IMAX with Laser,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.01.02,2024.01.03,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
-,Dune Part Two,English,English,2D,ScreenX,Xenon,2K,5.1,2.39:1,2.39:1,FS,,,"Pacific Outlet Mall, Jasola, Delhi",,,Alone
+,Dune Part Two,English,English,2D,ScreenX,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.01.02,,"Pacific Outlet Mall, Jasola, Delhi",,,Alone
 ,Kung Fu Panda 4,English,English,3D,RealD,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.01.03,2024.01.04,"TDI Jagat, Chandigarh, India",,,Alone
 ,Ghostbusters: Frozen Empire,English,English,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.01.04,2024.01.05,"TDI Jagat, Chandigarh, India",,,Alone
 ,Godzilla x Kong: The New Empire,English,English,3D,IMAX,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.01.05,2024.01.06,"Logix City Center, Noida",,,Alone
@@ -186,8 +186,8 @@
 ,Despicable Me 4,English,English,3D,RealD,Xenon,2K,5.1,2.39:1,1.85:1,FS,2024.07.05,2024.07.11,"TDI Jagat, Chandigarh, India",,,Alone
 ,Devara: Part 1,Hindi,None,2D,IMAX,Xenon,2K,5.1,2.39:1,2.39:1,FS,,,,,,Alone
 ,Longlegs,English,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.07.12,2024.07.13,"TDI Jagat, Chandigarh, India",,,Alone
-,Kalki 2898 AD,Hindi,None,3D,P[XL]; RealD; Atmos,Xenon,2K,5.1,1.85:1,2.39:1,FS,2024.06.28,2024.07.18,"TDI Jagat, Chandigarh, India",,,Alone
-,Twisters,English,English,2D,ICE,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.07.18,2024.07.25,"DLF Promenade, Delhi",,,Alone
+,Kalki 2898 AD,Hindi,None,3D,P[XL]; RealD; Atmos,Xenon,2K,5.1,1.85:1,2.39:1,FS,2024.01.20,2024.07.18,"TDI Jagat, Chandigarh, India",,,Alone
+,Twsiters,English,English,2D,ICE,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.07.18,2024.07.25,"DLF Promenade, Delhi",,,Alone
 ,Deadpool And Wolverine,English,English,3D,IMAX with Laser,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.07.26,2024.07.26,"Select Citywalk,Saket, Delhi",,,Alone
 ,Deadpool And Wolverine,Hindi,None,3D,RealD; Atmos,Xenon,2K,5.1,2.39:1,2.39:1,FS,2024.07.26,2024.08.01,"TDI Jagat, Chandigarh, India",,,Alone
 ,Partner,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2007.07.20,2024.08.03,"Elante Mall, Chandigarh, India",,,Alone
@@ -212,31 +212,31 @@
 ,Bhool Bhulaiyaa 3,Hindi,None,2D,P[XL]; 5.1,Xenon,2K,5.1,1.85:1,2.39:1,FS,,2024.12.04,"CP67 Mall, Mohali",,,Alone
 ,Pushpa 2,Hindi,None,2D,P[XL]; 5.1,Xenon,2K,5.1,1.85:1,2.39:1,FS,,,"CP67 Mall, Mohali",,,Alone
 ,Mufasa,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,1.85:1,FS,,,,,,Alone
-,Barroz,Malayalam,English,3D,,Xenon,2K,5.1,2.39:1,1.85:1,PB,,2024.12.25,,,,Alone
+,Barroz,Malayalam,English,3D,,Xenon,2K,5.1,2.39:1,1.85:1,FS,,2024.12.25,,,,Alone
 ,Mufasa,Hindi,None,2D,P[XL]; 5.1,Xenon,2K,5.1,1.85:1,1.85:1,FS,,,"CP67 Mall, Mohali",,,Alone
 ,Kaho Na Pyaar Hai,Hindi,None,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,,,,,,Alone
-,Sonic the Hedgehog 3,Hindi,None,2D,P[XL]; 5.1,Xenon,2K,5.1,1.85:1,2.39:1,FS,,,"CP67 Mall, Mohali",,,Alone
+,Sonic 3,Hindi,None,2D,P[XL]; 5.1,Xenon,2K,5.1,1.85:1,2.39:1,FS,,,"CP67 Mall, Mohali",,,Alone
 ,Nosferatu ,Hindi,None,2D,P[XL]; 5.1,Laser,2K,5.1,1.85:1,1.85:1,FS,,,"CP67 Mall, Mohali",,,Alone
 ,Nosferatu ,English,English,4K,ONYX; 7.1,Xenon,4K,5.1,2.39:1,1.85:1,FS,,,"DLF Avenue, Saket, Delhi",,,Alone
 ,Mufasa,Hindi,None,RealD 3D,4DX 5.1,Laser,2K,5.1,2.39:1,1.85:1,FS,,,"DLF Avenue, Saket, Delhi",,,Alone
 ,Ramayana,Hindi,None,4K,ONYX; 5.1,Xenon,4K,5.1,2.39:1,1.85:1,FS,,,"DLF Avenue, Saket, Delhi",,,Alone
-,Kanguva,Hindi,None,2D,,Laser,2K,5.1,2.39:1,2.39:1,FS,,,,,,Alone
+,Kanguva,Hindi,None,2D,,Laser,2K,5.1,2.39:1,2.39:1,FS,2024.11.16,,,,,Alone
 ,Sky Force,Hindi,None,2D,P[XL]; 5.1,Laser,2K,5.1,1.85:1,2.39:1,FS,,,"CP67 Mall, Mohali",,,Alone
-,Interstellar,English,English,2D,IMAX with Laser,Laser,4K,5.1,2.39:1,2.39:1,FS,2014.11.07,2025.02.08,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
+,Interstellar,English,English,2D,IMAX with Laser,Laser,4K,5.1,2.39:1,2.39:1,FS,2023.11.07,2025.02.08,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,Captain America Brave New World,Hindi,None,2D,IMAX with Laser,Laser,2K,12.1,2.39:1,2.39:1,FS,,,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,Chhaava,Hindi,None,2D,IMAX with Laser,Laser,2K,5.1,2.39:1,2.39:1,FS,,,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,Crazxy,Hindi,None,2D,,Laser,2K,7.1,2.39:1,2.39:1,FS,2025.02.28,2025.03.02,,,,Alone
 ,Mickey 17,English,English,4K,IMAX with Laser,Laser,4K,5.1,2.39:1,1.85:1,FS,2025.03.07,2025.03.09,"Palladium, Ahmedabad, Gujarat, India",,,Alone
-,Dune Part Two,English,English,4K,IMAX with Laser,Laser,4K,5.1,2.39:1,2.39:1,FS,2024.03.01,2025.03.15,"Rajhans Precia, Surat, Gujarat, India",,,Alone
-,Hubble,Hindi,None,IMAX 15/70 Film,IMAX GT 3D,Dual Xenon,IMAX 15/70,6.1,2.39:1,2.39:1,FS,2010.03.19,2025.03.15,"Gujarat Science City, Ahmedabad, Gujarat, India",,,Alone
-,Dune Part Two,English,English,2D,IMAX with Laser,Laser,4K,12.1,2.39:1,2.39:1,FS,2024.03.01,2025.03.16,"PVR, Select Citywalk, Saket, Delhi, India",,,Alone
-,Interstellar,English,English,2D,IMAX with Laser,Laser,4K,5.1,2.39:1,2.39:1,FS,2014.11.07,2025.03.16,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
+,Dune Part Two,English,English,4K,IMAX with Laser,Laser,4K,5.1,2.39:1,2.39:1,FS,2024.01.02,2025.03.15,"Rajhans Precia, Surat, Gujarat, India",,,Alone
+,Hubble,Hindi,None,IMAX 3D,IMAX 15/70 GT3D,Xenon,IMAX 15/70,6.1,2.39:1,2.39:1,FS,2010.03.19,2025.03.15,"Gujarat Science City, Ahmedabad, Gujarat, India",,,Alone
+,Dune Part Two,English,English,2D,IMAX with Laser,Laser,4K,12.1,2.39:1,2.39:1,FS,2024.01.02,2025.03.16,"PVR, Select Citywalk, Saket, Delhi, India",,,Alone
+,Interstellar,English,English,2D,IMAX with Laser,Laser,4K,5.1,2.39:1,2.39:1,FS,2023.11.07,2025.03.16,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,The Diplomat,Hindi,None,4K,P[XL]; 5.1,Laser,4K,5.1,1.85:1,2.39:1,FS,2025.03.14,2025.03.21,"CP67 Mall, Mohali",,,Alone
 ,Snow White,English,English,2D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,2025.03.21,2025.03.25,,,,Alone
 ,Thunderbolts*,English,English,3D,IMAX with Laser,Laser,2K,5.1,1.90:1,1.90:1,FS,2025.05.03,2025.05.03,"Paras Cinema, Nehru Enclave, Delhi",,,Alone
 ,Sinners,English,English,2D,IMAX with Laser,Laser,4K,12.1,1.90:1,1.90:1,FS,2025.05.13,2025.05.13,"Select Citywalk, Saket, Delhi",,,Alone
-,Sinners,English,English,2D,IMAX,Laser CoLa,2K,5.1,2.39:1,2.76:1,FS,2025.05.13,2025.05.13,"CP67, Mohali, Punjab, India",,,Alone
-,Thunderbolts*,English,English,2D,IMAX,Laser XT,4K,12.1,1.90:1,1.90:1,FS,2025.05.03,2025.05.03,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
+,Sinners,English,English,2D,Laser,Laser,2K,5.1,2.39:1,2.76:1,FS,2025.05.13,2025.05.13,"CP67, Mohali, Punjab, India",,,Alone
+,Thunderbolts*,English,English,2D,IMAX with Laser,Laser,4K,12.1,1.90:1,1.90:1,FS,2025.05.03,2025.05.03,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,Sinners,English,English,2D,IMAX with Laser,Laser,4K,12.1,1.90:1,1.90:1,FS,2025.05.13,2025.05.13,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,Mission Impossible: The Final Reckoning,English,English,2D,IMAX with Laser,Laser,4K,12.1,1.90:1,1.90:1,FS/LB,2025.05.13,2025.05.13,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
 ,Mission Impossible: The Final Reckoning,English,English,2D,Laser,Laser,4K,5.1,2.39:1,2.39:1,FS,2025.05.13,2025.05.13,"Priya Cinema, Vasant Vihar, Delhi",,,Alone
@@ -247,25 +247,25 @@
 ,How To Train Your Dragon,,None,,,Laser,,,,,FS,,,,,,Alone
 ,Elio,,None,,,Xenon,,,,,FS,,,,,,Alone
 ,28 Years Later,,None,,,Xenon,,,,,LB,,,,,,Alone
-,F1,Hindi,None,2D,4DX,Laser,2K,7.1,2.39:1,2.39:1,FS,,,,,,Alone
+,F1,Hindi,None,2D,4DX,Laser,2K,7.1,2.39:1,2.39:1,FS,2025.07.03,,,,,Alone
 ,F1,English,English,2D,Dolby Cinema,Dual Laser,4K,Atmos,2.1:1,2.39:1,LB,2025.07.03,2025.07.03,"Citypride Multiplex, Pune, Maharashtra, India",,,Alone
 ,Jurassic World: Rebirth,English,English,3D,Dolby Cinema,Dual Laser,2K,Atmos,2.1:1,2.39:1,LB,2025.07.03,2025.07.03,"Citypride Multiplex, Pune, Maharashtra, India",,,Alone
 ,Superman,Hindi,None,3D,P[XL],Laser,2K,5.1,1.85:1,1.85:1,FS,2025.07.11,205.07.11,,,,Alone
 ,Superman,English,English,3D,P[XL],Laser,2K,5.1,1.85:1,1.85:1,FS,2025.07.11,205.07.12,,,,Alone
 ,Mahavatar Narsimha,Hindi,English,3D,,Xenon,2K,5.1,2.39:1,2.39:1,FS,,,,,,Alone
 ,The Fantastic Four: First Steps,Hindi,None,3D,RealD,Xenon,2K,7.1,2.39:1,2.39:1,FS,,,,,,Alone
-,Jurassic World: Rebirth,Hindi,None,3D,RealD,Xenon,2K,7.1,2.39:1,2.39:1,FS,,,,,,Alone
+,Jurassic World: Rebirth,Hindi,None,3D,RealD,Xenon,2K,7.1,2.39:1,2.39:1,FS,2025.07.03,,,,,Alone
 ,Sikandar,Hindi,None,,IMAX,Laser,4K,5.1,1.85:1,2.39:1,LB,,,,,,Alone
 ,A Minecraft Movie,English,English,3D,IMAX with Laser,Laser,2K,5.1,1.90:1,1.85:1,PB,,,,,,Alone
 ,Drop,English,English,2D,PVR GOLD,Xenon,2K,5.1,2.39:1,2.39:1,FS,,,,,,Alone
 ,Warfare,English,English,2D,,Xenon,2K,5.1,2.39:1,2.00:1,WB,,,,,,Alone
 ,Ne Zha 2,Hindi,English,3D,Laser,Laser,2K,5.1,2.39:1,2.39:1,FS,,,,,,Alone
-,The Wild Robot,,,,,,,,,,,,,,,,Alone
-,The Fantastic Four: First Steps,,,,,,,,,,,,,,,,Alone
-,F1,,,,,,,,,,,,,,,,Alone
-,Weapons,,,,,,,,,,,,,,,,Alone
-,Coolie,,,,,,,,,,,,,,,,Alone
-,War 2,,,,,,,,,,,,,,,,Alone
+,,,,,,,,,,,,,,,,,Alone
+,,,,,,,,,,,,,,,,,Alone
+,,,,,,,,,,,,,,,,,Alone
+,,,,,,,,,,,,,,,,,Alone
+,,,,,,,,,,,,,,,,,Alone
+,,,,,,,,,,,,,,,,,Alone
 ,,,,,,,,,,,,,,,,,Alone
 ,,,,,,,,,,,,,,,,,Alone
 ,,,,,,,,,,,,,,,,,Alone
