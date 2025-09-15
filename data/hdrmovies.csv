@@ -1,24 +1,25 @@
-Movie,Movie Release Date,Version,Version Release Date,Base Nits,Max Nits,Max Average Nits,Highlights Extension,Highlights Recovery,Scene Lift
-Avengers Endgame,2019.10.10,4K Blu-ray,2002,100,283,196,Yes,Yes,No
-Oppenheimer,2023.10.10,4K Blu-ray,2003,203,185,122,No,No,No
-Interstellar,2014.10.10,4K Blu-ray,2004,100,186,123,No,No,Yes
-Mickey 17,2025.10.10,4K Blu-ray,2005,100,187,124,Yes,No,No
-Ready Player One,2019.10.11,4K Blu-ray,2006,100,188,125,Yes,No,No
-Mad Max Fury Road,2023.10.11,4K Blu-ray,2007,100,189,126,Yes,No,No
-Lucy,2014.10.11,4K Blu-ray,2008,100,190,127,Yes,No,No
-Jurassic World,2025.10.11,4K Blu-ray,2009,100,191,128,Yes,No,No
-Deadpool & Wolverine,2019.10.12,4K Blu-ray,2010,100,192,129,Yes,No,No
-The Dark Knightt Rises,2023.10.12,4K Blu-ray,2011,100,193,130,Yes,No,No
-Chaos Walking,2014.10.12,4K Blu-ray,2012,100,194,131,Yes,No,No
-Blade Runner 2049,2025.10.12,4K Blu-ray,2013,100,195,132,Yes,No,No
-Billy Lynn's Long Halftime Walk,2019.10.13,4K Blu-ray,2014,100,196,133,Yes,No,No
-Batman v Superman: Dawn of Justice,2023.10.13,4K Blu-ray,2015,100,197,134,Yes,No,No
-Back to the Future,2014.10.13,4K Blu-ray,2016,100,198,135,Yes,No,No
-Aquaman,2025.10.13,4K Blu-ray,2017,100,199,136,Yes,No,No
-The Amazing Spider-Man 2,2019.10.14,4K Blu-ray,2018,100,200,137,Yes,No,No
-The Amazing Spider-Man,2023.10.14,4K Blu-ray,2019,100,201,138,Yes,No,No
-Alien Romulus,2014.10.14,4K Blu-ray,2020,100,202,139,Yes,No,No
-2001: A Space Odyssey,2025.10.14,4K Blu-ray,2021,100,203,140,Yes,No,No
-1001 Nunakal,2019.10.15,4K Blu-ray,2022,100,204,141,Yes,No,No
-Devara: Part 1,2023.10.15,Netflix,2023,100,205,142,Yes,No,No
-Avatar,2009.12.19,4K Blu-ray,2024,100,206,143,Yes,No,No
+Movie,Movie Release Date,Version,Version Release Date,HDR10 Type,Dolby Vision Type,HDR10+ Type,Base Nits,MDCP,Max Nits,Max Average Nits,Highlights Extension,Highlights Recovery,Scene Lift
+Avengers Endgame,2019.10.10,4K Blu-ray,2002,Trim,Absent,Absent,100,Display P3,0,0,Yes,Yes,No
+Oppenheimer,2023.10.10,4K Blu-ray,2003,Full,Absent,Absent,203,BT.2020,185,122,No,No,No
+Interstellar,2014.10.10,4K Blu-ray,2004,Full,Absent,Absent,100,Display P3,0,0,No,No,Yes
+Mickey 17,2025.10.10,4K Blu-ray,2005,Full,MEL (10-bit),Absent,100,Display P3,0,0,Yes,No,No
+Titanic,2025.10.11,4K Blu-ray,2006,Full,MEL (11-bit),Absent,101,BT.2020,283,196,Yes,No,No
+Ready Player One,2019.10.11,4K Blu-ray,2006,,Absent,Absent,100,BT.2020,725,162,Yes,No,No
+Mad Max Fury Road,2023.10.11,4K Blu-ray,2007,,Absent,Absent,100,Display P3,9918,3241,Yes,No,No
+Lucy,2014.10.11,4K Blu-ray,2008,,Absent,Absent,100,Display P3,1000,400,Yes,No,No
+Jurassic World,2025.10.11,4K Blu-ray,2009,,MEL (12-bit),Absent,100,Display P3,1000,427,Yes,No,No
+Deadpool & Wolverine,2019.10.12,4K Blu-ray,2010,,MEL (13-bit),Absent,100,BT.2020,1007,313,Yes,No,No
+The Dark Knightt Rises,2023.10.12,4K Blu-ray,2011,,Absent,Absent,100,Display P3,500,200,Yes,No,No
+Chaos Walking,2014.10.12,4K Blu-ray,2012,,Absent,Absent,100,Display P3,1000,248,Yes,No,No
+Blade Runner 2049,2025.10.12,4K Blu-ray,2013,,Absent,Absent,100,Display P3,457,179,Yes,No,No
+Billy Lynn's Long Halftime Walk,2019.10.13,4K Blu-ray,2014,,MEL (14-bit),Absent,100,Display P3,2086,997,Yes,No,No
+Batman v Superman: Dawn of Justice,2023.10.13,4K Blu-ray,2015,,MEL (15-bit),Absent,100,Display P3,699,530,Yes,No,No
+Back to the Future,2014.10.13,4K Blu-ray,2016,,Absent,Absent,100,Display P3,1000,755,Yes,No,No
+Aquaman,2025.10.13,4K Blu-ray,2017,,Absent,Absent,100,Display P3,1506,459,Yes,No,No
+The Amazing Spider-Man 2,2019.10.14,4K Blu-ray,2018,,Absent,Absent,100,Display P3,1977,1112,Yes,No,No
+The Amazing Spider-Man,2023.10.14,4K Blu-ray,2019,,MEL (16-bit),Absent,100,Display P3,4809,1138,Yes,No,No
+Alien Romulus,2014.10.14,4K Blu-ray,2020,,MEL (17-bit),Absent,100,BT.2020,714,123,Yes,No,No
+2001: A Space Odyssey,2025.10.14,4K Blu-ray,2021,,Absent,Absent,100,BT.2020,992,282,Yes,No,No
+1001 Nunakal,2019.10.15,4K Blu-ray,2022,,Absent,Absent,100,Display P3,941,335,Yes,No,No
+Devara: Part 1,2023.10.15,Netflix,2023,,Profile 5 (11.5-bit),Absent,100,BT.2020,1341,1022,Yes,No,No
+Avatar,2009.12.19,4K Blu-ray,2024,,Profile 5 (11.6-bit),Absent,203,BT.2020,206,143,Yes,No,No
