@@ -1,27 +1,27 @@
-Movie<br>Release Date,Movie,Version,Version<br>Release Date,Dolby Vision<br>Type,HDR10+,HDR10<br>Type,Max Nits,Max Average Nits,Highlights<br>Extension,Highlights<br>Recovery,Mastering Display<br>Color Primaries,Highlights<br>Extension,Highlights<br>Recovery,Scene<br>Lift,Base<br>Nits
-2019.04.19,Avengers Endgame,4K Blu-ray,2019.08.13,Absent,No,Trim,0,0,Yes,Yes,Display P3,Yes,Yes,No,100
-2023.07.23,Oppenheimer,4K Blu-ray,2023.11.21,Absent,No,Full,185,122,No,No,BT.2020,No,No,No,203
-2014.07.14,Interstellar,4K Blu-ray,2017.12.19,Absent,No,Full,0,0,No,No,Display P3,No,No,Yes,100
-2025.03.07,Mickey 17,4K Blu-ray,2025.05.13,MEL (10-bit),No,Full,0,0,Yes,No,Display P3,Yes,No,No,100
-1997.12.19,Titanic,4K Blu-ray,2023.12.05,MEL (10-bit),No,Full,283,196,Yes,No,BT.2020,Yes,No,No,101
-2018.03.29,Ready Player One,4K Blu-ray,2018.07.24,MEL (10-bit),No,Full,725,162,Yes,No,BT.2020,Yes,No,No,100
-2015.05.15,Mad Max Fury Road,4K Blu-ray,2016.03.01,Absent,No,Full,9918,3241,Yes,No,Display P3,Yes,No,No,100
-2014.06.25,Lucy,4K Blu-ray,2016.08.09,Absent,No,Full,1000,400,Yes,No,Display P3,Yes,No,No,100
-2015.07.02,Jurassic World,4K Blu-ray,2022.05.10,Absent,No,Full,1000,427,Yes,No,Display P3,Yes,No,No,100
-2024.07.26,Deadpool & Wolverine,4K Blu-ray,2024.10.22,Absent,No,Full,1007,313,Yes,No,BT.2020,Yes,No,No,100
-2012.07.20,The Dark Knight Rises,4K Blu-ray,2017.12.19,Absent,No,Full,500,200,Yes,No,Display P3,Yes,No,No,100
-2021.03.05,Chaos Walking,4K Blu-ray,2021.05.25,FEL (12-bit),No,Trim,1000,248,Yes,No,Display P3,Yes,No,No,100
-2017.10.06,Blade Runner 2049,4K Blu-ray,2018.01.16,Absent,No,Full,457,179,Yes,No,Display P3,Yes,No,No,100
-2016.09.11,Billy Lynn's Long Halftime Walk,4K Blu-ray,2017.02.14,MEL (10-bit),No,Full,2086,997,Yes,No,Display P3,Yes,No,No,100
-2016.03.25,Batman v Superman: Dawn of Justice,4K Blu-ray,2021.03.23,Absent,No,Full,699,530,Yes,No,Display P3,Yes,No,No,100
-1985.07.03,Back to the Future,4K Blu-ray,2020.10.20,FEL (12-bit),No,Trim,1000,755,Yes,No,Display P3,Yes,No,No,100
-2018.12.21,Aquaman,4K Blu-ray,2019.03.26,MEL (10-bit),No,Full,1506,459,Yes,No,Display P3,Yes,No,No,100
-2012.07.03,The Amazing Spider-Man 2,4K Blu-ray,2017.10.17,Absent,No,Full,1977,1112,Yes,No,Display P3,Yes,No,No,100
-2014.05.02,The Amazing Spider-Man,4K Blu-ray,2016.03.01,Absent,No,Full,4809,1138,Yes,No,Display P3,Yes,No,No,100
-2014.10.14,Alien Romulus,4K Blu-ray,2024.12.03,MEL (10-bit),Yes,Full,714,123,Yes,No,BT.2020,Yes,No,No,100
-1968.04.02,2001: A Space Odyssey,4K Blu-ray,2018.12.18,MEL (10-bit),No,Full,992,282,Yes,No,BT.2020,Yes,No,No,100
-2023.08.18,1001 Nunakal,Sony Liv,2023.08.18,Absent,No,Full,941,335,Yes,No,Display P3,Yes,No,No,100
-2024.09.27,Devara: Part 1,Netflix,2024.10.30,Profile 5,No,Full,1341,1022,Yes,No,BT.2020,Yes,No,No,100
-2009.12.18,Avatar,4K Blu-ray,2023.06.20,Profile 5,No,Full,206,143,Yes,Yes,BT.2020,Yes,No,No,203
-2025.04.04,A Minecraft Movie,4K Blu-ray,2025.06.24,MEL (10-bit),Yes,Full,2757,522,No,No,Display P3,Yes,Yes,Yes,100
-2024.03.26,Boy Kills World,4K Blu-ray,2024.07.09,No,No,No,100,100,No,No,BT.709,No,No,No,100
+Movie<br>Release Date,Movie,Version,Version<br>Release Date,Dolby Vision<br>Type,HDR10+,HDR10<br>Type,Max Nits,Max Average Nits,Highlights<br>Extension,Highlights<br>Recovery,Mastering Display<br>Color Primaries,Scene<br>Lift,Base<br>Nits
+2019.04.19,Avengers Endgame,4K Blu-ray,2019.08.13,Absent,No,Trim,0,0,Yes,Yes,Display P3,No,100
+2023.07.23,Oppenheimer,4K Blu-ray,2023.11.21,Absent,No,Full,185,122,No,No,BT.2020,No,203
+2014.07.14,Interstellar,4K Blu-ray,2017.12.19,Absent,No,Full,0,0,No,No,Display P3,Yes,100
+2025.03.07,Mickey 17,4K Blu-ray,2025.05.13,MEL (10-bit),No,Full,0,0,Yes,No,Display P3,No,100
+1997.12.19,Titanic,4K Blu-ray,2023.12.05,MEL (10-bit),No,Full,283,196,Yes,No,BT.2020,No,101
+2018.03.29,Ready Player One,4K Blu-ray,2018.07.24,MEL (10-bit),No,Full,725,162,Yes,No,BT.2020,No,100
+2015.05.15,Mad Max Fury Road,4K Blu-ray,2016.03.01,Absent,No,Full,9918,3241,Yes,No,Display P3,No,100
+2014.06.25,Lucy,4K Blu-ray,2016.08.09,Absent,No,Full,1000,400,Yes,No,Display P3,No,100
+2015.07.02,Jurassic World,4K Blu-ray,2022.05.10,Absent,No,Full,1000,427,Yes,No,Display P3,No,100
+2024.07.26,Deadpool & Wolverine,4K Blu-ray,2024.10.22,MEL (10-bit),No,Full,1007,313,Yes,No,BT.2020,No,100
+2012.07.20,The Dark Knight Rises,4K Blu-ray,2017.12.19,Absent,No,Full,500,200,Yes,No,Display P3,No,100
+2021.03.05,Chaos Walking,4K Blu-ray,2021.05.25,FEL (12-bit),No,Trim,1000,248,Yes,No,Display P3,No,100
+2017.10.06,Blade Runner 2049,4K Blu-ray,2018.01.16,Absent,No,Full,457,179,Yes,No,Display P3,No,100
+2016.09.11,Billy Lynn's Long Halftime Walk,4K Blu-ray,2017.02.14,MEL (10-bit),No,Full,2086,997,Yes,No,Display P3,No,100
+2016.03.25,Batman v Superman: Dawn of Justice,4K Blu-ray,2021.03.23,Absent,No,Full,699,530,Yes,No,Display P3,No,100
+1985.07.03,Back to the Future,4K Blu-ray,2020.10.20,FEL (12-bit),No,Trim,1000,755,Yes,No,Display P3,No,100
+2018.12.21,Aquaman,4K Blu-ray,2019.03.26,MEL (10-bit),No,Full,1506,459,Yes,No,Display P3,No,100
+2012.07.03,The Amazing Spider-Man 2,4K Blu-ray,2017.10.17,Absent,No,Full,1977,1112,Yes,No,Display P3,No,100
+2014.05.02,The Amazing Spider-Man,4K Blu-ray,2016.03.01,Absent,No,Full,4809,1138,Yes,No,Display P3,No,100
+2014.10.14,Alien Romulus,4K Blu-ray,2024.12.03,MEL (10-bit),Yes,Full,714,123,Yes,No,BT.2020,No,100
+1968.04.02,2001: A Space Odyssey,4K Blu-ray,2018.12.18,MEL (10-bit),No,Full,992,282,Yes,No,BT.2020,No,100
+2023.08.18,1001 Nunakal,Sony Liv,2023.08.18,Absent,No,Full,941,335,Yes,No,Display P3,No,100
+2024.09.27,Devara: Part 1,Netflix,2024.10.30,Profile 5,Yes,Full,1341,1022,Yes,No,BT.2020,No,100
+2009.12.18,Avatar,4K Blu-ray,2023.06.20,Profile 5,No,Full,206,143,Yes,Yes,BT.2020,No,203
+2025.04.04,A Minecraft Movie,4K Blu-ray,2025.06.24,MEL (10-bit),Yes,Full,2757,522,No,No,Display P3,Yes,100
+2024.03.26,Boy Kills World,4K Blu-ray,2024.07.09,No,No,No,100,100,No,No,BT.709,No,100
