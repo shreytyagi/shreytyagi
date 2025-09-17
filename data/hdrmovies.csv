@@ -1,4 +1,4 @@
-Movie Release Date,Movie,Version,Version Release Date,Dolby Vision Type,HDR10+,HDR10 Type,Max Nits,Max Average Nits,Highlights Extension,Highlights Recovery,Mastering Display Color Primaries,Highlights Extension,Highlights Recovery,Scene Lift,Base Nits
+Movie<br>Release Date,Movie,Version,Version<br>Release Date,Dolby Vision<br>Type,HDR10+,HDR10<br>Type,Max Nits,Max Average Nits,Highlights<br>Extension,Highlights<br>Recovery,Mastering Display<br>Color Primaries,Highlights<br>Extension,Highlights<br>Recovery,Scene<br>Lift,Base<br>Nits
 2019.04.19,Avengers Endgame,4K Blu-ray,2019.08.13,Absent,No,Trim,0,0,Yes,Yes,Display P3,Yes,Yes,No,100
 2023.07.23,Oppenheimer,4K Blu-ray,2023.11.21,Absent,No,Full,185,122,No,No,BT.2020,No,No,No,203
 2014.07.14,Interstellar,4K Blu-ray,2017.12.19,Absent,No,Full,0,0,No,No,Display P3,No,No,Yes,100
@@ -7,7 +7,7 @@ Movie Release Date,Movie,Version,Version Release Date,Dolby Vision Type,HDR10+,H
 2018.03.29,Ready Player One,4K Blu-ray,2018.07.24,MEL (10-bit),No,Full,725,162,Yes,No,BT.2020,Yes,No,No,100
 2015.05.15,Mad Max Fury Road,4K Blu-ray,2016.03.01,Absent,No,Full,9918,3241,Yes,No,Display P3,Yes,No,No,100
 2014.06.25,Lucy,4K Blu-ray,2016.08.09,Absent,No,Full,1000,400,Yes,No,Display P3,Yes,No,No,100
-2025.07.02,Jurassic World,4K Blu-ray,2022.05.10,Absent,No,Full,1000,427,Yes,No,Display P3,Yes,No,No,100
+2015.07.02,Jurassic World,4K Blu-ray,2022.05.10,Absent,No,Full,1000,427,Yes,No,Display P3,Yes,No,No,100
 2024.07.26,Deadpool & Wolverine,4K Blu-ray,2024.10.22,Absent,No,Full,1007,313,Yes,No,BT.2020,Yes,No,No,100
 2012.07.20,The Dark Knight Rises,4K Blu-ray,2017.12.19,Absent,No,Full,500,200,Yes,No,Display P3,Yes,No,No,100
 2021.03.05,Chaos Walking,4K Blu-ray,2021.05.25,FEL (12-bit),No,Trim,1000,248,Yes,No,Display P3,Yes,No,No,100
