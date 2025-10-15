@@ -174,11 +174,11 @@ padding: 0;
 		/* Aspect ratio for cards with both .card and .card-photo classes (1:1) */
 		.card.card-photo {
 			aspect-ratio: 1;
-			/* border-radius: 15px; /* Increase or decrease as needed */
+			border-radius: 15px; /* Increase or decrease as needed */
 			/* background-size: 100% 100%;  */ /*  Use this to stretch the images*/
 			/* background-position: center;
 			background-repeat: no-repeat; */
-			/* border: 2px solid #343a40 */
+			border: 2px solid #343a40
 		}
 
 .deadinside {
