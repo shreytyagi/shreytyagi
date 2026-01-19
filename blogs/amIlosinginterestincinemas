@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+	<title>Am I Losing Interest In Cinemas? | Blogs | Shrey Tyagi</title>
+
+	<!-- Bootstrap CSS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<!-- Botstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<!-- Local CSS -->
+	<link href="/css/style.css" rel="stylesheet">
+
+	<!-- Local JS -->
+	<script src="/js/script.js"></script>
+
+	<!-- YouTube JS -->
+	<script src="https://apis.google.com/js/platform.js"></script>
+
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
+
+	<!-- Navbar will be loaded here -->
+	<div id="navbar-container"></div>
+
+	<div class="container mt-1 text-justify flex-grow-1">
+
+		<div class="content-container">
+			<h3>Am I Losing Interest In Cinemas?</h3>
+			<p class="articleauth">Shrey Tyagi • 28 Jan, 2026<p>
+<p>For a very long time, I’ve been a strong supporter of the theatrical experience. I’ve always told people to watch movies only in cinemas and to not wait for them to arrive on OTT… because a cinema experience can never be fully replicated at home. A projector illuminating a big white screen, array of surround speakers, being free of distractions in a dark room, and the communal experience. For years, I believed this deeply. And I still do.
+
+But something has slowly started changing.
+
+Now that I am in my late 20s, life feels busier in ways it did not earlier. Work takes up a lot of time, responsibilities are increasing and all the things I want to do outside of work feel harder to fit into the day. On top of that, as a lazy lad, it only makes it worse for me to redeem free time.
+
+To plan a movie outing, means getting ready (especially in winters it means 3x more time to cover up properly) before leaving the house. Then comes the travel… reaching the cinema, parking the vehicle, long walks inside the mall, and finally settling into the seat. There are trailers to sit through and then comes the long stretch of sitting in one position. If water intake is not planned properly, there is always the fear of missing some of the movie because of unavoidable washroom breaks. After the movie ends, there is the travel back home, changing clothes, and finally settling down again. All of this adds up.
+
+But I have already done this a lot and never even felt it to be a discomfort. I have watched close to 300 movies in cinemas so far in my life. Over the years, I have gone out of my way to experience movies the best way possible. I have traveled to Delhi-NCR more than 50 times specifically to watch movies in premium formats. Almost 10 hours of travel just to watch one movie. A few times I have even travelled 1000+ km, just for a cinema visit.
+
+People often asked why I would travel so far just for a movie. At that time, it never felt like a big deal. For me, it was worth it. I wanted to experience cinema in its purest form, and I had the energy to do it.
+
+If I tried to build that habit now, I honestly do not think I could. Today, my relationship with cinemas is changing, not because I love movies any less, but because my priorities are shifting. I now prefer going to the cinema only when a movie truly excites me. When I cannot wait for it to come home. When it offers something that only a cinema can provide. A strong spectacle. A native or excellent 3D presentation. Or when there is exceptional hype around the movie. But how often does that really happen? In a year, maybe 15 or 20 movies at most. That includes both Hindi and English movies. With 52 weeks in a year, that comes down to roughly 1 cinema visit every 2 weeks. And even that feels like a conscious choice now, not a default habit.
+
+At the same time, watching movies at home has started to feel more appealing. Lying on my bed, wrapped comfortably in a quilt. Snacks on the table. Water, coffee, chips, whatever I want. A dark room. I can pause or rewind whenever I want. I can adjust the picture exactly how I like it. I can tune the bass, the surround channels, and the overall sound balance on my 5.1 home theater setup. I get 4K resolution, HDR, and proper surround activity under my full control.
+
+In cinemas, that control is mostly missing. Sometimes the picture is not calibrated properly. Sometimes the sound is too low. Sometimes the surround channels feel inactive. Sometimes the bass is barely audible. These issues are out of my hands. At home, they are not. Comfort is slowly becoming more important than the experience itself.
+
+This shift in my cinema preferences has not completely happened yet, but it is getting stronger day by day. I can see it coming, it’s inevitable. But I’m glad that during my early 20s, I pushed myself to experience cinema to the fullest. I traveled, explored different theaters, and watched movies the way I always wanted to. I lived that phase fully, without regret.</p>
+</div>
+
+	</div>
+	
+	
+	<div id="footer-container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+        <div class="container">
+            <div class="navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" id="current-year">
+                            Copyright © 2027 by Shrey Tyagi. All rights reserved.
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>
