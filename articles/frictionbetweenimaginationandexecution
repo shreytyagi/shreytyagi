@@ -233,3 +233,28 @@
       as the discovery of fire and the invention of the wheel.
 
     </p>
+
+            <p><em>Disclaimer: I wrote this article and used AI assistance for grammar review, and improving sentence structure and clarity. The ideas, research, and viewpoints are my own.</em></p>
+
+		</div>
+
+	</div>
+	
+	<div id="footer-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+            <div class="container">
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" id="current-year">
+                                Copyright © 2027 by Shrey Tyagi. All rights reserved.
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</body>
+</html>
