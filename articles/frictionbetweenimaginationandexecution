@@ -1,13 +1,48 @@
+<html lang="en">
+<head>
+	<title>The Friction Between Imagination And Execution</title>
 
+	<!-- Bootstrap CSS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	
+	<!-- Social Media Meta Tag for Link Sharing -->
+	<meta property="og:image" content="https://www.shreytyagi.com/articles/dhurandhar2inepiqluxonimages/IMG_2073b.jpg">
+	<meta property="og:title" content="The Friction Between Imagination And Execution">
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<!-- Botstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<!-- Local CSS -->
+	<link href="/css/style.css" rel="stylesheet">
 
+	<!-- Local JS -->
+	<script src="/js/script.js"></script>
 
+	<!-- YouTube JS -->
+	<script src="https://apis.google.com/js/platform.js"></script>
 
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
 
+	<!-- Navbar will be loaded here -->
+	<div id="navbar-container"></div>
 
+	<div class="container mt-1 text-justify flex-grow-1">
 
-    <h1>AI and Human Evolution</h1>
+		<div class="content-container">
+			<h3>The Friction Between Imagination And Execution</h3>
+			<p class="articleauth">Shrey Tyagi • 23 Apr, 2026</p>
+
+            <!-- Main Intro Image (Social Media Share Image) -->
+            <img src="dhurandhar2inepiqluxonimages/IMG_2073.jpg" class="img-fluid rounded w-100 mb-4" alt="Me standing at entry pointing towards EPIQ LUXON logo">
+
+            
 
     <p>
 
