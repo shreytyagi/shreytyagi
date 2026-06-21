@@ -1,0 +1,298 @@
+<html lang="en">
+<head>
+	<title>Mastering Archival Encoding: x265, Dolby Vision, and the Power of Apple Silicon</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	
+	<meta property="og:image" content="https://www.shreytyagi.com/articles/encoding_masterclass/IMG_COVER.jpg">
+	<meta property="og:title" content="Mastering Archival Encoding: x265, Dolby Vision, and the Power of Apple Silicon">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<link href="/css/style.css" rel="stylesheet">
+
+	<script src="/js/script.js"></script>
+
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
+
+	<div id="navbar-container"></div>
+
+	<div class="container mt-1 text-justify flex-grow-1">
+
+		<div class="content-container">
+			<h3>Mastering Archival Encoding: x265, Dolby Vision, and the Power of Apple Silicon</h3>
+			<p class="articleauth">Shrey Tyagi • 21 Jun, 2026</p>
+
+            <img src="encoding_masterclass/IMG_COVER.jpg" class="img-fluid rounded w-100 mb-4" alt="Mac Studio Terminal running x265 encode">
+
+            <p>In the world of high-fidelity video engineering, preserving the absolute raw quality of a camera sensor while keeping file sizes manageable is the ultimate pursuit. Whether capturing vlogs on an iPhone 17 Pro in Dolby Vision or archiving cinematic masters, the tools we use dictate the legacy of the footage.</p>
+
+            <h4>The Great Debate: Hardware vs. Software Encoding</h4>
+            <p>Today, everyone loves hardware encoders. Apple's VideoToolbox, Nvidia's NVENC, and Intel's QuickSync are blisteringly fast. They can chew through 4K video faster than real-time. But speed comes at a heavy cost: <b>Efficiency and Precision.</b></p>
+
+            <p>Hardware encoders are rigidly hardcoded into the silicon. They use massive bitrates to brute-force video quality, and they completely lack the deep, granular mathematical tools required for pristine HDR shadow preservation. For true archival quality—where every microscopic film grain and specular highlight matters—we must abandon the GPU and return to the CPU. <b>x265</b> is the absolute king of software encoding. It is mathematically exhaustive, perfectly compliant, and capable of achieving transparent cinematic quality at incredibly low file sizes.</p>
+
+            <h4>The Prerequisites: Arming Your Workstation</h4>
+            <p>To build an uncompromising mastering pipeline, you need a few specialized command-line tools. You need the x265 engine, VapourSynth for frame processing, and <code>dovi_tool</code> for handling complex Dolby Vision metadata.</p>
+            
+            <ul>
+                <li><b>macOS Setup:</b> Open your terminal and use Homebrew. Run: <code>brew install x265 vapoursynth ffmpeg dovi_tool</code></li>
+                <li><b>Windows Setup:</b> Use the Scoop package manager, or download the pre-compiled binary `.exe` files from their respective GitHub repositories and add them to your Windows System PATH.</li>
+            </ul>
+
+            <h4>The Scripting Trick: Modularity</h4>
+            <p>Running a 24-hour archival encode requires stability. We do not type massive commands directly into the terminal. We use a modular file trick. You need a <code>script.vpy</code> file to handle your VapourSynth cropping and color management, and separate text files for your commands (e.g., <code>commandsdr.txt</code>, <code>commandpq.txt</code>, <code>commandhlg.txt</code>).</p>
+            <p>By saving your exact x265 pipeline into a text file, you can execute it safely using a trigger command. On a Mac, you use <code>caffeinate -i bash commandhlg.txt</code> to strictly prevent the OS from putting the terminal to sleep mid-render.</p>
+
+            <h4>Deconstructing the Master Command</h4>
+            <p>An archival x265 script is a highly orchestrated symphony of math. Here is why we use the specific flags in our ultimate pipeline:</p>
+            <ul>
+                <li><code>--crf 14</code>: Constant Rate Factor. This guarantees visually transparent, lossless quality.</li>
+                <li><code>--aq-mode 3 --no-cutree</code>: The shadow protectors. This prevents the encoder from mathematically starving dark areas, completely eliminating low-light banding.</li>
+                <li><code>--vbv-maxrate 160000</code>: Unlocks a massive 160 Mbps buffer to perfectly resolve chaotic, high-entropy scenes like blowing leaves or rippling water without pixelation.</li>
+                <li><code>--deblock -3:-3</code>: Forces the engine to leave the natural camera sensor grain completely untouched and razor-sharp.</li>
+                <li><code>--bframes 4</code>: The absolute mathematical sweet spot for compression efficiency without triggering the massive exponential CPU slowdowns caused by 8 or 16 B-frames.</li>
+                <li><code>--ref 5</code>: A strict hardware safety net ensuring the video will not crash the limited memory buffers on older smart TVs.</li>
+            </ul>
+
+            <h4>The Convoy Effect: Taming the CPU Cores</h4>
+            <p>When running exhaustive scripts, you must manage your CPU architecture. On hybrid processors, allowing background threads to spill onto weak Efficiency cores causes the fast Performance cores to wait in a bottleneck—the "Convoy Effect." We fix this with the <code>--pools</code> command.</p>
+            
+            <ul>
+                <li><b>Apple M4 Max:</b> Features 10 hyper-fast P-cores and 4 E-cores. We strictly set <code>--pools 10</code>. This isolates the render strictly to the hypercars, instantly doubling encode speeds.</li>
+                <li><b>Apple M4 Pro:</b> Depending on the binning, a base M4 Pro might have 8 P-Cores. You would set <code>--pools 8</code> to achieve the exact same isolation.</li>
+                <li><b>Intel (13th/14th Gen):</b> Intel's P/E core architecture requires you to either use process lasso/affinity tools or specify the exact number of P-cores in the pools command to prevent the E-cores from ruining your frame times.</li>
+                <li><b>AMD Ryzen (e.g., 7950X):</b> AMD uses uniform, full-power cores. You can leave the pools command out or set it to utilize all available threads.</li>
+            </ul>
+
+            <h4>The Dynamic Metadata Philosophy: Fake JSONs and dovi_tool</h4>
+            <p>HDR is not just brightness; it is instructions. HDR10+ and Dolby Vision require dynamic, frame-by-frame metadata (the RPU). Using <code>dovi_tool</code>, we can extract this metadata from a source file into an <code>RPU.bin</code> file, and then flawlessly inject it back into our new x265 encode using <code>--dolby-vision-rpu RPU.bin</code>.</p>
+            <p>For HDR10+, if you lack official studio mastering tools, you can create a <code>fake_hdr10plus.json</code> map to structure the metadata block, allowing x265 to format the stream correctly for Samsung displays.</p>
+
+            <h4>VapourSynth: Cropping and LUT Injection</h4>
+            <p>Before the video ever hits x265, VapourSynth prepares the canvas.</p>
+            <p><b>Cropping:</b> To remove letterboxing without re-encoding black bars, use: <br><code>clip = core.std.Crop(clip, left=0, right=0, top=140, bottom=140)</code></p>
+            <p><b>Applying 3D LUTs:</b> If you need to map a cinematic color grade or convert LOG footage, you can use the <code>vs-placebo</code> or <code>timecube</code> toolkits: <br><code>clip = core.timecube.Cube(clip, "cinematic_grade.cube")</code></p>
+
+            <h4>The Final Copiable Master Commands</h4>
+            <p>Here are the absolute, uncompromising archival scripts. Copy the relevant block into your <code>command.txt</code> file.</p>
+
+            <b>1. SDR Master (Standard Dynamic Range / Rec. 709)</b>
+            <pre class="bg-light p-3 border rounded text-dark"><code>vspipe -c y4m script.vpy - | x265 - --y4m -o sdr.hevc --preset slow --profile main10 --output-depth 10 --input-csp i420 --vbv-maxrate 160000 --vbv-bufsize 160000 --crf 14 --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes 4 --pools 10 --no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip --colorprim bt709 --transfer bt709 --colormatrix bt709 --range limited --chromaloc 0 --videoformat component --repeat-headers --hrd --aud --open-gop --min-keyint 1 --keyint 300 --level-idc 5.1 --max-luma 1023 --sar 1 --no-info</code></pre>
+
+            <b>2. Cinematic HDR10+ / Dolby Vision 8.1 Master</b>
+            <pre class="bg-light p-3 border rounded text-dark"><code>vspipe -c y4m script.vpy - | x265 - --y4m -o pqhdr10pdv81.hevc --preset slow --profile main10 --output-depth 10 --input-csp i420 --vbv-maxrate 160000 --vbv-bufsize 160000 --crf 14 --aq-mode 3 --no-cutree --hdr10-opt --dynamic-rd 4 --ref 5 --bframes 4 --pools 10 --no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip --colorprim bt2020 --transfer smpte2084 --colormatrix bt2020nc --range limited --chromaloc 2 --hdr10 --videoformat component --master-display "G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)" --max-cll "1000,400" --repeat-headers --hrd --aud --open-gop --min-keyint 1 --keyint 300 --level-idc 5.1 --max-luma 1023 --sar 1 --no-info --dhdr10-info fake_hdr10plus.json --dhdr10-opt --dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin</code></pre>
+
+            <b>3. Broadcast HLG / Dolby Vision 8.4 Master</b>
+            <pre class="bg-light p-3 border rounded text-dark"><code>vspipe -c y4m script.vpy - | x265 - --y4m -o hlghdrdv84.hevc --preset slow --profile main10 --output-depth 10 --input-csp i420 --vbv-maxrate 160000 --vbv-bufsize 160000 --crf 14 --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes 4 --pools 10 --no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip --colorprim bt2020 --transfer arib-std-b67 --colormatrix bt2020nc --range limited --chromaloc 2 --atc-sei 18 --pic-struct 0 --videoformat component --repeat-headers --hrd --aud --open-gop --min-keyint 1 --keyint 300 --level-idc 5.1 --max-luma 1023 --sar 1 --no-info --dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin</code></pre>
+
+            <p>Once the render finishes, always bypass MKVToolNix to protect your Dolby Vision metadata. Use FFmpeg with the <code>-tag:v hvc1</code> flag to instantly mux your raw HEVC stream directly into an Apple-compliant MP4, permanently signing your name as the encoder.</p>
+
+            <hr class="my-5">
+
+            <h4 class="mb-4">Bonus: The Ultimate x265 Archival Command Generator</h4>
+            <div class="card shadow-sm border-secondary mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Interactive Master Script Builder</h5>
+                </div>
+                <div class="card-body bg-light">
+                    <p class="text-muted small mb-4">Select your parameters below. The script will automatically assemble the mathematically perfect pipeline for your specific hardware and format.</p>
+                    
+                    <form id="x265GeneratorForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="font-weight-bold">Video Format</label>
+                                <select class="form-control" id="genFormat">
+                                    <option value="sdr">SDR (Rec. 709)</option>
+                                    <option value="hlg" selected>HLG Broadcast HDR</option>
+                                    <option value="pq">PQ Cinematic HDR</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="font-weight-bold">CPU Pools (P-Cores)</label>
+                                <input type="number" class="form-control" id="genPools" value="10" min="1" max="128">
+                                <small class="form-text text-muted">M4 Max: 10 | M4 Pro: 8</small>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label class="font-weight-bold">B-Frames</label>
+                                <input type="number" class="form-control" id="genBframes" value="4" min="0" max="16">
+                                <small class="form-text text-muted">Default: 4 (Max Efficiency)</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="font-weight-bold">Peak VBV Bitrate (kbps)</label>
+                                <input type="number" class="form-control" id="genVbv" value="160000" step="1000">
+                                <small class="form-text text-muted">160000 for Extreme Detail</small>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="font-weight-bold">Keyframe Interval (Keyint)</label>
+                                <input type="number" class="form-control" id="genKeyint" value="300" step="10">
+                                <small class="form-text text-muted">Frames (300 = 10s at 30fps)</small>
+                            </div>
+
+                            <div class="col-md-4 mb-3 pt-4">
+                                <div class="custom-control custom-switch mb-2" id="dvToggleContainer">
+                                    <input type="checkbox" class="custom-control-input" id="genDv" checked>
+                                    <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
+                                </div>
+                                <div class="custom-control custom-switch" id="hdr10pToggleContainer" style="display: none;">
+                                    <input type="checkbox" class="custom-control-input" id="genHdr10p">
+                                    <label class="custom-control-label font-weight-bold" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row border-top pt-3 mt-2" id="advancedHdrMetadata" style="display: none;">
+                            <div class="col-md-12 mb-2">
+                                <h6 class="font-weight-bold text-primary">Advanced HDR Metadata (PQ Only)</h6>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label class="font-weight-bold">Mastering Display Coordinates</label>
+                                <input type="text" class="form-control" id="genMasterDisp" value="G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="font-weight-bold">Max CLL / FALL</label>
+                                <input type="text" class="form-control" id="genMaxCll" value="1000,400">
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="mt-4">
+                        <label class="font-weight-bold text-success">Your Custom Master Pipeline:</label>
+                        <div class="position-relative">
+                            <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code id="finalCommandOutput"></code></pre>
+                            <button class="btn btn-success btn-sm position-absolute" style="top: 10px; right: 10px;" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const formElements = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
+                    
+                    // Listeners for real-time generation
+                    formElements.forEach(el => {
+                        el.addEventListener('input', updateCommand);
+                        el.addEventListener('change', updateCommand);
+                    });
+
+                    function updateCommand() {
+                        const format = document.getElementById('genFormat').value;
+                        const pools = document.getElementById('genPools').value;
+                        const bframes = document.getElementById('genBframes').value;
+                        const vbv = document.getElementById('genVbv').value;
+                        const keyint = document.getElementById('genKeyint').value;
+                        const useDv = document.getElementById('genDv').checked;
+                        const useHdr10p = document.getElementById('genHdr10p').checked;
+                        const masterDisp = document.getElementById('genMasterDisp').value;
+                        const maxCll = document.getElementById('genMaxCll').value;
+
+                        // UI Logic: Show/Hide fields based on Format
+                        const dvToggle = document.getElementById('dvToggleContainer');
+                        const hdr10pToggle = document.getElementById('hdr10pToggleContainer');
+                        const advHdr = document.getElementById('advancedHdrMetadata');
+
+                        if (format === 'sdr') {
+                            dvToggle.style.display = 'none';
+                            hdr10pToggle.style.display = 'none';
+                            advHdr.style.display = 'none';
+                        } else if (format === 'hlg') {
+                            dvToggle.style.display = 'block';
+                            hdr10pToggle.style.display = 'none';
+                            advHdr.style.display = 'none';
+                        } else if (format === 'pq') {
+                            dvToggle.style.display = 'block';
+                            hdr10pToggle.style.display = 'block';
+                            advHdr.style.display = 'flex';
+                        }
+
+                        // Base command (Constant Archival Protections)
+                        let cmd = `vspipe -c y4m script.vpy - | x265 - --y4m --preset slow --profile main10 --output-depth 10 --input-csp i420 `;
+                        
+                        // Dynamic Variables
+                        cmd += `--vbv-maxrate ${vbv} --vbv-bufsize ${vbv} --crf 14 --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} --pools ${pools} `;
+                        cmd += `--no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip `;
+
+                        // Format Specific Math
+                        if (format === 'sdr') {
+                            cmd += `-o sdr_master.hevc --colorprim bt709 --transfer bt709 --colormatrix bt709 --range limited --chromaloc 0 `;
+                        } else if (format === 'hlg') {
+                            cmd += `-o hlg_hdr_master.hevc --colorprim bt2020 --transfer arib-std-b67 --colormatrix bt2020nc --range limited --chromaloc 2 --atc-sei 18 --pic-struct 0 `;
+                        } else if (format === 'pq') {
+                            cmd += `-o pq_hdr_master.hevc --colorprim bt2020 --transfer smpte2084 --colormatrix bt2020nc --range limited --chromaloc 2 --hdr10 `;
+                            cmd += `--master-display "${masterDisp}" --max-cll "${maxCll}" `;
+                            
+                            if (useHdr10p) {
+                                cmd += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
+                            }
+                        }
+
+                        // Hardware Cages
+                        cmd += `--videoformat component --repeat-headers --hrd --aud --open-gop --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma 1023 --sar 1 --no-info `;
+
+                        // Dolby Vision Injection
+                        if (format !== 'sdr' && useDv) {
+                            if (format === 'hlg') cmd += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin`;
+                            if (format === 'pq') cmd += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin`;
+                        }
+
+                        // Print to Output Box
+                        document.getElementById('finalCommandOutput').innerText = cmd;
+                    }
+
+                    // Initialize on page load
+                    updateCommand();
+                });
+
+                // Copy to Clipboard Function
+                function copyGeneratedCommand() {
+                    const cmdText = document.getElementById('finalCommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyBtn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-secondary');
+                        setTimeout(() => {
+                            btn.innerText = "Copy Command";
+                            btn.classList.remove('btn-secondary');
+                            btn.classList.add('btn-success');
+                        }, 2000);
+                    });
+                }
+            </script>
+
+		</div>
+
+	</div>
+	
+	<div id="footer-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+            <div class="container">
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" id="current-year">
+                                Copyright © 2026 by Shrey Tyagi. All rights reserved.
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</body>
+</html>
