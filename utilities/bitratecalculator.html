@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCP & Media Bitrate Calculator</title>
+    <!-- Bootstrap CSS for clean styling -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            padding: 2rem 1rem;
+        }
+        .calculator-wrapper {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            max-width: 950px;
+            margin: auto;
+        }
+        .input-group-text {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        .breakdown-box {
+            background-color: #212529;
+            color: #12ff00; /* Terminal green for cool math breakdown */
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1.5rem;
+            border-radius: 5px;
+            display: none; /* Hidden until calculated */
+        }
+        .calc-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .input-small {
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-wrapper">
+        <h2 class="mb-4 text-center">Step-by-Step Bitrate Calculator</h2>
+        
+        <!-- 1. The Base Selector -->
+        <div class="form-group mb-4">
+            <label for="calcBase" class="font-weight-bold">Calculation Base System</label>
+            <select class="form-control form-control-lg w-50" id="calcBase">
+                <option value="1024">1024-Base (Binary / DCP Servers & Windows)</option>
+                <option value="1000">1000-Base (Decimal / Apple, Android & Hard Drives)</option>
+            </select>
+        </div>
+
+        <!-- 2. The Size Inputs (TB, GB, MB inline) -->
+        <label class="font-weight-bold">File Size</label>
+        <div class="calc-row flex-wrap">
+            <input type="number" id="inputTB" class="form-control input-small" placeholder="0" min="0">
+            <span class="font-weight-bold">TB</span>
+            
+            <input type="number" id="inputGB" class="form-control input-small" placeholder="0" min="0">
+            <span class="font-weight-bold">GB</span>
+            
+            <input type="number" id="inputMB" class="form-control input-small" placeholder="0" min="0">
+            <span class="font-weight-bold">MB</span>
+        </div>
+
+        <!-- 3. The Duration Inputs (Hours, Minutes, Seconds inline) -->
+        <label class="font-weight-bold mt-2">Runtime Duration</label>
+        <div class="calc-row flex-wrap">
+            <input type="number" id="inputHours" class="form-control input-small" placeholder="0" min="0">
+            <span class="font-weight-bold">Hours</span>
+            
+            <input type="number" id="inputMinutes" class="form-control input-small" placeholder="0" min="0">
+            <span class="font-weight-bold">Minutes</span>
+            
+            <input type="number" id="inputSeconds" class="form-control input-small" placeholder="0" min="0">
+            <span class="font-weight-bold">Seconds</span>
+        </div>
+
+        <!-- 4. Calculate Button & Inline Result -->
+        <div class="d-flex align-items-center mt-4 border-top pt-4">
+            <button class="btn btn-primary btn-lg px-5 mr-4" onclick="calculateAndBreakdown()">Calculate</button>
+            <h3 id="finalResult" class="text-success font-weight-bold mb-0" style="display: none;"></h3>
+        </div>
+
+        <!-- 5. Breakdown Field -->
+        <div id="breakdownSection" class="breakdown-box mt-4">
+            <!-- Math logs will be injected here -->
+        </div>
+
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        function calculateAndBreakdown() {
+            // Get base
+            const base = parseInt(document.getElementById('calcBase').value);
+            
+            // Get size inputs (default to 0 if empty)
+            const tb = parseFloat(document.getElementById('inputTB').value) || 0;
+            const gb = parseFloat(document.getElementById('inputGB').value) || 0;
+            const mb = parseFloat(document.getElementById('inputMB').value) || 0;
+            
+            // Get time inputs (default to 0 if empty)
+            const hrs = parseFloat(document.getElementById('inputHours').value) || 0;
+            const mins = parseFloat(document.getElementById('inputMinutes').value) || 0;
+            const secs = parseFloat(document.getElementById('inputSeconds').value) || 0;
+
+            const breakdownBox = document.getElementById('breakdownSection');
+            const finalResult = document.getElementById('finalResult');
+
+            // Validation: Ensure there is at least some data and some time
+            if ((tb === 0 && gb === 0 && mb === 0) || (hrs === 0 && mins === 0 && secs === 0)) {
+                alert("Please enter at least one file size value and one duration value.");
+                return;
+            }
+
+            let logHTML = `<div><strong>--- SIZE BREAKDOWN ---</strong></div>`;
+
+            // Step 1: Consolidate all sizes into a single total of MB first for easier reading
+            let totalMB = mb;
+            if (tb > 0) {
+                let tbToMb = tb * base * base;
+                logHTML += `<div>> ${tb} TB * ${base} = ${tb * base} GB</div>`;
+                logHTML += `<div>> ${tb * base} GB * ${base} = ${tbToMb} MB</div>`;
+                totalMB += tbToMb;
+            }
+            if (gb > 0) {
+                let gbToMb = gb * base;
+                logHTML += `<div>> ${gb} GB * ${base} = ${gbToMb} MB</div>`;
+                totalMB += gbToMb;
+            }
+            
+            logHTML += `<div><strong>> Total Megabytes (MB): ${totalMB.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2})} MB</strong></div><br>`;
+
+            // Step 2: Drill down from MB to Bits
+            let totalKB = totalMB * base;
+            logHTML += `<div>> ${totalMB.toLocaleString()} MB * ${base} = ${totalKB.toLocaleString()} KB</div>`;
+            
+            let totalBytes = totalKB * base;
+            logHTML += `<div>> ${totalKB.toLocaleString()} KB * ${base} = ${totalBytes.toLocaleString()} Bytes (B)</div>`;
+            
+            let totalBits = totalBytes * 8;
+            logHTML += `<div>> ${totalBytes.toLocaleString()} Bytes * 8 = <strong>${totalBits.toLocaleString()} Total Bits</strong></div><br>`;
+
+            // Step 3: Drill down duration to total seconds
+            logHTML += `<div><strong>--- RUNTIME BREAKDOWN ---</strong></div>`;
+            let totalSeconds = secs;
+            
+            if (hrs > 0) {
+                let hrsToMins = hrs * 60;
+                logHTML += `<div>> ${hrs} Hours * 60 = ${hrsToMins} Minutes</div>`;
+                let hrsToSecs = hrsToMins * 60;
+                logHTML += `<div>> ${hrsToMins} Minutes * 60 = ${hrsToSecs} Seconds</div>`;
+                totalSeconds += hrsToSecs;
+            }
+            if (mins > 0) {
+                let minsToSecs = mins * 60;
+                logHTML += `<div>> ${mins} Minutes * 60 = ${minsToSecs} Seconds</div>`;
+                totalSeconds += minsToSecs;
+            }
+            
+            logHTML += `<div><strong>> Total Duration: ${totalSeconds.toLocaleString()} Total Seconds</strong></div><br>`;
+
+            // Step 4: Calculate final Bitrate (bps -> kbps -> Mbps)
+            logHTML += `<div><strong>--- BITRATE CALCULATION ---</strong></div>`;
+            
+            let bps = totalBits / totalSeconds;
+            logHTML += `<div>> ${totalBits.toLocaleString()} Bits / ${totalSeconds.toLocaleString()} Seconds = <strong>${bps.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} Bits Per Second (bps)</strong></div>`;
+
+            // Network speeds (kbps/Mbps) universally use 1000 division, regardless of storage base
+            let kbps = bps / 1000;
+            logHTML += `<div>> ${bps.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} bps / 1000 = ${kbps.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kilobits Per Second (kbps)</div>`;
+
+            let mbps = kbps / 1000;
+            logHTML += `<div>> ${kbps.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} kbps / 1000 = <strong style="color: #fff;">${mbps.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} Megabits Per Second (Mbps)</strong></div>`;
+
+            // Display Results
+            breakdownBox.innerHTML = logHTML;
+            breakdownBox.style.display = "block";
+            
+            finalResult.innerHTML = `${mbps.toFixed(2)} Mbps`;
+            finalResult.style.display = "block";
+        }
+    </script>
+</body>
+</html>
