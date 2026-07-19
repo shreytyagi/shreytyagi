@@ -454,19 +454,28 @@ function parseCSV(data) {
 function calculateColumnWidths(data) {
         const numCols = data[0].length;
         let maxChars = new Array(numCols).fill(0);
+        let totalChars = new Array(numCols).fill(0);
 
-        // 1. Calculate max text length PER COLUMN using ONLY DATA rows
+        // 1. Pass 1: Get Max and Total Characters (Data rows only)
         const dataRows = data.length > 1 ? data.slice(1) : data;
+        let numRows = dataRows.length || 1;
+
         dataRows.forEach(row => {
             row.forEach((cell, index) => {
                 if (index < numCols) {
                     const rawText = cell.replace(/<[^>]*>?/gm, '').replace(/&[a-z]+;/gi, ' ');
-                    maxChars[index] = Math.max(maxChars[index], rawText.length);
+                    let len = rawText.length;
+                    maxChars[index] = Math.max(maxChars[index], len);
+                    totalChars[index] += len;
                 }
             });
         });
 
-        // 2. Parse User Attributes
+        // 2. Pass 2 & 3: Calculate the "Father Average" (Blended Length)
+        let avgChars = totalChars.map(total => total / numRows);
+        let blendedChars = maxChars.map((max, i) => (max + avgChars[i]) / 2);
+
+        // 3. Parse Explicit User Attributes
         let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
         let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
         let isLocked = new Array(numCols).fill(false);
@@ -474,65 +483,85 @@ function calculateColumnWidths(data) {
 
         let priorityAttr = tableContainer.getAttribute("columnpriority");
         let weights = new Array(numCols).fill(1); 
+        let maxWeight = 1;
         if (priorityAttr) {
             let pList = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
             pList.forEach((colIndex, i) => {
                 if (colIndex >= 0 && colIndex < numCols) {
                     // Highest priority (first in list) gets the largest multiplier
-                    weights[colIndex] = pList.length - i + 1; 
+                    weights[colIndex] = pList.length - i; 
                 }
             });
+            maxWeight = Math.max(...weights);
         }
 
-        // 3. Calculate Strict Base Widths (Optimized for Mobile viewports)
+        // 4. Calculate Base Widths using the new Father Average
         let lockedTotal = 0;
-        let baseWidths = maxChars.map((len, idx) => {
-            // Tighter math formula: ~1.8% width per char + 4% base padding
-            let w = (len === 0) ? 5 : (len * 1.8) + 4;
-            w = Math.max(w, 5); // Absolute minimum 5%
+        let unlockedBaseTotal = 0;
+        
+        let baseWidths = maxChars.map((maxLen, idx) => {
+            // CRITICAL: Locked columns MUST use maxChars to guarantee they never break.
+            // Unlocked columns use the smooth Father Average to stay proportional.
+            let calcLen = isLocked[idx] ? maxLen : blendedChars[idx];
+            
+            let w = (calcLen === 0) ? 5 : (calcLen * 1.8) + 4;
+            w = Math.max(w, 5); // Absolute minimum 5% floor
             
             if (isLocked[idx]) {
                 lockedTotal += w;
-                return w; // Locked columns get EXACTLY what they need
+                return w; 
+            } else {
+                w = Math.min(w, 50); // Unlocked columns cap at 50% base
+                unlockedBaseTotal += w;
+                return w;
             }
-            return Math.min(w, 50); // Unlocked columns capped at 50% base
         });
 
-        // 4. Smart Distribution via "Effective Weight"
+        // 5. Smart Space Distribution (Grow / Shrink)
         let finalWidths = new Array(numCols).fill(0);
-
-        if (lockedTotal >= 90) {
+        let unlockedTotalSpace = 100 - lockedTotal;
+        
+        if (lockedTotal >= 95) {
             // Failsafe: Locked columns take up the whole screen. Scale proportionally.
-            let totalBase = baseWidths.reduce((a, b) => a + b, 0);
-            finalWidths = baseWidths.map(w => (w / totalBase) * 100);
-        } else {
-            let unlockedTotalSpace = 100 - lockedTotal;
-            let unlockedEffectiveWeights = 0;
-            
-            baseWidths.forEach((w, i) => {
-                if (!isLocked[i]) {
-                    // Effective weight blends natural text length WITH user priority
-                    let ew = w * weights[i];
-                    unlockedEffectiveWeights += ew;
-                }
-            });
-
-            baseWidths.forEach((w, i) => {
-                if (isLocked[i]) {
-                    finalWidths[i] = w; // Do not grow or shrink
-                } else {
-                    if (unlockedEffectiveWeights === 0) {
-                        finalWidths[i] = w; 
-                    } else {
-                        let ew = w * weights[i];
-                        finalWidths[i] = (ew / unlockedEffectiveWeights) * unlockedTotalSpace;
-                    }
-                }
-            });
+            let total = baseWidths.reduce((a,b)=>a+b,0);
+            return baseWidths.map(w => (w / total) * 100);
         }
 
-        // 5. Final Normalization (Ensures strict 100% sum)
-        let finalSum = finalWidths.reduce((a, b) => a + b, 0);
+        // How much space is left after meeting the basic needs of all columns?
+        let remainder = unlockedTotalSpace - unlockedBaseTotal;
+        
+        // Calculate total weight pools for unlocked columns
+        let totalUnlockedWeight = 0;
+        let totalUnlockedInverseWeight = 0;
+        
+        baseWidths.forEach((w, i) => {
+            if (!isLocked[i]) {
+                totalUnlockedWeight += weights[i];
+                // Inverse weight makes low-priority columns absorb more damage during a shrink
+                totalUnlockedInverseWeight += (maxWeight - weights[i] + 1); 
+            }
+        });
+
+        baseWidths.forEach((w, i) => {
+            if (isLocked[i]) {
+                finalWidths[i] = w; // Keep strictly locked
+            } else {
+                if (remainder >= 0) {
+                    // GROW MODE: Distribute LEFTOVER space strictly by priority weights
+                    let extraSpace = (totalUnlockedWeight === 0) ? (remainder / numCols) : (remainder * (weights[i] / totalUnlockedWeight));
+                    finalWidths[i] = w + extraSpace;
+                } else {
+                    // SHRINK MODE: Remove deficit space heavily from lowest priorities
+                    let deficit = Math.abs(remainder);
+                    let inverseWeight = (maxWeight - weights[i] + 1);
+                    let shrinkAmount = (totalUnlockedInverseWeight === 0) ? (deficit / numCols) : (deficit * (inverseWeight / totalUnlockedInverseWeight));
+                    finalWidths[i] = Math.max(w - shrinkAmount, 5); 
+                }
+            }
+        });
+        
+        // 6. Final Strict Normalization (Ensures absolute 100% total)
+        let finalSum = finalWidths.reduce((a,b)=>a+b,0);
         return finalWidths.map(w => (w / finalSum) * 100);
     }
 
