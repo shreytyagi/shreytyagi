@@ -64,8 +64,8 @@
         
         <!-- P[XL] Table -->
         <div id="table-pxl" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/cinemas/plf/pxl.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table-pxl" class="w-100">
+            <div class="table-container" csvfile="/data/plf/pxl.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -74,8 +74,8 @@
 
         <!-- BigPix Table -->
         <div id="table-bigpix" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/cinemas/plf/bigpix.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table-bigpix" class="w-100">
+            <div class="table-container" csvfile="/data/plf/bigpix.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -84,8 +84,8 @@
 
         <!-- EPIQ Table -->
         <div id="table-epiq" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/cinemas/plf/epiq.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table-epiq" class="w-100">
+            <div class="table-container" csvfile="/data/plf/epiq.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -94,8 +94,8 @@
 
         <!-- ScreenX Table -->
         <div id="table-screenx" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/cinemas/plf/screenx.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table-screenx" class="w-100">
+            <div class="table-container" csvfile="/data/plf/screenx.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -123,11 +123,13 @@
     <!-- Dropdown Interaction Logic -->
     <script>
         $(document).ready(function() {
+            // Note: I also updated the image paths to match the /data/plf/ folder structure. 
+            // If your images are still inside /data/cinemas/plf/, just add /cinemas/ back into these paths.
             const formatImages = {
-                'pxl': 'https://originserver-static1-uat.pvrcinemas.com/pvrcms/exp_brand/pxl_KKJAdkwn.png',
-                'bigpix': 'https://originserver-static1-uat.pvrcinemas.com/pvrcms/exp_brand/bigpix_9coQHfJx.png',
-                'epiq': '/data/cinemas/plf/epiq.png',
-                'screenx': 'https://upload.wikimedia.org/wikipedia/commons/3/3d/ScreenX_Logo_%282019%29.svg'
+                'pxl': '/data/plf/pxl.png',
+                'bigpix': '/data/plf/bigpix.png',
+                'epiq': '/data/plf/epiq.png',
+                'screenx': '/data/plf/screenx.png'
             };
 
             $('#formatSelector').on('change', function() {
