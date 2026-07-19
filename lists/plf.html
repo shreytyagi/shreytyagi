@@ -62,40 +62,11 @@
             </div>
         </div>
         
-        <!-- P[XL] Table -->
-        <div id="table-pxl" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/plf/pxl.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table" class="w-100">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- BigPix Table -->
-        <div id="table-bigpix" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/plf/bigpix.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table" class="w-100">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- EPIQ Table -->
-        <div id="table-epiq" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/plf/epiq.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table" class="w-100">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ScreenX Table -->
-        <div id="table-screenx" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/plf/screenx.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table" class="w-100">
+        <!-- SINGLE Dynamic Table Wrapper -->
+        <div id="table-wrapper" class="format-list-section" style="display: none;">
+            <!-- Note: csvfile is left empty so script.js doesn't try to process it on load -->
+            <div class="table-container" id="main-table-container" csvfile="" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table" class="w-100 table table-striped">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -120,30 +91,88 @@
         </nav>
     </div>
 
-    <!-- Dropdown Interaction Logic -->
+    <!-- Dropdown Interaction & CSV Loading Logic -->
     <script>
         $(document).ready(function() {
-            // Note: I also updated the image paths to match the /data/plf/ folder structure. 
-            // If your images are still inside /data/cinemas/plf/, just add /cinemas/ back into these paths.
-            const formatImages = {
-                'pxl': '/data/plf/pxl.png',
-                'bigpix': '/data/plf/bigpix.png',
-                'epiq': '/data/plf/epiq.png',
-                'screenx': '/data/plf/screenx.png'
+            // Using the exact file paths you provided
+            const plfData = {
+                'pxl': { csv: '/data/plf_pxl.csv', img: '/data/plf_pxl.png' },
+                'bigpix': { csv: '/data/bigpix.csv', img: '/data/bigpix.png' },
+                'epiq': { csv: '/data/epic.csv', img: '/data/epic.png' },
+                'screenx': { csv: '/data/screenx.csv', img: '/data/screenx.png' }
             };
+
+            // Custom CSV line parser to handle basic data safely
+            function parseCSVRow(str) {
+                let arr = [];
+                let quote = false;
+                let col = '';
+                for (let i = 0; i < str.length; i++) {
+                    let cc = str[i], nc = str[i+1];
+                    if (cc === '"' && quote && nc === '"') { col += cc; ++i; continue; }
+                    if (cc === '"') { quote = !quote; continue; }
+                    if (cc === ',' && !quote) { arr.push(col.trim()); col = ''; continue; }
+                    col += cc;
+                }
+                arr.push(col.trim());
+                return arr;
+            }
 
             $('#formatSelector').on('change', function() {
                 const selectedFormat = $(this).val();
+                const formatInfo = plfData[selectedFormat];
                 
-                if (formatImages[selectedFormat]) {
-                    $('#formatImage').attr('src', formatImages[selectedFormat]);
-                    $('#formatImageContainer').show();
-                } else {
-                    $('#formatImageContainer').hide();
+                if (formatInfo) {
+                    // 1. Show the logo
+                    $('#formatImage').attr('src', formatInfo.img);
+                    $('#formatImageContainer').fadeIn(300);
+                    
+                    // 2. Show the single table wrapper
+                    $('#table-wrapper').show();
+                    
+                    // 3. Clear existing table data to prevent lingering empty space and show loading
+                    $('#dynamic-table thead').empty();
+                    $('#dynamic-table tbody').html('<tr><td class="text-center py-4">Loading format locations...</td></tr>');
+                    
+                    // 4. Fetch the selected CSV dynamically and build the table
+                    $.ajax({
+                        url: formatInfo.csv,
+                        dataType: 'text',
+                        success: function(data) {
+                            let lines = data.split(/\r?\n/);
+                            if(lines.length === 0) return;
+                            
+                            // Build Headers
+                            let theadHTML = '<tr>';
+                            let headers = parseCSVRow(lines[0]);
+                            for(let i=0; i<headers.length; i++) {
+                                theadHTML += '<th>' + headers[i] + '</th>';
+                            }
+                            theadHTML += '</tr>';
+                            
+                            // Build Rows
+                            let tbodyHTML = '';
+                            for(let i=1; i<lines.length; i++) {
+                                let line = lines[i].trim();
+                                if(line === '') continue;
+                                
+                                let cells = parseCSVRow(line);
+                                tbodyHTML += '<tr>';
+                                for(let j=0; j<cells.length; j++) {
+                                    tbodyHTML += '<td>' + cells[j] + '</td>';
+                                }
+                                tbodyHTML += '</tr>';
+                            }
+                            
+                            // Inject directly into the DOM
+                            $('#dynamic-table thead').html(theadHTML);
+                            $('#dynamic-table tbody').html(tbodyHTML);
+                        },
+                        error: function() {
+                            $('#dynamic-table tbody').html('<tr><td class="text-center text-danger py-4">Error loading data. Please ensure the CSV file is uploaded.</td></tr>');
+                        }
+                    });
                 }
-
-                $('.format-list-section').css('display', 'none');
-                $('#table-' + selectedFormat).fadeIn(300);
             });
         });
     </script>
