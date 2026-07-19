@@ -26,10 +26,10 @@
     <style>
         /* Format Logo Image Styling */
         .format-logo {
-            height: 80px; /* Constant height for uniform switching */
-            width: auto; /* Variable width based on original aspect ratio */
-            max-width: 100%; /* Prevents logo from exceeding mobile viewports */
-            object-fit: contain; /* Ensures the logo is never cropped */
+            height: 80px;
+            width: auto; 
+            max-width: 100%; 
+            object-fit: contain; 
             display: block;
         }
     </style>
@@ -61,15 +61,11 @@
                 <img id="formatImage" src="" alt="Cinema Format Logo" class="format-logo">
             </div>
         </div>
-
-        <!-- ============================================== -->
-        <!-- DYNAMIC TABLES SECTION -->
-        <!-- ============================================== -->
         
         <!-- P[XL] Table -->
         <div id="table-pxl" class="format-list-section" style="display: none;">
             <div class="table-container" csvfile="/data/cinemas/plf/pxl.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table">
+                <table id="dynamic-table-pxl" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -79,7 +75,7 @@
         <!-- BigPix Table -->
         <div id="table-bigpix" class="format-list-section" style="display: none;">
             <div class="table-container" csvfile="/data/cinemas/plf/bigpix.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table">
+                <table id="dynamic-table-bigpix" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -89,7 +85,7 @@
         <!-- EPIQ Table -->
         <div id="table-epiq" class="format-list-section" style="display: none;">
             <div class="table-container" csvfile="/data/cinemas/plf/epiq.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table">
+                <table id="dynamic-table-epiq" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -99,7 +95,7 @@
         <!-- ScreenX Table -->
         <div id="table-screenx" class="format-list-section" style="display: none;">
             <div class="table-container" csvfile="/data/cinemas/plf/screenx.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
-                <table id="dynamic-table">
+                <table id="dynamic-table-screenx" class="w-100">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -127,7 +123,6 @@
     <!-- Dropdown Interaction Logic -->
     <script>
         $(document).ready(function() {
-            // Dictionary mapping dropdown values to their respective image paths
             const formatImages = {
                 'pxl': '/data/cinemas/plf/pxl.png',
                 'bigpix': '/data/cinemas/plf/bigpix.png',
@@ -138,7 +133,6 @@
             $('#formatSelector').on('change', function() {
                 const selectedFormat = $(this).val();
                 
-                // 1. Update the image source and display the image container
                 if (formatImages[selectedFormat]) {
                     $('#formatImage').attr('src', formatImages[selectedFormat]);
                     $('#formatImageContainer').show();
@@ -146,10 +140,7 @@
                     $('#formatImageContainer').hide();
                 }
 
-                // 2. Hide all tables immediately using display none to clear any lingering empty space
                 $('.format-list-section').css('display', 'none');
-                
-                // 3. Fade in only the selected table
                 $('#table-' + selectedFormat).fadeIn(300);
             });
         });
