@@ -451,34 +451,80 @@ function parseCSV(data) {
 }
 
 	
-	    function calculateColumnWidths(data) {
-        const columnWidths = new Array(data[0].length).fill(0);
+function calculateColumnWidths(data) {
+        const numCols = data[0].length;
+        let maxChars = new Array(numCols).fill(0);
 
-        // Determine max length of any cell in each column
-        data.forEach(row => {
+        // 1. Calculate max text length PER COLUMN using ONLY DATA rows (Ignore Header)
+        const dataRows = data.length > 1 ? data.slice(1) : data;
+        dataRows.forEach(row => {
             row.forEach((cell, index) => {
-                columnWidths[index] = Math.max(columnWidths[index], cell.length);
+                if (index < numCols) {
+                    // Strip HTML (like <br> or &shy;) to get true visible character count
+                    const rawText = cell.replace(/<[^>]*>?/gm, '').replace(/&[a-z]+;/gi, ' ');
+                    maxChars[index] = Math.max(maxChars[index], rawText.length);
+                }
             });
         });
 
-        let totalMaxLength = columnWidths.reduce((a, b) => a + b, 0);
-        let calculatedWidths = columnWidths.map(width => (width / totalMaxLength) * 100);
-
-        // Minimum column width rules
-        const minWidth = 27;  // Minimum for normal columns
-        const minHashWidth = 17; // Minimum for "#" column
-
-        let adjustedWidths = calculatedWidths.map((width, index) => {
-            return data[0][index] === "#" ? Math.max(width, minHashWidth) : Math.max(width, minWidth);
+        // 2. Calculate intelligent minimum base width
+        // Formula: ~2% width per character + 6% margin of error for padding/borders
+        let baseWidths = maxChars.map(len => {
+            if (len === 0) return 5; // Absolute fallback for empty columns
+            
+            let calculatedWidth = (len * 2) + 6;
+            
+            // Cap the base at 45% so extremely long columns don't instantly steal 100% of the table.
+            // Remaining space will be intelligently distributed by the priority system.
+            return Math.min(calculatedWidth, 45); 
         });
 
-        // Normalize if total width exceeds 100%
-        let widthSum = adjustedWidths.reduce((a, b) => a + b, 0);
-        if (widthSum > 100) {
-            adjustedWidths = adjustedWidths.map(width => (width / widthSum) * 100);
+        // Ensure an absolute minimum (8%) so no column shrinks to unreadable levels
+        baseWidths = baseWidths.map(w => Math.max(w, 8));
+
+        let totalBase = baseWidths.reduce((a, b) => a + b, 0);
+
+        // 3. Read custom "columnpriority" attribute
+        let priorityAttr = tableContainer.getAttribute("columnpriority");
+        let weights = new Array(numCols).fill(1); // Default weight if no attribute
+
+        if (priorityAttr) {
+            // e.g. "2,3,1,0" -> Order of highest priority index to lowest
+            let pList = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+            let maxWeight = pList.length * 3; // Scale weights to create a noticeable difference
+            
+            pList.forEach((colIndex, i) => {
+                if (colIndex >= 0 && colIndex < numCols) {
+                    weights[colIndex] = Math.max(1, maxWeight - (i * 3)); // 1st gets highest weight, 2nd gets less, etc.
+                }
+            });
+        } else {
+            // Default fallback: Give remaining space proportionally to columns with the longest text
+            weights = maxChars.slice();
         }
 
-        return adjustedWidths;
+        // 4. Distribute final widths
+        let finalWidths = [];
+
+        if (totalBase >= 100) {
+            // If strictly required minimums exceed 100%, scale them down proportionally
+            finalWidths = baseWidths.map(w => (w / totalBase) * 100);
+        } else {
+            // We have leftover space! Distribute it exactly based on the priority weights.
+            let remainder = 100 - totalBase;
+            let totalWeight = weights.reduce((a, b) => a + b, 0);
+
+            if (totalWeight === 0) {
+                finalWidths = baseWidths.map(w => w + (remainder / numCols));
+            } else {
+                finalWidths = baseWidths.map((w, index) => {
+                    let extraSpace = remainder * (weights[index] / totalWeight);
+                    return w + extraSpace;
+                });
+            }
+        }
+
+        return finalWidths;
     }
 
     function renderTable(data, isFullWidth) {
