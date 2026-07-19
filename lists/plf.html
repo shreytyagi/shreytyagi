@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Special Cinema Formats | Lists | Shrey Tyagi</title>
+	<title>Premium Cinema Formats | Lists | Shrey Tyagi</title>
 
 	<!-- Bootstrap CSS -->
 	<meta charset="utf-8">
@@ -22,6 +22,17 @@
 
 	<!-- YouTube JS -->
 	<script src="https://apis.google.com/js/platform.js"></script>
+
+    <!-- Specific Logo CSS -->
+    <style>
+        .format-logo {
+            height: 60px;         /* Constant small height for all logos */
+            width: auto;          /* Variable width based on aspect ratio */
+            max-width: 100%;      /* Prevents stretching past the screen width */
+            object-fit: contain;  /* Ensures the image never crops */
+            display: block;
+        }
+    </style>
 
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
@@ -48,7 +59,7 @@
 
             <!-- Dynamic Image Container -->
             <div id="formatImageContainer" class="mt-4 mb-4" style="display: none;">
-                <img id="formatImage" src="" alt="Cinema Format View" class="img-fluid rounded shadow-sm w-100">
+                <img id="formatImage" src="" alt="Cinema Format View" class="format-logo">
             </div>
         </div>
 
@@ -58,7 +69,8 @@
         
         <!-- P[XL] Table -->
         <div id="table-pxl" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/pxl_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+            <!-- Note: Left the attribute as 'csvfile' based on your template, but updated path to .html as requested -->
+            <div class="table-container" csvfile="/data/cinemas/plf/pxl.html" fullwidth="false" sortcolumn="0" sortorder="asc">
                 <table id="dynamic-table">
                     <thead></thead>
                     <tbody></tbody>
@@ -68,7 +80,7 @@
 
         <!-- BigPix Table -->
         <div id="table-bigpix" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/bigpix_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+            <div class="table-container" csvfile="/data/cinemas/plf/bigpix.html" fullwidth="false" sortcolumn="0" sortorder="asc">
                 <table id="dynamic-table">
                     <thead></thead>
                     <tbody></tbody>
@@ -78,7 +90,7 @@
 
         <!-- EPIQ Table -->
         <div id="table-epiq" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/epiq_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+            <div class="table-container" csvfile="/data/cinemas/plf/epiq.html" fullwidth="false" sortcolumn="0" sortorder="asc">
                 <table id="dynamic-table">
                     <thead></thead>
                     <tbody></tbody>
@@ -88,7 +100,7 @@
 
         <!-- ScreenX Table -->
         <div id="table-screenx" class="format-list-section" style="display: none;">
-            <div class="table-container" csvfile="/data/screenx_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+            <div class="table-container" csvfile="/data/cinemas/plf/screenx.html" fullwidth="false" sortcolumn="0" sortorder="asc">
                 <table id="dynamic-table">
                     <thead></thead>
                     <tbody></tbody>
@@ -119,10 +131,10 @@
         $(document).ready(function() {
             // Dictionary mapping dropdown values to their respective image paths
             const formatImages = {
-                'pxl': '/images/formats/pxl-image.jpg',
-                'bigpix': '/images/formats/bigpix-image.jpg',
-                'epiq': '/images/formats/epiq-image.jpg',
-                'screenx': '/images/formats/screenx-image.jpg'
+                'pxl': '/data/cinemas/plf/pxl.png',
+                'bigpix': '/data/cinemas/plf/bigpix.png',
+                'epiq': '/data/cinemas/plf/epiq.png',
+                'screenx': '/data/cinemas/plf/screenx.png'
             };
 
             $('#formatSelector').on('change', function() {
