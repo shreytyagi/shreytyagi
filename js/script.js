@@ -466,111 +466,136 @@ function calculateColumnWidths(data) {
             });
         });
 
-        // 2. Read explicit "dontbreakcolumns" attribute
+        // 2. Parse User Attributes
         let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
         let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
-        
-        let isFragile = new Array(numCols).fill(false);
-        dontBreakCols.forEach(colIndex => {
-            if (colIndex >= 0 && colIndex < numCols) isFragile[colIndex] = true;
-        });
+        let isLocked = new Array(numCols).fill(false);
+        dontBreakCols.forEach(c => { if(c >= 0 && c < numCols) isLocked[c] = true; });
 
-        // 3. Calculate strict base widths
-        let baseWidths = maxChars.map((len, idx) => {
-            if (len === 0) return 5;
-            let calculatedWidth = (len * 2.8) + 5; 
-            
-            if (isFragile[idx]) return calculatedWidth; // Exact width for protected columns
-            return Math.min(calculatedWidth, 45); // 45% cap for unprotected columns
-        });
-
-        // 4. Priority Engine Initialization
         let priorityAttr = tableContainer.getAttribute("columnpriority");
         let weights = new Array(numCols).fill(1); 
-        let maxWeightValue = 1;
-
         if (priorityAttr) {
             let pList = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-            let maxWeight = pList.length * 3; 
             pList.forEach((colIndex, i) => {
                 if (colIndex >= 0 && colIndex < numCols) {
-                    weights[colIndex] = Math.max(1, maxWeight - (i * 3)); 
+                    // Highest priority (first in list) gets the largest multiplier
+                    weights[colIndex] = pList.length - i + 1; 
                 }
             });
-            maxWeightValue = Math.max(...weights);
-        } else {
-            // Default: Give priority to columns with naturally longer text
-            weights = maxChars.slice();
-            maxWeightValue = Math.max(...weights);
         }
 
-        // 5. Dual-Mode Smart Distribution
-        let protectedWidth = 0;
-        let unprotectedBase = 0;
-        let unprotectedWeights = 0;
-        let unprotectedInverseWeights = 0;
-        let unprotectedCount = 0;
-
-        baseWidths.forEach((w, i) => {
-            if (isFragile[i]) {
-                protectedWidth += w;
-            } else {
-                unprotectedBase += w;
-                unprotectedWeights += weights[i];
-                // High priority = small inverse weight (absorbs less shrink damage)
-                unprotectedInverseWeights += (maxWeightValue - weights[i] + 1);
-                unprotectedCount++;
+        // 3. Calculate Strict Base Widths (Optimized for Mobile viewports)
+        let lockedTotal = 0;
+        let baseWidths = maxChars.map((len, idx) => {
+            // Tighter math formula: ~1.8% width per char + 4% base padding
+            let w = (len === 0) ? 5 : (len * 1.8) + 4;
+            w = Math.max(w, 5); // Absolute minimum 5%
+            
+            if (isLocked[idx]) {
+                lockedTotal += w;
+                return w; // Locked columns get EXACTLY what they need
             }
+            return Math.min(w, 50); // Unlocked columns capped at 50% base
         });
 
+        // 4. Smart Distribution via "Effective Weight"
         let finalWidths = new Array(numCols).fill(0);
 
-        if (protectedWidth >= 95) {
-            // Failsafe: Protected columns demand the whole screen. Scale everything proportionally.
-            let total = protectedWidth + unprotectedBase;
-            finalWidths = baseWidths.map(w => (w / total) * 100);
+        if (lockedTotal >= 90) {
+            // Failsafe: Locked columns take up the whole screen. Scale proportionally.
+            let totalBase = baseWidths.reduce((a, b) => a + b, 0);
+            finalWidths = baseWidths.map(w => (w / totalBase) * 100);
         } else {
-            let availableSpace = 100 - protectedWidth;
-
-            if (availableSpace >= unprotectedBase) {
-                // GROW MODE: We have extra space. Distribute based on HIGH priority.
-                let remainder = availableSpace - unprotectedBase;
-                baseWidths.forEach((w, i) => {
-                    if (isFragile[i]) {
-                        finalWidths[i] = w; // Stay locked
-                    } else {
-                        let extra = unprotectedWeights > 0 
-                            ? remainder * (weights[i] / unprotectedWeights) 
-                            : remainder / unprotectedCount;
-                        finalWidths[i] = w + extra;
-                    }
-                });
-            } else {
-                // SHRINK MODE: We have a deficit. Distribute shrinkage based on LOW priority.
-                let deficit = unprotectedBase - availableSpace;
-                baseWidths.forEach((w, i) => {
-                    if (isFragile[i]) {
-                        finalWidths[i] = w; // Stay locked
-                    } else {
-                        let inverseWeight = maxWeightValue - weights[i] + 1;
-                        let reduction = unprotectedInverseWeights > 0 
-                            ? deficit * (inverseWeight / unprotectedInverseWeights) 
-                            : deficit / unprotectedCount;
-                        
-                        // Prevent a column from being crushed entirely (minimum 5% floor)
-                        finalWidths[i] = Math.max(w - reduction, 5); 
-                    }
-                });
-
-                // Final failsafe normalization in case Math.max(5) pushed the total over 100%
-                let checkTotal = finalWidths.reduce((a, b) => a + b, 0);
-                if (checkTotal > 100) {
-                    finalWidths = finalWidths.map(w => (w / checkTotal) * 100);
+            let unlockedTotalSpace = 100 - lockedTotal;
+            let unlockedEffectiveWeights = 0;
+            
+            baseWidths.forEach((w, i) => {
+                if (!isLocked[i]) {
+                    // Effective weight blends natural text length WITH user priority
+                    let ew = w * weights[i];
+                    unlockedEffectiveWeights += ew;
                 }
-            }
+            });
+
+            baseWidths.forEach((w, i) => {
+                if (isLocked[i]) {
+                    finalWidths[i] = w; // Do not grow or shrink
+                } else {
+                    if (unlockedEffectiveWeights === 0) {
+                        finalWidths[i] = w; 
+                    } else {
+                        let ew = w * weights[i];
+                        finalWidths[i] = (ew / unlockedEffectiveWeights) * unlockedTotalSpace;
+                    }
+                }
+            });
         }
 
-        return finalWidths;
+        // 5. Final Normalization (Ensures strict 100% sum)
+        let finalSum = finalWidths.reduce((a, b) => a + b, 0);
+        return finalWidths.map(w => (w / finalSum) * 100);
+    }
+
+
+    function renderTable(data, isFullWidth) {
+        const tableHead = document.querySelector("#dynamic-table thead");
+        const tableBody = document.querySelector("#dynamic-table tbody");
+        const dynamicTable = document.querySelector("#dynamic-table");
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        if (isFullWidth) {
+            tableContainer.classList.add("full-width");
+            tableContainer.style.overflowX = "auto";
+            dynamicTable.style.width = "max-content";
+            dynamicTable.style.tableLayout = "auto";
+        } else {
+            tableContainer.classList.remove("full-width");
+            tableContainer.style.overflowX = "hidden";
+            dynamicTable.style.width = "100%";
+            dynamicTable.style.tableLayout = "fixed";
+        }
+        
+        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+
+        // Parse explicit no-wrap columns for the renderer
+        let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
+        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+
+        // --- HEADERS ---
+        const headerRow = document.createElement("tr");
+        data[0].forEach((header, index) => {
+            const th = document.createElement("th");
+            th.innerHTML = header; 
+            th.setAttribute("data-column-index", index);
+            th.style.cursor = "pointer";
+            th.style.padding = "8px";
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
+            th.addEventListener("click", () => sortTableByColumn(index));
+            headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
+
+        // --- DATA ROWS ---
+        sortedData.slice(1).forEach(rowData => {
+            const row = document.createElement("tr");
+            rowData.forEach((cellData, index) => {
+                const td = document.createElement("td");
+                td.innerHTML = cellData; 
+                td.style.padding = "8px";
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
+                
+                // Explicit CSS Bulletproofing: Forces browser to respect the JS width
+                if (dontBreakCols.includes(index)) {
+                    td.style.whiteSpace = "nowrap";
+                }
+
+                row.appendChild(td);
+            });
+            tableBody.appendChild(row);
+        });
     }
 
 
