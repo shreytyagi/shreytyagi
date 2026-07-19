@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Premium Cinema Formats | Lists | Shrey Tyagi</title>
+
+	<!-- Bootstrap CSS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<!-- Botstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<!-- Local CSS -->
+	<link href="/css/style.css" rel="stylesheet">
+
+	<!-- Local JS -->
+	<script src="/js/script.js"></script>
+
+	<!-- YouTube JS -->
+	<script src="https://apis.google.com/js/platform.js"></script>
+
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
+
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+
+    <div class="container mt-1 text-justify flex-grow-1">
+
+        <div class="content-container">
+            <h3>Premium Large Formats</h3>
+            <p>Select a cinema format from the dropdown below to view its respective screen image and complete list of locations.</p>
+            
+            <!-- Format Selector Dropdown -->
+            <div class="form-group mt-4">
+                <select class="form-control border-dark font-weight-bold" id="formatSelector" style="max-width: 350px; cursor: pointer;">
+                    <option value="" selected disabled>-- Choose a Format --</option>
+                    <option value="pxl">P[XL]</option>
+                    <option value="bigpix">BigPix</option>
+                    <option value="epiq">EPIQ</option>
+                    <option value="screenx">ScreenX</option>
+                </select>
+            </div>
+
+            <!-- Dynamic Image Container -->
+            <div id="formatImageContainer" class="mt-4 mb-4" style="display: none;">
+                <img id="formatImage" src="" alt="Cinema Format View" class="img-fluid rounded shadow-sm w-100">
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- DYNAMIC TABLES SECTION -->
+        <!-- ============================================== -->
+        
+        <!-- P[XL] Table -->
+        <div id="table-pxl" class="format-list-section" style="display: none;">
+            <div class="table-container" csvfile="/data/pxl_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BigPix Table -->
+        <div id="table-bigpix" class="format-list-section" style="display: none;">
+            <div class="table-container" csvfile="/data/bigpix_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- EPIQ Table -->
+        <div id="table-epiq" class="format-list-section" style="display: none;">
+            <div class="table-container" csvfile="/data/epiq_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ScreenX Table -->
+        <div id="table-screenx" class="format-list-section" style="display: none;">
+            <div class="table-container" csvfile="/data/screenx_screens.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
+                <table id="dynamic-table">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+	
+	<div id="footer-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+            <div class="container">
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" id="current-year">
+                                Copyright © 2027 by Shrey Tyagi. All rights reserved.
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Dropdown Interaction Logic -->
+    <script>
+        $(document).ready(function() {
+            // Dictionary mapping dropdown values to their respective image paths
+            const formatImages = {
+                'pxl': '/images/formats/pxl-image.jpg',
+                'bigpix': '/images/formats/bigpix-image.jpg',
+                'epiq': '/images/formats/epiq-image.jpg',
+                'screenx': '/images/formats/screenx-image.jpg'
+            };
+
+            $('#formatSelector').on('change', function() {
+                const selectedFormat = $(this).val();
+                
+                // 1. Update the image source and display the image container
+                if (formatImages[selectedFormat]) {
+                    $('#formatImage').attr('src', formatImages[selectedFormat]);
+                    $('#formatImageContainer').fadeIn(300);
+                } else {
+                    $('#formatImageContainer').hide();
+                }
+
+                // 2. Hide all tables immediately, then fade in the selected one
+                $('.format-list-section').hide();
+                $('#table-' + selectedFormat).fadeIn(300);
+            });
+        });
+    </script>
+
+</body>
+</html>
