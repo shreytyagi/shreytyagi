@@ -23,17 +23,16 @@
 	<!-- YouTube JS -->
 	<script src="https://apis.google.com/js/platform.js"></script>
 
-    <!-- Specific Logo CSS -->
     <style>
+        /* Format Logo Image Styling */
         .format-logo {
-            height: 60px;         /* Constant small height for all logos */
-            width: auto;          /* Variable width based on aspect ratio */
-            max-width: 100%;      /* Prevents stretching past the screen width */
-            object-fit: contain;  /* Ensures the image never crops */
+            height: 80px; /* Constant height for uniform switching */
+            width: auto; /* Variable width based on original aspect ratio */
+            max-width: 100%; /* Prevents logo from exceeding mobile viewports */
+            object-fit: contain; /* Ensures the logo is never cropped */
             display: block;
         }
     </style>
-
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
 
@@ -44,7 +43,7 @@
 
         <div class="content-container">
             <h3>Premium Large Formats</h3>
-            <p>Select a cinema format from the dropdown below to view its respective screen image and complete list of locations.</p>
+            <p>Select a cinema format from the dropdown below to view its respective logo and complete list of locations.</p>
             
             <!-- Format Selector Dropdown -->
             <div class="form-group mt-4">
@@ -59,7 +58,7 @@
 
             <!-- Dynamic Image Container -->
             <div id="formatImageContainer" class="mt-4 mb-4" style="display: none;">
-                <img id="formatImage" src="" alt="Cinema Format View" class="format-logo">
+                <img id="formatImage" src="" alt="Cinema Format Logo" class="format-logo">
             </div>
         </div>
 
@@ -69,7 +68,6 @@
         
         <!-- P[XL] Table -->
         <div id="table-pxl" class="format-list-section" style="display: none;">
-            <!-- Note: Left the attribute as 'csvfile' based on your template, but updated path to .html as requested -->
             <div class="table-container" csvfile="/data/cinemas/plf/pxl.csv" fullwidth="false" sortcolumn="0" sortorder="asc">
                 <table id="dynamic-table">
                     <thead></thead>
@@ -143,13 +141,15 @@
                 // 1. Update the image source and display the image container
                 if (formatImages[selectedFormat]) {
                     $('#formatImage').attr('src', formatImages[selectedFormat]);
-                    $('#formatImageContainer').fadeIn(300);
+                    $('#formatImageContainer').show();
                 } else {
                     $('#formatImageContainer').hide();
                 }
 
-                // 2. Hide all tables immediately, then fade in the selected one
-                $('.format-list-section').hide();
+                // 2. Hide all tables immediately using display none to clear any lingering empty space
+                $('.format-list-section').css('display', 'none');
+                
+                // 3. Fade in only the selected table
                 $('#table-' + selectedFormat).fadeIn(300);
             });
         });
