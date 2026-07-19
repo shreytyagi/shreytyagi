@@ -1,5 +1,6 @@
-Aspect Ratio,Audi No.,Cinema,City
-1.85:2,5,"Pacific Outlet, Jasola",Delhi
-1.85:3,1,"Somewhere 1","Kolkata"
-1.85:4,2,"Somewhere 1","Mumbai"
-1.85:5,3,"Somewhere BigPix 1","Bengaluru"
+Audi No.,Aspect Ratio,Venue,City
+?,2.39:1,"INOX: Mall de Goa, Porvorim","Goa, Goa"
+?,2.39:1,"INOX: Marina Mall, OMR","Chennai, Tamil Nadu"
+?,2.39:1,"INOX: M5 Mall, Electronic City","Bangalore, Karnataka"
+?,2.39:1,"INOX: Pacific Mall, Jasola","Delhi, Delhi"
+?,1.85:1,"INOX: Citadel Mall, MR 10","Indore, Madhya Pradesh"
