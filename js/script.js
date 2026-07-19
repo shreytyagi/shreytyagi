@@ -478,22 +478,16 @@ function calculateColumnWidths(data) {
         // 3. Calculate strict base widths
         let baseWidths = maxChars.map((len, idx) => {
             if (len === 0) return 5;
-            
-            // Formula: ~2.8% per char (generous for mobile) + 5% base padding
             let calculatedWidth = (len * 2.8) + 5; 
             
-            // If the user explicitly protected this column, give it exact needed space
-            if (isFragile[idx]) return calculatedWidth;
-            
-            // Unprotected columns get capped at 45% so they don't eat the whole table
-            return Math.min(calculatedWidth, 45); 
+            if (isFragile[idx]) return calculatedWidth; // Exact width for protected columns
+            return Math.min(calculatedWidth, 45); // 45% cap for unprotected columns
         });
 
-        let totalBase = baseWidths.reduce((a, b) => a + b, 0);
-
-        // 4. Priority Engine (Reads your columnpriority attribute)
+        // 4. Priority Engine Initialization
         let priorityAttr = tableContainer.getAttribute("columnpriority");
         let weights = new Array(numCols).fill(1); 
+        let maxWeightValue = 1;
 
         if (priorityAttr) {
             let pList = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
@@ -503,43 +497,77 @@ function calculateColumnWidths(data) {
                     weights[colIndex] = Math.max(1, maxWeight - (i * 3)); 
                 }
             });
+            maxWeightValue = Math.max(...weights);
         } else {
+            // Default: Give priority to columns with naturally longer text
             weights = maxChars.slice();
+            maxWeightValue = Math.max(...weights);
         }
 
-        // 5. Smart Distribution & Protection
+        // 5. Dual-Mode Smart Distribution
+        let protectedWidth = 0;
+        let unprotectedBase = 0;
+        let unprotectedWeights = 0;
+        let unprotectedInverseWeights = 0;
+        let unprotectedCount = 0;
+
+        baseWidths.forEach((w, i) => {
+            if (isFragile[i]) {
+                protectedWidth += w;
+            } else {
+                unprotectedBase += w;
+                unprotectedWeights += weights[i];
+                // High priority = small inverse weight (absorbs less shrink damage)
+                unprotectedInverseWeights += (maxWeightValue - weights[i] + 1);
+                unprotectedCount++;
+            }
+        });
+
         let finalWidths = new Array(numCols).fill(0);
 
-        if (totalBase > 100) {
-            // DANGER: Table is too wide. Shield explicit columns, force others to shrink.
-            let protectedWidth = 0;
-            let unprotectedBase = 0;
-            
-            baseWidths.forEach((w, i) => {
-                if (isFragile[i]) protectedWidth += w;
-                else unprotectedBase += w;
-            });
-
-            if (protectedWidth >= 90) {
-                // Failsafe: if protected columns demand > 90% of screen, scale everything
-                finalWidths = baseWidths.map(w => (w / totalBase) * 100);
-            } else {
-                let remainingForUnprotected = 100 - protectedWidth;
-                finalWidths = baseWidths.map((w, i) => {
-                    if (isFragile[i]) return w; // Lock strict width!
-                    return (w / unprotectedBase) * remainingForUnprotected; // Scale down the rest
-                });
-            }
+        if (protectedWidth >= 95) {
+            // Failsafe: Protected columns demand the whole screen. Scale everything proportionally.
+            let total = protectedWidth + unprotectedBase;
+            finalWidths = baseWidths.map(w => (w / total) * 100);
         } else {
-            // SAFE: We have leftover space. Distribute using priority weights.
-            let remainder = 100 - totalBase;
-            let totalWeight = weights.reduce((a, b) => a + b, 0);
+            let availableSpace = 100 - protectedWidth;
 
-            finalWidths = baseWidths.map((w, index) => {
-                if (totalWeight === 0) return w + (remainder / numCols);
-                let extraSpace = remainder * (weights[index] / totalWeight);
-                return w + extraSpace;
-            });
+            if (availableSpace >= unprotectedBase) {
+                // GROW MODE: We have extra space. Distribute based on HIGH priority.
+                let remainder = availableSpace - unprotectedBase;
+                baseWidths.forEach((w, i) => {
+                    if (isFragile[i]) {
+                        finalWidths[i] = w; // Stay locked
+                    } else {
+                        let extra = unprotectedWeights > 0 
+                            ? remainder * (weights[i] / unprotectedWeights) 
+                            : remainder / unprotectedCount;
+                        finalWidths[i] = w + extra;
+                    }
+                });
+            } else {
+                // SHRINK MODE: We have a deficit. Distribute shrinkage based on LOW priority.
+                let deficit = unprotectedBase - availableSpace;
+                baseWidths.forEach((w, i) => {
+                    if (isFragile[i]) {
+                        finalWidths[i] = w; // Stay locked
+                    } else {
+                        let inverseWeight = maxWeightValue - weights[i] + 1;
+                        let reduction = unprotectedInverseWeights > 0 
+                            ? deficit * (inverseWeight / unprotectedInverseWeights) 
+                            : deficit / unprotectedCount;
+                        
+                        // Prevent a column from being crushed entirely (minimum 5% floor)
+                        finalWidths[i] = Math.max(w - reduction, 5); 
+                    }
+                });
+
+                // Final failsafe normalization in case Math.max(5) pushed the total over 100%
+                let checkTotal = finalWidths.reduce((a, b) => a + b, 0);
+                if (checkTotal > 100) {
+                    finalWidths = finalWidths.map(w => (w / checkTotal) * 100);
+                }
+            }
         }
 
         return finalWidths;
