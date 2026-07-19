@@ -451,7 +451,7 @@ function parseCSV(data) {
 }
 
 	
-function calculateColumnWidths(data) {
+    function calculateColumnWidths(data) {
         const numCols = data[0].length;
         let maxChars = new Array(numCols).fill(0);
         let totalChars = new Array(numCols).fill(0);
@@ -471,7 +471,7 @@ function calculateColumnWidths(data) {
             });
         });
 
-        // 2. Pass 2 & 3: Calculate the "Father Average" (Blended Length)
+        // 2. Pass 2 & 3: Calculate the "Father Average"
         let avgChars = totalChars.map(total => total / numRows);
         let blendedChars = maxChars.map((max, i) => (max + avgChars[i]) / 2);
 
@@ -487,71 +487,61 @@ function calculateColumnWidths(data) {
         if (priorityAttr) {
             let pList = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
             pList.forEach((colIndex, i) => {
-                if (colIndex >= 0 && colIndex < numCols) {
-                    // Highest priority (first in list) gets the largest multiplier
-                    weights[colIndex] = pList.length - i; 
-                }
+                if (colIndex >= 0 && colIndex < numCols) weights[colIndex] = pList.length - i; 
             });
             maxWeight = Math.max(...weights);
         }
 
-        // 4. Calculate Base Widths using the new Father Average
+        // 4. Calculate Base Widths
         let lockedTotal = 0;
         let unlockedBaseTotal = 0;
         
         let baseWidths = maxChars.map((maxLen, idx) => {
-            // CRITICAL: Locked columns MUST use maxChars to guarantee they never break.
-            // Unlocked columns use the smooth Father Average to stay proportional.
             let calcLen = isLocked[idx] ? maxLen : blendedChars[idx];
             
-            let w = (calcLen === 0) ? 5 : (calcLen * 1.8) + 4;
-            w = Math.max(w, 5); // Absolute minimum 5% floor
+            // Locked columns get a slightly safer base margin (2.0 multiplier)
+            let w = (calcLen === 0) ? 5 : isLocked[idx] ? (calcLen * 2.0) + 6 : (calcLen * 1.8) + 4;
+            w = Math.max(w, 5); 
             
             if (isLocked[idx]) {
                 lockedTotal += w;
                 return w; 
             } else {
-                w = Math.min(w, 50); // Unlocked columns cap at 50% base
+                w = Math.min(w, 50); 
                 unlockedBaseTotal += w;
                 return w;
             }
         });
 
-        // 5. Smart Space Distribution (Grow / Shrink)
+        // 5. Smart Space Distribution 
         let finalWidths = new Array(numCols).fill(0);
         let unlockedTotalSpace = 100 - lockedTotal;
         
         if (lockedTotal >= 95) {
-            // Failsafe: Locked columns take up the whole screen. Scale proportionally.
+            // Failsafe: if locked columns take up the whole screen
             let total = baseWidths.reduce((a,b)=>a+b,0);
             return baseWidths.map(w => (w / total) * 100);
         }
 
-        // How much space is left after meeting the basic needs of all columns?
         let remainder = unlockedTotalSpace - unlockedBaseTotal;
-        
-        // Calculate total weight pools for unlocked columns
         let totalUnlockedWeight = 0;
         let totalUnlockedInverseWeight = 0;
         
         baseWidths.forEach((w, i) => {
             if (!isLocked[i]) {
                 totalUnlockedWeight += weights[i];
-                // Inverse weight makes low-priority columns absorb more damage during a shrink
                 totalUnlockedInverseWeight += (maxWeight - weights[i] + 1); 
             }
         });
 
         baseWidths.forEach((w, i) => {
             if (isLocked[i]) {
-                finalWidths[i] = w; // Keep strictly locked
+                finalWidths[i] = w; 
             } else {
                 if (remainder >= 0) {
-                    // GROW MODE: Distribute LEFTOVER space strictly by priority weights
                     let extraSpace = (totalUnlockedWeight === 0) ? (remainder / numCols) : (remainder * (weights[i] / totalUnlockedWeight));
                     finalWidths[i] = w + extraSpace;
                 } else {
-                    // SHRINK MODE: Remove deficit space heavily from lowest priorities
                     let deficit = Math.abs(remainder);
                     let inverseWeight = (maxWeight - weights[i] + 1);
                     let shrinkAmount = (totalUnlockedInverseWeight === 0) ? (deficit / numCols) : (deficit * (inverseWeight / totalUnlockedInverseWeight));
@@ -560,9 +550,87 @@ function calculateColumnWidths(data) {
             }
         });
         
-        // 6. Final Strict Normalization (Ensures absolute 100% total)
+        // 6. Safe Normalization (Mathematically Protects Locked Columns)
         let finalSum = finalWidths.reduce((a,b)=>a+b,0);
-        return finalWidths.map(w => (w / finalSum) * 100);
+        if (Math.abs(finalSum - 100) > 0.1) {
+            let actualLockedSum = 0;
+            let actualUnlockedSum = 0;
+            finalWidths.forEach((w, i) => {
+                if (isLocked[i]) actualLockedSum += w;
+                else actualUnlockedSum += w;
+            });
+            
+            let requiredUnlockedSum = 100 - actualLockedSum;
+            if (requiredUnlockedSum > 0 && actualUnlockedSum > 0) {
+                 finalWidths = finalWidths.map((w, i) => isLocked[i] ? w : (w / actualUnlockedSum) * requiredUnlockedSum);
+            } else {
+                 // Absolute failsafe fallback
+                 finalWidths = finalWidths.map(w => (w / finalSum) * 100);
+            }
+        }
+        return finalWidths;
+    }
+
+
+    function renderTable(data, isFullWidth) {
+        const tableHead = document.querySelector("#dynamic-table thead");
+        const tableBody = document.querySelector("#dynamic-table tbody");
+        const dynamicTable = document.querySelector("#dynamic-table");
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        if (isFullWidth) {
+            tableContainer.classList.add("full-width");
+            tableContainer.style.overflowX = "auto";
+            dynamicTable.style.width = "max-content";
+            dynamicTable.style.tableLayout = "auto";
+        } else {
+            tableContainer.classList.remove("full-width");
+            tableContainer.style.overflowX = "hidden";
+            dynamicTable.style.width = "100%";
+            dynamicTable.style.tableLayout = "fixed";
+        }
+        
+        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+
+        // Parse explicit no-wrap columns for the renderer
+        let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
+        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+
+        // --- HEADERS ---
+        const headerRow = document.createElement("tr");
+        data[0].forEach((header, index) => {
+            const th = document.createElement("th");
+            th.innerHTML = header; 
+            th.setAttribute("data-column-index", index);
+            th.style.cursor = "pointer";
+            th.style.padding = "8px";
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
+            th.addEventListener("click", () => sortTableByColumn(index));
+            headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
+
+        // --- DATA ROWS ---
+        sortedData.slice(1).forEach(rowData => {
+            const row = document.createElement("tr");
+            rowData.forEach((cellData, index) => {
+                const td = document.createElement("td");
+                td.innerHTML = cellData; 
+                td.style.padding = "8px";
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
+                
+                // CSS BULLETPROOFING: Physically forces the browser to respect your locks
+                if (dontBreakCols.includes(index)) {
+                    td.style.whiteSpace = "nowrap";
+                }
+
+                row.appendChild(td);
+            });
+            tableBody.appendChild(row);
+        });
     }
 
 
