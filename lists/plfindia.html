@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Premium Large Format Cinemas of India | Lists | Shrey Tyagi</title>
+
+	<!-- Bootstrap CSS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<!-- Botstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<!-- Local CSS -->
+	<link href="/css/style.css" rel="stylesheet">
+
+	<!-- Local JS -->
+	<script src="/js/script.js"></script>
+
+	<!-- YouTube JS -->
+	<script src="https://apis.google.com/js/platform.js"></script>
+
+    <style>
+        /* Format Logo Image Styling */
+        .format-logo {
+            height: 80px;
+            width: auto; 
+            max-width: 100%; 
+            object-fit: contain; 
+            display: block;
+        }
+    </style>
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
+
+    <!-- Navbar will be loaded here -->
+    <div id="navbar-container"></div>
+
+    <div class="container mt-1 text-justify flex-grow-1">
+
+        <div class="content-container">
+            <h3>Premium Large Format Cinemas of India</h3>
+            <p>Select a cinema format from the dropdown below to view its respective logo and complete list of locations.</p>
+            
+            <!-- Format Selector Dropdown (Triggers a split-second seamless refresh to format URL) -->
+            <div class="form-group mt-4">
+                <select class="form-control border-dark font-weight-bold" id="formatSelector" style="max-width: 350px; cursor: pointer;" onchange="window.location.href = window.location.pathname + '?f=' + this.value;">
+                    <option value="" selected disabled>-- Choose a Format --</option>
+                    <option value="pxl">P[XL]</option>
+                    <option value="bigpix">BigPix</option>
+                    <option value="epiq">EPIQ</option>
+                    <option value="screenx">ScreenX</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Inline logic runs synchronously during page load BEFORE script.js fires -->
+        <script>
+            // Data dictionary exactly matching your live file paths
+            const formatData = {
+                'pxl': { csv: '/data/plf/pxl.csv', img: '/data/plf/pxl.png' },
+                'bigpix': { csv: '/data/plf/bigpix.csv', img: '/data/plf/bigpix.png' },
+                'epiq': { csv: '/data/plf/epiq.csv', img: '/data/plf/epiq.png' },
+                'screenx': { csv: '/data/plf/screenx.csv', img: '/data/plf/screenx.png' }
+            };
+
+            // Check URL for active format
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentFormat = urlParams.get('f');
+
+            if (currentFormat && formatData[currentFormat]) {
+                // 1. Keep dropdown accurately set on refresh
+                document.getElementById('formatSelector').value = currentFormat;
+                
+                // 2. Write the precise, barebones HTML structure that your script.js expects
+                document.write(`
+                    <div class="content-container mb-4">
+                        <img src="${formatData[currentFormat].img}" alt="Cinema Format Logo" class="format-logo">
+                    </div>
+                    <div class="table-container" csvfile="${formatData[currentFormat].csv}" fullwidth="false" sortcolumn="3" sortorder="asc">
+                        <table id="dynamic-table">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                `);
+            }
+        </script>
+
+    </div>
+	
+	<div id="footer-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+            <div class="container">
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" id="current-year">
+                                Copyright © 2027 by Shrey Tyagi. All rights reserved.
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</body>
+</html>
