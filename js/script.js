@@ -455,76 +455,156 @@ function calculateColumnWidths(data) {
         const numCols = data[0].length;
         let maxChars = new Array(numCols).fill(0);
 
-        // 1. Calculate max text length PER COLUMN using ONLY DATA rows (Ignore Header)
+        // 1. Calculate max text length PER COLUMN using ONLY DATA rows
         const dataRows = data.length > 1 ? data.slice(1) : data;
         dataRows.forEach(row => {
             row.forEach((cell, index) => {
                 if (index < numCols) {
-                    // Strip HTML (like <br> or &shy;) to get true visible character count
                     const rawText = cell.replace(/<[^>]*>?/gm, '').replace(/&[a-z]+;/gi, ' ');
                     maxChars[index] = Math.max(maxChars[index], rawText.length);
                 }
             });
         });
 
-        // 2. Calculate intelligent minimum base width
-        // Formula: ~2% width per character + 6% margin of error for padding/borders
-        let baseWidths = maxChars.map(len => {
-            if (len === 0) return 5; // Absolute fallback for empty columns
+        // 2. Read explicit "dontbreakcolumns" attribute
+        let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
+        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+        
+        let isFragile = new Array(numCols).fill(false);
+        dontBreakCols.forEach(colIndex => {
+            if (colIndex >= 0 && colIndex < numCols) isFragile[colIndex] = true;
+        });
+
+        // 3. Calculate strict base widths
+        let baseWidths = maxChars.map((len, idx) => {
+            if (len === 0) return 5;
             
-            let calculatedWidth = (len * 2) + 6;
+            // Formula: ~2.8% per char (generous for mobile) + 5% base padding
+            let calculatedWidth = (len * 2.8) + 5; 
             
-            // Cap the base at 45% so extremely long columns don't instantly steal 100% of the table.
-            // Remaining space will be intelligently distributed by the priority system.
+            // If the user explicitly protected this column, give it exact needed space
+            if (isFragile[idx]) return calculatedWidth;
+            
+            // Unprotected columns get capped at 45% so they don't eat the whole table
             return Math.min(calculatedWidth, 45); 
         });
 
-        // Ensure an absolute minimum (8%) so no column shrinks to unreadable levels
-        baseWidths = baseWidths.map(w => Math.max(w, 8));
-
         let totalBase = baseWidths.reduce((a, b) => a + b, 0);
 
-        // 3. Read custom "columnpriority" attribute
+        // 4. Priority Engine (Reads your columnpriority attribute)
         let priorityAttr = tableContainer.getAttribute("columnpriority");
-        let weights = new Array(numCols).fill(1); // Default weight if no attribute
+        let weights = new Array(numCols).fill(1); 
 
         if (priorityAttr) {
-            // e.g. "2,3,1,0" -> Order of highest priority index to lowest
             let pList = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-            let maxWeight = pList.length * 3; // Scale weights to create a noticeable difference
-            
+            let maxWeight = pList.length * 3; 
             pList.forEach((colIndex, i) => {
                 if (colIndex >= 0 && colIndex < numCols) {
-                    weights[colIndex] = Math.max(1, maxWeight - (i * 3)); // 1st gets highest weight, 2nd gets less, etc.
+                    weights[colIndex] = Math.max(1, maxWeight - (i * 3)); 
                 }
             });
         } else {
-            // Default fallback: Give remaining space proportionally to columns with the longest text
             weights = maxChars.slice();
         }
 
-        // 4. Distribute final widths
-        let finalWidths = [];
+        // 5. Smart Distribution & Protection
+        let finalWidths = new Array(numCols).fill(0);
 
-        if (totalBase >= 100) {
-            // If strictly required minimums exceed 100%, scale them down proportionally
-            finalWidths = baseWidths.map(w => (w / totalBase) * 100);
+        if (totalBase > 100) {
+            // DANGER: Table is too wide. Shield explicit columns, force others to shrink.
+            let protectedWidth = 0;
+            let unprotectedBase = 0;
+            
+            baseWidths.forEach((w, i) => {
+                if (isFragile[i]) protectedWidth += w;
+                else unprotectedBase += w;
+            });
+
+            if (protectedWidth >= 90) {
+                // Failsafe: if protected columns demand > 90% of screen, scale everything
+                finalWidths = baseWidths.map(w => (w / totalBase) * 100);
+            } else {
+                let remainingForUnprotected = 100 - protectedWidth;
+                finalWidths = baseWidths.map((w, i) => {
+                    if (isFragile[i]) return w; // Lock strict width!
+                    return (w / unprotectedBase) * remainingForUnprotected; // Scale down the rest
+                });
+            }
         } else {
-            // We have leftover space! Distribute it exactly based on the priority weights.
+            // SAFE: We have leftover space. Distribute using priority weights.
             let remainder = 100 - totalBase;
             let totalWeight = weights.reduce((a, b) => a + b, 0);
 
-            if (totalWeight === 0) {
-                finalWidths = baseWidths.map(w => w + (remainder / numCols));
-            } else {
-                finalWidths = baseWidths.map((w, index) => {
-                    let extraSpace = remainder * (weights[index] / totalWeight);
-                    return w + extraSpace;
-                });
-            }
+            finalWidths = baseWidths.map((w, index) => {
+                if (totalWeight === 0) return w + (remainder / numCols);
+                let extraSpace = remainder * (weights[index] / totalWeight);
+                return w + extraSpace;
+            });
         }
 
         return finalWidths;
+    }
+
+
+    function renderTable(data, isFullWidth) {
+        const tableHead = document.querySelector("#dynamic-table thead");
+        const tableBody = document.querySelector("#dynamic-table tbody");
+        const dynamicTable = document.querySelector("#dynamic-table");
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        if (isFullWidth) {
+            tableContainer.classList.add("full-width");
+            tableContainer.style.overflowX = "auto";
+            dynamicTable.style.width = "max-content";
+            dynamicTable.style.tableLayout = "auto";
+        } else {
+            tableContainer.classList.remove("full-width");
+            tableContainer.style.overflowX = "hidden";
+            dynamicTable.style.width = "100%";
+            dynamicTable.style.tableLayout = "fixed";
+        }
+        
+        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
+
+        // Parse explicit no-wrap columns for the renderer
+        let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
+        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+
+        // --- HEADERS ---
+        const headerRow = document.createElement("tr");
+        data[0].forEach((header, index) => {
+            const th = document.createElement("th");
+            th.innerHTML = header; 
+            th.setAttribute("data-column-index", index);
+            th.style.cursor = "pointer";
+            th.style.padding = "8px";
+            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
+            th.addEventListener("click", () => sortTableByColumn(index));
+            headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
+
+        // --- DATA ROWS ---
+        sortedData.slice(1).forEach(rowData => {
+            const row = document.createElement("tr");
+            rowData.forEach((cellData, index) => {
+                const td = document.createElement("td");
+                td.innerHTML = cellData; 
+                td.style.padding = "8px";
+                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
+                
+                // Explicit CSS Bulletproofing:
+                if (dontBreakCols.includes(index)) {
+                    td.style.whiteSpace = "nowrap";
+                }
+
+                row.appendChild(td);
+            });
+            tableBody.appendChild(row);
+        });
     }
 
     function renderTable(data, isFullWidth) {
