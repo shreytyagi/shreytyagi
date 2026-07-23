@@ -79,12 +79,40 @@
 
         <!-- Inline logic runs synchronously during page load BEFORE script.js fires -->
         <script>
+            // Master Database of Credits
+            // Add as many different credits here as you need in the future!
+            const creditsDatabase = {
+                1: 'Thanks to Kaustubh Debnath for compiling the data. <a href="https://docs.google.com/spreadsheets/d/1UAMhBksBShzZikukFf7O8onHhgNtb-DcZ6KmlficaqY" target="_blank">Click here</a> to see his excel sheet.',
+                2: 'Special thanks to Jane Doe for providing this location data.',
+                3: 'Data provided by the Indian Cinema Enthusiasts Group.'
+            };
+
             // Data dictionary exactly matching your live file paths
             const formatData = {
-                'pxl': { csv: '/data/plf/pxl.csv', img: '/data/plf/pxl.png' },
-                'bigpix': { csv: '/data/plf/bigpix.csv', img: '/data/plf/bigpix.png' },
-                'epiq': { csv: '/data/plf/epiq.csv', img: '/data/plf/epiq.png' },
-                'screenx': { csv: '/data/plf/screenx.csv', img: '/data/plf/screenx.png' }
+                'pxl': { 
+                    csv: '/data/plf/pxl.csv', 
+                    img: '/data/plf/pxl.png',
+                    desc: 'Enter your PVR P[XL] description here. It will appear directly below the logo and above the table.',
+                    showCredits: 1
+                },
+                'bigpix': { 
+                    csv: '/data/plf/bigpix.csv', 
+                    img: '/data/plf/bigpix.png',
+                    desc: 'Enter your INOX BigPix description here.',
+                    showCredits: 0
+                },
+                'epiq': { 
+                    csv: '/data/plf/epiq.csv', 
+                    img: '/data/plf/epiq.png',
+                    desc: 'Enter your EPIQ description here.',
+                    showCredits: 0
+                },
+                'screenx': { 
+                    csv: '/data/plf/screenx.csv', 
+                    img: '/data/plf/screenx.png',
+                    desc: 'ScreenX is a multi-projection cinematic platform providing a 270-degree panoramic viewing experience.',
+                    showCredits: 1
+                }
             };
 
             // Check URL for active format
@@ -95,10 +123,24 @@
                 // 1. Keep dropdown accurately set on refresh
                 document.getElementById('formatSelector').value = currentFormat;
                 
-                // 2. Write the precise, barebones HTML structure that your script.js expects
+                // 2. Conditionally build the credits HTML based on the number
+                let creditsHtml = '';
+                const creditNum = formatData[currentFormat].showCredits;
+                
+                // If the number is greater than 0 AND it exists in our database, render it
+                if (creditNum > 0 && creditsDatabase[creditNum]) {
+                    creditsHtml = `
+                        <div class="mt-4 mb-5">
+                            ${creditsDatabase[creditNum]}
+                        </div>
+                    `;
+                }
+
+                // 3. Write the precise HTML structure that your script.js expects
                 document.write(`
                     <div class="content-container mb-4">
                         <img src="${formatData[currentFormat].img}" alt="Cinema Format Logo" class="format-logo">
+                        <p class="mt-3 text-justify">${formatData[currentFormat].desc}</p>
                     </div>
                     <div class="table-container" csvfile="${formatData[currentFormat].csv}" fullwidth="false" sortcolumn="3" sortorder="asc" columnpriority="2,3,1,0" dontbreakcolumns="0,1">
                         <table id="dynamic-table">
@@ -106,15 +148,10 @@
                             <tbody></tbody>
                         </table>
                     </div>
+                    ${creditsHtml}
                 `);
             }
         </script>
-
-		<div>
-
-<br><br>Thanks to Kaustubh Debnath for compiling the data. <a href="https://docs.google.com/spreadsheets/d/1UAMhBksBShzZikukFf7O8onHhgNtb-DcZ6KmlficaqY">Click here</a> to see his excel sheet. 
-			
-		</div>
 
     </div>
 	
