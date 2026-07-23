@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Premium Large Format Cinemas of India | Lists | Shrey Tyagi</title>
+	<title>Special Cinema Formats of India | Lists | Shrey Tyagi</title>
 
 	<!-- Bootstrap CSS -->
 	<meta charset="utf-8">
@@ -42,7 +42,7 @@
     <div class="container mt-1 text-justify flex-grow-1">
 
         <div class="content-container">
-            <h3>Premium Large Format Cinemas of India</h3>
+            <h3>Special Cinema Formats of India</h3>
             <p>Select a cinema format from the dropdown below to view its respective logo and complete list of locations.</p>
             
             <!-- Format Selector Dropdown (Triggers a split-second seamless refresh to format URL) -->
@@ -58,17 +58,17 @@
 					<option value="pxl">PVR P[XL]</option>
 					<option value="bigpix">INOX BigPix</option>
                     <option value="macroxe">Cinepolis MacroXE</option>
-                    <option value="epiq">Epiq</option>
-                    <option value="epiqluxon">Epiq Luxon</option>
+                    <option value="epiq">EPIQ</option>
+                    <option value="epiqluxon">EPIQ Luxon</option>
 					<option value="broadwayhyperx">Broadway HyperX</option>
 					<option value="broadwayvivid">Broadway Vivid</option>
                     <option value="onyx">ONYX</option>
 					<option value="4dx">4DX</option>
 					<option value="mx4d">MX4D</option>
-					<option value="mirajmaximum" disabled>Miraj Maximum</option>
-					<option value="maxx" disabled>MovieMax Maxx</option>
-					<option value="pcx" disabled>PCX</option>
-					<option value="pvrgold" disabled>PVR Gold</option>
+					<option value="mirajmaximum">Miraj Maximum</option>
+					<option value="maxx">MovieMax Maxx</option>
+					<option value="pcx">PCX</option>
+					<option value="pvrgold">PVR Gold</option>
 					<option value="broadwaygold">Broadway Gold</option>
 					<option value="pvrdirectorscut" disabled>PVR Director's Cut</option>
 					<option value="pvrluxe" disabled>PVR LUXE</option>
