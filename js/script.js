@@ -11,41 +11,34 @@ function parseCSVRaw(data) {
 
         if (char === '"') {
             if (inQuotes && nextChar === '"') {
-                // Escaped quote ("")
                 currentField += '"';
-                i++; // Skip next quote
+                i++;
             } else {
-                // Toggle in/out of quotes
                 inQuotes = !inQuotes;
             }
         } else if (char === ',' && !inQuotes) {
-            // Field separator
-            currentRow.push(currentField.trim()); // Trim before pushing
+            currentRow.push(currentField.trim());
             currentField = '';
         } else if ((char === '\n' || char === '\r') && !inQuotes) {
-            // End of row
-            if (char === '\r' && nextChar === '\n') i++; // Handle \r\n
-            currentRow.push(currentField.trim()); // Trim before pushing
+            if (char === '\r' && nextChar === '\n') i++;
+            currentRow.push(currentField.trim());
             rows.push(currentRow);
             currentField = '';
             currentRow = [];
         } else {
             if (char === '\n' && inQuotes) {
-                currentField += '<br>'; // Replace newline with <br> if inside quotes
+                currentField += '<br>';
             } else {
                 currentField += char;
             }
         }
-
         i++;
     }
 
-    // Add last field/row if any
     if (currentField.length > 0 || currentRow.length > 0) {
-        currentRow.push(currentField.trim()); // Trim last field
+        currentRow.push(currentField.trim());
         rows.push(currentRow);
     }
-
     return rows;
 }
 
@@ -64,24 +57,17 @@ $(document).ready(function () {
     $("#navbar-container").load("/navbar.html", function () {
         $(".navbar-toggler").click(function () {
             setTimeout(function () {
-                // Ensure footer is always visible
                 $("#footer-container").css({
                     "display": "block",
                     "visibility": "visible",
                     "min-height": "50px"
                 });
-
-                // Restore footer content visibility
                 $("#footer-container nav").css({
                     "display": "block",
                     "visibility": "visible"
                 });
-
-                // Recalculate the height
                 let bodyHeight = $("body").outerHeight();
                 let windowHeight = $(window).height();
-
-                // If page content is smaller than viewport, keep footer at bottom
                 if (bodyHeight < windowHeight) {
                     $("#footer-container").css({
                         "position": "relative",
@@ -96,47 +82,44 @@ $(document).ready(function () {
             }, 300);
         });
 
-        // Extra Fix: Restore footer content visibility after menu retracts
         $(".navbar-toggler").on("click", function () {
             setTimeout(function () {
-                $("#footer-container").show().css("visibility", "visible"); // Fix: Ensure content is always visible
-                $("#footer-container nav").show().css("visibility", "visible"); // Fix: Ensure nav inside footer is also visible
+                $("#footer-container").show().css("visibility", "visible");
+                $("#footer-container nav").show().css("visibility", "visible");
             }, 600);
         });
     });
 
     $("#footer-container").load("footer.html", function () {
-        // Fix: Ensure footer content is visible on page load
         $("#footer-container nav").css("display", "block");
     });
 	
 	$("#current-year").text("Copyright © " + new Date().getFullYear() + " by Shrey Tyagi. All rights reserved.");
-
 });
+
+// ==========================================
+// --- OPTIMIZED ARTICLE RENDERING ---
+// ==========================================
 
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
-    let articles = []; // To store CSV data globally
+    let articles = []; 
 
-    // Get attributes from <body>
     const masterCategoryFilter = document.body.getAttribute("data-master-category")?.toLowerCase() || "";
-    const csvFile = document.body.getAttribute("csvfile") || "index.csv"; // Default to "index.csv"
+    const csvFile = document.body.getAttribute("csvfile") || "index.csv"; 
 
-    // Load and Parse CSV
     fetch(csvFile)
         .then(response => response.text())
         .then(csvData => {
             articles = parseCSV(csvData);
-            // Filter based on master category before rendering
             const filteredArticles = masterCategoryFilter
                 ? articles.filter(article => article.masterCategory === masterCategoryFilter)
                 : articles;
-            renderArticles(filteredArticles); // Initial rendering with filter applied
+            renderArticles(filteredArticles); 
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-    // Function to parse CSV (Strict `""` format, Skips Header Row)
     function parseCSV(data) {
         const rows = parseCSVRaw(data);
         return rows.slice(1).map(fields => {
@@ -153,22 +136,22 @@ document.addEventListener("DOMContentLoaded", function () {
           .sort((a, b) => b.date.localeCompare(a.date));
     }
 
-    // Function to format date
     function formatDate(isoDate) {
         const [year, month, day] = isoDate.split(".");
         const dateObj = new Date(year, month - 1, day);
         return dateObj.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
     }
 
-    // Function to render articles
+    // Exponential Fix: Batch HTML in memory and inject once
     function renderArticles(articleList) {
-        cardContainer.innerHTML = "";
+        let allCardsHTML = ""; 
+        
         articleList.forEach(({ masterCategory, category, title, date, link }) => {
             const formattedDate = formatDate(date);
-            const cardHTML = `
-                <div class="col-lg-4 col-md-6 col-12"">
+            allCardsHTML += `
+                <div class="col-lg-4 col-md-6 col-12">
                     <div class="card-link">
-                        <a href="${link}" class="card-link"">
+                        <a href="${link}" class="card-link">
                             <div class="card custom-card article">
                                 <div class="card-inner">
                                     <div class="card-content">
@@ -182,20 +165,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>
             `;
-            cardContainer.insertAdjacentHTML("beforeend", cardHTML);
         });
+        
+        cardContainer.innerHTML = allCardsHTML; 
     }
 
-    // Function to filter articles on search input
     function searchArticles() {
         const searchText = searchInput.value.toLowerCase();
 
         if (searchText.trim() === "") {
-            // Return to default state — re-filtered and sorted by date
             const defaultList = masterCategoryFilter
                 ? articles.filter(({ masterCategory }) => masterCategory === masterCategoryFilter)
                 : articles;
-
             renderArticles(defaultList);
             return;
         }
@@ -206,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (aMatch && !bMatch) return -1;
             if (!aMatch && bMatch) return 1;
-            return 0; // keep original order otherwise
+            return 0; 
         });
 
         const filteredForCategory = masterCategoryFilter
@@ -216,15 +197,26 @@ document.addEventListener("DOMContentLoaded", function () {
         renderArticles(filteredForCategory);
     }
 
-    // Event listener for real-time search
-    searchInput.addEventListener("input", searchArticles);
+    // Exponential Fix: Debounce live search to save CPU
+    let searchTimeout;
+    if (searchInput) {
+        searchInput.addEventListener("input", function() {
+            clearTimeout(searchTimeout); 
+            searchTimeout = setTimeout(() => {
+                searchArticles(); 
+            }, 250);
+        });
+    }
 });
+
+// ==========================================
+// --- PHOTO GALLERY RENDERING ---
+// ==========================================
 
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
     const csvFile = document.querySelector(".gallery-container")?.getAttribute("csvfile") || "photos.csv";
 
-    // Ensure overlay exists
     if (!document.querySelector(".overlay")) {
         const overlayHTML = `
             <div class="overlay">
@@ -245,14 +237,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const nextBtn = document.querySelector(".next-btn");
     const prevBtn = document.querySelector(".prev-btn");
 
-    let images = []; // Store image list
-    let currentIndex = -1; // Track current image index
+    let images = []; 
+    let currentIndex = -1; 
 
     if(galleryContainer) {
         fetch(csvFile)
             .then(response => response.text())
             .then(data => {
-                images = parseCSV(data).slice(1); // Skip header row
+                images = parseCSV(data).slice(1); 
                 let galleryHTML = "";
 
                 images.forEach(([thumb, fullres, caption], index) => {
@@ -278,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function parseCSV(data) {
-        return parseCSVRaw(data).slice(1); // Skipping header
+        return parseCSVRaw(data).slice(1); 
     }
 
     function bindImageClickEvents() {
@@ -317,10 +309,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function showImage(index) {
         if (index >= 0 && index < images.length) {
-            previewImage.src = images[index][1]; // Load full-size image
+            previewImage.src = images[index][1]; 
             overlay.style.display = "flex";
 
-            // Hide prev/next buttons when at the start or end
             prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
             nextBtn.style.visibility = index === images.length - 1 ? "hidden" : "visible";
         }
@@ -331,27 +322,22 @@ document.addEventListener("DOMContentLoaded", function () {
 // --- ADVANCED DYNAMIC TABLE ENGINE ---
 // ==========================================
 
-// Global Configuration Variables
 window.masterCsvData = [];
 window.currentVisibleCols = [];
 
-// The Global Toggle Function triggered from HTML
 window.toggleTableConfig = function(visibleColsStr, fullWidthStr, priorityStr, dontBreakStr, sortColStr, hideId, showId) {
     const container = document.querySelector('.table-container');
     if (!container) return;
 
-    // 1. Update HTML attributes for the math engine
     container.setAttribute('visiblecolumns', visibleColsStr);
     container.setAttribute('fullwidth', fullWidthStr);
     container.setAttribute('columnpriority', priorityStr);
     container.setAttribute('dontbreakcolumns', dontBreakStr);
     container.setAttribute('sortcolumn', sortColStr);
 
-    // 2. Toggle text visibility
     if (document.getElementById(hideId)) document.getElementById(hideId).style.display = 'none';
     if (document.getElementById(showId)) document.getElementById(showId).style.display = 'inline';
 
-    // 3. Trigger rebuild immediately
     if (window.rebuildTableFromMaster) {
         window.rebuildTableFromMaster();
     }
@@ -368,19 +354,15 @@ document.addEventListener("DOMContentLoaded", function () {
     let sortOrder = 0;
     let isFullWidth = false;
 
-    // Load original CSV Data
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
             window.masterCsvData = parseCSVRaw(data);
             if (window.masterCsvData.length === 0) return;
-            
-            // Build the table based on initial HTML attributes
             window.rebuildTableFromMaster();
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-    // Master Rebuild Function - Automatically maps absolute indices to sub-table indices
     window.rebuildTableFromMaster = function() {
         isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
         let visibleAttr = tableContainer.getAttribute("visiblecolumns");
@@ -389,7 +371,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let totalCols = window.masterCsvData[0].length;
         
-        // 1. Determine Visible Columns (Absolute)
         window.currentVisibleCols = [];
         if (!visibleAttr) {
             for(let i=0; i < totalCols; i++) window.currentVisibleCols.push(i);
@@ -397,12 +378,10 @@ document.addEventListener("DOMContentLoaded", function () {
             window.currentVisibleCols = visibleAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
         }
 
-        // 2. Filter Master Data Down to Sub-Table
         currentFilteredData = window.masterCsvData.map(row => {
             return window.currentVisibleCols.map(idx => row[idx] !== undefined ? row[idx] : '');
         });
 
-        // 3. Auto-Map the Sort Column (Absolute -> Relative)
         if (sortColAttr) {
             let absoluteSortCol = parseInt(sortColAttr, 10);
             let relSortCol = window.currentVisibleCols.indexOf(absoluteSortCol);
@@ -414,15 +393,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         sortOrder = sortOrderAttr === "asc" ? 1 : sortOrderAttr === "desc" ? -1 : 0;
 
-        // 4. Sort and Render
         let dataToRender = currentFilteredData;
         if (currentSortColumn !== null && sortOrder !== 0) {
             dataToRender = sortData(currentFilteredData, currentSortColumn, sortOrder);
         }
 
         renderTable(dataToRender, isFullWidth);
-        insertSoftHyphensInTableCells();
-        mergeIdenticalVerticalCells();
     };
 
     function calculateColumnWidths(data) {
@@ -447,7 +423,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let avgChars = totalChars.map(total => total / numRows);
         let blendedChars = maxChars.map((max, i) => (max + avgChars[i]) / 2);
 
-        // --- MAP DONT BREAK COLUMNS (Absolute -> Relative) ---
         let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
         let absoluteDontBreak = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
         let dontBreakCols = absoluteDontBreak.map(abs => window.currentVisibleCols.indexOf(abs)).filter(rel => rel !== -1);
@@ -455,7 +430,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let isLocked = new Array(numCols).fill(false);
         dontBreakCols.forEach(c => { if(c >= 0 && c < numCols) isLocked[c] = true; });
 
-        // --- MAP COLUMN PRIORITY (Absolute -> Relative) ---
         let priorityAttr = tableContainer.getAttribute("columnpriority");
         let weights = new Array(numCols).fill(1);
         let maxWeight = 1;
@@ -536,8 +510,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
         const dynamicTable = document.querySelector("#dynamic-table");
-        tableHead.innerHTML = "";
-        tableBody.innerHTML = "";
 
         if (isFullWidth) {
             tableContainer.classList.add("full-width");
@@ -553,12 +525,15 @@ document.addEventListener("DOMContentLoaded", function () {
         
         let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
 
-        // Map dontBreak for precise CSS injections
         let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
         let absoluteDontBreak = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
         let dontBreakCols = absoluteDontBreak.map(abs => window.currentVisibleCols.indexOf(abs)).filter(rel => rel !== -1);
 
-        // --- HEADERS ---
+        // --- STEP 1: CREATE IN-MEMORY FRAGMENTS (Zero Layout Thrashing) ---
+        const headFragment = document.createDocumentFragment();
+        const bodyFragment = document.createDocumentFragment();
+        const breakPattern = /([a-z]{1,}?)(?=[a-z])/gi;
+
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
@@ -570,26 +545,58 @@ document.addEventListener("DOMContentLoaded", function () {
             th.addEventListener("click", () => sortTableByColumn(index));
             headerRow.appendChild(th);
         });
-        tableHead.appendChild(headerRow);
+        headFragment.appendChild(headerRow);
 
-        // --- DATA ROWS ---
+        // --- STEP 2: BUILD ROWS AND INJECT HYPHENS OFFLINE ---
         data.slice(1).forEach(rowData => {
             const row = document.createElement("tr");
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
-                td.innerHTML = cellData; 
+                
+                const words = String(cellData).split(/\s+/);
+                const hyphenatedWords = words.map(word => {
+                    if (word.length < 10 || /[<>]/.test(word)) return word;
+                    return word.replace(breakPattern, "$1&shy;");
+                });
+                
+                td.innerHTML = hyphenatedWords.join(" "); 
                 td.style.padding = "8px";
                 if (!isFullWidth) td.style.width = columnWidths[index] + "%";
-                
-                // CSS Bulletproofing ensures locked columns never line break
-                if (dontBreakCols.includes(index)) {
-                    td.style.whiteSpace = "nowrap";
-                }
+                if (dontBreakCols.includes(index)) td.style.whiteSpace = "nowrap";
 
                 row.appendChild(td);
             });
-            tableBody.appendChild(row);
+            bodyFragment.appendChild(row);
         });
+
+        // --- STEP 3: MERGE CELLS OFFLINE (Lightning Fast) ---
+        const rows = bodyFragment.querySelectorAll('tr');
+        const numCols = data[0].length;
+
+        for (let colIndex = 0; colIndex < numCols; colIndex++) {
+            let topCell = null;
+            let rowspanCount = 1;
+
+            for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                const currentCell = rows[rowIndex].children[colIndex];
+                if (!currentCell) continue;
+
+                if (topCell && topCell.innerHTML === currentCell.innerHTML && topCell.textContent.trim() !== "") {
+                    rowspanCount++;
+                    topCell.setAttribute('rowspan', rowspanCount);
+                    currentCell.style.display = 'none'; 
+                } else {
+                    topCell = currentCell;
+                    rowspanCount = 1;
+                }
+            }
+        }
+
+        // --- STEP 4: SINGLE BULK PAINT TO SCREEN ---
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+        tableHead.appendChild(headFragment);
+        tableBody.appendChild(bodyFragment);
     }
 
     function sortData(data, columnIndex, order) {
@@ -612,64 +619,10 @@ document.addEventListener("DOMContentLoaded", function () {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
         }
         
-        // Sort on the currently filtered active sub-table
         const sortedData = sortOrder === 0 ? [...currentFilteredData] : sortData(currentFilteredData, currentSortColumn, sortOrder);
-        
         renderTable(sortedData, isFullWidth);
-        insertSoftHyphensInTableCells(); 
-        mergeIdenticalVerticalCells(); // Fire AFTER widths and HTML are set
     }
 
-    function insertSoftHyphensInTableCells() {
-        const cellSelector = "td, th";
-        const breakPattern = /([a-z]{1,}?)(?=[a-z])/gi;
-
-        document.querySelectorAll(cellSelector).forEach(cell => {
-            const originalText = cell.innerHTML;
-            const words = originalText.split(/\s+/);
-            const hyphenatedWords = words.map(word => {
-                if (word.length < 10 || /[<>]/.test(word)) return word;
-                return word.replace(breakPattern, "$1&shy;");
-            });
-            cell.innerHTML = hyphenatedWords.join(" ");
-        });
-    }
-
-    // Dynamic Merging to clean up identical vertical data post-render
-    function mergeIdenticalVerticalCells() {
-        const table = document.getElementById('dynamic-table');
-        if (!table) return;
-
-        const tbody = table.querySelector('tbody');
-        const rows = tbody.querySelectorAll('tr');
-        if (rows.length === 0) return;
-
-        const numCols = rows[0].querySelectorAll('td').length;
-
-        for (let colIndex = 0; colIndex < numCols; colIndex++) {
-            let topCell = null;
-            let rowspanCount = 1;
-
-            for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
-                const currentCell = rows[rowIndex].querySelectorAll('td')[colIndex];
-                if (!currentCell) continue;
-
-                // Ensure we don't accidentally merge blank cells
-                if (topCell && topCell.innerHTML === currentCell.innerHTML && topCell.textContent.trim() !== "") {
-                    rowspanCount++;
-                    topCell.setAttribute('rowspan', rowspanCount);
-                    currentCell.style.display = 'none'; 
-                } else {
-                    topCell = currentCell;
-                    rowspanCount = 1;
-                }
-            }
-        }
-    }
-
-    window.addEventListener("resize", () => {
-        insertSoftHyphensInTableCells();
-    });
 });
 
 document.documentElement.lang = "en";
