@@ -20,18 +20,18 @@ function parseCSVRaw(data) {
             }
         } else if (char === ',' && !inQuotes) {
             // Field separator
-            currentRow.push(currentField.trim()); // 🔥 Trim before pushing
+            currentRow.push(currentField.trim()); // Trim before pushing
             currentField = '';
         } else if ((char === '\n' || char === '\r') && !inQuotes) {
             // End of row
             if (char === '\r' && nextChar === '\n') i++; // Handle \r\n
-            currentRow.push(currentField.trim()); // 🔥 Trim before pushing
+            currentRow.push(currentField.trim()); // Trim before pushing
             rows.push(currentRow);
             currentField = '';
             currentRow = [];
         } else {
             if (char === '\n' && inQuotes) {
-                currentField += '<br>'; // 🔥 Replace newline with <br> if inside quotes
+                currentField += '<br>'; // Replace newline with <br> if inside quotes
             } else {
                 currentField += char;
             }
@@ -42,17 +42,12 @@ function parseCSVRaw(data) {
 
     // Add last field/row if any
     if (currentField.length > 0 || currentRow.length > 0) {
-        currentRow.push(currentField.trim()); // 🔥 Trim last field
+        currentRow.push(currentField.trim()); // Trim last field
         rows.push(currentRow);
     }
 
     return rows;
 }
-
-
-
-
-
 
 $(document).ready(function () {
     $('.card').hover(
@@ -64,7 +59,6 @@ $(document).ready(function () {
         }
     );
 });
-
 
 $(document).ready(function () {
     $("#navbar-container").load("/navbar.html", function () {
@@ -120,70 +114,6 @@ $(document).ready(function () {
 
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
@@ -207,22 +137,21 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Error loading CSV:", error));
 
     // Function to parse CSV (Strict `""` format, Skips Header Row)
-function parseCSV(data) {
-    const rows = parseCSVRaw(data);
-    return rows.slice(1).map(fields => {
-        if (fields.length < 5) return null;
-        const [masterCategory, category, title, date, link] = fields;
-        return {
-            masterCategory: masterCategory.toLowerCase(),
-            category,
-            title,
-            date,
-            link
-        };
-    }).filter(item => item !== null)
-      .sort((a, b) => b.date.localeCompare(a.date));
-}
-
+    function parseCSV(data) {
+        const rows = parseCSVRaw(data);
+        return rows.slice(1).map(fields => {
+            if (fields.length < 5) return null;
+            const [masterCategory, category, title, date, link] = fields;
+            return {
+                masterCategory: masterCategory.toLowerCase(),
+                category,
+                title,
+                date,
+                link
+            };
+        }).filter(item => item !== null)
+          .sort((a, b) => b.date.localeCompare(a.date));
+    }
 
     // Function to format date
     function formatDate(isoDate) {
@@ -258,42 +187,38 @@ function parseCSV(data) {
     }
 
     // Function to filter articles on search input
-function searchArticles() {
-    const searchText = searchInput.value.toLowerCase();
+    function searchArticles() {
+        const searchText = searchInput.value.toLowerCase();
 
-    if (searchText.trim() === "") {
-        // Return to default state — re-filtered and sorted by date
-        const defaultList = masterCategoryFilter
-            ? articles.filter(({ masterCategory }) => masterCategory === masterCategoryFilter)
-            : articles;
+        if (searchText.trim() === "") {
+            // Return to default state — re-filtered and sorted by date
+            const defaultList = masterCategoryFilter
+                ? articles.filter(({ masterCategory }) => masterCategory === masterCategoryFilter)
+                : articles;
 
-        renderArticles(defaultList);
-        return;
+            renderArticles(defaultList);
+            return;
+        }
+
+        const sortedArticles = [...articles].sort((a, b) => {
+            const aMatch = a.title.toLowerCase().includes(searchText) || a.category.toLowerCase().includes(searchText);
+            const bMatch = b.title.toLowerCase().includes(searchText) || b.category.toLowerCase().includes(searchText);
+
+            if (aMatch && !bMatch) return -1;
+            if (!aMatch && bMatch) return 1;
+            return 0; // keep original order otherwise
+        });
+
+        const filteredForCategory = masterCategoryFilter
+            ? sortedArticles.filter(({ masterCategory }) => masterCategory === masterCategoryFilter)
+            : sortedArticles;
+
+        renderArticles(filteredForCategory);
     }
-
-    const sortedArticles = [...articles].sort((a, b) => {
-        const aMatch = a.title.toLowerCase().includes(searchText) || a.category.toLowerCase().includes(searchText);
-        const bMatch = b.title.toLowerCase().includes(searchText) || b.category.toLowerCase().includes(searchText);
-
-        if (aMatch && !bMatch) return -1;
-        if (!aMatch && bMatch) return 1;
-        return 0; // keep original order otherwise
-    });
-
-    const filteredForCategory = masterCategoryFilter
-        ? sortedArticles.filter(({ masterCategory }) => masterCategory === masterCategoryFilter)
-        : sortedArticles;
-
-    renderArticles(filteredForCategory);
-}
-
 
     // Event listener for real-time search
     searchInput.addEventListener("input", searchArticles);
 });
-
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
@@ -323,37 +248,38 @@ document.addEventListener("DOMContentLoaded", function () {
     let images = []; // Store image list
     let currentIndex = -1; // Track current image index
 
-    fetch(csvFile)
-        .then(response => response.text())
-        .then(data => {
-            images = parseCSV(data).slice(1); // Skip header row
-            let galleryHTML = "";
+    if(galleryContainer) {
+        fetch(csvFile)
+            .then(response => response.text())
+            .then(data => {
+                images = parseCSV(data).slice(1); // Skip header row
+                let galleryHTML = "";
 
-            images.forEach(([thumb, fullres, caption], index) => {
-                if (thumb && fullres) {
-                    galleryHTML += `
-                        <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
-                            <div class="card-link nottoobig">
-                                <a href="#" class="photo-link" data-index="${index}" data-image="${fullres}">
-                                    <div class="card custom-card card-photo" style="background-image: url('${thumb}');">
-                                        ${caption ? `<div class="card-caption">${caption}</div>` : ""}
-                                    </div>
-                                </a>
+                images.forEach(([thumb, fullres, caption], index) => {
+                    if (thumb && fullres) {
+                        galleryHTML += `
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-6">
+                                <div class="card-link nottoobig">
+                                    <a href="#" class="photo-link" data-index="${index}" data-image="${fullres}">
+                                        <div class="card custom-card card-photo" style="background-image: url('${thumb}');">
+                                            ${caption ? `<div class="card-caption">${caption}</div>` : ""}
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    `;
-                }
-            });
+                        `;
+                    }
+                });
 
-            galleryContainer.innerHTML = galleryHTML;
-            bindImageClickEvents();
-        })
-        .catch(error => console.error("Error loading CSV:", error));
+                galleryContainer.innerHTML = galleryHTML;
+                bindImageClickEvents();
+            })
+            .catch(error => console.error("Error loading CSV:", error));
+    }
 
-function parseCSV(data) {
-    return parseCSVRaw(data).slice(1); // Skipping header
-}
-
+    function parseCSV(data) {
+        return parseCSVRaw(data).slice(1); // Skipping header
+    }
 
     function bindImageClickEvents() {
         document.querySelectorAll(".photo-link").forEach(link => {
@@ -401,62 +327,109 @@ function parseCSV(data) {
     }
 });
 
+// ==========================================
+// --- ADVANCED DYNAMIC TABLE ENGINE ---
+// ==========================================
 
+// Global Configuration Variables
+window.masterCsvData = [];
+window.currentVisibleCols = [];
 
+// The Global Toggle Function triggered from HTML
+window.toggleTableConfig = function(visibleColsStr, fullWidthStr, priorityStr, dontBreakStr, sortColStr, hideId, showId) {
+    const container = document.querySelector('.table-container');
+    if (!container) return;
 
+    // 1. Update HTML attributes for the math engine
+    container.setAttribute('visiblecolumns', visibleColsStr);
+    container.setAttribute('fullwidth', fullWidthStr);
+    container.setAttribute('columnpriority', priorityStr);
+    container.setAttribute('dontbreakcolumns', dontBreakStr);
+    container.setAttribute('sortcolumn', sortColStr);
 
+    // 2. Toggle text visibility
+    if (document.getElementById(hideId)) document.getElementById(hideId).style.display = 'none';
+    if (document.getElementById(showId)) document.getElementById(showId).style.display = 'inline';
 
-
-
-
-
-
-
-
-
-// This code is for tables
-
-
+    // 3. Trigger rebuild immediately
+    if (window.rebuildTableFromMaster) {
+        window.rebuildTableFromMaster();
+    }
+};
 
 document.addEventListener("DOMContentLoaded", function () {
     const tableContainer = document.querySelector(".table-container");
+    if (!tableContainer) return;
+
     const csvFile = tableContainer.getAttribute("csvfile") || "data.csv";
-    const isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
-    const defaultSortColumn = tableContainer.getAttribute("sortcolumn");
-    const defaultSortOrder = tableContainer.getAttribute("sortorder");
+    
+    let currentFilteredData = [];
+    let currentSortColumn = null;
+    let sortOrder = 0;
+    let isFullWidth = false;
 
-    let originalData = [];
-    let currentSortColumn = defaultSortColumn ? parseInt(defaultSortColumn, 10) : null;
-    let sortOrder = defaultSortOrder === "asc" ? 1 : defaultSortOrder === "desc" ? -1 : 0;
-
+    // Load original CSV Data
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
-            originalData = parseCSV(data);
-            if (originalData.length === 0) return;
-
-            if (currentSortColumn !== null && sortOrder !== 0) {
-                originalData = sortData(originalData, currentSortColumn, sortOrder);
-            }
-
-            renderTable(originalData, isFullWidth);
-
-            // ✅ Auto-insert &shy; after table is rendered
-            insertSoftHyphensInTableCells();
+            window.masterCsvData = parseCSVRaw(data);
+            if (window.masterCsvData.length === 0) return;
+            
+            // Build the table based on initial HTML attributes
+            window.rebuildTableFromMaster();
         })
         .catch(error => console.error("Error loading CSV:", error));
 
-function parseCSV(data) {
-    return parseCSVRaw(data);
-}
+    // Master Rebuild Function - Automatically maps absolute indices to sub-table indices
+    window.rebuildTableFromMaster = function() {
+        isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
+        let visibleAttr = tableContainer.getAttribute("visiblecolumns");
+        let sortColAttr = tableContainer.getAttribute("sortcolumn");
+        let sortOrderAttr = tableContainer.getAttribute("sortorder");
 
-	
+        let totalCols = window.masterCsvData[0].length;
+        
+        // 1. Determine Visible Columns (Absolute)
+        window.currentVisibleCols = [];
+        if (!visibleAttr) {
+            for(let i=0; i < totalCols; i++) window.currentVisibleCols.push(i);
+        } else {
+            window.currentVisibleCols = visibleAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+        }
+
+        // 2. Filter Master Data Down to Sub-Table
+        currentFilteredData = window.masterCsvData.map(row => {
+            return window.currentVisibleCols.map(idx => row[idx] !== undefined ? row[idx] : '');
+        });
+
+        // 3. Auto-Map the Sort Column (Absolute -> Relative)
+        if (sortColAttr) {
+            let absoluteSortCol = parseInt(sortColAttr, 10);
+            let relSortCol = window.currentVisibleCols.indexOf(absoluteSortCol);
+            if (relSortCol !== -1) currentSortColumn = relSortCol;
+            else currentSortColumn = null;
+        } else {
+            currentSortColumn = null;
+        }
+
+        sortOrder = sortOrderAttr === "asc" ? 1 : sortOrderAttr === "desc" ? -1 : 0;
+
+        // 4. Sort and Render
+        let dataToRender = currentFilteredData;
+        if (currentSortColumn !== null && sortOrder !== 0) {
+            dataToRender = sortData(currentFilteredData, currentSortColumn, sortOrder);
+        }
+
+        renderTable(dataToRender, isFullWidth);
+        insertSoftHyphensInTableCells();
+        mergeIdenticalVerticalCells();
+    };
+
     function calculateColumnWidths(data) {
         const numCols = data[0].length;
         let maxChars = new Array(numCols).fill(0);
         let totalChars = new Array(numCols).fill(0);
 
-        // 1. Pass 1: Get Max and Total Characters (Data rows only)
         const dataRows = data.length > 1 ? data.slice(1) : data;
         let numRows = dataRows.length || 1;
 
@@ -471,54 +444,45 @@ function parseCSV(data) {
             });
         });
 
-        // 2. Pass 2 & 3: Calculate the "Father Average"
         let avgChars = totalChars.map(total => total / numRows);
         let blendedChars = maxChars.map((max, i) => (max + avgChars[i]) / 2);
 
-        // 3. Parse Explicit User Attributes
+        // --- MAP DONT BREAK COLUMNS (Absolute -> Relative) ---
         let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
-        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+        let absoluteDontBreak = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+        let dontBreakCols = absoluteDontBreak.map(abs => window.currentVisibleCols.indexOf(abs)).filter(rel => rel !== -1);
+        
         let isLocked = new Array(numCols).fill(false);
         dontBreakCols.forEach(c => { if(c >= 0 && c < numCols) isLocked[c] = true; });
 
+        // --- MAP COLUMN PRIORITY (Absolute -> Relative) ---
         let priorityAttr = tableContainer.getAttribute("columnpriority");
-        let weights = new Array(numCols).fill(1); 
+        let weights = new Array(numCols).fill(1);
         let maxWeight = 1;
         if (priorityAttr) {
-            let pList = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-            pList.forEach((colIndex, i) => {
-                if (colIndex >= 0 && colIndex < numCols) weights[colIndex] = pList.length - i; 
+            let absolutePriorities = priorityAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
+            absolutePriorities.forEach((absIdx, i) => {
+                let relIdx = window.currentVisibleCols.indexOf(absIdx);
+                if (relIdx !== -1) weights[relIdx] = absolutePriorities.length - i;
             });
             maxWeight = Math.max(...weights);
         }
 
-        // 4. Calculate Base Widths
         let lockedTotal = 0;
         let unlockedBaseTotal = 0;
         
         let baseWidths = maxChars.map((maxLen, idx) => {
             let calcLen = isLocked[idx] ? maxLen : blendedChars[idx];
-            
-            // Locked columns get a slightly safer base margin (2.0 multiplier)
             let w = (calcLen === 0) ? 5 : isLocked[idx] ? (calcLen * 2.0) + 6 : (calcLen * 1.8) + 4;
-            w = Math.max(w, 5); 
-            
-            if (isLocked[idx]) {
-                lockedTotal += w;
-                return w; 
-            } else {
-                w = Math.min(w, 50); 
-                unlockedBaseTotal += w;
-                return w;
-            }
+            w = Math.max(w, 5);
+            if (isLocked[idx]) { lockedTotal += w; return w; } 
+            else { w = Math.min(w, 50); unlockedBaseTotal += w; return w; }
         });
 
-        // 5. Smart Space Distribution 
         let finalWidths = new Array(numCols).fill(0);
         let unlockedTotalSpace = 100 - lockedTotal;
         
         if (lockedTotal >= 95) {
-            // Failsafe: if locked columns take up the whole screen
             let total = baseWidths.reduce((a,b)=>a+b,0);
             return baseWidths.map(w => (w / total) * 100);
         }
@@ -530,13 +494,13 @@ function parseCSV(data) {
         baseWidths.forEach((w, i) => {
             if (!isLocked[i]) {
                 totalUnlockedWeight += weights[i];
-                totalUnlockedInverseWeight += (maxWeight - weights[i] + 1); 
+                totalUnlockedInverseWeight += (maxWeight - weights[i] + 1);
             }
         });
 
         baseWidths.forEach((w, i) => {
             if (isLocked[i]) {
-                finalWidths[i] = w; 
+                finalWidths[i] = w;
             } else {
                 if (remainder >= 0) {
                     let extraSpace = (totalUnlockedWeight === 0) ? (remainder / numCols) : (remainder * (weights[i] / totalUnlockedWeight));
@@ -545,12 +509,11 @@ function parseCSV(data) {
                     let deficit = Math.abs(remainder);
                     let inverseWeight = (maxWeight - weights[i] + 1);
                     let shrinkAmount = (totalUnlockedInverseWeight === 0) ? (deficit / numCols) : (deficit * (inverseWeight / totalUnlockedInverseWeight));
-                    finalWidths[i] = Math.max(w - shrinkAmount, 5); 
+                    finalWidths[i] = Math.max(w - shrinkAmount, 5);
                 }
             }
         });
         
-        // 6. Safe Normalization (Mathematically Protects Locked Columns)
         let finalSum = finalWidths.reduce((a,b)=>a+b,0);
         if (Math.abs(finalSum - 100) > 0.1) {
             let actualLockedSum = 0;
@@ -559,19 +522,16 @@ function parseCSV(data) {
                 if (isLocked[i]) actualLockedSum += w;
                 else actualUnlockedSum += w;
             });
-            
             let requiredUnlockedSum = 100 - actualLockedSum;
             if (requiredUnlockedSum > 0 && actualUnlockedSum > 0) {
-                 finalWidths = finalWidths.map((w, i) => isLocked[i] ? w : (w / actualUnlockedSum) * requiredUnlockedSum);
+                finalWidths = finalWidths.map((w, i) => isLocked[i] ? w : (w / actualUnlockedSum) * requiredUnlockedSum);
             } else {
-                 // Absolute failsafe fallback
-                 finalWidths = finalWidths.map(w => (w / finalSum) * 100);
+                finalWidths = finalWidths.map(w => (w / finalSum) * 100);
             }
         }
         return finalWidths;
     }
 
-
     function renderTable(data, isFullWidth) {
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
@@ -593,9 +553,10 @@ function parseCSV(data) {
         
         let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
 
-        // Parse explicit no-wrap columns for the renderer
+        // Map dontBreak for precise CSS injections
         let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
-        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+        let absoluteDontBreak = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
+        let dontBreakCols = absoluteDontBreak.map(abs => window.currentVisibleCols.indexOf(abs)).filter(rel => rel !== -1);
 
         // --- HEADERS ---
         const headerRow = document.createElement("tr");
@@ -611,10 +572,8 @@ function parseCSV(data) {
         });
         tableHead.appendChild(headerRow);
 
-        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
-
         // --- DATA ROWS ---
-        sortedData.slice(1).forEach(rowData => {
+        data.slice(1).forEach(rowData => {
             const row = document.createElement("tr");
             rowData.forEach((cellData, index) => {
                 const td = document.createElement("td");
@@ -622,194 +581,11 @@ function parseCSV(data) {
                 td.style.padding = "8px";
                 if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 
-                // CSS BULLETPROOFING: Physically forces the browser to respect your locks
+                // CSS Bulletproofing ensures locked columns never line break
                 if (dontBreakCols.includes(index)) {
                     td.style.whiteSpace = "nowrap";
                 }
 
-                row.appendChild(td);
-            });
-            tableBody.appendChild(row);
-        });
-    }
-
-
-    function renderTable(data, isFullWidth) {
-        const tableHead = document.querySelector("#dynamic-table thead");
-        const tableBody = document.querySelector("#dynamic-table tbody");
-        const dynamicTable = document.querySelector("#dynamic-table");
-        tableHead.innerHTML = "";
-        tableBody.innerHTML = "";
-
-        if (isFullWidth) {
-            tableContainer.classList.add("full-width");
-            tableContainer.style.overflowX = "auto";
-            dynamicTable.style.width = "max-content";
-            dynamicTable.style.tableLayout = "auto";
-        } else {
-            tableContainer.classList.remove("full-width");
-            tableContainer.style.overflowX = "hidden";
-            dynamicTable.style.width = "100%";
-            dynamicTable.style.tableLayout = "fixed";
-        }
-        
-        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-
-        // Parse explicit no-wrap columns for the renderer
-        let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
-        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
-
-        // --- HEADERS ---
-        const headerRow = document.createElement("tr");
-        data[0].forEach((header, index) => {
-            const th = document.createElement("th");
-            th.innerHTML = header; 
-            th.setAttribute("data-column-index", index);
-            th.style.cursor = "pointer";
-            th.style.padding = "8px";
-            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
-            th.addEventListener("click", () => sortTableByColumn(index));
-            headerRow.appendChild(th);
-        });
-        tableHead.appendChild(headerRow);
-
-        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
-
-        // --- DATA ROWS ---
-        sortedData.slice(1).forEach(rowData => {
-            const row = document.createElement("tr");
-            rowData.forEach((cellData, index) => {
-                const td = document.createElement("td");
-                td.innerHTML = cellData; 
-                td.style.padding = "8px";
-                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
-                
-                // Explicit CSS Bulletproofing: Forces browser to respect the JS width
-                if (dontBreakCols.includes(index)) {
-                    td.style.whiteSpace = "nowrap";
-                }
-
-                row.appendChild(td);
-            });
-            tableBody.appendChild(row);
-        });
-    }
-
-
-    function renderTable(data, isFullWidth) {
-        const tableHead = document.querySelector("#dynamic-table thead");
-        const tableBody = document.querySelector("#dynamic-table tbody");
-        const dynamicTable = document.querySelector("#dynamic-table");
-        tableHead.innerHTML = "";
-        tableBody.innerHTML = "";
-
-        if (isFullWidth) {
-            tableContainer.classList.add("full-width");
-            tableContainer.style.overflowX = "auto";
-            dynamicTable.style.width = "max-content";
-            dynamicTable.style.tableLayout = "auto";
-        } else {
-            tableContainer.classList.remove("full-width");
-            tableContainer.style.overflowX = "hidden";
-            dynamicTable.style.width = "100%";
-            dynamicTable.style.tableLayout = "fixed";
-        }
-        
-        let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-
-        // Parse explicit no-wrap columns for the renderer
-        let dontBreakAttr = tableContainer.getAttribute("dontbreakcolumns");
-        let dontBreakCols = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
-
-        // --- HEADERS ---
-        const headerRow = document.createElement("tr");
-        data[0].forEach((header, index) => {
-            const th = document.createElement("th");
-            th.innerHTML = header; 
-            th.setAttribute("data-column-index", index);
-            th.style.cursor = "pointer";
-            th.style.padding = "8px";
-            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
-            th.addEventListener("click", () => sortTableByColumn(index));
-            headerRow.appendChild(th);
-        });
-        tableHead.appendChild(headerRow);
-
-        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
-
-        // --- DATA ROWS ---
-        sortedData.slice(1).forEach(rowData => {
-            const row = document.createElement("tr");
-            rowData.forEach((cellData, index) => {
-                const td = document.createElement("td");
-                td.innerHTML = cellData; 
-                td.style.padding = "8px";
-                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
-                
-                // Explicit CSS Bulletproofing:
-                if (dontBreakCols.includes(index)) {
-                    td.style.whiteSpace = "nowrap";
-                }
-
-                row.appendChild(td);
-            });
-            tableBody.appendChild(row);
-        });
-    }
-
-    function renderTable(data, isFullWidth) {
-        const tableHead = document.querySelector("#dynamic-table thead");
-        const tableBody = document.querySelector("#dynamic-table tbody");
-        const dynamicTable = document.querySelector("#dynamic-table");
-        tableHead.innerHTML = "";
-        tableBody.innerHTML = "";
-
-        if (isFullWidth) {
-            tableContainer.classList.add("full-width");
-            tableContainer.style.overflowX = "auto";
-            dynamicTable.style.width = "max-content";
-            dynamicTable.style.tableLayout = "auto";
-			/* tableContainer.style.whiteSpace = "nowrap";
-            tableContainer.style.display = "block";
-			dynamicTable.style.minWidth = "100%"; */
-        } else {
-            tableContainer.classList.remove("full-width");
-            tableContainer.style.overflowX = "hidden";
-            dynamicTable.style.width = "100%";
-            dynamicTable.style.tableLayout = "fixed";
-			/* tableContainer.style.width = "100%"; */
-        }
-		
-		let columnWidths = isFullWidth ? [] : calculateColumnWidths(data);
-
-        const headerRow = document.createElement("tr");
-        data[0].forEach((header, index) => {
-            const th = document.createElement("th");
-            th.innerHTML = header; //Change 3 th.textContent = header;
-            th.setAttribute("data-column-index", index);
-            th.style.cursor = "pointer";
-            /* th.style.whiteSpace = "normal";  // Allow headers to wrap
-            th.style.wordBreak = "break-word";
-            //th.style.hyphens = "auto"; */
-            th.style.padding = "8px";
-            if (!isFullWidth) th.style.width = columnWidths[index] + "%";
-            th.addEventListener("click", () => sortTableByColumn(index));
-            headerRow.appendChild(th);
-        });
-        tableHead.appendChild(headerRow);
-
-        let sortedData = currentSortColumn !== null && sortOrder !== 0 ? sortData(data, currentSortColumn, sortOrder) : data;
-
-        sortedData.slice(1).forEach(rowData => {
-            const row = document.createElement("tr");
-            rowData.forEach((cellData, index) => {
-                const td = document.createElement("td");
-                td.innerHTML = cellData; //Change 1 td.textContent = cellData;
-                /* td.style.whiteSpace = "normal";  // Allow text to wrap
-                td.style.wordBreak = "break-word";
-                td.style.hyphens = "auto"; */
-                td.style.padding = "8px";
-                if (!isFullWidth) td.style.width = columnWidths[index] + "%";
                 row.appendChild(td);
             });
             tableBody.appendChild(row);
@@ -818,7 +594,6 @@ function parseCSV(data) {
 
     function sortData(data, columnIndex, order) {
         if (order === 0) return [...data];
-
         return [data[0], ...data.slice(1).sort((a, b) => {
             const aVal = isNaN(a[columnIndex]) ? a[columnIndex].toLowerCase() : parseFloat(a[columnIndex]);
             const bVal = isNaN(b[columnIndex]) ? b[columnIndex].toLowerCase() : parseFloat(b[columnIndex]);
@@ -836,18 +611,21 @@ function parseCSV(data) {
         } else {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
         }
-        const sortedData = sortOrder === 0 ? [...originalData] : sortData(originalData, columnIndex, sortOrder);
+        
+        // Sort on the currently filtered active sub-table
+        const sortedData = sortOrder === 0 ? [...currentFilteredData] : sortData(currentFilteredData, currentSortColumn, sortOrder);
+        
         renderTable(sortedData, isFullWidth);
-        insertSoftHyphensInTableCells(); // ✅ Re-hyphenate after sort
+        insertSoftHyphensInTableCells(); 
+        mergeIdenticalVerticalCells(); // Fire AFTER widths and HTML are set
     }
 
-    // ✅ Function: Inserts &shy; and recalculates on resize
     function insertSoftHyphensInTableCells() {
         const cellSelector = "td, th";
         const breakPattern = /([a-z]{1,}?)(?=[a-z])/gi;
 
         document.querySelectorAll(cellSelector).forEach(cell => {
-            const originalText = cell.innerHTML; //Change 2 const originalText = cell.textContent;
+            const originalText = cell.innerHTML;
             const words = originalText.split(/\s+/);
             const hyphenatedWords = words.map(word => {
                 if (word.length < 10 || /[<>]/.test(word)) return word;
@@ -857,12 +635,41 @@ function parseCSV(data) {
         });
     }
 
-    // ✅ Optional: Re-run on window resize
+    // Dynamic Merging to clean up identical vertical data post-render
+    function mergeIdenticalVerticalCells() {
+        const table = document.getElementById('dynamic-table');
+        if (!table) return;
+
+        const tbody = table.querySelector('tbody');
+        const rows = tbody.querySelectorAll('tr');
+        if (rows.length === 0) return;
+
+        const numCols = rows[0].querySelectorAll('td').length;
+
+        for (let colIndex = 0; colIndex < numCols; colIndex++) {
+            let topCell = null;
+            let rowspanCount = 1;
+
+            for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+                const currentCell = rows[rowIndex].querySelectorAll('td')[colIndex];
+                if (!currentCell) continue;
+
+                // Ensure we don't accidentally merge blank cells
+                if (topCell && topCell.innerHTML === currentCell.innerHTML && topCell.textContent.trim() !== "") {
+                    rowspanCount++;
+                    topCell.setAttribute('rowspan', rowspanCount);
+                    currentCell.style.display = 'none'; 
+                } else {
+                    topCell = currentCell;
+                    rowspanCount = 1;
+                }
+            }
+        }
+    }
+
     window.addEventListener("resize", () => {
         insertSoftHyphensInTableCells();
     });
 });
 
-
-
-document.documentElement.lang = "en"; // just in case it's missing or changed
+document.documentElement.lang = "en";
