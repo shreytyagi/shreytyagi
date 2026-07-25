@@ -611,7 +611,11 @@ document.addEventListener("DOMContentLoaded", function () {
         })];
     }
 
+	    // Add a timer variable right above the function
+    let sortTimeout; 
+
     function sortTableByColumn(columnIndex) {
+        // 1. Instantly register the taps and update the sorting state
         if (columnIndex !== currentSortColumn) {
             sortOrder = 1;
             currentSortColumn = columnIndex;
@@ -619,10 +623,13 @@ document.addEventListener("DOMContentLoaded", function () {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
         }
         
-        const sortedData = sortOrder === 0 ? [...currentFilteredData] : sortData(currentFilteredData, currentSortColumn, sortOrder);
-        renderTable(sortedData, isFullWidth);
+        // 2. Debounce the heavy rendering to prevent main-thread flooding
+        clearTimeout(sortTimeout);
+        sortTimeout = setTimeout(() => {
+            const sortedData = sortOrder === 0 ? [...currentFilteredData] : sortData(currentFilteredData, currentSortColumn, sortOrder);
+            renderTable(sortedData, isFullWidth);
+        }, 150); // Waits 150ms after the last tap before building the HTML
     }
-
 });
 
 document.documentElement.lang = "en";
