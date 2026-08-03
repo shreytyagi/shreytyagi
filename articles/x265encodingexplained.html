@@ -83,115 +83,110 @@
             <hr class="my-5">
 
             <!-- Bonus: Interactive x265 Command Generator -->
-            <h4 class="mb-4">Bonus: The Ultimate x265 Archival Command Generator</h4>
-            <div class="card shadow-sm border-secondary mb-4">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Interactive Master Script Builder</h5>
-                </div>
-                <div class="card-body bg-light">
-                    <p class="text-muted small mb-4">Select your parameters below. The script will automatically assemble the mathematically perfect pipeline for your specific hardware, delivery needs, and format.</p>
-                    
-                    <form id="x265GeneratorForm">
-                        <div class="row">
-                            <!-- Video Format Selection -->
-                            <div class="col-md-4 mb-3">
-                                <label class="font-weight-bold">Video Format</label>
-                                <select class="form-control" id="genFormat">
-                                    <option value="sdr">SDR (Rec. 709)</option>
-                                    <option value="hlg" selected>HLG Broadcast HDR</option>
-                                    <option value="pq">PQ Cinematic HDR</option>
-                                </select>
-                            </div>
-
-                            <!-- Encode Quality Level -->
-                            <div class="col-md-4 mb-3">
-                                <label class="font-weight-bold">Encode Quality Level</label>
-                                <select class="form-control" id="genQuality">
-                                    <option value="high" selected>High (Optimized & Fast)</option>
-                                    <option value="extreme">Extreme (Max Compression, Slow)</option>
-                                </select>
-                                <small class="form-text text-muted">Extreme forces deep 3D geometry.</small>
-                            </div>
-                            
-                            <!-- CPU Pools -->
-                            <div class="col-md-4 mb-3">
-                                <label class="font-weight-bold">CPU Pools (P-Cores)</label>
-                                <input type="number" class="form-control" id="genPools" value="10" min="1" max="128">
-                                <small class="form-text text-muted">M4 Max: 10 | M4 Pro: 8</small>
-                            </div>
+            <div class="mt-4 mb-5">
+                <h4 class="mb-2 text-primary">Interactive Master Script Builder</h4>
+                <p class="text-muted mb-4">Select your parameters below. The script will automatically assemble the mathematically perfect pipeline for your specific hardware, delivery needs, and format.</p>
+                
+                <form id="x265GeneratorForm">
+                    <div class="row">
+                        <!-- Video Format Selection -->
+                        <div class="col-md-4 mb-3">
+                            <label class="font-weight-bold">Video Format</label>
+                            <select class="form-control" id="genFormat">
+                                <option value="sdr">SDR (Rec. 709)</option>
+                                <option value="hlg" selected>HLG Broadcast HDR</option>
+                                <option value="pq">PQ Cinematic HDR</option>
+                            </select>
                         </div>
 
-                        <div class="row">
-                            <!-- Scrubbing/Editing Toggle -->
-                            <div class="col-md-4 mb-3 pt-2">
-                                <div class="custom-control custom-switch mb-2 p-3 bg-white border rounded shadow-sm">
-                                    <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
-                                    <label class="custom-control-label font-weight-bold text-primary" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
-                                    <small class="d-block text-muted mt-1">Check this if playing on the web or editing in iMovie/FCP. Uncheck for pure archival storage.</small>
-                                </div>
-                            </div>
-
-                            <!-- Bitrate & Architecture -->
-                            <div class="col-md-4 mb-3">
-                                <label class="font-weight-bold">Peak VBV Bitrate (kbps)</label>
-                                <input type="number" class="form-control" id="genVbv" value="160000" step="1000">
-                                <small class="form-text text-muted">Web streaming? Lower to 50000.</small>
-                            </div>
-
-                            <div class="col-md-2 mb-3">
-                                <label class="font-weight-bold">Keyint</label>
-                                <input type="number" class="form-control" id="genKeyint" value="30" step="1">
-                                <small class="form-text text-muted">I-Frame Interval</small>
-                            </div>
-
-                            <div class="col-md-2 mb-3">
-                                <label class="font-weight-bold">B-Frames</label>
-                                <input type="number" class="form-control" id="genBframes" value="4" min="0" max="16">
-                                <small class="form-text text-muted">Bidirectional limit</small>
-                            </div>
+                        <!-- Encode Quality Level -->
+                        <div class="col-md-4 mb-3">
+                            <label class="font-weight-bold">Encode Quality Level</label>
+                            <select class="form-control" id="genQuality">
+                                <option value="high" selected>High (Optimized & Fast)</option>
+                                <option value="extreme">Extreme (Max Compression, Slow)</option>
+                            </select>
+                            <small class="form-text text-muted">Extreme forces deep 3D geometry.</small>
                         </div>
-
-                        <div class="row pt-2 border-top mt-2">
-                            <!-- Dynamic Metadata Toggles -->
-                            <div class="col-md-4 mb-3 pt-3">
-                                <div class="custom-control custom-switch mb-2" id="dvToggleContainer">
-                                    <input type="checkbox" class="custom-control-input" id="genDv" checked>
-                                    <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
-                                </div>
-                                <div class="custom-control custom-switch" id="hdr10pToggleContainer" style="display: none;">
-                                    <input type="checkbox" class="custom-control-input" id="genHdr10p">
-                                    <label class="custom-control-label font-weight-bold" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
-                                </div>
-                            </div>
-                            
-                            <!-- Advanced HDR Metadata (Hidden for SDR/HLG) -->
-                            <div class="col-md-8 mb-3" id="advancedHdrMetadata" style="display: none;">
-                                <div class="row">
-                                    <div class="col-md-12 mb-2 pt-2">
-                                        <h6 class="font-weight-bold text-danger">Advanced HDR Metadata (PQ Only)</h6>
-                                    </div>
-                                    <div class="col-md-8 mb-3">
-                                        <label class="font-weight-bold small">Mastering Display Coordinates</label>
-                                        <input type="text" class="form-control form-control-sm" id="genMasterDisp" value="G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)">
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label class="font-weight-bold small">Max CLL / FALL</label>
-                                        <input type="text" class="form-control form-control-sm" id="genMaxCll" value="1000,400">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Command Output Box -->
-                    <div class="mt-4">
-                        <label class="font-weight-bold text-success">Your Custom Master Pipeline:</label>
-                        <div class="position-relative">
-                            <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code id="finalCommandOutput"></code></pre>
-                            <button class="btn btn-success btn-sm position-absolute" style="top: 10px; right: 10px;" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
+                        
+                        <!-- CPU Pools -->
+                        <div class="col-md-4 mb-3">
+                            <label class="font-weight-bold">CPU Pools (P-Cores)</label>
+                            <input type="number" class="form-control" id="genPools" value="10" min="1" max="128">
+                            <small class="form-text text-muted">M4 Max: 10 | M4 Pro: 8</small>
                         </div>
                     </div>
 
+                    <div class="row">
+                        <!-- Bitrate & Architecture -->
+                        <div class="col-md-4 mb-3">
+                            <label class="font-weight-bold">Peak VBV Bitrate (kbps)</label>
+                            <input type="number" class="form-control" id="genVbv" value="160000" step="1000">
+                            <small class="form-text text-muted">Web streaming? Lower to 50000.</small>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="font-weight-bold">Keyint (I-Frame Interval)</label>
+                            <input type="number" class="form-control" id="genKeyint" value="30" step="1">
+                            <small class="form-text text-muted">Usually matches FPS (e.g., 30)</small>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="font-weight-bold">B-Frames</label>
+                            <input type="number" class="form-control" id="genBframes" value="4" min="0" max="16">
+                            <small class="form-text text-muted">Bidirectional limit (4 to 8)</small>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <!-- Scrubbing/Editing Toggle -->
+                        <div class="col-md-4 mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
+                                <label class="custom-control-label font-weight-bold text-primary" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
+                            </div>
+                            <small class="form-text text-muted mt-1">Check for iMovie/Web. Uncheck for pure archival.</small>
+                        </div>
+
+                        <!-- DV Toggle -->
+                        <div class="col-md-4 mb-3" id="dvToggleContainer">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="genDv" checked>
+                                <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
+                            </div>
+                        </div>
+
+                        <!-- HDR10+ Toggle -->
+                        <div class="col-md-4 mb-3" id="hdr10pToggleContainer" style="display: none;">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="genHdr10p">
+                                <label class="custom-control-label font-weight-bold" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced HDR Metadata (Hidden for SDR/HLG) -->
+                    <div class="row mt-3" id="advancedHdrMetadata" style="display: none;">
+                        <div class="col-12"><hr class="my-2"></div>
+                        <div class="col-md-12 mb-2">
+                            <h6 class="font-weight-bold text-danger">Advanced HDR Metadata (PQ Only)</h6>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label class="font-weight-bold small">Mastering Display Coordinates</label>
+                            <input type="text" class="form-control" id="genMasterDisp" value="G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="font-weight-bold small">Max CLL / FALL</label>
+                            <input type="text" class="form-control" id="genMaxCll" value="1000,400">
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Command Output Box -->
+                <div class="mt-4 pt-2">
+                    <label class="font-weight-bold text-success">Your Custom Master Pipeline:</label>
+                    <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code id="finalCommandOutput"></code></pre>
+                    <button class="btn btn-success mt-2 px-4" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
                 </div>
             </div>
 
@@ -252,7 +247,7 @@
                         } else if (format === 'pq') {
                             dvToggle.style.display = 'block';
                             hdr10pToggle.style.display = 'block';
-                            advHdr.style.display = 'block';
+                            advHdr.style.display = 'flex';
                         }
 
                         // Base command (Constant Archival Protections)
@@ -346,5 +341,3 @@
 
 </body>
 </html>
-
-
