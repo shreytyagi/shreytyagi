@@ -105,19 +105,35 @@
 
                     <!-- VapourSynth Row 2 -->
                     <div class="row">
-                        <div class="col-12 col-md-6 mb-4">
-                            <label class="font-weight-bold">Assume FPS</label>
-                            <select class="form-control" id="genFps">
-                                <option value="original" selected>Keep Original (Do Not Alter)</option>
+                        <div class="col-12 col-md-4 mb-4">
+                            <label class="font-weight-bold">1. Lock Framerate (Fix VFR)</label>
+                            <select class="form-control" id="genLockFps">
+                                <option value="original" selected>Do Not Lock (Use Original)</option>
                                 <option value="24000/1001">23.976 fps</option>
                                 <option value="24/1">24.000 fps</option>
                                 <option value="25/1">25.000 fps (PAL)</option>
                                 <option value="30000/1001">29.970 fps</option>
                                 <option value="30/1">30.000 fps</option>
+                                <option value="60000/1001">59.940 fps</option>
                                 <option value="60/1">60.000 fps</option>
                             </select>
+                            <small class="form-text text-muted mt-1">Duplicates/drops frames to lock to CFR.</small>
                         </div>
-                        <div class="col-12 col-md-6 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
+                            <label class="font-weight-bold">2. Speed Override (Assume FPS)</label>
+                            <select class="form-control" id="genAssumeFps">
+                                <option value="original" selected>No Speed Override (1:1)</option>
+                                <option value="24000/1001">23.976 fps (Slow-mo)</option>
+                                <option value="24/1">24.000 fps</option>
+                                <option value="25/1">25.000 fps</option>
+                                <option value="30000/1001">29.970 fps</option>
+                                <option value="30/1">30.000 fps</option>
+                                <option value="60000/1001">59.940 fps</option>
+                                <option value="60/1">60.000 fps (Fast-forward)</option>
+                            </select>
+                            <small class="form-text text-muted mt-1">Plays locked frames at this new speed.</small>
+                        </div>
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Crop (Top, Bottom, Left, Right)</label>
                             <div class="d-flex">
                                 <input type="number" class="form-control mr-2 px-1 text-center" id="cropT" value="0" min="0">
@@ -169,13 +185,13 @@
                                 <option value="original" selected>Original Unchanged</option>
                                 <option value="276:100">Anamorphic 2.76:1</option>
                                 <option value="266:100">Anamorphic 2.66:1</option>
-                                <option value="239:100">Scope 2.39:1 (2048x858)</option>
+                                <option value="239:100">Scope 2.39:1</option>
                                 <option value="235:100">Scope 2.35:1</option>
                                 <option value="220:100">Scope 2.20:1</option>
                                 <option value="2:1">Univision 2.00:1</option>
-                                <option value="190:100">IMAX 1.90:1 (2048x1080)</option>
-                                <option value="185:100">Flat 1.85:1 (1998x1080)</option>
-                                <option value="16:9">Widescreen 1.78:1 (16:9)</option>
+                                <option value="190:100">IMAX 1.90:1</option>
+                                <option value="185:100">Flat 1.85:1</option>
+                                <option value="16:9">Widescreen 1.78:1</option>
                                 <option value="166:100">1.66:1</option>
                                 <option value="160:100">1.60:1</option>
                                 <option value="150:100">1.50:1</option>
@@ -208,12 +224,12 @@
                         <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Color Space</label>
                             <select class="form-control" id="genColor">
-                                <option value="bt601">BT.601</option>
-                                <option value="bt709">BT.709</option>
                                 <option value="bt2020" selected>BT.2020</option>
-                                <option value="dcip3">DCI P3</option>
+                                <option value="dcip3">P3-DCI</option>
                                 <option value="p3d65">P3-D65</option>
                                 <option value="p3d60">P3-D60</option>
+                                <option value="bt709">BT.709</option>
+                                <option value="bt601">BT.601</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-4 mb-4">
@@ -314,8 +330,8 @@
                                     <label class="font-weight-bold">Display Color Space</label>
                                     <select class="form-control" id="genMasterColor">
                                         <option value="bt2020">Rec. 2020</option>
-                                        <option value="p3d65" selected>P3-D65 (Display P3)</option>
-                                        <option value="dcip3">DCI-P3</option>
+                                        <option value="dcip3">P3-DCI</option>
+                                        <option value="p3d65" selected>P3-D65</option>
                                         <option value="p3d60">P3-D60</option>
                                         <option value="bt709">Rec. 709</option>
                                     </select>
@@ -343,11 +359,32 @@
                     </div>
                 </form>
 
-                <!-- Command Output Area -->
+                <!-- ==============================================
+                     DYNAMIC COMMAND OUTPUT AREAS
+                     ============================================== -->
+
+                <!-- STEP 1: HDR10+ JSON Secondary Command Output Area (Dynamic) -->
+                <div class="mt-5 pb-4 border-bottom border-light" id="hdr10pCommandContainer" style="display: none;">
+                    <label class="font-weight-bold text-danger" id="hdr10pStepLabel">Step 1: HDR10+ JSON Creator Command</label>
+                    <p class="text-muted small mb-2">Run this command first to dynamically generate your <code>fake_hdr10plus.json</code> file on your drive based on your metadata settings.</p>
+                    <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="hdr10pCommandOutput"></code></pre>
+                    <button class="btn btn-danger px-4 mt-2" onclick="copyHdr10pCommand()" id="copyHdrBtn">Copy JSON Command</button>
+                </div>
+
+                <!-- STEP 2: Dolby Vision RPU Generator (Dynamic - Only shows if HDR10+ AND DV are selected) -->
+                <div class="mt-4 pb-4 border-bottom border-light" id="dvRpuCommandContainer" style="display: none;">
+                    <label class="font-weight-bold text-info" id="dvRpuStepLabel">Step 2: Dolby Vision RPU Generator Command</label>
+                    <p class="text-muted small mb-2">Run this command to use <code>dovi_tool</code> to instantly generate your Dolby Vision RPU file (<code>RPU.bin</code>) directly from the HDR10+ JSON you just created.</p>
+                    <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dvRpuCommandOutput"></code></pre>
+                    <button class="btn btn-info px-4 mt-2" onclick="copyDvRpuCommand()" id="copyDvRpuBtn">Copy RPU Command</button>
+                </div>
+
+                <!-- FINAL STEP: Primary Encode Command Output Area -->
                 <div class="mt-4">
-                    <label class="font-weight-bold">Generated Pipeline (One-Line Execution Block):</label>
+                    <label class="font-weight-bold text-primary" id="mainCommandLabel">Generated Pipeline (Main Encode Command):</label>
+                    <p class="text-muted small mb-2">Paste this directly into your terminal. It instantly injects Python frame processing into memory, pipelines it to x265, and automatically cleans up.</p>
                     <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="finalCommandOutput"></code></pre>
-                    <button class="btn btn-primary px-4 mt-2" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
+                    <button class="btn btn-primary px-4 mt-2" onclick="copyGeneratedCommand()" id="copyBtn">Copy Encode Command</button>
                 </div>
             </div>
 
@@ -393,7 +430,8 @@
                         // VapourSynth Variables
                         const inFile = document.getElementById('genInputFile').value || 'input.mp4';
                         const lutFile = document.getElementById('genLutFile').value;
-                        const fps = document.getElementById('genFps').value;
+                        const lockFps = document.getElementById('genLockFps').value;
+                        const assumeFps = document.getElementById('genAssumeFps').value;
                         
                         const cT = parseInt(document.getElementById('cropT').value) || 0;
                         const cB = parseInt(document.getElementById('cropB').value) || 0;
@@ -448,11 +486,16 @@
                             x265Profile = 'main12';
                         }
 
-                        // UI Logic for HDR formats
+                        // UI Elements
                         const dvToggle = document.getElementById('dvToggleContainer');
                         const hdr10pToggle = document.getElementById('hdr10pToggleContainer');
                         const advHdr = document.getElementById('advancedHdrMetadata');
+                        
+                        const hdr10pCommandContainer = document.getElementById('hdr10pCommandContainer');
+                        const dvRpuCommandContainer = document.getElementById('dvRpuCommandContainer');
+                        const mainCommandLabel = document.getElementById('mainCommandLabel');
 
+                        // Manage Toggles based on Transfer Function
                         if (transfer === 'hlg' || transfer === 'pq') {
                             dvToggle.style.display = 'block';
                         } else {
@@ -468,14 +511,71 @@
                         }
 
                         // ==========================================
-                        // BUILD UNIFIED ONE-LINE PYTHON STRING 
+                        // INTELLIGENT STEP SEQUENCING
+                        // ==========================================
+                        let stepCount = 1;
+
+                        if (transfer === 'pq' && useHdr10p) {
+                            // Step 1: HDR10+ JSON
+                            hdr10pCommandContainer.style.display = 'block';
+                            document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`;
+                            stepCount++;
+                            
+                            // Step 2: Dolby Vision RPU Creator (Conditional)
+                            if (useDv) {
+                                dvRpuCommandContainer.style.display = 'block';
+                                document.getElementById('dvRpuStepLabel').innerText = `Step ${stepCount}: Dolby Vision RPU Generator Command`;
+                                stepCount++;
+                                
+                                // dovi_tool generate command using the fake_hdr10plus.json
+                                const rpuCmd = `dovi_tool generate -j fake_hdr10plus.json -o RPU.bin`;
+                                document.getElementById('dvRpuCommandOutput').innerText = rpuCmd;
+                            } else {
+                                dvRpuCommandContainer.style.display = 'none';
+                            }
+                            
+                            // Final Step: Main Encode
+                            mainCommandLabel.innerText = `Step ${stepCount}: Generated Pipeline (Main Encode Command)`;
+                            
+                        } else {
+                            // Reset to 1-Step Workflow
+                            hdr10pCommandContainer.style.display = 'none';
+                            dvRpuCommandContainer.style.display = 'none';
+                            mainCommandLabel.innerText = "Generated Pipeline (Main Encode Command):";
+                        }
+
+
+                        // ==========================================
+                        // 1. BUILD HDR10+ JSON SCRIPT STRING
                         // ==========================================
                         
-                        // We use semicolons so the entire Python script sits cleanly on one continuous line
-                        let pyString = `import vapoursynth as vs; core = vs.core; clip = core.lsmas.LWLibavSource(source=\\"${inFile}\\"); `;
+                        let displayColorString = "";
+                        switch(masterColorSpace) {
+                            case 'bt2020': displayColorString = "Rec2020"; break;
+                            case 'p3d65': displayColorString = "P3-D65"; break;
+                            case 'dcip3': displayColorString = "P3-DCI"; break;
+                            case 'p3d60': displayColorString = "P3-D60"; break;
+                            case 'bt709': displayColorString = "Rec709"; break;
+                        }
+
+                        // Pure one-line bash command using echo to instantly build a structured JSON based on UI parameters.
+                        const jsonCmd = `echo '{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${masterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}' > fake_hdr10plus.json`;
+                        document.getElementById('hdr10pCommandOutput').innerText = jsonCmd;
+
+                        // ==========================================
+                        // 2. BUILD UNIFIED ONE-LINE PYTHON STRING 
+                        // ==========================================
                         
-                        if (fps !== "original") {
-                            let [num, den] = fps.split('/');
+                        let sourceArgs = `source=\\"${inFile}\\"`;
+                        if (lockFps !== "original") {
+                            let [num, den] = lockFps.split('/');
+                            sourceArgs += `, fpsnum=${num}, fpsden=${den}`;
+                        }
+                        
+                        let pyString = `import vapoursynth as vs; core = vs.core; clip = core.lsmas.LWLibavSource(${sourceArgs}); `;
+                        
+                        if (assumeFps !== "original") {
+                            let [num, den] = assumeFps.split('/');
                             pyString += `clip = core.std.AssumeFPS(clip, fpsnum=${num}, fpsden=${den}); `;
                         }
 
@@ -496,7 +596,7 @@
                         pyString += `clip.set_output()`;
 
                         // ==========================================
-                        // BUILD X265 COMMAND 
+                        // 3. BUILD X265 COMMAND 
                         // ==========================================
                         
                         let transferFlag = '';
@@ -592,9 +692,39 @@
                         btn.classList.remove('btn-primary');
                         btn.classList.add('btn-success');
                         setTimeout(() => {
-                            btn.innerText = "Copy Command";
+                            btn.innerText = "Copy Encode Command";
                             btn.classList.remove('btn-success');
                             btn.classList.add('btn-primary');
+                        }, 2000);
+                    });
+                }
+
+                function copyHdr10pCommand() {
+                    const cmdText = document.getElementById('hdr10pCommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyHdrBtn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-danger');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy JSON Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-danger');
+                        }, 2000);
+                    });
+                }
+
+                function copyDvRpuCommand() {
+                    const cmdText = document.getElementById('dvRpuCommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyDvRpuBtn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-info');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy RPU Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-info');
                         }, 2000);
                     });
                 }
@@ -622,5 +752,3 @@
 
 </body>
 </html>
-
-
