@@ -165,22 +165,22 @@
                             <input type="text" class="form-control" id="genOutputFile" value="master_encode.hevc">
                         </div>
                         <div class="col-12 col-md-6 mb-4">
-                            <label class="font-weight-bold">Aspect Ratio (SAR)</label>
+                            <label class="font-weight-bold">Display Aspect Ratio</label>
                             <select class="form-control" id="genSar">
-                                <option value="1" selected>1:1 (Square Pixels)</option>
-                                <option value="190:100">IMAX 1.90:1 (2048 by 1080)</option>
-                                <option value="185:100">Flat 1.85:1 (1998 by 1080)</option>
-                                <option value="239:100">Scope 2.39:1 (2048 by 858)</option>
-                                <option value="235:100">Scope 2.35:1</option>
-                                <option value="220:100">Scope 2.20:1</option>
+                                <option value="original" selected>Original Unchanged</option>
                                 <option value="276:100">Anamorphic 2.76:1</option>
                                 <option value="266:100">Anamorphic 2.66:1</option>
+                                <option value="239:100">Scope 2.39:1 (2048x858)</option>
+                                <option value="235:100">Scope 2.35:1</option>
+                                <option value="220:100">Scope 2.20:1</option>
                                 <option value="2:1">Univision 2.00:1</option>
-                                <option value="143:100">IMAX 1.43:1</option>
-                                <option value="150:100">1.50:1</option>
+                                <option value="190:100">IMAX 1.90:1 (2048x1080)</option>
+                                <option value="185:100">Flat 1.85:1 (1998x1080)</option>
+                                <option value="16:9">Widescreen 1.78:1 (16:9)</option>
                                 <option value="166:100">1.66:1</option>
                                 <option value="160:100">1.60:1</option>
-                                <option value="16:9">1.78:1</option>
+                                <option value="150:100">1.50:1</option>
+                                <option value="143:100">IMAX 1.43:1</option>
                                 <option value="137:100">Academy Ratio 1.37:1</option>
                             </select>
                         </div>
@@ -269,60 +269,65 @@
                         </div>
                     </div>
 
-                    <!-- Advanced HDR Metadata (PQ Only) -->
-                    <div class="mt-3" id="advancedHdrMetadata" style="display: none;">
-                        <hr class="my-3 border-secondary">
-                        <h6 class="font-weight-bold text-danger mb-4">HDR Content & Mastering Metadata (PQ Only)</h6>
+                    <!-- Advanced HDR Metadata Box (PQ Only) -->
+                    <div class="mt-4 p-4 bg-light border rounded" id="advancedHdrMetadata" style="display: none;">
+                        <h5 class="font-weight-bold text-danger mb-4">PQ HDR Advanced Metadata</h5>
                         
-                        <div class="row">
-                            <!-- Content Details (Fixed Mobile Overlap) -->
-                            <div class="col-12 col-md-6 mb-4">
-                                <label class="font-weight-bold">MaxCLL (Content Light Level)</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genMaxCll" value="1000" min="0">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">nits</span>
+                        <!-- SECTION 1: Content Metadata -->
+                        <div class="mb-4">
+                            <h6 class="font-weight-bold text-secondary border-bottom pb-2 mb-3">HDR Content Metadata</h6>
+                            <div class="row">
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label class="font-weight-bold">MaxCLL (Content Light Level)</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="genMaxCll" value="1000" min="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">nits</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-6 mb-4">
-                                <label class="font-weight-bold">MaxFALL (Frame Average)</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genMaxFall" value="400" min="0">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">nits</span>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label class="font-weight-bold">MaxFALL (Frame Average)</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="genMaxFall" value="400" min="0">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">nits</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <!-- Mastering Display Details -->
-                            <div class="col-12 col-lg-4 mb-4">
-                                <label class="font-weight-bold">Mastering Display Color Space</label>
-                                <select class="form-control" id="genMasterColor">
-                                    <option value="bt2020">Rec. 2020</option>
-                                    <option value="p3d65" selected>P3-D65 (Display P3)</option>
-                                    <option value="dcip3">DCI-P3</option>
-                                    <option value="p3d60">P3-D60</option>
-                                    <option value="bt709">Rec. 709</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                                <label class="font-weight-bold">Display Max Brightness</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genMasterMax" value="1000" min="1" step="1">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">nits</span>
+                        
+                        <!-- SECTION 2: Mastering Display Metadata -->
+                        <div>
+                            <h6 class="font-weight-bold text-secondary border-bottom pb-2 mb-3">HDR Mastering Display Metadata</h6>
+                            <div class="row">
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label class="font-weight-bold">Mastering Color Space</label>
+                                    <select class="form-control" id="genMasterColor">
+                                        <option value="bt2020">Rec. 2020</option>
+                                        <option value="p3d65" selected>P3-D65 (Display P3)</option>
+                                        <option value="dcip3">DCI-P3</option>
+                                        <option value="p3d60">P3-D60</option>
+                                        <option value="bt709">Rec. 709</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label class="font-weight-bold">Display Max Brightness</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="genMasterMax" value="1000" min="1" step="1">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">nits</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-4 mb-4">
-                                <label class="font-weight-bold">Display Black Level</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genMasterMin" value="0.0001" min="0" step="0.0001">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">nits</span>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label class="font-weight-bold">Display Black Level</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="genMasterMin" value="0.0001" min="0" step="0.0001">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">nits</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -331,7 +336,7 @@
                 </form>
 
                 <!-- Command Output Area -->
-                <div class="mt-2">
+                <div class="mt-4">
                     <label class="font-weight-bold">Generated Pipeline (Copy & Run in Terminal):</label>
                     <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code id="finalCommandOutput"></code></pre>
                     <button class="btn btn-primary px-4 mt-2" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
@@ -433,9 +438,10 @@
                             dvToggle.style.display = 'none';
                         }
 
+                        // Display Block Fix
                         if (transfer === 'pq') {
                             hdr10pToggle.style.display = 'block';
-                            advHdr.style.display = 'flex';
+                            advHdr.style.display = 'block'; 
                         } else {
                             hdr10pToggle.style.display = 'none';
                             advHdr.style.display = 'none';
@@ -539,7 +545,12 @@
                             }
                         }
 
-                        cmd += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --sar ${sar} --level-idc 5.1 --max-luma 1023 --no-info `;
+                        cmd += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma 1023 --no-info `;
+
+                        // Aspect Ratio (Omit if Original Unchanged)
+                        if (sar !== 'original') {
+                            cmd += `--sar ${sar} `;
+                        }
 
                         if (useDv) {
                             if (transfer === 'hlg') cmd += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin `;
