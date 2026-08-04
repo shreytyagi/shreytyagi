@@ -83,110 +83,105 @@
             <hr class="my-5">
 
             <!-- Bonus: Interactive x265 Command Generator -->
-            <div class="mt-4 mb-5">
-                <h4 class="mb-2 text-primary">Interactive Master Script Builder</h4>
+            <div class="mt-4 mb-5 p-4 bg-light border rounded">
+                <h4 class="mb-2">Interactive Master Script Builder</h4>
                 <p class="text-muted mb-4">Select your parameters below. The script will automatically assemble the mathematically perfect pipeline for your specific hardware, delivery needs, and format.</p>
                 
                 <form id="x265GeneratorForm">
                     <div class="row">
-                        <!-- Video Format Selection -->
-                        <div class="col-md-4 mb-3">
-                            <label class="font-weight-bold">Video Format</label>
-                            <select class="form-control" id="genFormat">
-                                <option value="sdr">SDR (Rec. 709)</option>
-                                <option value="hlg" selected>HLG Broadcast HDR</option>
-                                <option value="pq">PQ Cinematic HDR</option>
+                        <!-- Transfer Function -->
+                        <div class="col-md-3 mb-3">
+                            <label class="font-weight-bold">Transfer Function</label>
+                            <select class="form-control" id="genTransfer">
+                                <option value="bt709">SDR (BT.709)</option>
+                                <option value="arib-std-b67" selected>HLG</option>
+                                <option value="smpte2084">PQ (SMPTE 2084)</option>
+                                <option value="bt470m">Gamma 2.2</option>
+                                <option value="bt470bg">Gamma 2.8</option>
+                                <option value="iec61966-2-1">sRGB</option>
+                                <option value="linear">Linear</option>
+                            </select>
+                        </div>
+
+                        <!-- Color Space -->
+                        <div class="col-md-3 mb-3">
+                            <label class="font-weight-bold">Color Space</label>
+                            <select class="form-control" id="genColor">
+                                <option value="bt709">Rec. 709</option>
+                                <option value="bt2020" selected>Rec. 2020</option>
+                                <option value="smpte170m">Rec. 601 (NTSC)</option>
+                                <option value="bt470bg">Rec. 601 (PAL)</option>
+                                <option value="smpte431">DCI-P3</option>
+                                <option value="smpte432">Display P3 (P3-D65)</option>
                             </select>
                         </div>
 
                         <!-- Encode Quality Level -->
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="font-weight-bold">Encode Quality Level</label>
                             <select class="form-control" id="genQuality">
                                 <option value="high" selected>High (Optimized & Fast)</option>
-                                <option value="extreme">Extreme (Max Compression, Slow)</option>
+                                <option value="extreme">Extreme (Max Compression)</option>
                             </select>
-                            <small class="form-text text-muted">Extreme forces deep 3D geometry.</small>
                         </div>
                         
                         <!-- CPU Pools -->
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="font-weight-bold">CPU Pools (P-Cores)</label>
                             <input type="number" class="form-control" id="genPools" value="10" min="1" max="128">
-                            <small class="form-text text-muted">M4 Max: 10 | M4 Pro: 8</small>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <!-- Bitrate & Architecture -->
-                        <div class="col-md-4 mb-3">
+                    <div class="row align-items-center mt-2">
+                        <!-- Bitrate -->
+                        <div class="col-md-3 mb-3">
                             <label class="font-weight-bold">Peak VBV Bitrate (kbps)</label>
                             <input type="number" class="form-control" id="genVbv" value="160000" step="1000">
-                            <small class="form-text text-muted">Web streaming? Lower to 50000.</small>
                         </div>
 
-                        <div class="col-md-4 mb-3">
-                            <label class="font-weight-bold">Keyint (I-Frame Interval)</label>
-                            <input type="number" class="form-control" id="genKeyint" value="30" step="1">
-                            <small class="form-text text-muted">Usually matches FPS (e.g., 30)</small>
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label class="font-weight-bold">B-Frames</label>
-                            <input type="number" class="form-control" id="genBframes" value="4" min="0" max="16">
-                            <small class="form-text text-muted">Bidirectional limit (4 to 8)</small>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <!-- Scrubbing/Editing Toggle -->
-                        <div class="col-md-4 mb-3">
-                            <div class="custom-control custom-switch">
+                        <!-- Toggles aligned in a uniform row -->
+                        <div class="col-md-9 mb-3 d-flex flex-wrap align-items-center">
+                            
+                            <div class="custom-control custom-switch mr-4 mt-3">
                                 <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
-                                <label class="custom-control-label font-weight-bold text-primary" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
+                                <label class="custom-control-label font-weight-bold text-dark" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
                             </div>
-                            <small class="form-text text-muted mt-1">Check for iMovie/Web. Uncheck for pure archival.</small>
-                        </div>
 
-                        <!-- DV Toggle -->
-                        <div class="col-md-4 mb-3" id="dvToggleContainer">
-                            <div class="custom-control custom-switch">
+                            <div class="custom-control custom-switch mr-4 mt-3" id="dvToggleContainer">
                                 <input type="checkbox" class="custom-control-input" id="genDv" checked>
-                                <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
+                                <label class="custom-control-label font-weight-bold text-dark" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
                             </div>
-                        </div>
 
-                        <!-- HDR10+ Toggle -->
-                        <div class="col-md-4 mb-3" id="hdr10pToggleContainer" style="display: none;">
-                            <div class="custom-control custom-switch">
+                            <div class="custom-control custom-switch mt-3" id="hdr10pToggleContainer" style="display: none;">
                                 <input type="checkbox" class="custom-control-input" id="genHdr10p">
-                                <label class="custom-control-label font-weight-bold" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
+                                <label class="custom-control-label font-weight-bold text-dark" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
                             </div>
+
                         </div>
                     </div>
 
-                    <!-- Advanced HDR Metadata (Hidden for SDR/HLG) -->
-                    <div class="row mt-3" id="advancedHdrMetadata" style="display: none;">
+                    <!-- Advanced HDR Metadata (Hidden unless PQ is selected) -->
+                    <div class="row mt-2" id="advancedHdrMetadata" style="display: none;">
                         <div class="col-12"><hr class="my-2"></div>
                         <div class="col-md-12 mb-2">
-                            <h6 class="font-weight-bold text-danger">Advanced HDR Metadata (PQ Only)</h6>
+                            <h6 class="font-weight-bold text-dark">Advanced HDR Metadata (PQ Required)</h6>
                         </div>
                         <div class="col-md-8 mb-3">
-                            <label class="font-weight-bold small">Mastering Display Coordinates</label>
-                            <input type="text" class="form-control" id="genMasterDisp" value="G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)">
+                            <label class="font-weight-bold small text-muted">Mastering Display Coordinates</label>
+                            <input type="text" class="form-control form-control-sm" id="genMasterDisp" value="G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="font-weight-bold small">Max CLL / FALL</label>
-                            <input type="text" class="form-control" id="genMaxCll" value="1000,400">
+                            <label class="font-weight-bold small text-muted">Max CLL / FALL</label>
+                            <input type="text" class="form-control form-control-sm" id="genMaxCll" value="1000,400">
                         </div>
                     </div>
                 </form>
 
                 <!-- Command Output Box -->
-                <div class="mt-4 pt-2">
-                    <label class="font-weight-bold text-success">Your Custom Master Pipeline:</label>
+                <div class="mt-3">
+                    <label class="font-weight-bold">Your Custom Master Pipeline:</label>
                     <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code id="finalCommandOutput"></code></pre>
-                    <button class="btn btn-success mt-2 px-4" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
+                    <button class="btn btn-secondary mt-2 px-4" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
                 </div>
             </div>
 
@@ -195,23 +190,6 @@
                 document.addEventListener("DOMContentLoaded", function() {
                     const formElements = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
                     
-                    // Smart Listeners for intelligent UI updates
-                    document.getElementById('genQuality').addEventListener('change', function(e) {
-                        if (e.target.value === 'extreme') {
-                            document.getElementById('genBframes').value = 8;
-                        } else {
-                            document.getElementById('genBframes').value = 4;
-                        }
-                    });
-
-                    document.getElementById('genScrubbing').addEventListener('change', function(e) {
-                        if (e.target.checked) {
-                            document.getElementById('genKeyint').value = 30;
-                        } else {
-                            document.getElementById('genKeyint').value = 300;
-                        }
-                    });
-
                     // Listeners for real-time generation
                     formElements.forEach(el => {
                         el.addEventListener('input', updateCommand);
@@ -219,79 +197,85 @@
                     });
 
                     function updateCommand() {
-                        const format = document.getElementById('genFormat').value;
+                        const transfer = document.getElementById('genTransfer').value;
+                        const colorSpace = document.getElementById('genColor').value;
                         const quality = document.getElementById('genQuality').value;
                         const isScrubbing = document.getElementById('genScrubbing').checked;
                         const pools = document.getElementById('genPools').value;
-                        const bframes = document.getElementById('genBframes').value;
                         const vbv = document.getElementById('genVbv').value;
-                        const keyint = document.getElementById('genKeyint').value;
                         const useDv = document.getElementById('genDv').checked;
                         const useHdr10p = document.getElementById('genHdr10p').checked;
                         const masterDisp = document.getElementById('genMasterDisp').value;
                         const maxCll = document.getElementById('genMaxCll').value;
 
-                        // UI Logic: Show/Hide fields based on Format
+                        // Background Automation for B-frames and Keyint
+                        const bframes = (quality === 'extreme') ? 8 : 4;
+                        const keyint = isScrubbing ? 30 : 300;
+                        const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
+
+                        // UI Logic: Show/Hide Dolby Vision and HDR10+ dynamically
                         const dvToggle = document.getElementById('dvToggleContainer');
                         const hdr10pToggle = document.getElementById('hdr10pToggleContainer');
                         const advHdr = document.getElementById('advancedHdrMetadata');
 
-                        if (format === 'sdr') {
+                        // Dolby Vision applies to HLG and PQ
+                        if (transfer === 'smpte2084' || transfer === 'arib-std-b67') {
+                            dvToggle.style.display = 'block';
+                        } else {
                             dvToggle.style.display = 'none';
-                            hdr10pToggle.style.display = 'none';
-                            advHdr.style.display = 'none';
-                        } else if (format === 'hlg') {
-                            dvToggle.style.display = 'block';
-                            hdr10pToggle.style.display = 'none';
-                            advHdr.style.display = 'none';
-                        } else if (format === 'pq') {
-                            dvToggle.style.display = 'block';
+                        }
+
+                        // HDR10+ and Metadata apply ONLY to PQ
+                        if (transfer === 'smpte2084') {
                             hdr10pToggle.style.display = 'block';
                             advHdr.style.display = 'flex';
+                        } else {
+                            hdr10pToggle.style.display = 'none';
+                            advHdr.style.display = 'none';
                         }
 
                         // Base command (Constant Archival Protections)
-                        let cmd = `vspipe -c y4m script.vpy - | x265 - --y4m --preset slow --profile main10 --output-depth 10 --input-csp i420 `;
+                        let cmd = `vspipe -c y4m script.vpy - | x265 - --y4m -o master_encode.hevc --preset slow --profile main10 --output-depth 10 --input-csp i420 `;
                         
-                        // Dynamic Quality Variables
+                        // Bitrate & Pools & Automated B-frames
                         cmd += `--vbv-maxrate ${vbv} --vbv-bufsize ${vbv} --crf 14 --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} --pools ${pools} `;
                         
-                        // The Quality Switch
+                        // The Quality Logic Switch
                         if (quality === 'extreme') {
                             cmd += `--hme --tu-intra-depth 4 --tu-inter-depth 4 `;
                         }
 
                         cmd += `--no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip `;
 
-                        // Format Specific Math
-                        if (format === 'sdr') {
-                            cmd += `-o sdr.hevc --colorprim bt709 --transfer bt709 --colormatrix bt709 --range limited --chromaloc 0 `;
-                        } else if (format === 'hlg') {
-                            cmd += `-o hlghdrdv84.hevc --colorprim bt2020 --transfer arib-std-b67 --colormatrix bt2020nc --range limited --chromaloc 2 --atc-sei 18 --pic-struct 0 `;
-                        } else if (format === 'pq') {
-                            cmd += `-o pqhdr10pdv81.hevc --colorprim bt2020 --transfer smpte2084 --colormatrix bt2020nc --range limited --chromaloc 2 --hdr10 `;
-                            cmd += `--master-display "${masterDisp}" --max-cll "${maxCll}" `;
-                            
+                        // Matrix and Chromaloc Mapping logic
+                        let colorMatrix = colorSpace;
+                        if (colorSpace === 'bt2020') colorMatrix = 'bt2020nc';
+                        if (colorSpace === 'smpte431') colorMatrix = 'smpte170m'; // DCI-P3 often uses 601 matrix
+                        if (colorSpace === 'smpte432') colorMatrix = 'bt709'; // Display P3 usually maps to 709 matrix
+                        
+                        let chromaloc = (colorSpace === 'bt2020' || colorSpace === 'smpte431' || colorSpace === 'smpte432') ? 2 : 0;
+
+                        cmd += `--colorprim ${colorSpace} --transfer ${transfer} --colormatrix ${colorMatrix} --range limited --chromaloc ${chromaloc} `;
+
+                        // Specific metadata hooks
+                        if (transfer === 'arib-std-b67') {
+                            cmd += `--atc-sei 18 --pic-struct 0 `;
+                        }
+
+                        if (transfer === 'smpte2084') {
+                            cmd += `--hdr10 --master-display "${masterDisp}" --max-cll "${maxCll}" `;
                             if (useHdr10p) {
                                 cmd += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
                             }
                         }
 
-                        // Delivery & Editing Logic (The Scrubbing Switch)
-                        cmd += `--videoformat component --repeat-headers --hrd --aud `;
-                        
-                        if (isScrubbing) {
-                            cmd += `--no-open-gop `;
-                        } else {
-                            cmd += `--open-gop `;
-                        }
-                        
-                        cmd += `--min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma 1023 --sar 1 --no-info `;
+                        // Delivery & Editing Logic (Automated Keyint & GOP)
+                        cmd += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma 1023 --sar 1 --no-info `;
 
                         // Dolby Vision Injection
-                        if (format !== 'sdr' && useDv) {
-                            if (format === 'hlg') cmd += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin`;
-                            if (format === 'pq') cmd += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin`;
+                        if (useDv) {
+                            if (transfer === 'arib-std-b67') cmd += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin`;
+                            if (transfer === 'smpte2084') cmd += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin`;
                         }
 
                         // Print to Output Box
@@ -308,12 +292,12 @@
                     navigator.clipboard.writeText(cmdText).then(() => {
                         const btn = document.getElementById('copyBtn');
                         btn.innerText = "Copied!";
-                        btn.classList.remove('btn-success');
-                        btn.classList.add('btn-secondary');
+                        btn.classList.remove('btn-secondary');
+                        btn.classList.add('btn-success');
                         setTimeout(() => {
                             btn.innerText = "Copy Command";
-                            btn.classList.remove('btn-secondary');
-                            btn.classList.add('btn-success');
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-secondary');
                         }, 2000);
                     });
                 }
