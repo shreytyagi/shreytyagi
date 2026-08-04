@@ -118,7 +118,6 @@
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label class="font-weight-bold">CPU Pools (P-Cores)</label>
-                            <!-- Number only input via onkeypress -->
                             <input type="number" class="form-control" id="genPools" value="10" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
                         <div class="col-md-6 mb-4">
@@ -159,18 +158,62 @@
                     </div>
 
                     <!-- Advanced HDR Metadata (PQ Only) -->
-                    <div class="row mt-3" id="advancedHdrMetadata" style="display: none;">
-                        <div class="col-12"><hr class="my-2 border-secondary"></div>
-                        <div class="col-md-12 mb-3">
-                            <h6 class="font-weight-bold text-danger">HDR Mastering Metadata (PQ Only)</h6>
+                    <div class="mt-3" id="advancedHdrMetadata" style="display: none;">
+                        <hr class="my-3 border-secondary">
+                        <h6 class="font-weight-bold text-danger mb-4">HDR Content & Mastering Metadata (PQ Only)</h6>
+                        
+                        <div class="row">
+                            <!-- Content Details -->
+                            <div class="col-md-6 mb-4">
+                                <label class="font-weight-bold">Max Content Light Level (MaxCLL)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMaxCll" value="1000" min="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="font-weight-bold">Max Frame Average (MaxFALL)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMaxFall" value="400" min="0">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-8 mb-4">
-                            <label class="font-weight-bold small text-muted">Display Coordinates</label>
-                            <input type="text" class="form-control form-control-sm" id="genMasterDisp" value="G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)">
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <label class="font-weight-bold small text-muted">Max CLL / FALL</label>
-                            <input type="text" class="form-control form-control-sm" id="genMaxCll" value="1000,400">
+
+                        <div class="row">
+                            <!-- Mastering Display Details -->
+                            <div class="col-md-4 mb-4">
+                                <label class="font-weight-bold">Mastering Display Color Space</label>
+                                <select class="form-control" id="genMasterColor">
+                                    <option value="bt2020">Rec. 2020</option>
+                                    <option value="p3d65" selected>P3-D65 (Display P3)</option>
+                                    <option value="dcip3">DCI-P3</option>
+                                    <option value="p3d60">P3-D60</option>
+                                    <option value="bt709">Rec. 709</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <label class="font-weight-bold">Display Max Brightness</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMasterMax" value="1000" min="1" step="1">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <label class="font-weight-bold">Display Black Level</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMasterMin" value="0.0001" min="0" step="0.0001">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -210,8 +253,13 @@
                         const vbvMbps = document.getElementById('genVbv').value;
                         const useDv = document.getElementById('genDv').checked;
                         const useHdr10p = document.getElementById('genHdr10p').checked;
-                        const masterDisp = document.getElementById('genMasterDisp').value;
-                        const maxCll = document.getElementById('genMaxCll').value;
+                        
+                        // New User-Friendly Metadata Variables
+                        const maxCll = document.getElementById('genMaxCll').value || 1000;
+                        const maxFall = document.getElementById('genMaxFall').value || 400;
+                        const masterColorSpace = document.getElementById('genMasterColor').value;
+                        const masterMax = document.getElementById('genMasterMax').value || 1000;
+                        const masterMin = document.getElementById('genMasterMin').value || 0.0001;
 
                         // Math conversions
                         const vbvKbps = vbvMbps * 1000;
@@ -232,7 +280,7 @@
 
                         if (transfer === 'pq') {
                             hdr10pToggle.style.display = 'block';
-                            advHdr.style.display = 'flex';
+                            advHdr.style.display = 'block';
                         } else {
                             hdr10pToggle.style.display = 'none';
                             advHdr.style.display = 'none';
@@ -261,6 +309,20 @@
                         
                         let chromaloc = (colorSpace === 'bt2020' || colorSpace === 'dcip3' || colorSpace === 'p3d65' || colorSpace === 'p3d60') ? 2 : 0;
 
+                        // Master Display Coordinate Calculation (xy * 50000, Luminance * 10000)
+                        let masterCoords = "";
+                        switch(masterColorSpace) {
+                            case 'bt2020': masterCoords = "G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)"; break;
+                            case 'p3d65': masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)"; break;
+                            case 'dcip3': masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15700,17550)"; break;
+                            case 'p3d60': masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(16084,16884)"; break;
+                            case 'bt709': masterCoords = "G(15000,30000)B(7500,3000)R(32000,16500)WP(15635,16450)"; break;
+                        }
+                        
+                        const calcMaxLum = Math.round(parseFloat(masterMax) * 10000);
+                        const calcMinLum = Math.round(parseFloat(masterMin) * 10000);
+                        const masterDisplayString = `${masterCoords}L(${calcMaxLum},${calcMinLum})`;
+
                         // Base Command Assembly
                         let cmd = `vspipe -c y4m script.vpy - | x265 - --y4m -o master_encode.hevc --preset slow --profile main10 --output-depth 10 --input-csp i420 `;
                         
@@ -278,7 +340,7 @@
                         }
 
                         if (transfer === 'pq') {
-                            cmd += `--hdr10 --master-display "${masterDisp}" --max-cll "${maxCll}" `;
+                            cmd += `--hdr10 --master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
                             if (useHdr10p) {
                                 cmd += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
                             }
