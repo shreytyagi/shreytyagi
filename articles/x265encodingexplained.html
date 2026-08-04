@@ -82,7 +82,7 @@
 
             <hr class="my-5 border-secondary">
 
-            <!-- Interactive Archival Command Generator (Full Width, Uniform Spacing) -->
+            <!-- Interactive Archival Command Generator (Full Width, Uniform Spacing, Mobile Fixed) -->
             <div class="mt-4 mb-5">
                 <h4 class="mb-2 text-primary">Bonus: The Ultimate VapourSynth + x265 Generator</h4>
                 <p class="text-muted mb-4">This tool generates a single, unified Unix command block. Just copy and paste it into your terminal. It will dynamically build your VapourSynth Python script in memory, process the frames precisely, pipe them to the x265 engine, and automatically clean up after itself.</p>
@@ -91,25 +91,21 @@
                     
                     <h6 class="font-weight-bold text-success mb-3">VapourSynth Processing Engine</h6>
                     
-                    <!-- VapourSynth Row 1: Files -->
+                    <!-- VapourSynth Row 1 -->
                     <div class="row">
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-6 mb-4">
                             <label class="font-weight-bold">Input File Name</label>
                             <input type="text" class="form-control" id="genInputFile" value="input.mov">
                         </div>
-                        <div class="col-md-4 mb-4">
-                            <label class="font-weight-bold">Output File Name</label>
-                            <input type="text" class="form-control" id="genOutputFile" value="master_encode.hevc">
-                        </div>
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-6 mb-4">
                             <label class="font-weight-bold">Apply 3D LUT (Optional)</label>
                             <input type="text" class="form-control" id="genLutFile" placeholder="e.g. cinematic.cube">
                         </div>
                     </div>
 
-                    <!-- VapourSynth Row 2: Geometry & Time -->
+                    <!-- VapourSynth Row 2 -->
                     <div class="row">
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-6 mb-4">
                             <label class="font-weight-bold">Assume FPS</label>
                             <select class="form-control" id="genFps">
                                 <option value="original" selected>Keep Original (Do Not Alter)</option>
@@ -121,43 +117,34 @@
                                 <option value="60/1">60.000 fps</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-6 mb-4">
                             <label class="font-weight-bold">Crop (Top, Bottom, Left, Right)</label>
                             <div class="d-flex">
-                                <input type="number" class="form-control mr-1 px-1 text-center" id="cropT" value="0" min="0">
-                                <input type="number" class="form-control mr-1 px-1 text-center" id="cropB" value="0" min="0">
-                                <input type="number" class="form-control mr-1 px-1 text-center" id="cropL" value="0" min="0">
+                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropT" value="0" min="0">
+                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropB" value="0" min="0">
+                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropL" value="0" min="0">
                                 <input type="number" class="form-control px-1 text-center" id="cropR" value="0" min="0">
                             </div>
                         </div>
-                        <div class="col-md-4 mb-4">
-                            <label class="font-weight-bold">Sample Aspect Ratio (x265)</label>
-                            <select class="form-control" id="genSar">
-                                <option value="1" selected>1 (Square Pixels)</option>
-                                <option value="2">2 (2:1 Anamorphic)</option>
-                                <option value="4:3">4:3</option>
-                                <option value="16:9">16:9</option>
-                            </select>
-                        </div>
                     </div>
 
-                    <!-- VapourSynth Row 3: Resizing -->
-                    <div class="row mb-2">
-                        <div class="col-md-4 mb-4 d-flex align-items-center">
-                            <div class="custom-control custom-switch mt-3">
+                    <!-- VapourSynth Row 3 (Resizing) -->
+                    <div class="row align-items-end mb-2">
+                        <div class="col-12 col-md-4 mb-4">
+                            <div class="custom-control custom-switch mb-2">
                                 <input type="checkbox" class="custom-control-input" id="genResizeToggle">
                                 <label class="custom-control-label font-weight-bold text-dark" for="genResizeToggle" style="cursor: pointer;">Enable Resizing</label>
                             </div>
                         </div>
-                        <div class="col-md-3 mb-4">
+                        <div class="col-12 col-md-3 mb-4">
                             <label class="font-weight-bold">Target Width</label>
                             <input type="number" class="form-control" id="genResizeW" value="3840" disabled>
                         </div>
-                        <div class="col-md-3 mb-4">
+                        <div class="col-12 col-md-3 mb-4">
                             <label class="font-weight-bold">Target Height</label>
                             <input type="number" class="form-control" id="genResizeH" value="2160" disabled>
                         </div>
-                        <div class="col-md-2 mb-4">
+                        <div class="col-12 col-md-2 mb-4">
                             <label class="font-weight-bold">Algorithm</label>
                             <select class="form-control" id="genResizeAlgo" disabled>
                                 <option value="Spline36" selected>Spline36</option>
@@ -171,9 +158,37 @@
                     <hr class="my-3 border-secondary">
                     <h6 class="font-weight-bold text-primary mb-3">x265 Encoding Engine</h6>
 
-                    <!-- x265 Row 1 -->
+                    <!-- x265 Row 1: Files & Geometry -->
                     <div class="row">
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-6 mb-4">
+                            <label class="font-weight-bold">Output File Name</label>
+                            <input type="text" class="form-control" id="genOutputFile" value="master_encode.hevc">
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <label class="font-weight-bold">Aspect Ratio (SAR)</label>
+                            <select class="form-control" id="genSar">
+                                <option value="1" selected>1:1 (Square Pixels)</option>
+                                <option value="190:100">IMAX 1.90:1 (2048 by 1080)</option>
+                                <option value="185:100">Flat 1.85:1 (1998 by 1080)</option>
+                                <option value="239:100">Scope 2.39:1 (2048 by 858)</option>
+                                <option value="235:100">Scope 2.35:1</option>
+                                <option value="220:100">Scope 2.20:1</option>
+                                <option value="276:100">Anamorphic 2.76:1</option>
+                                <option value="266:100">Anamorphic 2.66:1</option>
+                                <option value="2:1">Univision 2.00:1</option>
+                                <option value="143:100">IMAX 1.43:1</option>
+                                <option value="150:100">1.50:1</option>
+                                <option value="166:100">1.66:1</option>
+                                <option value="160:100">1.60:1</option>
+                                <option value="16:9">1.78:1</option>
+                                <option value="137:100">Academy Ratio 1.37:1</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- x265 Row 2: Color Space -->
+                    <div class="row">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Transfer Function</label>
                             <select class="form-control" id="genTransfer">
                                 <option value="gamma24">Gamma 2.4</option>
@@ -183,7 +198,7 @@
                                 <option value="pq">PQ</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Color Space</label>
                             <select class="form-control" id="genColor">
                                 <option value="bt601">BT.601</option>
@@ -194,7 +209,7 @@
                                 <option value="p3d60">P3-D60</option>
                             </select>
                         </div>
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Tuning Profile</label>
                             <select class="form-control" id="genTune">
                                 <option value="none" selected>None (Standard)</option>
@@ -204,20 +219,20 @@
                         </div>
                     </div>
 
-                    <!-- x265 Row 2: Sliders & CPU -->
+                    <!-- x265 Row 3: Sliders & CPU -->
                     <div class="row">
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">CPU Pools (P-Cores)</label>
                             <input type="number" class="form-control" id="genPools" value="10" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold w-100 d-flex justify-content-between">
                                 <span>CRF (Quality)</span>
                                 <span id="crfLabel" class="text-primary">14</span>
                             </label>
                             <input type="range" class="custom-range mt-2" id="genCrf" min="0" max="30" value="14" step="1">
                         </div>
-                        <div class="col-md-4 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold w-100 d-flex justify-content-between">
                                 <span>Peak VBV Bitrate</span>
                                 <span id="vbvLabel" class="text-primary">160 Mbps</span>
@@ -226,27 +241,27 @@
                         </div>
                     </div>
 
-                    <!-- Toggles Row -->
+                    <!-- Toggles Row (Mobile Stacked) -->
                     <div class="row mt-1">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
                                 <label class="custom-control-label font-weight-bold" for="genQualitySwitch" style="cursor: pointer;">Extreme Quality (Max Compression)</label>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-12 col-md-6 mb-3">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
                                 <label class="custom-control-label font-weight-bold" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3" id="dvToggleContainer">
+                        <div class="col-12 col-md-6 mb-3" id="dvToggleContainer">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genDv" checked>
                                 <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3" id="hdr10pToggleContainer" style="display: none;">
+                        <div class="col-12 col-md-6 mb-3" id="hdr10pToggleContainer" style="display: none;">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genHdr10p">
                                 <label class="custom-control-label font-weight-bold" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
@@ -260,9 +275,9 @@
                         <h6 class="font-weight-bold text-danger mb-4">HDR Content & Mastering Metadata (PQ Only)</h6>
                         
                         <div class="row">
-                            <!-- Content Details -->
-                            <div class="col-md-6 mb-4">
-                                <label class="font-weight-bold">Max Content Light Level (MaxCLL)</label>
+                            <!-- Content Details (Fixed Mobile Overlap) -->
+                            <div class="col-12 col-md-6 mb-4">
+                                <label class="font-weight-bold">MaxCLL (Content Light Level)</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="genMaxCll" value="1000" min="0">
                                     <div class="input-group-append">
@@ -270,8 +285,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-4">
-                                <label class="font-weight-bold">Max Frame Average (MaxFALL)</label>
+                            <div class="col-12 col-md-6 mb-4">
+                                <label class="font-weight-bold">MaxFALL (Frame Average)</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="genMaxFall" value="400" min="0">
                                     <div class="input-group-append">
@@ -283,7 +298,7 @@
 
                         <div class="row">
                             <!-- Mastering Display Details -->
-                            <div class="col-md-4 mb-4">
+                            <div class="col-12 col-lg-4 mb-4">
                                 <label class="font-weight-bold">Mastering Display Color Space</label>
                                 <select class="form-control" id="genMasterColor">
                                     <option value="bt2020">Rec. 2020</option>
@@ -293,7 +308,7 @@
                                     <option value="bt709">Rec. 709</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-4">
+                            <div class="col-12 col-md-6 col-lg-4 mb-4">
                                 <label class="font-weight-bold">Display Max Brightness</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="genMasterMax" value="1000" min="1" step="1">
@@ -302,7 +317,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-4">
+                            <div class="col-12 col-md-6 col-lg-4 mb-4">
                                 <label class="font-weight-bold">Display Black Level</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="genMasterMin" value="0.0001" min="0" step="0.0001">
@@ -364,7 +379,6 @@
                     function updateCommand() {
                         // VapourSynth Variables
                         const inFile = document.getElementById('genInputFile').value || 'input.mov';
-                        const outFile = document.getElementById('genOutputFile').value || 'master_encode.hevc';
                         const lutFile = document.getElementById('genLutFile').value;
                         const fps = document.getElementById('genFps').value;
                         
@@ -372,7 +386,6 @@
                         const cB = parseInt(document.getElementById('cropB').value) || 0;
                         const cL = parseInt(document.getElementById('cropL').value) || 0;
                         const cR = parseInt(document.getElementById('cropR').value) || 0;
-                        const sar = document.getElementById('genSar').value;
 
                         const isResize = document.getElementById('genResizeToggle').checked;
                         const resW = document.getElementById('genResizeW').value;
@@ -380,6 +393,8 @@
                         const resAlgo = document.getElementById('genResizeAlgo').value;
 
                         // x265 Variables
+                        const outFile = document.getElementById('genOutputFile').value || 'master_encode.hevc';
+                        const sar = document.getElementById('genSar').value;
                         const transfer = document.getElementById('genTransfer').value;
                         const colorSpace = document.getElementById('genColor').value;
                         const tune = document.getElementById('genTune').value;
