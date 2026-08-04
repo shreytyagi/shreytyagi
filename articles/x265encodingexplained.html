@@ -80,18 +80,100 @@
 
             <p>Once your raw <code>.hevc</code> render finishes, always bypass MKVToolNix to protect your Dolby Vision metadata. Use FFmpeg with the <code>-tag:v hvc1</code> flag to instantly mux your raw HEVC stream directly into an Apple-compliant MP4, permanently signing your name as the encoder.</p>
 
-            <hr class="my-5">
+            <hr class="my-5 border-secondary">
 
-            <!-- Interactive x265 Command Generator (No Card, Full Width, Uniform Spacing) -->
+            <!-- Interactive Archival Command Generator (Full Width, Uniform Spacing) -->
             <div class="mt-4 mb-5">
-                <h4 class="mb-2 text-primary">Bonus: The Ultimate x265 Archival Command Generator</h4>
-                <p class="text-muted mb-4">Select your precise engineering parameters below. The script automatically aligns matrix coefficients, HEVC tags, and pipeline configurations based on your hardware and delivery targets.</p>
+                <h4 class="mb-2 text-primary">Bonus: The Ultimate VapourSynth + x265 Generator</h4>
+                <p class="text-muted mb-4">This tool generates a single, unified Unix command block. Just copy and paste it into your terminal. It will dynamically build your VapourSynth Python script in memory, process the frames precisely, pipe them to the x265 engine, and automatically clean up after itself.</p>
                 
                 <form id="x265GeneratorForm">
                     
-                    <!-- Form Controls Row 1 -->
+                    <h6 class="font-weight-bold text-success mb-3">VapourSynth Processing Engine</h6>
+                    
+                    <!-- VapourSynth Row 1: Files -->
                     <div class="row">
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold">Input File Name</label>
+                            <input type="text" class="form-control" id="genInputFile" value="input.mov">
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold">Output File Name</label>
+                            <input type="text" class="form-control" id="genOutputFile" value="master_encode.hevc">
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold">Apply 3D LUT (Optional)</label>
+                            <input type="text" class="form-control" id="genLutFile" placeholder="e.g. cinematic.cube">
+                        </div>
+                    </div>
+
+                    <!-- VapourSynth Row 2: Geometry & Time -->
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold">Assume FPS</label>
+                            <select class="form-control" id="genFps">
+                                <option value="original" selected>Keep Original (Do Not Alter)</option>
+                                <option value="24000/1001">23.976 fps</option>
+                                <option value="24/1">24.000 fps</option>
+                                <option value="25/1">25.000 fps (PAL)</option>
+                                <option value="30000/1001">29.970 fps</option>
+                                <option value="30/1">30.000 fps</option>
+                                <option value="60/1">60.000 fps</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold">Crop (Top, Bottom, Left, Right)</label>
+                            <div class="d-flex">
+                                <input type="number" class="form-control mr-1 px-1 text-center" id="cropT" value="0" min="0">
+                                <input type="number" class="form-control mr-1 px-1 text-center" id="cropB" value="0" min="0">
+                                <input type="number" class="form-control mr-1 px-1 text-center" id="cropL" value="0" min="0">
+                                <input type="number" class="form-control px-1 text-center" id="cropR" value="0" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold">Sample Aspect Ratio (x265)</label>
+                            <select class="form-control" id="genSar">
+                                <option value="1" selected>1 (Square Pixels)</option>
+                                <option value="2">2 (2:1 Anamorphic)</option>
+                                <option value="4:3">4:3</option>
+                                <option value="16:9">16:9</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- VapourSynth Row 3: Resizing -->
+                    <div class="row mb-2">
+                        <div class="col-md-4 mb-4 d-flex align-items-center">
+                            <div class="custom-control custom-switch mt-3">
+                                <input type="checkbox" class="custom-control-input" id="genResizeToggle">
+                                <label class="custom-control-label font-weight-bold text-dark" for="genResizeToggle" style="cursor: pointer;">Enable Resizing</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <label class="font-weight-bold">Target Width</label>
+                            <input type="number" class="form-control" id="genResizeW" value="3840" disabled>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <label class="font-weight-bold">Target Height</label>
+                            <input type="number" class="form-control" id="genResizeH" value="2160" disabled>
+                        </div>
+                        <div class="col-md-2 mb-4">
+                            <label class="font-weight-bold">Algorithm</label>
+                            <select class="form-control" id="genResizeAlgo" disabled>
+                                <option value="Spline36" selected>Spline36</option>
+                                <option value="Lanczos">Lanczos</option>
+                                <option value="Bicubic">Bicubic</option>
+                                <option value="Point">Point (Nearest)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr class="my-3 border-secondary">
+                    <h6 class="font-weight-bold text-primary mb-3">x265 Encoding Engine</h6>
+
+                    <!-- x265 Row 1 -->
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
                             <label class="font-weight-bold">Transfer Function</label>
                             <select class="form-control" id="genTransfer">
                                 <option value="gamma24">Gamma 2.4</option>
@@ -101,7 +183,7 @@
                                 <option value="pq">PQ</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
                             <label class="font-weight-bold">Color Space</label>
                             <select class="form-control" id="genColor">
                                 <option value="bt601">BT.601</option>
@@ -112,15 +194,30 @@
                                 <option value="p3d60">P3-D60</option>
                             </select>
                         </div>
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold">Tuning Profile</label>
+                            <select class="form-control" id="genTune">
+                                <option value="none" selected>None (Standard)</option>
+                                <option value="grain">Grain (Lock in Film Grain)</option>
+                                <option value="animation">Animation</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- Form Controls Row 2 -->
+                    <!-- x265 Row 2: Sliders & CPU -->
                     <div class="row">
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
                             <label class="font-weight-bold">CPU Pools (P-Cores)</label>
                             <input type="number" class="form-control" id="genPools" value="10" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
+                            <label class="font-weight-bold w-100 d-flex justify-content-between">
+                                <span>CRF (Quality)</span>
+                                <span id="crfLabel" class="text-primary">14</span>
+                            </label>
+                            <input type="range" class="custom-range mt-2" id="genCrf" min="0" max="30" value="14" step="1">
+                        </div>
+                        <div class="col-md-4 mb-4">
                             <label class="font-weight-bold w-100 d-flex justify-content-between">
                                 <span>Peak VBV Bitrate</span>
                                 <span id="vbvLabel" class="text-primary">160 Mbps</span>
@@ -129,27 +226,27 @@
                         </div>
                     </div>
 
-                    <!-- Toggles Row (Uniform Grid) -->
+                    <!-- Toggles Row -->
                     <div class="row mt-1">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
                                 <label class="custom-control-label font-weight-bold" for="genQualitySwitch" style="cursor: pointer;">Extreme Quality (Max Compression)</label>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
                                 <label class="custom-control-label font-weight-bold" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3" id="dvToggleContainer">
+                        <div class="col-md-4 mb-3" id="dvToggleContainer">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genDv" checked>
                                 <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3" id="hdr10pToggleContainer" style="display: none;">
+                        <div class="col-md-4 mb-3" id="hdr10pToggleContainer" style="display: none;">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genHdr10p">
                                 <label class="custom-control-label font-weight-bold" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
@@ -220,7 +317,7 @@
 
                 <!-- Command Output Area -->
                 <div class="mt-2">
-                    <label class="font-weight-bold">Generated Pipeline:</label>
+                    <label class="font-weight-bold">Generated Pipeline (Copy & Run in Terminal):</label>
                     <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code id="finalCommandOutput"></code></pre>
                     <button class="btn btn-primary px-4 mt-2" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
                 </div>
@@ -232,10 +329,30 @@
                     const formElements = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
                     const vbvSlider = document.getElementById('genVbv');
                     const vbvLabel = document.getElementById('vbvLabel');
+                    const crfSlider = document.getElementById('genCrf');
+                    const crfLabel = document.getElementById('crfLabel');
+                    
+                    const resizeToggle = document.getElementById('genResizeToggle');
+                    const resizeW = document.getElementById('genResizeW');
+                    const resizeH = document.getElementById('genResizeH');
+                    const resizeAlgo = document.getElementById('genResizeAlgo');
 
-                    // Real-time update for the VBV slider text
+                    // Real-time update for Sliders
                     vbvSlider.addEventListener('input', function() {
                         vbvLabel.innerText = this.value + ' Mbps';
+                        updateCommand();
+                    });
+                    crfSlider.addEventListener('input', function() {
+                        crfLabel.innerText = this.value;
+                        updateCommand();
+                    });
+
+                    // Resize Toggle Logic
+                    resizeToggle.addEventListener('change', function() {
+                        const state = !this.checked;
+                        resizeW.disabled = state;
+                        resizeH.disabled = state;
+                        resizeAlgo.disabled = state;
                         updateCommand();
                     });
                     
@@ -245,23 +362,46 @@
                     });
 
                     function updateCommand() {
+                        // VapourSynth Variables
+                        const inFile = document.getElementById('genInputFile').value || 'input.mov';
+                        const outFile = document.getElementById('genOutputFile').value || 'master_encode.hevc';
+                        const lutFile = document.getElementById('genLutFile').value;
+                        const fps = document.getElementById('genFps').value;
+                        
+                        const cT = parseInt(document.getElementById('cropT').value) || 0;
+                        const cB = parseInt(document.getElementById('cropB').value) || 0;
+                        const cL = parseInt(document.getElementById('cropL').value) || 0;
+                        const cR = parseInt(document.getElementById('cropR').value) || 0;
+                        const sar = document.getElementById('genSar').value;
+
+                        const isResize = document.getElementById('genResizeToggle').checked;
+                        const resW = document.getElementById('genResizeW').value;
+                        const resH = document.getElementById('genResizeH').value;
+                        const resAlgo = document.getElementById('genResizeAlgo').value;
+
+                        // x265 Variables
                         const transfer = document.getElementById('genTransfer').value;
                         const colorSpace = document.getElementById('genColor').value;
+                        const tune = document.getElementById('genTune').value;
+                        
                         const isExtreme = document.getElementById('genQualitySwitch').checked;
                         const isScrubbing = document.getElementById('genScrubbing').checked;
+                        
                         const pools = document.getElementById('genPools').value || 1;
+                        const crf = document.getElementById('genCrf').value;
                         const vbvMbps = document.getElementById('genVbv').value;
+                        
                         const useDv = document.getElementById('genDv').checked;
                         const useHdr10p = document.getElementById('genHdr10p').checked;
                         
-                        // New User-Friendly Metadata Variables
+                        // Metadata Variables
                         const maxCll = document.getElementById('genMaxCll').value || 1000;
                         const maxFall = document.getElementById('genMaxFall').value || 400;
                         const masterColorSpace = document.getElementById('genMasterColor').value;
                         const masterMax = document.getElementById('genMasterMax').value || 1000;
                         const masterMin = document.getElementById('genMasterMin').value || 0.0001;
 
-                        // Math conversions
+                        // Base Math & Conversions
                         const vbvKbps = vbvMbps * 1000;
                         const bframes = isExtreme ? 8 : 4;
                         const keyint = isScrubbing ? 30 : 300;
@@ -280,13 +420,47 @@
 
                         if (transfer === 'pq') {
                             hdr10pToggle.style.display = 'block';
-                            advHdr.style.display = 'block';
+                            advHdr.style.display = 'flex';
                         } else {
                             hdr10pToggle.style.display = 'none';
                             advHdr.style.display = 'none';
                         }
 
-                        // X.265 Official VUI Flag Mapping
+                        // ==========================================
+                        // BUILD VAPOURSYNTH SCRIPT STRING (HEREDOC)
+                        // ==========================================
+                        let vpy = `cat << 'EOF' > render_script.vpy\n`;
+                        vpy += `import vapoursynth as vs\n`;
+                        vpy += `core = vs.core\n`;
+                        vpy += `clip = core.lsmas.LWLibavSource(source="${inFile}")\n`;
+                        
+                        if (fps !== "original") {
+                            let [num, den] = fps.split('/');
+                            vpy += `clip = core.std.AssumeFPS(clip, fpsnum=${num}, fpsden=${den})\n`;
+                        }
+
+                        if (lutFile.trim() !== "") {
+                            vpy += `clip = core.timecube.Cube(clip, "${lutFile.trim()}")\n`;
+                        }
+
+                        if (cT > 0 || cB > 0 || cL > 0 || cR > 0) {
+                            vpy += `clip = core.std.Crop(clip, top=${cT}, bottom=${cB}, left=${cL}, right=${cR})\n`;
+                        }
+
+                        if (isResize) {
+                            vpy += `clip = core.resize.${resAlgo}(clip, width=${resW}, height=${resH}, format=vs.YUV420P10)\n`;
+                        } else {
+                            // Ensure 10-bit 4:2:0 format for x265 even if not resizing
+                            vpy += `clip = core.resize.Spline36(clip, format=vs.YUV420P10)\n`;
+                        }
+
+                        vpy += `clip.set_output()\nEOF\n`;
+
+                        // ==========================================
+                        // BUILD X265 COMMAND 
+                        // ==========================================
+                        
+                        // Flag Mapping
                         let transferFlag = '';
                         switch(transfer) {
                             case 'gamma24': transferFlag = 'bt709'; break;
@@ -309,7 +483,7 @@
                         
                         let chromaloc = (colorSpace === 'bt2020' || colorSpace === 'dcip3' || colorSpace === 'p3d65' || colorSpace === 'p3d60') ? 2 : 0;
 
-                        // Master Display Coordinate Calculation (xy * 50000, Luminance * 10000)
+                        // Master Display Calculation
                         let masterCoords = "";
                         switch(masterColorSpace) {
                             case 'bt2020': masterCoords = "G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)"; break;
@@ -323,10 +497,14 @@
                         const calcMinLum = Math.round(parseFloat(masterMin) * 10000);
                         const masterDisplayString = `${masterCoords}L(${calcMaxLum},${calcMinLum})`;
 
-                        // Base Command Assembly
-                        let cmd = `vspipe -c y4m script.vpy - | x265 - --y4m -o master_encode.hevc --preset slow --profile main10 --output-depth 10 --input-csp i420 `;
+                        // Assemble Execution
+                        let cmd = `vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${outFile}" --preset slow --profile main10 --output-depth 10 --input-csp i420 `;
                         
-                        cmd += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} --crf 14 --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} --pools ${pools} `;
+                        if (tune !== 'none') {
+                            cmd += `--tune ${tune} `;
+                        }
+
+                        cmd += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} --crf ${crf} --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} --pools ${pools} `;
                         
                         if (isExtreme) {
                             cmd += `--hme --tu-intra-depth 4 --tu-inter-depth 4 `;
@@ -346,14 +524,19 @@
                             }
                         }
 
-                        cmd += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma 1023 --sar 1 --no-info `;
+                        cmd += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --sar ${sar} --level-idc 5.1 --max-luma 1023 --no-info `;
 
                         if (useDv) {
-                            if (transfer === 'hlg') cmd += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin`;
-                            if (transfer === 'pq') cmd += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin`;
+                            if (transfer === 'hlg') cmd += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin `;
+                            if (transfer === 'pq') cmd += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin `;
                         }
 
-                        document.getElementById('finalCommandOutput').innerText = cmd;
+                        // Add cleanup step
+                        cmd += `&& rm render_script.vpy`;
+
+                        // Merge VapourSynth Bash block with x265 command
+                        const finalBlock = vpy + cmd;
+                        document.getElementById('finalCommandOutput').innerText = finalBlock;
                     }
 
                     updateCommand();
