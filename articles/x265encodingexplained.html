@@ -82,15 +82,16 @@
 
             <hr class="my-5">
 
-            <!-- Interactive x265 Command Generator (No Card, Full Width) -->
+            <!-- Interactive x265 Command Generator (No Card, Full Width, Uniform Spacing) -->
             <div class="mt-4 mb-5">
                 <h4 class="mb-2 text-primary">Bonus: The Ultimate x265 Archival Command Generator</h4>
                 <p class="text-muted mb-4">Select your precise engineering parameters below. The script automatically aligns matrix coefficients, HEVC tags, and pipeline configurations based on your hardware and delivery targets.</p>
                 
                 <form id="x265GeneratorForm">
-                    <!-- Dropdowns Row -->
-                    <div class="row mb-3">
-                        <div class="col-md-4 mb-2">
+                    
+                    <!-- Form Controls Row 1 -->
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
                             <label class="font-weight-bold">Transfer Function</label>
                             <select class="form-control" id="genTransfer">
                                 <option value="gamma24">Gamma 2.4</option>
@@ -100,8 +101,7 @@
                                 <option value="pq">PQ</option>
                             </select>
                         </div>
-
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-6 mb-4">
                             <label class="font-weight-bold">Color Space</label>
                             <select class="form-control" id="genColor">
                                 <option value="bt601">BT.601</option>
@@ -112,46 +112,45 @@
                                 <option value="p3d60">P3-D60</option>
                             </select>
                         </div>
+                    </div>
 
-                        <div class="col-md-4 mb-2">
-                            <label class="font-weight-bold">Encode Quality</label>
-                            <select class="form-control" id="genQuality">
-                                <option value="high" selected>High (Optimized)</option>
-                                <option value="extreme">Extreme (Max Compression)</option>
-                            </select>
+                    <!-- Form Controls Row 2 -->
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="font-weight-bold">CPU Pools (P-Cores)</label>
+                            <!-- Number only input via onkeypress -->
+                            <input type="number" class="form-control" id="genPools" value="10" min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="font-weight-bold w-100 d-flex justify-content-between">
+                                <span>Peak VBV Bitrate</span>
+                                <span id="vbvLabel" class="text-primary">160 Mbps</span>
+                            </label>
+                            <input type="range" class="custom-range mt-2" id="genVbv" min="1" max="160" value="160" step="1">
                         </div>
                     </div>
 
-                    <!-- Input Values Row -->
-                    <div class="row mb-3 align-items-end">
-                        <div class="col-md-4 mb-2">
-                            <label class="font-weight-bold">CPU Pools (P-Cores)</label>
-                            <input type="number" class="form-control" id="genPools" value="10" min="1" max="128">
+                    <!-- Toggles Row (Uniform Grid) -->
+                    <div class="row mt-1">
+                        <div class="col-md-6 mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
+                                <label class="custom-control-label font-weight-bold" for="genQualitySwitch" style="cursor: pointer;">Extreme Quality (Max Compression)</label>
+                            </div>
                         </div>
-
-                        <div class="col-md-4 mb-2">
-                            <label class="font-weight-bold">Peak VBV Bitrate (kbps)</label>
-                            <input type="number" class="form-control" id="genVbv" value="160000" step="1000">
-                        </div>
-
-                        <div class="col-md-4 mb-2">
-                            <div class="custom-control custom-switch mb-1">
+                        <div class="col-md-6 mb-3">
+                            <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
                                 <label class="custom-control-label font-weight-bold" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Dynamic Toggles Row -->
-                    <div class="row mb-2">
-                        <div class="col-md-4 mb-2" id="dvToggleContainer">
+                        <div class="col-md-6 mb-3" id="dvToggleContainer">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genDv" checked>
                                 <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
                             </div>
                         </div>
-
-                        <div class="col-md-4 mb-2" id="hdr10pToggleContainer" style="display: none;">
+                        <div class="col-md-6 mb-3" id="hdr10pToggleContainer" style="display: none;">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genHdr10p">
                                 <label class="custom-control-label font-weight-bold" for="genHdr10p" style="cursor: pointer;">Inject HDR10+ JSON</label>
@@ -162,14 +161,14 @@
                     <!-- Advanced HDR Metadata (PQ Only) -->
                     <div class="row mt-3" id="advancedHdrMetadata" style="display: none;">
                         <div class="col-12"><hr class="my-2 border-secondary"></div>
-                        <div class="col-md-12 mb-2">
+                        <div class="col-md-12 mb-3">
                             <h6 class="font-weight-bold text-danger">HDR Mastering Metadata (PQ Only)</h6>
                         </div>
-                        <div class="col-md-8 mb-2">
+                        <div class="col-md-8 mb-4">
                             <label class="font-weight-bold small text-muted">Display Coordinates</label>
                             <input type="text" class="form-control form-control-sm" id="genMasterDisp" value="G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)L(10000000,1)">
                         </div>
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-4 mb-4">
                             <label class="font-weight-bold small text-muted">Max CLL / FALL</label>
                             <input type="text" class="form-control form-control-sm" id="genMaxCll" value="1000,400">
                         </div>
@@ -177,10 +176,10 @@
                 </form>
 
                 <!-- Command Output Area -->
-                <div class="mt-4">
+                <div class="mt-2">
                     <label class="font-weight-bold">Generated Pipeline:</label>
                     <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-wrap: break-word;"><code id="finalCommandOutput"></code></pre>
-                    <button class="btn btn-primary px-4 mt-1" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
+                    <button class="btn btn-primary px-4 mt-2" onclick="copyGeneratedCommand()" id="copyBtn">Copy Command</button>
                 </div>
             </div>
 
@@ -188,30 +187,39 @@
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     const formElements = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
+                    const vbvSlider = document.getElementById('genVbv');
+                    const vbvLabel = document.getElementById('vbvLabel');
+
+                    // Real-time update for the VBV slider text
+                    vbvSlider.addEventListener('input', function() {
+                        vbvLabel.innerText = this.value + ' Mbps';
+                        updateCommand();
+                    });
                     
                     formElements.forEach(el => {
-                        el.addEventListener('input', updateCommand);
                         el.addEventListener('change', updateCommand);
+                        if(el.type !== 'range') el.addEventListener('input', updateCommand);
                     });
 
                     function updateCommand() {
                         const transfer = document.getElementById('genTransfer').value;
                         const colorSpace = document.getElementById('genColor').value;
-                        const quality = document.getElementById('genQuality').value;
+                        const isExtreme = document.getElementById('genQualitySwitch').checked;
                         const isScrubbing = document.getElementById('genScrubbing').checked;
-                        const pools = document.getElementById('genPools').value;
-                        const vbv = document.getElementById('genVbv').value;
+                        const pools = document.getElementById('genPools').value || 1;
+                        const vbvMbps = document.getElementById('genVbv').value;
                         const useDv = document.getElementById('genDv').checked;
                         const useHdr10p = document.getElementById('genHdr10p').checked;
                         const masterDisp = document.getElementById('genMasterDisp').value;
                         const maxCll = document.getElementById('genMaxCll').value;
 
-                        // Automated Math Logic
-                        const bframes = (quality === 'extreme') ? 8 : 4;
+                        // Math conversions
+                        const vbvKbps = vbvMbps * 1000;
+                        const bframes = isExtreme ? 8 : 4;
                         const keyint = isScrubbing ? 30 : 300;
                         const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
 
-                        // UI Logic
+                        // UI Logic for HDR formats
                         const dvToggle = document.getElementById('dvToggleContainer');
                         const hdr10pToggle = document.getElementById('hdr10pToggleContainer');
                         const advHdr = document.getElementById('advancedHdrMetadata');
@@ -256,9 +264,9 @@
                         // Base Command Assembly
                         let cmd = `vspipe -c y4m script.vpy - | x265 - --y4m -o master_encode.hevc --preset slow --profile main10 --output-depth 10 --input-csp i420 `;
                         
-                        cmd += `--vbv-maxrate ${vbv} --vbv-bufsize ${vbv} --crf 14 --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} --pools ${pools} `;
+                        cmd += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} --crf 14 --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} --pools ${pools} `;
                         
-                        if (quality === 'extreme') {
+                        if (isExtreme) {
                             cmd += `--hme --tu-intra-depth 4 --tu-inter-depth 4 `;
                         }
 
