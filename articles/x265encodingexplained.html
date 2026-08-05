@@ -264,8 +264,8 @@
                         </div>
                     </div>
 
-                    <!-- Toggles Row -->
-                    <div class="row mt-2">
+                    <!-- Toggles Row (Mobile Stacked) -->
+                    <div class="row mt-1">
                         <div class="col-12 col-md-6 mb-3">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
@@ -487,19 +487,35 @@
                         // Base Math & Conversions
                         const vbvKbps = vbvMbps * 1000;
                         const bframes = isExtreme ? 8 : 4;
-                        const keyint = isScrubbing ? 30 : 300;
                         const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
 
-                        // Dynamic Bit Depth Formatting
+                        // Calculate Integer FPS for Keyframe Interval
+                        let baseFps = 24; // Safe cinematic default fallback
+                        if (assumeFps !== "original") {
+                            let [num, den] = assumeFps.split('/');
+                            baseFps = Math.round(parseInt(num) / parseInt(den));
+                        } else if (lockFps !== "original") {
+                            let [num, den] = lockFps.split('/');
+                            baseFps = Math.round(parseInt(num) / parseInt(den));
+                        }
+                        
+                        // Calculate Smart Keyint (GOP Size)
+                        // Scrubbing ON = 2 second GOP. Scrubbing OFF (Archival) = 10 second GOP.
+                        const keyint = isScrubbing ? baseFps * 2 : baseFps * 10;
+
+                        // Dynamic Bit Depth Formatting & Max Luma fixing
                         let vsFormat = 'vs.YUV420P10';
                         let x265Profile = 'main10';
+                        let maxLuma = 1023;
                         
                         if (bitDepth === '8') {
                             vsFormat = 'vs.YUV420P8';
                             x265Profile = 'main';
+                            maxLuma = 255;
                         } else if (bitDepth === '12') {
                             vsFormat = 'vs.YUV420P12';
                             x265Profile = 'main12';
+                            maxLuma = 4095;
                         }
 
                         // UI Elements
@@ -716,7 +732,7 @@
                             }
                         }
 
-                        args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma 1023 --no-info `;
+                        args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma ${maxLuma} --no-info `;
 
                         if (sar !== 'original') {
                             args += `--sar ${sar} `;
