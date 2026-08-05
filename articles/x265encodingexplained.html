@@ -214,21 +214,21 @@
                         <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Transfer Function</label>
                             <select class="form-control" id="genTransfer">
-                                <option value="gamma24">Gamma 2.4</option>
+                                <option value="gamma24" selected>Gamma 2.4</option>
                                 <option value="gamma22">Gamma 2.2</option>
                                 <option value="gamma26">Gamma 2.6</option>
-                                <option value="hlg" selected>HLG</option>
+                                <option value="hlg">HLG</option>
                                 <option value="pq">PQ</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Color Space</label>
                             <select class="form-control" id="genColor">
-                                <option value="bt2020" selected>BT.2020</option>
+                                <option value="bt2020">BT.2020</option>
                                 <option value="dcip3">P3-DCI</option>
                                 <option value="p3d65">P3-D65</option>
                                 <option value="p3d60">P3-D60</option>
-                                <option value="bt709">BT.709</option>
+                                <option value="bt709" selected>BT.709</option>
                                 <option value="bt601">BT.601</option>
                             </select>
                         </div>
@@ -278,7 +278,7 @@
                                 <label class="custom-control-label font-weight-bold" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 mb-3" id="dvToggleContainer">
+                        <div class="col-12 col-md-6 mb-3" id="dvToggleContainer" style="display: none;">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genDv">
                                 <label class="custom-control-label font-weight-bold" for="genDv" style="cursor: pointer;">Inject Dolby Vision RPU</label>
@@ -292,10 +292,10 @@
                         </div>
                     </div>
 
-                    <!-- Advanced HDR Metadata (PQ Only) - Displayed as Native Text Blocks -->
+                    <!-- Advanced HDR Metadata (Pure Text) -->
                     <div class="mt-4" id="advancedHdrMetadata" style="display: none;">
                         
-                        <h5 class="font-weight-bold text-danger mb-4 mt-5 pb-1 border-bottom border-danger">HDR Advanced Metadata (PQ Base)</h5>
+                        <h5 class="font-weight-bold text-danger mb-4 mt-5 pb-1 border-bottom border-danger" id="advHdrTitle">HDR Advanced Metadata</h5>
                         
                         <!-- Content Metadata Section -->
                         <div class="mb-5">
@@ -363,7 +363,7 @@
                      DYNAMIC COMMAND OUTPUT AREAS
                      ============================================== -->
 
-                <!-- STEP 1: HDR10+ JSON Secondary Command Output Area (Dynamic) -->
+                <!-- STEP 1 (PQ+HDR10+): HDR10+ JSON Creator -->
                 <div class="mt-5 pb-4 border-bottom border-light" id="hdr10pCommandContainer" style="display: none;">
                     <label class="font-weight-bold text-danger" id="hdr10pStepLabel">Step 1: HDR10+ JSON Creator Command</label>
                     <p class="text-muted small mb-2">Run this command first to dynamically generate your <code>fake_hdr10plus.json</code> file on your drive based on your metadata settings.</p>
@@ -371,12 +371,28 @@
                     <button class="btn btn-danger px-4 mt-2" onclick="copyHdr10pCommand()" id="copyHdrBtn">Copy JSON Command</button>
                 </div>
 
-                <!-- STEP 2: Dolby Vision RPU Generator (Dynamic - Only shows if HDR10+ AND DV are selected) -->
+                <!-- STEP 2 (PQ+HDR10+DV): Dolby Vision RPU Generator from JSON -->
                 <div class="mt-4 pb-4 border-bottom border-light" id="dvRpuCommandContainer" style="display: none;">
                     <label class="font-weight-bold text-info" id="dvRpuStepLabel">Step 2: Dolby Vision RPU Generator Command</label>
                     <p class="text-muted small mb-2">Run this command to use <code>dovi_tool</code> to instantly generate your Dolby Vision RPU file (<code>RPU.bin</code>) directly from the HDR10+ JSON you just created.</p>
                     <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dvRpuCommandOutput"></code></pre>
                     <button class="btn btn-info px-4 mt-2" onclick="copyDvRpuCommand()" id="copyDvRpuBtn">Copy RPU Command</button>
+                </div>
+
+                <!-- STEP 1 (PQ+DV Only): Fake DV 8.1 RPU Creator (Combined) -->
+                <div class="mt-5 pb-4 border-bottom border-light" id="dv81CommandContainer" style="display: none;">
+                    <label class="font-weight-bold text-info" id="dv81StepLabel">Step 1: Fake Dolby Vision 8.1 RPU Creator</label>
+                    <p class="text-muted small mb-2">Run this command first. It will instantly generate an HDR10+ JSON under the hood and use <code>dovi_tool</code> to convert it into a Profile 8.1 <code>RPU.bin</code> file.</p>
+                    <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dv81CommandOutput"></code></pre>
+                    <button class="btn btn-info px-4 mt-2" onclick="copyDv81Command()" id="copyDv81Btn">Copy DV8.1 Command</button>
+                </div>
+
+                <!-- STEP 1 (HLG+DV): Fake Dolby Vision 8.4 RPU Creator Command -->
+                <div class="mt-5 pb-4 border-bottom border-light" id="dv84CommandContainer" style="display: none;">
+                    <label class="font-weight-bold text-info" id="dv84StepLabel">Step 1: Fake Dolby Vision 8.4 RPU Creator</label>
+                    <p class="text-muted small mb-2">Run this command first to dynamically generate a Fake Profile 8.4 <code>RPU.bin</code> file using your mastering metadata to trigger the TV's Dolby Vision mode.</p>
+                    <pre class="bg-dark text-white p-3 rounded" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dv84CommandOutput"></code></pre>
+                    <button class="btn btn-info px-4 mt-2" onclick="copyDv84Command()" id="copyDv84Btn">Copy DV8.4 Command</button>
                 </div>
 
                 <!-- FINAL STEP: Primary Encode Command Output Area -->
@@ -490,9 +506,12 @@
                         const dvToggle = document.getElementById('dvToggleContainer');
                         const hdr10pToggle = document.getElementById('hdr10pToggleContainer');
                         const advHdr = document.getElementById('advancedHdrMetadata');
+                        const advHdrTitle = document.getElementById('advHdrTitle');
                         
                         const hdr10pCommandContainer = document.getElementById('hdr10pCommandContainer');
                         const dvRpuCommandContainer = document.getElementById('dvRpuCommandContainer');
+                        const dv81CommandContainer = document.getElementById('dv81CommandContainer');
+                        const dv84CommandContainer = document.getElementById('dv84CommandContainer');
                         const mainCommandLabel = document.getElementById('mainCommandLabel');
 
                         // Manage Toggles based on Transfer Function
@@ -504,9 +523,19 @@
 
                         if (transfer === 'pq') {
                             hdr10pToggle.style.display = 'block';
-                            advHdr.style.display = 'block'; 
                         } else {
                             hdr10pToggle.style.display = 'none';
+                        }
+
+                        // Advanced Metadata visibility
+                        if (transfer === 'pq' || (transfer === 'hlg' && useDv)) {
+                            advHdr.style.display = 'block';
+                            if (transfer === 'pq') {
+                                advHdrTitle.innerText = "HDR Advanced Metadata (PQ Base)";
+                            } else {
+                                advHdrTitle.innerText = "HDR Advanced Metadata (Fake Dolby Vision 8.4 Parameters)";
+                            }
+                        } else {
                             advHdr.style.display = 'none';
                         }
 
@@ -515,38 +544,57 @@
                         // ==========================================
                         let stepCount = 1;
 
-                        if (transfer === 'pq' && useHdr10p) {
-                            // Step 1: HDR10+ JSON
-                            hdr10pCommandContainer.style.display = 'block';
-                            document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`;
-                            stepCount++;
-                            
-                            // Step 2: Dolby Vision RPU Creator (Conditional)
-                            if (useDv) {
+                        // Reset containers
+                        hdr10pCommandContainer.style.display = 'none';
+                        dvRpuCommandContainer.style.display = 'none';
+                        dv81CommandContainer.style.display = 'none';
+                        dv84CommandContainer.style.display = 'none';
+
+                        if (transfer === 'pq') {
+                            if (useHdr10p && useDv) {
+                                // Step 1: HDR10+ JSON
+                                hdr10pCommandContainer.style.display = 'block';
+                                document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`;
+                                stepCount++;
+                                
+                                // Step 2: DV RPU
                                 dvRpuCommandContainer.style.display = 'block';
                                 document.getElementById('dvRpuStepLabel').innerText = `Step ${stepCount}: Dolby Vision RPU Generator Command`;
                                 stepCount++;
                                 
-                                // dovi_tool generate command using the fake_hdr10plus.json
                                 const rpuCmd = `dovi_tool generate -j fake_hdr10plus.json -o RPU.bin`;
                                 document.getElementById('dvRpuCommandOutput').innerText = rpuCmd;
-                            } else {
-                                dvRpuCommandContainer.style.display = 'none';
+                            } else if (useHdr10p && !useDv) {
+                                // Step 1: HDR10+ JSON Only
+                                hdr10pCommandContainer.style.display = 'block';
+                                document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`;
+                                stepCount++;
+                            } else if (!useHdr10p && useDv) {
+                                // Step 1: Combined Fake DV 8.1 RPU (JSON + RPU)
+                                dv81CommandContainer.style.display = 'block';
+                                document.getElementById('dv81StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.1 RPU Creator`;
+                                stepCount++;
                             }
-                            
-                            // Final Step: Main Encode
+                        } else if (transfer === 'hlg' && useDv) {
+                            // Step 1: Fake DV 8.4 RPU Creator
+                            dv84CommandContainer.style.display = 'block';
+                            document.getElementById('dv84StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.4 RPU Creator`;
+                            stepCount++;
+
+                            // Build the dovi_tool json for Profile 8.4 L1/L6 metadata
+                            const dv84JsonCmd = `echo '{"mode":0,"algorithm":0,"level1":{"min_pq":0,"max_pq":${maxCll},"avg_pq":${maxFall}},"level6":{"max_display_mastering_luminance":${masterMax},"min_display_mastering_luminance":${masterMin},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}' > fake_dv84.json && dovi_tool generate -j fake_dv84.json --profile 8.4 -o RPU.bin`;
+                            document.getElementById('dv84CommandOutput').innerText = dv84JsonCmd;
+                        }
+
+                        // Final Step Label: Main Encode
+                        if (stepCount > 1) {
                             mainCommandLabel.innerText = `Step ${stepCount}: Generated Pipeline (Main Encode Command)`;
-                            
                         } else {
-                            // Reset to 1-Step Workflow
-                            hdr10pCommandContainer.style.display = 'none';
-                            dvRpuCommandContainer.style.display = 'none';
                             mainCommandLabel.innerText = "Generated Pipeline (Main Encode Command):";
                         }
 
-
                         // ==========================================
-                        // 1. BUILD HDR10+ JSON SCRIPT STRING
+                        // 1. PREPARE PQ JSON STRING
                         // ==========================================
                         
                         let displayColorString = "";
@@ -558,9 +606,16 @@
                             case 'bt709': displayColorString = "Rec709"; break;
                         }
 
-                        // Pure one-line bash command using echo to instantly build a structured JSON based on UI parameters.
-                        const jsonCmd = `echo '{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${masterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}' > fake_hdr10plus.json`;
+                        const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${masterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
+                        
+                        // Output for standalone HDR10+ Command
+                        const jsonCmd = `echo '${pqJsonString}' > fake_hdr10plus.json`;
                         document.getElementById('hdr10pCommandOutput').innerText = jsonCmd;
+
+                        // Output for combined DV 8.1 Command
+                        const dv81Cmd = `echo '${pqJsonString}' > fake_hdr10plus.json && dovi_tool generate -j fake_hdr10plus.json --profile 8.1 -o RPU.bin`;
+                        document.getElementById('dv81CommandOutput').innerText = dv81Cmd;
+
 
                         // ==========================================
                         // 2. BUILD UNIFIED ONE-LINE PYTHON STRING 
@@ -723,6 +778,36 @@
                         btn.classList.add('btn-success');
                         setTimeout(() => {
                             btn.innerText = "Copy RPU Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-info');
+                        }, 2000);
+                    });
+                }
+
+                function copyDv81Command() {
+                    const cmdText = document.getElementById('dv81CommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyDv81Btn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-info');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy DV8.1 Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-info');
+                        }, 2000);
+                    });
+                }
+
+                function copyDv84Command() {
+                    const cmdText = document.getElementById('dv84CommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyDv84Btn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-info');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy DV8.4 Command";
                             btn.classList.remove('btn-success');
                             btn.classList.add('btn-info');
                         }, 2000);
