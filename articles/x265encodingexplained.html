@@ -264,8 +264,8 @@
                         </div>
                     </div>
 
-                    <!-- Toggles Row (Mobile Stacked) -->
-                    <div class="row mt-1">
+                    <!-- Toggles Row -->
+                    <div class="row mt-2">
                         <div class="col-12 col-md-6 mb-3">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
@@ -276,6 +276,12 @@
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
                                 <label class="custom-control-label font-weight-bold" for="genScrubbing" style="cursor: pointer;">Scrubbing & Editing Friendly</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="genInfoSEI" checked>
+                                <label class="custom-control-label font-weight-bold" for="genInfoSEI" style="cursor: pointer;">Embed Encoding Logs (SEI Info)</label>
                             </div>
                         </div>
                         <div class="col-12 col-md-6 mb-3" id="dvToggleContainer" style="display: none;">
@@ -469,6 +475,7 @@
                         
                         const isExtreme = document.getElementById('genQualitySwitch').checked;
                         const isScrubbing = document.getElementById('genScrubbing').checked;
+                        const embedInfo = document.getElementById('genInfoSEI').checked;
                         
                         const pools = document.getElementById('genPools').value || 1;
                         const crf = document.getElementById('genCrf').value;
@@ -732,7 +739,13 @@
                             }
                         }
 
-                        args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma ${maxLuma} --no-info `;
+                        args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma ${maxLuma} `;
+
+                        if (embedInfo) {
+                            args += `--info `;
+                        } else {
+                            args += `--no-info `;
+                        }
 
                         if (sar !== 'original') {
                             args += `--sar ${sar} `;
