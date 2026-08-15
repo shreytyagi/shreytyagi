@@ -1,22 +1,23 @@
-1,Chennai,Port Blair
-2,Port Blair,Chennai
-3,Chennai,Delhi
-4,Delhi,Bengaluru
-5,Bengaluru,Trivandrum
-6,Madurai,Bengaluru
-7,Bengaluru,Delhi
-8,Delhi,Bengaluru
-9,Bengaluru,Chandigarh
-10,Delhi,Rajkot
-11,Rajkot,Mumbai
-12,Mumbai,Delhi
-13,Chandigarh,Srinagar
-14,Srinagar,Chandigarh
-15,Delhi,Kochi
-16,Kochi,Delhi
-17,Chandigarh,Hyderabad
-18,Hyderabad,Chandigarh
-19,Chandigarh,Delhi
-20,Delhi,Leh
-21,Leh,Delhi
-22,Delhi,Chandigarh
+#,From,To,Seat
+1,Chennai,Port Blair,LM
+2,Port Blair,Chennai,LW
+3,Chennai,Delhi,RW
+4,Delhi,Bengaluru,RW
+5,Bengaluru,Trivandrum,LW
+6,Madurai,Bengaluru,LW
+7,Bengaluru,Delhi,RW
+8,Delhi,Bengaluru,RW
+9,Bengaluru,Chandigarh,LW
+10,Delhi,Rajkot,RM
+11,Rajkot,Mumbai,RW
+12,Mumbai,Delhi,RW
+13,Chandigarh,Srinagar,RW
+14,Srinagar,Chandigarh,RM
+15,Delhi,Kochi,
+16,Kochi,Delhi,RW
+17,Chandigarh,Hyderabad,RW
+18,Hyderabad,Chandigarh,RM
+19,Chandigarh,Delhi,RW
+20,Delhi,Leh,LW
+21,Leh,Delhi,LW
+22,Delhi,Chandigarh,RW
