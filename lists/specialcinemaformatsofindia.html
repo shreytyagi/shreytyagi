@@ -41,7 +41,7 @@
 
     <div class="container mt-1 text-justify flex-grow-1">
 
-        <div class="content-container">
+        <div class="content-container" style="padding-bottom: 0 !important; margin-bottom: 0 !important;">
             <h3>Special Cinema Formats of India</h3>
             
             <!-- Format Selector Dropdown (Triggers a split-second seamless refresh to format URL) -->
@@ -375,9 +375,9 @@
 
                 // 3. Write the precise HTML structure that your script.js expects
                 document.write(`
-                    <div class="content-container mb-4">
+                    <div class="mt-3" style="margin-bottom: 15px !important;">
                         <img src="${formatData[currentFormat].img}" alt="Cinema Format Logo" class="format-logo">
-                        <p class="mt-3 text-justify">${formatData[currentFormat].desc}</p>
+                        <p class="mt-3 mb-0 text-justify">${formatData[currentFormat].desc}</p>
                     </div>
                     <div class="table-container" csvfile="${formatData[currentFormat].csv}" fullwidth="false" sortcolumn="3" sortorder="asc" columnpriority="2,3,1,0" dontbreakcolumns="0,1">
                         <table id="dynamic-table">
