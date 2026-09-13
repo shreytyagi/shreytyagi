@@ -303,6 +303,12 @@
                 formatSelector.innerHTML = '<option value="" selected disabled>-- Choose a Format --</option>';
                 const selectedCategory = this.value;
                 
+                // Hide previously loaded data instantly
+                const displayArea = document.getElementById('format-display-area');
+                if (displayArea) {
+                    displayArea.style.display = 'none';
+                }
+                
                 if (categories[selectedCategory]) {
                     categories[selectedCategory].forEach(formatKey => {
                         const opt = document.createElement('option');
@@ -357,19 +363,51 @@
                     `;
                 }
 
-                // Write the precise HTML structure for the selected format
+                // Synchronous check to see if CSV exists and isn't a fallback HTML error page
+                let hasValidCsv = false;
+                try {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('HEAD', formatData[currentFormat].csv, false); // synchronous check
+                    xhr.send();
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        var contentType = xhr.getResponseHeader("Content-Type");
+                        // If the response is HTML, it's likely a custom 404 block returning 200 OK
+                        if (!contentType || contentType.indexOf("text/html") === -1) {
+                            hasValidCsv = true;
+                        }
+                    }
+                } catch(e) {
+                    // Ignore local/cors exceptions on synchronous requests
+                }
+
+                let tableOutput = '';
+                if (hasValidCsv) {
+                    tableOutput = `
+                        <div class="table-container" csvfile="${formatData[currentFormat].csv}" fullwidth="false" sortcolumn="3" sortorder="asc" columnpriority="2,3,1,0" dontbreakcolumns="0,1">
+                            <table id="dynamic-table">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    `;
+                } else {
+                    tableOutput = `
+                        <div class="alert alert-secondary mt-4 text-center border-dark" role="alert">
+                            <strong>Location Data Pending:</strong> The master list for this format is currently being compiled and will be updated soon.
+                        </div>
+                    `;
+                }
+
+                // Write the precise HTML structure for the selected format wrapped in an ID
                 document.write(`
-                    <div class="mt-3" style="margin-bottom: 15px !important;">
-                        <img src="${formatData[currentFormat].img}" alt="Cinema Format Logo" class="format-logo mx-auto">
-                        <p class="mt-3 mb-0 text-justify">${formatData[currentFormat].desc}</p>
+                    <div id="format-display-area">
+                        <div class="mt-3" style="margin-bottom: 15px !important;">
+                            <img src="${formatData[currentFormat].img}" alt="${formatData[currentFormat].name} Logo" class="format-logo mx-auto" onerror="this.style.display='none'">
+                            <p class="mt-3 mb-0 text-justify">${formatData[currentFormat].desc}</p>
+                        </div>
+                        ${tableOutput}
+                        ${creditsHtml}
                     </div>
-                    <div class="table-container" csvfile="${formatData[currentFormat].csv}" fullwidth="false" sortcolumn="3" sortorder="asc" columnpriority="2,3,1,0" dontbreakcolumns="0,1">
-                        <table id="dynamic-table">
-                            <thead></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    ${creditsHtml}
                 `);
             }
         </script>
