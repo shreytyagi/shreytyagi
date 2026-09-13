@@ -303,7 +303,7 @@
                 formatSelector.innerHTML = '<option value="" selected disabled>-- Choose a Format --</option>';
                 const selectedCategory = this.value;
                 
-                // Hide previously loaded data instantly
+                // Instantly hide the previously loaded format data
                 const displayArea = document.getElementById('format-display-area');
                 if (displayArea) {
                     displayArea.style.display = 'none';
@@ -363,21 +363,22 @@
                     `;
                 }
 
-                // Synchronous check to see if CSV exists and isn't a fallback HTML error page
+                // Synchronous check to definitively block garbage HTML pages acting as CSV files
                 let hasValidCsv = false;
                 try {
                     var xhr = new XMLHttpRequest();
-                    xhr.open('HEAD', formatData[currentFormat].csv, false); // synchronous check
+                    // Using GET to inspect the actual response body content
+                    xhr.open('GET', formatData[currentFormat].csv, false); 
                     xhr.send();
                     if (xhr.status >= 200 && xhr.status < 300) {
-                        var contentType = xhr.getResponseHeader("Content-Type");
-                        // If the response is HTML, it's likely a custom 404 block returning 200 OK
-                        if (!contentType || contentType.indexOf("text/html") === -1) {
+                        var responseText = xhr.responseText.trim();
+                        // If it starts with '<', it is an HTML error page or scrape redirect, not a CSV.
+                        if (responseText.length > 0 && !responseText.startsWith('<')) {
                             hasValidCsv = true;
                         }
                     }
                 } catch(e) {
-                    // Ignore local/cors exceptions on synchronous requests
+                    // Fail silently and leave hasValidCsv as false
                 }
 
                 let tableOutput = '';
@@ -398,11 +399,11 @@
                     `;
                 }
 
-                // Write the precise HTML structure for the selected format wrapped in an ID
+                // Write the precise HTML structure. Image is hidden by default and only shows on successful load.
                 document.write(`
                     <div id="format-display-area">
-                        <div class="mt-3" style="margin-bottom: 15px !important;">
-                            <img src="${formatData[currentFormat].img}" alt="${formatData[currentFormat].name} Logo" class="format-logo mx-auto" onerror="this.style.display='none'">
+                        <div class="mt-3" style="margin-bottom: 15px !important; min-height: 80px;">
+                            <img src="${formatData[currentFormat].img}" alt="${formatData[currentFormat].name} Logo" class="format-logo mx-auto" style="display: none;" onload="this.style.display='block'" onerror="this.style.display='none'">
                             <p class="mt-3 mb-0 text-justify">${formatData[currentFormat].desc}</p>
                         </div>
                         ${tableOutput}
