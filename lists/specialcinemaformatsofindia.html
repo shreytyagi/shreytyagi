@@ -102,171 +102,253 @@
                 3: 'Data provided by the Indian Cinema Enthusiasts Group.'
             };
 
-            // Master Data Dictionary mapping each dropdown option to its assets
+            // Master Data Dictionary exactly matching your original structure and file paths
             const formatData = {
                 'imaxcola12': { 
-                    csv: '/data/csv/imaxcola12.csv', img: '/data/logos/imaxcola12.png',
-                    desc: 'IMAX with Laser 12.1 features a next-generation 4K laser projection system. It delivers crystal-clear resolution, expanded color gamuts, and is paired with a 12.1 channel immersive audio setup.', showCredits: 1
+                    csv: '/data/plf/imaxcola12.csv', 
+                    img: '/data/plf/imaxcola12.png',
+                    desc: 'IMAX with Laser 12.1 features a next-generation 4K laser projection system. It delivers crystal-clear resolution, expanded color gamuts, and is paired with a 12.1 channel immersive audio setup.', 
+                    showCredits: 1
                 },
                 'imaxxt12': { 
-                    csv: '/data/csv/imaxxt12.csv', img: '/data/logos/imaxxt12.png',
-                    desc: 'IMAX Laser XT 12.1 is designed for slightly smaller auditoriums while maintaining strict IMAX optical standards. It utilizes a 4K laser engine coupled with 12.1 channel immersive sound.', showCredits: 1
+                    csv: '/data/plf/imaxxt12.csv', 
+                    img: '/data/plf/imaxxt12.png',
+                    desc: 'IMAX Laser XT 12.1 is designed for slightly smaller auditoriums while maintaining strict IMAX optical standards. It utilizes a 4K laser engine coupled with 12.1 channel immersive sound.', 
+                    showCredits: 1
                 },
                 'imaxxt5': { 
-                    csv: '/data/csv/imaxxt5.csv', img: '/data/logos/imaxxt5.png',
-                    desc: 'IMAX Laser XT 5.1 brings bright 4K laser projection to compact theatre geometries. It pairs this high-contrast optical engine with standard IMAX 5.1 channel acoustic calibration.', showCredits: 0
+                    csv: '/data/plf/imaxxt5.csv', 
+                    img: '/data/plf/imaxxt5.png',
+                    desc: 'IMAX Laser XT 5.1 brings bright 4K laser projection to compact theatre geometries. It pairs this high-contrast optical engine with standard IMAX 5.1 channel acoustic calibration.', 
+                    showCredits: 0
                 },
                 'imaxdx5': { 
-                    csv: '/data/csv/imaxdx5.csv', img: '/data/logos/imaxdx5.png',
-                    desc: 'IMAX Digital (Dual Xenon) utilizes legacy dual 2K projectors powered by Xenon arc lamps. It projects a 1.90:1 aspect ratio with heavily calibrated standard 5.1 audio mapping.', showCredits: 0
+                    csv: '/data/plf/imaxdx5.csv', 
+                    img: '/data/plf/imaxdx5.png',
+                    desc: 'IMAX Digital (Dual Xenon) utilizes legacy dual 2K projectors powered by Xenon arc lamps. It projects a 1.90:1 aspect ratio with heavily calibrated standard 5.1 audio mapping.', 
+                    showCredits: 0
                 },
                 'dolbycinema': { 
-                    csv: '/data/csv/dolbycinema.csv', img: '/data/logos/dolbycinema.png',
-                    desc: 'Dolby Cinema combines dual 4K Dolby Vision laser projection with a massive Dolby Atmos speaker array. It achieves perfect black levels and an infinite contrast ratio.', showCredits: 0
+                    csv: '/data/plf/dolbycinema.csv', 
+                    img: '/data/plf/dolbycinema.png',
+                    desc: 'Dolby Cinema combines dual 4K Dolby Vision laser projection with a massive Dolby Atmos speaker array. It achieves perfect black levels and an infinite contrast ratio.', 
+                    showCredits: 0
                 },
                 'hdrbybarco': { 
-                    csv: '/data/csv/hdrbybarco.csv', img: '/data/logos/hdrbybarco.png',
-                    desc: 'HDR by Barco utilizes proprietary Lightsteering technology to intelligently redirect laser light to highlights. This delivers profound HDR contrast, reaching peak brightness levels of up to 300 nits.', showCredits: 0
+                    csv: '/data/plf/hdrbybarco.csv', 
+                    img: '/data/plf/hdrbybarco.png',
+                    desc: 'HDR by Barco utilizes proprietary Lightsteering technology to intelligently redirect laser light to highlights. This delivers profound HDR contrast, reaching peak brightness levels of up to 300 nits.', 
+                    showCredits: 0
                 },
                 'epiq': { 
-                    csv: '/data/csv/epiq.csv', img: '/data/logos/epiq.png',
-                    desc: 'Qube EPIQ is a homegrown premium large format featuring a massive 1.89:1 wall-to-wall screen. It guarantees Barco 4K RGB laser projection and studio-grade Dolby Atmos sound.', showCredits: 0
+                    csv: '/data/plf/epiq.csv', 
+                    img: '/data/plf/epiq.png',
+                    desc: 'Qube EPIQ is a homegrown premium large format featuring a massive 1.89:1 wall-to-wall screen. It guarantees Barco 4K RGB laser projection and studio-grade Dolby Atmos sound.', 
+                    showCredits: 0
                 },
                 'pxl': { 
-                    csv: '/data/csv/pxl.csv', img: '/data/logos/pxl.png',
-                    desc: 'PVR P[XL] is an indigenous large-screen format offering enhanced dimensions and 4K laser projection. It is paired with immersive Dolby Atmos audio for a premium multiplex experience.', showCredits: 1
+                    csv: '/data/plf/pxl.csv', 
+                    img: '/data/plf/pxl.png',
+                    desc: 'PVR P[XL] is an indigenous large-screen format offering enhanced dimensions and 4K laser projection. It is paired with immersive Dolby Atmos audio for a premium multiplex experience.', 
+                    showCredits: 1
                 },
                 'bigpix': { 
-                    csv: '/data/csv/bigpix.csv', img: '/data/logos/bigpix.png',
-                    desc: 'INOX BigPix features expanded screen dimensions and 4K laser projection. This proprietary format was designed to offer audiences an accessible, premium large-format alternative.', showCredits: 0
+                    csv: '/data/plf/bigpix.csv', 
+                    img: '/data/plf/bigpix.png',
+                    desc: 'INOX BigPix features expanded screen dimensions and 4K laser projection. This proprietary format was designed to offer audiences an accessible, premium large-format alternative.', 
+                    showCredits: 0
                 },
                 'macroxe': { 
-                    csv: '/data/csv/macroxe.csv', img: '/data/logos/macroxe.png',
-                    desc: 'Cinépolis MacroXE features expanded screens typically over 50 feet wide. It combines high-definition digital projection with premium Dolby Atmos surround sound.', showCredits: 0
+                    csv: '/data/plf/macroxe.csv', 
+                    img: '/data/plf/macroxe.png',
+                    desc: 'Cinépolis MacroXE features expanded screens typically over 50 feet wide. It combines high-definition digital projection with premium Dolby Atmos surround sound.', 
+                    showCredits: 0
                 },
                 'broadwayhyperx': { 
-                    csv: '/data/csv/broadwayhyperx.csv', img: '/data/logos/broadwayhyperx.png',
-                    desc: 'Broadway HyperX completely hides Dolby Atmos speakers behind the entire screen structure for 360-degree acoustic immersion. It utilizes advanced speckle-reduction laser projection for flawless visuals.', showCredits: 0
+                    csv: '/data/plf/broadwayhyperx.csv', 
+                    img: '/data/plf/broadwayhyperx.png',
+                    desc: 'Broadway HyperX completely hides Dolby Atmos speakers behind the entire screen structure for 360-degree acoustic immersion. It utilizes advanced speckle-reduction laser projection for flawless visuals.', 
+                    showCredits: 0
                 },
                 'broadwayvivid': { 
-                    csv: '/data/csv/broadwayvivid.csv', img: '/data/logos/broadwayvivid.png',
-                    desc: 'Broadway Vivid maximizes color reproduction and luminance. It pairs specialized high-gain screens with highly calibrated laser modules for striking, life-like contrast.', showCredits: 0
+                    csv: '/data/plf/broadwayvivid.csv', 
+                    img: '/data/plf/broadwayvivid.png',
+                    desc: 'Broadway Vivid maximizes color reproduction and luminance. It pairs specialized high-gain screens with highly calibrated laser modules for striking, life-like contrast.', 
+                    showCredits: 0
                 },
                 'mirajmaximum': { 
-                    csv: '/data/csv/mirajmaximum.csv', img: '/data/logos/mirajmaximum.png',
-                    desc: 'Miraj Maximum guarantees wall-to-wall screen architecture. It provides 4K digital projection and Dolby Atmos audio, popularizing premium formats in growing tier-2 and tier-3 markets.', showCredits: 0
+                    csv: '/data/plf/mirajmaximum.csv', 
+                    img: '/data/plf/mirajmaximum.png',
+                    desc: 'Miraj Maximum guarantees wall-to-wall screen architecture. It provides 4K digital projection and Dolby Atmos audio, popularizing premium formats in growing tier-2 and tier-3 markets.', 
+                    showCredits: 0
                 },
                 'moviemaxmaxx': { 
-                    csv: '/data/csv/moviemaxmaxx.csv', img: '/data/logos/moviemaxmaxx.png',
-                    desc: 'MovieMax Maxx upgrades the standard auditorium with massive screens and advanced 4K laser projection, aiming to deliver a heightened, high-fidelity experience.', showCredits: 0
+                    csv: '/data/plf/moviemaxmaxx.csv', 
+                    img: '/data/plf/moviemaxmaxx.png',
+                    desc: 'MovieMax Maxx upgrades the standard auditorium with massive screens and advanced 4K laser projection, aiming to deliver a heightened, high-fidelity experience.', 
+                    showCredits: 0
                 },
                 'pcx': { 
-                    csv: '/data/csv/pcx.csv', img: '/data/logos/pcx.png',
-                    desc: 'PCX (Prasad\'s Large Screen) in Hyderabad is a massive 100-foot-wide format. It utilizes dual Barco 6P laser projectors to fill a towering 1.85:1 aspect ratio.', showCredits: 0
+                    csv: '/data/plf/pcx.csv', 
+                    img: '/data/plf/pcx.png',
+                    desc: 'PCX (Prasad\'s Large Screen) in Hyderabad is a massive 100-foot-wide format. It utilizes dual Barco 6P laser projectors to fill a towering 1.85:1 aspect ratio.', 
+                    showCredits: 0
                 },
                 'msiv': { 
-                    csv: '/data/csv/msiv.csv', img: '/data/logos/msiv.png',
-                    desc: 'Marvel Studios Infinity Vision denotes films shot digitally with IMAX-certified cameras to expand to the 1.90:1 aspect ratio. It offers up to 26% more picture exclusively in IMAX theatres.', showCredits: 0
+                    csv: '/data/plf/msiv.csv', 
+                    img: '/data/plf/msiv.png',
+                    desc: 'Marvel Studios Infinity Vision denotes films shot digitally with IMAX-certified cameras to expand to the 1.90:1 aspect ratio. It offers up to 26% more picture exclusively in IMAX theatres.', 
+                    showCredits: 0
                 },
                 'onyx': { 
-                    csv: '/data/csv/onyx.csv', img: '/data/logos/onyx.png',
-                    desc: 'Samsung ONYX completely replaces the traditional projector with a direct-view LED wall. It achieves true High Dynamic Range (HDR), delivering perfect black levels and uncompromised contrast.', showCredits: 0
+                    csv: '/data/plf/onyx.csv', 
+                    img: '/data/plf/onyx.png',
+                    desc: 'Samsung ONYX completely replaces the traditional projector with a direct-view LED wall. It achieves true High Dynamic Range (HDR), delivering perfect black levels and uncompromised contrast.', 
+                    showCredits: 0
                 },
                 'magnova': { 
-                    csv: '/data/csv/magnova.csv', img: '/data/logos/magnova.png',
-                    desc: 'Magnova LED is an active, modular LED cinema display that removes the need for a projection booth. It provides ultra-high brightness and contrast for modern HDR content.', showCredits: 0
+                    csv: '/data/plf/magnova.csv', 
+                    img: '/data/plf/magnova.png',
+                    desc: 'Magnova LED is an active, modular LED cinema display that removes the need for a projection booth. It provides ultra-high brightness and contrast for modern HDR content.', 
+                    showCredits: 0
                 },
                 'tricorne': { 
-                    csv: '/data/csv/tricorne.csv', img: '/data/logos/tricorne.png',
-                    desc: 'Tricorne LED utilizes direct-view LED panels to achieve deep blacks and vibrant colors. It delivers a high-brightness cinematic experience without traditional projection limitations.', showCredits: 0
+                    csv: '/data/plf/tricorne.csv', 
+                    img: '/data/plf/tricorne.png',
+                    desc: 'Tricorne LED utilizes direct-view LED panels to achieve deep blacks and vibrant colors. It delivers a high-brightness cinematic experience without traditional projection limitations.', 
+                    showCredits: 0
                 },
                 'epiqluxon': { 
-                    csv: '/data/csv/epiqluxon.csv', img: '/data/logos/epiqluxon.png',
-                    desc: 'Qube EPIQ Luxon LED utilizes a massive 10-meter-wide direct-view HDR LED screen. It supports breathtaking 500 Mbps uncompressed bitrates, delivering flawless 4K resolution at 300 nits.', showCredits: 0
+                    csv: '/data/plf/epiqluxon.csv', 
+                    img: '/data/plf/epiqluxon.png',
+                    desc: 'Qube EPIQ Luxon LED utilizes a massive 10-meter-wide direct-view HDR LED screen. It supports breathtaking 500 Mbps uncompressed bitrates, delivering flawless 4K resolution at 300 nits.', 
+                    showCredits: 0
                 },
                 'qluxon': { 
-                    csv: '/data/csv/qluxon.csv', img: '/data/logos/qluxon.png',
-                    desc: 'Qube Q Luxon LED is a variant of Qube\'s direct-view LED offerings. It provides exceptional colorimetric fidelity and peak luminance through its active pixel HDR panels.', showCredits: 0
+                    csv: '/data/plf/qluxon.csv', 
+                    img: '/data/plf/qluxon.png',
+                    desc: 'Qube Q Luxon LED is a variant of Qube\'s direct-view LED offerings. It provides exceptional colorimetric fidelity and peak luminance through its active pixel HDR panels.', 
+                    showCredits: 0
                 },
                 '4dx': { 
-                    csv: '/data/csv/4dx.csv', img: '/data/logos/4dx.png',
-                    desc: '4DX transforms the movie into a multi-sensory ride. It features motion-programmed seating and environmental effects like wind, rain, fog, and scents synchronized with the film.', showCredits: 0
+                    csv: '/data/plf/4dx.csv', 
+                    img: '/data/plf/4dx.png',
+                    desc: '4DX transforms the movie into a multi-sensory ride. It features motion-programmed seating and environmental effects like wind, rain, fog, and scents synchronized with the film.', 
+                    showCredits: 0
                 },
                 'mx4d': { 
-                    csv: '/data/csv/mx4d.csv', img: '/data/logos/mx4d.png',
-                    desc: 'MX4D utilizes pneumatic motion seats with localized environmental effects built directly into the armrests. It includes seat rumblers, air blasts, and water sprays.', showCredits: 0
+                    csv: '/data/plf/mx4d.csv', 
+                    img: '/data/plf/mx4d.png',
+                    desc: 'MX4D utilizes pneumatic motion seats with localized environmental effects built directly into the armrests. It includes seat rumblers, air blasts, and water sprays.', 
+                    showCredits: 0
                 },
                 'screenx': { 
-                    csv: '/data/csv/screenx.csv', img: '/data/logos/screenx.png',
-                    desc: 'ScreenX offers a 270-degree peripheral viewing experience. It projects specialized film content onto the left and right auditorium walls alongside the main screen during key sequences.', showCredits: 1
+                    csv: '/data/plf/screenx.csv', 
+                    img: '/data/plf/screenx.png',
+                    desc: 'ScreenX offers a 270-degree peripheral viewing experience. It projects specialized film content onto the left and right auditorium walls alongside the main screen during key sequences.', 
+                    showCredits: 1
                 },
                 'ice': { 
-                    csv: '/data/csv/ice.csv', img: '/data/logos/ice.png',
-                    desc: 'PVR ICE (Immersive Cinema Experience) complements the main screen with 12 synchronized LED panels on the side walls. These generate peripheral color and motion, expanding the visual field.', showCredits: 0
+                    csv: '/data/plf/ice.csv', 
+                    img: '/data/plf/ice.png',
+                    desc: 'PVR ICE (Immersive Cinema Experience) complements the main screen with 12 synchronized LED panels on the side walls. These generate peripheral color and motion, expanding the visual field.', 
+                    showCredits: 0
                 },
                 'dbox': { 
-                    csv: '/data/csv/dbox.csv', img: '/data/logos/dbox.png',
-                    desc: 'D-BOX features highly calibrated, haptic motorized seating. The individual chairs provide localized motion and vibration perfectly synchronized to the action on screen.', showCredits: 0
+                    csv: '/data/plf/dbox.csv', 
+                    img: '/data/plf/dbox.png',
+                    desc: 'D-BOX features highly calibrated, haptic motorized seating. The individual chairs provide localized motion and vibration perfectly synchronized to the action on screen.', 
+                    showCredits: 0
                 },
                 'pvrgold': { 
-                    csv: '/data/csv/pvrgold.csv', img: '/data/logos/pvrgold.png',
-                    desc: 'PVR Gold offers a plush, scalable luxury experience. It features spacious leather recliners, personalized butler service, and gourmet in-seat dining.', showCredits: 0
+                    csv: '/data/plf/pvrgold.csv', 
+                    img: '/data/plf/pvrgold.png',
+                    desc: 'PVR Gold offers a plush, scalable luxury experience. It features spacious leather recliners, personalized butler service, and gourmet in-seat dining.', 
+                    showCredits: 0
                 },
                 'broadwaygold': { 
-                    csv: '/data/csv/broadwaygold.csv', img: '/data/logos/broadwaygold.png',
-                    desc: 'Broadway Gold provides premium recliner seating within the Broadway megaplex ecosystem. It elevates the standard viewing experience with high-end hospitality and comfort.', showCredits: 0
+                    csv: '/data/plf/broadwaygold.csv', 
+                    img: '/data/plf/broadwaygold.png',
+                    desc: 'Broadway Gold provides premium recliner seating within the Broadway megaplex ecosystem. It elevates the standard viewing experience with high-end hospitality and comfort.', 
+                    showCredits: 0
                 },
                 'pvrdirectorscut': { 
-                    csv: '/data/csv/pvrdirectorscut.csv', img: '/data/logos/pvrdirectorscut.png',
-                    desc: 'PVR Director\'s Cut is a 7-star cinematic venue. It offers fully reclining electronic armchairs, curated gourmet menus by executive chefs, and exclusive lounge environments.', showCredits: 0
+                    csv: '/data/plf/pvrdirectorscut.csv', 
+                    img: '/data/plf/pvrdirectorscut.png',
+                    desc: 'PVR Director\'s Cut is a 7-star cinematic venue. It offers fully reclining electronic armchairs, curated gourmet menus by executive chefs, and exclusive lounge environments.', 
+                    showCredits: 0
                 },
                 'pvrluxe': { 
-                    csv: '/data/csv/pvrluxe.csv', img: '/data/logos/pvrluxe.png',
-                    desc: 'PVR LUXE features opulent interiors and hyper-comfortable seating. It bridges the gap between mainstream seating and ultra-exclusive formats with premium hospitality.', showCredits: 0
+                    csv: '/data/plf/pvrluxe.csv', 
+                    img: '/data/plf/pvrluxe.png',
+                    desc: 'PVR LUXE features opulent interiors and hyper-comfortable seating. It bridges the gap between mainstream seating and ultra-exclusive formats with premium hospitality.', 
+                    showCredits: 0
                 },
                 'inoxinsignia': { 
-                    csv: '/data/csv/inoxinsignia.csv', img: '/data/logos/inoxinsignia.png',
-                    desc: 'INOX Insignia focuses on extravagant lobbies and ultra-premium recliners. It delivers high-end hospitality and gourmet dining directly to your seat.', showCredits: 0
+                    csv: '/data/plf/inoxinsignia.csv', 
+                    img: '/data/plf/inoxinsignia.png',
+                    desc: 'INOX Insignia focuses on extravagant lobbies and ultra-premium recliners. It delivers high-end hospitality and gourmet dining directly to your seat.', 
+                    showCredits: 0
                 },
                 'devgnamor': { 
-                    csv: '/data/csv/devgnamor.csv', img: '/data/logos/devgnamor.png',
-                    desc: 'Devgn Cinex Amor is an ultra-luxurious lounge format infused with deep cinematic aesthetics. It incorporates local cultural motifs and interactive storytelling into its premium architecture.', showCredits: 0
+                    csv: '/data/plf/devgnamor.csv', 
+                    img: '/data/plf/devgnamor.png',
+                    desc: 'Devgn Cinex Amor is an ultra-luxurious lounge format infused with deep cinematic aesthetics. It incorporates local cultural motifs and interactive storytelling into its premium architecture.', 
+                    showCredits: 0
                 },
                 'waveplatinum': { 
-                    csv: '/data/csv/waveplatinum.csv', img: '/data/logos/waveplatinum.png',
-                    desc: 'Wave Cinemas Platinum Lounge offers plush reclining leather seats and a multi-cuisine live kitchen. It provides metro-level luxury and in-seat butler service.', showCredits: 0
+                    csv: '/data/plf/waveplatinum.csv', 
+                    img: '/data/plf/waveplatinum.png',
+                    desc: 'Wave Cinemas Platinum Lounge offers plush reclining leather seats and a multi-cuisine live kitchen. It provides metro-level luxury and in-seat butler service.', 
+                    showCredits: 0
                 },
                 'wavegold': { 
-                    csv: '/data/csv/wavegold.csv', img: '/data/logos/wavegold.png',
-                    desc: 'Wave Cinemas Gold Class brings high-end recliner comfort to North Indian markets. It features ample legroom, premium aesthetics, and dedicated hospitality staff.', showCredits: 0
+                    csv: '/data/plf/wavegold.csv', 
+                    img: '/data/plf/wavegold.png',
+                    desc: 'Wave Cinemas Gold Class brings high-end recliner comfort to North Indian markets. It features ample legroom, premium aesthetics, and dedicated hospitality staff.', 
+                    showCredits: 0
                 },
                 'muktaa2opulence': { 
-                    csv: '/data/csv/muktaa2opulence.csv', img: '/data/logos/muktaa2opulence.png',
-                    desc: 'Mukta A2 Opulence features couple\'s beds and premium sofas finished in rich leather. It represents the value-chain\'s aggressive pivot into the luxury hospitality sector.', showCredits: 0
+                    csv: '/data/plf/muktaa2opulence.csv', 
+                    img: '/data/plf/muktaa2opulence.png',
+                    desc: 'Mukta A2 Opulence features couple\'s beds and premium sofas finished in rich leather. It represents the value-chain\'s aggressive pivot into the luxury hospitality sector.', 
+                    showCredits: 0
                 },
                 'mirajsignature': { 
-                    csv: '/data/csv/mirajsignature.csv', img: '/data/logos/mirajsignature.png',
-                    desc: 'Miraj Signature features 100% luxury recliner seating and exclusive lounge access. It proves that premium, dedicated guest pathways thrive in regional markets.', showCredits: 0
+                    csv: '/data/plf/mirajsignature.csv', 
+                    img: '/data/plf/mirajsignature.png',
+                    desc: 'Miraj Signature features 100% luxury recliner seating and exclusive lounge access. It proves that premium, dedicated guest pathways thrive in regional markets.', 
+                    showCredits: 0
                 },
                 'moviemaxedition': { 
-                    csv: '/data/csv/moviemaxedition.csv', img: '/data/logos/moviemaxedition.png',
-                    desc: 'MovieMax Edition auditoriums undergo rigorous renovations to install high-end recliners and refined HVAC systems. They are designed to compete directly in the premium multiplex sector.', showCredits: 0
+                    csv: '/data/plf/moviemaxedition.csv', 
+                    img: '/data/plf/moviemaxedition.png',
+                    desc: 'MovieMax Edition auditoriums undergo rigorous renovations to install high-end recliners and refined HVAC systems. They are designed to compete directly in the premium multiplex sector.', 
+                    showCredits: 0
                 },
                 'moviemaxluxe': { 
-                    csv: '/data/csv/moviemaxluxe.csv', img: '/data/logos/moviemaxluxe.png',
-                    desc: 'MovieMax Luxe offers an upgraded, luxurious cinematic environment. It focuses on premium seating comfort and high-fidelity projection in a refined setting.', showCredits: 0
+                    csv: '/data/plf/moviemaxluxe.csv', 
+                    img: '/data/plf/moviemaxluxe.png',
+                    desc: 'MovieMax Luxe offers an upgraded, luxurious cinematic environment. It focuses on premium seating comfort and high-fidelity projection in a refined setting.', 
+                    showCredits: 0
                 },
                 'pvrplayhouse': { 
-                    csv: '/data/csv/pvrplayhouse.csv', img: '/data/logos/pvrplayhouse.png',
-                    desc: 'PVR Playhouse is tailored specifically for children and families. It features vibrant multi-colored seating, in-auditorium slides, and a dedicated play area.', showCredits: 0
+                    csv: '/data/plf/pvrplayhouse.csv', 
+                    img: '/data/plf/pvrplayhouse.png',
+                    desc: 'PVR Playhouse is tailored specifically for children and families. It features vibrant multi-colored seating, in-auditorium slides, and a dedicated play area.', 
+                    showCredits: 0
                 },
                 'inoxkiddles': { 
-                    csv: '/data/csv/inoxkiddles.csv', img: '/data/logos/inoxkiddles.png',
-                    desc: 'INOX Kiddles transforms the cinema into a sensory-friendly space for toddlers. It integrates bright aesthetics and play zones to make movie-going a specialized event for young families.', showCredits: 0
+                    csv: '/data/plf/inoxkiddles.csv', 
+                    img: '/data/plf/inoxkiddles.png',
+                    desc: 'INOX Kiddles transforms the cinema into a sensory-friendly space for toddlers. It integrates bright aesthetics and play zones to make movie-going a specialized event for young families.', 
+                    showCredits: 0
                 },
                 'cinepolisjunior': { 
-                    csv: '/data/csv/cinepolisjunior.csv', img: '/data/logos/cinepolisjunior.png',
-                    desc: 'Cinépolis Junior offers a specialized auditorium environment for kids. It combines comfortable family seating with fun amenities designed specifically for children.', showCredits: 0
+                    csv: '/data/plf/cinepolisjunior.csv', 
+                    img: '/data/plf/cinepolisjunior.png',
+                    desc: 'Cinépolis Junior offers a specialized auditorium environment for kids. It combines comfortable family seating with fun amenities designed specifically for children.', 
+                    showCredits: 0
                 }
             };
 
