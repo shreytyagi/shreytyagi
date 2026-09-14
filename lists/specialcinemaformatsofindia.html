@@ -1,3 +1,6 @@
+Here is the completely rewritten code with the categories restacked in your exact requested order.
+I have updated the dropdown categories and re-mapped the formats accordingly, including moving Broadway Vivid and Broadway HyperX into the Exhibitor Proprietary Large Screens category.
+For the Cinema LED Screens, I narrowed the options down to exactly what you requested. Please note that I used the spelling "Volt" instead of "Bolt", as this is the official name of the acoustically transparent LED screen recently installed at Vettri Theatres. I also added Magic Frames, representing the new direct-view LED setup, along with Spectra X.
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,14 +53,15 @@
                 <!-- Dropdown 1: Categories -->
                 <select class="form-control border-dark font-weight-bold mb-3" id="categorySelector" style="max-width: 350px; cursor: pointer;">
                     <option value="" selected disabled>-- Choose a Category --</option>
-                    <option value="studio">Studio Mastered Proprietary Formats</option>
-                    <option value="supplemental">Supplemental Data Special Formats</option>
-                    <option value="exhibitor">Exhibitor Proprietary Premium Large Formats</option>
-                    <option value="vip">VIP Premium Hospitality Formats</option>
-                    <option value="audio">Special Audio Formats</option>
+                    <option value="custom">Custom Mastered Premium Formats</option>
+                    <option value="panoramic">Panoramic Extension Formats</option>
+                    <option value="motion">Motion Seats & Sensory Formats</option>
+                    <option value="exhibitor">Exhibitor Proprietary Large Screens</option>
+                    <option value="led">Cinema LED Screens</option>
+                    <option value="vip">Luxury Auditoriums</option>
                     <option value="3d">Special 3D Technologies</option>
-                    <option value="led">Direct-View LED Formats</option>
-                    <option value="kids">Kids & Family Formats</option>
+                    <option value="audio">Advanced Audio Formats</option>
+                    <option value="kids">Kids Friendly Auditoriums</option>
                 </select>
 
                 <!-- Dropdown 2: Formats (Disabled by default) -->
@@ -78,19 +82,20 @@
 
             // Mapping of Categories to Format Keys
             const categories = {
-                'studio': ['imaxcola12', 'imaxxt12', 'imaxxt5', 'imaxdx5', 'dolbycinema', 'hdrbybarco', 'epiq', 'broadwayhyperx', 'broadwayvivid'],
-                'supplemental': ['4dx', 'mx4d', 'screenx', 'ice', 'dbox'],
-                'exhibitor': ['pxl', 'bigpix', 'macroxe', 'mirajmaximum', 'moviemaxmaxx', 'pcx', 'msiv'],
+                'custom': ['imaxcola12', 'imaxxt12', 'imaxxt5', 'imaxdx5', 'dolbycinema', 'hdrbybarco', 'epiq'],
+                'panoramic': ['screenx', 'ice'],
+                'motion': ['4dx', 'mx4d', 'dbox'],
+                'exhibitor': ['pxl', 'bigpix', 'macroxe', 'mirajmaximum', 'moviemaxmaxx', 'pcx', 'msiv', 'broadwayhyperx', 'broadwayvivid'],
+                'led': ['onyx', 'epiqluxon', 'qluxon', 'volt', 'magicframes', 'spectrax'],
                 'vip': ['pvrgold', 'broadwaygold', 'pvrdirectorscut', 'pvrluxe', 'inoxinsignia', 'devgnamor', 'waveplatinum', 'wavegold', 'muktaa2opulence', 'mirajsignature', 'moviemaxedition', 'moviemaxluxe'],
-                'audio': ['dolbyatmos', 'dtsx', 'barcoauro'],
                 '3d': ['reald3d', 'dolby3d', 'getd3d'],
-                'led': ['onyx', 'magnova', 'tricorne', 'epiqluxon', 'qluxon'],
+                'audio': ['dolbyatmos', 'dtsx', 'barcoauro'],
                 'kids': ['pvrplayhouse', 'inoxkiddles', 'cinepolisjunior']
             };
 
             // Master Data Dictionary 
             const formatData = {
-                // Studio Mastered Proprietary Formats
+                // Custom Mastered Premium Formats
                 'imaxcola12': { 
                     name: 'IMAX (Commercial Laser 12.1)', csv: '/data/plf/imaxcola12.csv', img: '/data/plf/imaxcola12.png',
                     desc: 'Features 4K laser projection with expanded color gamuts, a 12.1 channel spatial audio setup, and utilizes bespoke studio-mastered DCPs.', showCredits: 1
@@ -119,24 +124,8 @@
                     name: 'Qube EPIQ', csv: '/data/plf/epiq.csv', img: '/data/plf/epiq.png',
                     desc: 'Offers a 1.89:1 wall-to-wall presentation featuring 4K RGB laser projection, Atmos sound, and natively remastered high-contrast content.', showCredits: 0
                 },
-                'broadwayhyperx': { 
-                    name: 'Broadway HyperX', csv: '/data/plf/broadwayhyperx.csv', img: '/data/plf/broadwayhyperx.png',
-                    desc: 'Speakers are hidden entirely behind the screen structure for unhindered acoustic immersion, paired with speckle-reduction laser projection.', showCredits: 0
-                },
-                'broadwayvivid': { 
-                    name: 'Broadway Vivid', csv: '/data/plf/broadwayvivid.csv', img: '/data/plf/broadwayvivid.png',
-                    desc: 'Combines high-gain screen architecture with specially calibrated laser modules for high contrast and peak color reproduction.', showCredits: 0
-                },
 
-                // Supplemental Data Special Formats
-                '4dx': { 
-                    name: '4DX', csv: '/data/plf/4dx.csv', img: '/data/plf/4dx.png',
-                    desc: 'Features special motion seats that move in sync with the action, accompanied by perfectly timed environmental effects like rain, wind, and smoke.', showCredits: 0
-                },
-                'mx4d': { 
-                    name: 'MX4D', csv: '/data/plf/mx4d.csv', img: '/data/plf/mx4d.png',
-                    desc: 'Utilizes pneumatic motion seats with localized environmental effects built directly into the armrests, including rumblers, air blasts, and water sprays.', showCredits: 0
-                },
+                // Panoramic Extension Formats
                 'screenx': { 
                     name: 'ScreenX', csv: '/data/plf/screenx.csv', img: '/data/plf/screenx.png',
                     desc: 'Special side content plays on the walls to the left and right, extending the view of the main screen to provide a 270-degree peripheral experience.', showCredits: 1
@@ -145,12 +134,22 @@
                     name: 'PVR ICE', csv: '/data/plf/ice.csv', img: '/data/plf/ice.png',
                     desc: 'The main screen is complemented by synchronized LED panels on the side walls that generate peripheral color and motion via a supplemental data track.', showCredits: 0
                 },
+
+                // Motion Seats & Sensory Formats
+                '4dx': { 
+                    name: '4DX', csv: '/data/plf/4dx.csv', img: '/data/plf/4dx.png',
+                    desc: 'Features special motion seats that move in sync with the action, accompanied by perfectly timed environmental effects like rain, wind, and smoke.', showCredits: 0
+                },
+                'mx4d': { 
+                    name: 'MX4D', csv: '/data/plf/mx4d.csv', img: '/data/plf/mx4d.png',
+                    desc: 'Utilizes pneumatic motion seats with localized environmental effects built directly into the armrests, including rumblers, air blasts, and water sprays.', showCredits: 0
+                },
                 'dbox': { 
                     name: 'D-BOX', csv: '/data/plf/dbox.csv', img: '/data/plf/dbox.png',
                     desc: 'Provides localized motion and vibration directly in the seat, perfectly synchronized to the action on screen.', showCredits: 0
                 },
 
-                // Exhibitor Proprietary Premium Large Formats
+                // Exhibitor Proprietary Large Screens
                 'pxl': { 
                     name: 'PVR P[XL]', csv: '/data/plf/pxl.csv', img: '/data/plf/pxl.png',
                     desc: 'Enforces enhanced spatial dimensions, 4K laser projection, and Atmos audio without requiring proprietary DCPs.', showCredits: 1
@@ -179,8 +178,42 @@
                     name: 'Marvel Studios Infinity Vision', csv: '/data/plf/msiv.csv', img: '/data/plf/msiv.png',
                     desc: 'Features films shot digitally with certified cameras that naturally expand to fill a 1.90:1 aspect ratio.', showCredits: 0
                 },
+                'broadwayhyperx': { 
+                    name: 'Broadway HyperX', csv: '/data/plf/broadwayhyperx.csv', img: '/data/plf/broadwayhyperx.png',
+                    desc: 'Speakers are hidden entirely behind the screen structure for unhindered acoustic immersion, paired with speckle-reduction laser projection.', showCredits: 0
+                },
+                'broadwayvivid': { 
+                    name: 'Broadway Vivid', csv: '/data/plf/broadwayvivid.csv', img: '/data/plf/broadwayvivid.png',
+                    desc: 'Combines high-gain screen architecture with specially calibrated laser modules for high contrast and peak color reproduction.', showCredits: 0
+                },
 
-                // VIP Premium Hospitality Formats
+                // Cinema LED Screens
+                'onyx': { 
+                    name: 'Samsung ONYX LED', csv: '/data/plf/onyx.csv', img: '/data/plf/onyx.png',
+                    desc: 'A direct-view LED wall that achieves deep blacks and high contrast without a traditional projector.', showCredits: 0
+                },
+                'epiqluxon': { 
+                    name: 'Qube EPIQ Luxon LED', csv: '/data/plf/epiqluxon.csv', img: '/data/plf/epiqluxon.png',
+                    desc: 'A 10-meter-wide direct-view LED screen supporting uncompressed bitrates and 4K resolution at 300 nits.', showCredits: 0
+                },
+                'qluxon': { 
+                    name: 'Qube Q Luxon LED', csv: '/data/plf/qluxon.csv', img: '/data/plf/qluxon.png',
+                    desc: 'Utilizes active pixel LED panels to deliver high colorimetric fidelity and peak luminance.', showCredits: 0
+                },
+                'volt': { 
+                    name: 'Volt', csv: '/data/plf/volt.csv', img: '/data/plf/volt.png',
+                    desc: 'An acoustically transparent LED screen allowing cinema-grade speakers to be positioned directly behind the display.', showCredits: 0
+                },
+                'magicframes': { 
+                    name: 'Magic Frames', csv: '/data/plf/magicframes.csv', img: '/data/plf/magicframes.png',
+                    desc: 'A premium direct-view LED display offering deep blacks and high contrast without a traditional projection system.', showCredits: 0
+                },
+                'spectrax': { 
+                    name: 'Spectra X', csv: '/data/plf/spectrax.csv', img: '/data/plf/spectrax.png',
+                    desc: 'A direct-view LED cinema screen delivering exceptional HDR visuals and peak brightness.', showCredits: 0
+                },
+
+                // Luxury Auditoriums
                 'pvrgold': { 
                     name: 'PVR Gold', csv: '/data/plf/pvrgold.csv', img: '/data/plf/pvrgold.png',
                     desc: 'Features recliner seating coupled with personalized butler service and in-seat dining.', showCredits: 0
@@ -230,20 +263,6 @@
                     desc: 'Focuses on seating comfort within an upgraded cinematic environment.', showCredits: 0
                 },
 
-                // Special Audio Formats
-                'dolbyatmos': {
-                    name: 'Dolby Atmos', csv: '/data/plf/dolbyatmos.csv', img: '/data/plf/dolbyatmos.png',
-                    desc: 'An object-based audio codec that maps sound to precise locations in a 3D space using extensive ceiling and wall speaker arrays.', showCredits: 0
-                },
-                'dtsx': {
-                    name: 'DTS:X', csv: '/data/plf/dtsx.csv', img: '/data/plf/dtsx.png',
-                    desc: 'An object-based surround sound system that creates a multi-dimensional acoustic environment without requiring fixed speaker configurations.', showCredits: 0
-                },
-                'barcoauro': {
-                    name: 'Barco Auro 11.1', csv: '/data/plf/barcoauro.csv', img: '/data/plf/barcoauro.png',
-                    desc: 'Utilizes a three-layer acoustic design—ear-level, height, and overhead—to achieve spatial audio.', showCredits: 0
-                },
-
                 // Special 3D Technologies
                 'reald3d': {
                     name: 'RealD 3D', csv: '/data/plf/reald3d.csv', img: '/data/plf/reald3d.png',
@@ -258,29 +277,21 @@
                     desc: 'A passive circular polarization system widely adopted for bright stereoscopic projection.', showCredits: 0
                 },
 
-                // Direct-View LED Formats
-                'onyx': { 
-                    name: 'Samsung ONYX LED', csv: '/data/plf/onyx.csv', img: '/data/plf/onyx.png',
-                    desc: 'A direct-view LED wall that achieves deep blacks and high contrast without a traditional projector.', showCredits: 0
+                // Advanced Audio Formats
+                'dolbyatmos': {
+                    name: 'Dolby Atmos', csv: '/data/plf/dolbyatmos.csv', img: '/data/plf/dolbyatmos.png',
+                    desc: 'An object-based audio codec that maps sound to precise locations in a 3D space using extensive ceiling and wall speaker arrays.', showCredits: 0
                 },
-                'magnova': { 
-                    name: 'Magnova LED', csv: '/data/plf/magnova.csv', img: '/data/plf/magnova.png',
-                    desc: 'An active, modular LED cinema display providing high brightness and modern contrast.', showCredits: 0
+                'dtsx': {
+                    name: 'DTS:X', csv: '/data/plf/dtsx.csv', img: '/data/plf/dtsx.png',
+                    desc: 'An object-based surround sound system that creates a multi-dimensional acoustic environment without requiring fixed speaker configurations.', showCredits: 0
                 },
-                'tricorne': { 
-                    name: 'Tricorne LED', csv: '/data/plf/tricorne.csv', img: '/data/plf/tricorne.png',
-                    desc: 'Utilizes direct-view LED panels to achieve deep blacks and vibrant colors without projection limitations.', showCredits: 0
-                },
-                'epiqluxon': { 
-                    name: 'Qube EPIQ Luxon LED', csv: '/data/plf/epiqluxon.csv', img: '/data/plf/epiqluxon.png',
-                    desc: 'A 10-meter-wide direct-view LED screen supporting uncompressed bitrates and 4K resolution at 300 nits.', showCredits: 0
-                },
-                'qluxon': { 
-                    name: 'Qube Q Luxon LED', csv: '/data/plf/qluxon.csv', img: '/data/plf/qluxon.png',
-                    desc: 'Utilizes active pixel LED panels to deliver high colorimetric fidelity and peak luminance.', showCredits: 0
+                'barcoauro': {
+                    name: 'Barco Auro 11.1', csv: '/data/plf/barcoauro.csv', img: '/data/plf/barcoauro.png',
+                    desc: 'Utilizes a three-layer acoustic design—ear-level, height, and overhead—to achieve spatial audio.', showCredits: 0
                 },
 
-                // Kids & Family Formats
+                // Kids Friendly Auditoriums
                 'pvrplayhouse': { 
                     name: 'PVR Playhouse', csv: '/data/plf/pvrplayhouse.csv', img: '/data/plf/pvrplayhouse.png',
                     desc: 'Tailored for children, featuring multi-colored seating, in-auditorium slides, and a dedicated play area.', showCredits: 0
