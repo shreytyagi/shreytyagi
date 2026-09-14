@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Special Cinema Formats of India | Lists | Shrey Tyagi</title>
+	<title>Special Cinemas of India | Lists | Shrey Tyagi</title>
 
 	<!-- Bootstrap CSS -->
 	<meta charset="utf-8">
@@ -43,7 +43,7 @@
     <div class="container mt-1 text-justify flex-grow-1">
 
         <div class="content-container" style="padding-bottom: 0 !important; margin-bottom: 0 !important;">
-            <h3>Special Cinema Formats of India</h3>
+            <h3>Special Cinemas of India</h3>
             
             <!-- Cascading Dropdowns -->
             <div class="form-group mt-4 mb-0">
@@ -53,8 +53,8 @@
                     <option value="custom">Custom Mastered Premium Formats</option>
                     <option value="panoramic">Panoramic Extension Formats</option>
                     <option value="motion">Motion Seats & Sensory Formats</option>
-                    <option value="exhibitor">Exhibitor Proprietary Large Screens</option>
-                    <option value="led">Cinema LED Screens</option>
+                    <option value="exhibitor">Exhibitor Branded Auditoriums</option>
+                    <option value="led">LED Screen Auditoriums</option>
                     <option value="vip">Luxury Auditoriums</option>
                     <option value="3d">Special 3D Technologies</option>
                     <option value="audio">Advanced Audio Formats</option>
@@ -79,7 +79,7 @@
 
             // Mapping of Categories to Format Keys
             const categories = {
-                'custom': ['imaxcola12', 'imaxxt12', 'imaxxt5', 'imaxdx5', 'dolbycinema', 'hdrbybarco', 'epiq'],
+                'custom': ['imaxwl', 'imax', 'dolbycinema', 'hdrbybarco', 'epiq'],
                 'panoramic': ['screenx', 'ice'],
                 'motion': ['4dx', 'mx4d', 'dbox'],
                 'exhibitor': ['pxl', 'bigpix', 'macroxe', 'mirajmaximum', 'moviemaxmaxx', 'pcx', 'msiv', 'broadwayhyperx', 'broadwayvivid'],
@@ -93,21 +93,13 @@
             // Master Data Dictionary 
             const formatData = {
                 // Custom Mastered Premium Formats
-                'imaxcola12': { 
-                    name: 'IMAX (Commercial Laser 12.1)', csv: '/data/plf/imaxcola12.csv', img: '/data/plf/imaxcola12.png',
-                    desc: 'Features 4K laser projection with expanded color gamuts, a 12.1 channel spatial audio setup, and utilizes bespoke studio-mastered DCPs.', showCredits: 1
+                'imaxwl': { 
+                    name: 'IMAX with Laser', csv: '/data/plf/imaxwl.csv', img: '/data/plf/imaxwl.png',
+                    desc: 'Features high-contrast 4K laser projection with 1.90:1 screen and custom mastered DCPs.', showCredits: 1
                 },
-                'imaxxt12': { 
-                    name: 'IMAX (Laser XT 12.1)', csv: '/data/plf/imaxxt12.csv', img: '/data/plf/imaxxt12.png',
-                    desc: 'Maintains strict optical standards with 4K laser projection, 12.1 channel spatial audio, and proprietary mastered content designed for compact auditoriums.', showCredits: 1
-                },
-                'imaxxt5': { 
-                    name: 'IMAX (Laser XT 5.1)', csv: '/data/plf/imaxxt5.csv', img: '/data/plf/imaxxt5.png',
-                    desc: 'Features high-contrast 4K laser projection for compact theatre geometries, calibrated with standard 5.1 audio mapping and custom mastered DCPs.', showCredits: 0
-                },
-                'imaxdx5': { 
-                    name: 'IMAX (Dual Xenon 5.1)', csv: '/data/plf/imaxdx5.csv', img: '/data/plf/imaxdx5.png',
-                    desc: 'Utilizes dual 2K Xenon arc lamp projectors to deliver a 1.90:1 aspect ratio, paired with calibrated standard 5.1 audio and custom mastered content.', showCredits: 0
+                'imaxdx': { 
+                    name: 'IMAX', csv: '/data/plf/imaxdx.csv', img: '/data/plf/imaxdx.png',
+                    desc: 'Utilizes dual 2K Xenon arc lamp projectors with 1.90:1 screen and custom mastered content.', showCredits: 1
                 },
                 'dolbycinema': { 
                     name: 'Dolby Cinema', csv: '/data/plf/dolbycinema.csv', img: '/data/plf/dolbycinema.png',
@@ -272,6 +264,10 @@
                 'getd3d': {
                     name: 'GetD 3D', csv: '/data/plf/getd3d.csv', img: '/data/plf/getd3d.png',
                     desc: 'A passive circular polarization system widely adopted for bright stereoscopic projection.', showCredits: 0
+                },
+				'active3d': {
+                    name: 'Active 3D', csv: '/data/plf/active3d.csv', img: '/data/plf/active3d.png',
+                    desc: 'An active shutter 3D system for a weird stereoscopic projection.', showCredits: 0
                 },
 
                 // Advanced Audio Formats
