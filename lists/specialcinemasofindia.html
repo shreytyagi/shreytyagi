@@ -11,7 +11,7 @@
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 	
-	<!-- Botstrap JS -->
+	<!-- Bootstrap JS -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	
 	<!-- Local CSS -->
@@ -85,7 +85,7 @@
                 'exhibitor': ['pxl', 'bigpix', 'macroxe', 'mirajmaximum', 'moviemaxmaxx', 'pcx', 'msiv', 'broadwayhyperx', 'broadwayvivid'],
                 'led': ['samsungonyx', 'lopuepiqluxon', 'aotoepiqluxon', 'lopuqluxon', 'tricornevolt', 'heyledmagnova', 'inledtronicsspectrax'],
                 'vip': ['pvrgold', 'broadwaygold', 'pvrdirectorscut', 'pvrluxe', 'inoxinsignia', 'devgnamor', 'waveplatinum', 'wavegold', 'muktaa2opulence', 'mirajsignature', 'moviemaxedition', 'moviemaxluxe'],
-                '3d': ['reald3d', 'dolby3d', 'getd3d'],
+                '3d': ['reald3d', 'dolby3d', 'getd3d', 'active3d'],
                 'audio': ['dolbyatmos', 'dtsx', 'barcoauro'],
                 'kids': ['pvrplayhouse', 'inoxkiddles', 'cinepolisjunior']
             };
@@ -392,7 +392,7 @@
                 let tableOutput = '';
                 if (hasValidCsv) {
                     tableOutput = `
-                        <div class="table-container" csvfile="${formatData[currentFormat].csv}" fullwidth="false" sortcolumn="3" sortorder="asc" columnpriority="2,3,1,0" dontbreakcolumns="0,1">
+                        <div class="table-container text-left" csvfile="${formatData[currentFormat].csv}" fullwidth="false" sortcolumn="3" sortorder="asc" columnpriority="2,3,1,0" dontbreakcolumns="0,1">
                             <table id="dynamic-table">
                                 <thead></thead>
                                 <tbody></tbody>
