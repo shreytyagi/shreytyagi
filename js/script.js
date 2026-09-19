@@ -1,3 +1,8 @@
+/* ==========================================================================
+   1. CORE UTILITIES
+   ========================================================================== */
+
+// Parses raw CSV data while respecting quotes and line breaks
 function parseCSVRaw(data) {
     const rows = [];
     let currentField = '';
@@ -42,19 +47,13 @@ function parseCSVRaw(data) {
     return rows;
 }
 
-$(document).ready(function () {
-    $('.card').hover(
-        function () {
-            $(this).find('.card-caption').addClass('show-full');
-        },
-        function () {
-            $(this).find('.card-caption').removeClass('show-full');
-        }
-    );
-});
 
-$(document).ready(function () {
-    $("#navbar-container").load("/navbar.html", function () {
+/* ==========================================================================
+   2. INITIALIZATION (Navbar, Footer, General Setup)
+   ========================================================================== */
+
+// All standard DOM loading events consolidated into one block for efficiency
+$(document).ready(function () {          // 1. Load Navbar and handle mobile toggle behavior$("#navbar-container").load("/navbar.html", function () {
         $(".navbar-toggler").click(function () {
             setTimeout(function () {
                 $("#footer-container").css({
@@ -68,6 +67,8 @@ $(document).ready(function () {
                 });
                 let bodyHeight = $("body").outerHeight();
                 let windowHeight = $(window).height();
+                
+                // Adjust footer position dynamically based on page length
                 if (bodyHeight < windowHeight) {
                     $("#footer-container").css({
                         "position": "relative",
@@ -90,36 +91,44 @@ $(document).ready(function () {
         });
     });
 
+    // 2. Load Footer
     $("#footer-container").load("footer.html", function () {
         $("#footer-container nav").css("display", "block");
     });
 	
-	$("#current-year").text("Copyright © " + new Date().getFullYear() + " by Shrey Tyagi. All rights reserved.");
+    // 3. Automatically set the copyright year
+    $("#current-year").text("Copyright © " + new Date().getFullYear() + " by Shrey Tyagi. All rights reserved.");
 });
 
-// ==========================================
-// --- OPTIMIZED ARTICLE RENDERING ---
-// ==========================================
+
+/* ==========================================================================
+   3. ARTICLE RENDERING ENGINE
+   ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const cardContainer = document.getElementById("card-container");
     let articles = []; 
 
+    // Look for filter tags in the HTML body attribute
     const masterCategoryFilter = document.body.getAttribute("data-master-category")?.toLowerCase() || "";
     const csvFile = document.body.getAttribute("csvfile") || "index.csv"; 
 
-    fetch(csvFile)
-        .then(response => response.text())
-        .then(csvData => {
-            articles = parseCSV(csvData);
-            const filteredArticles = masterCategoryFilter
-                ? articles.filter(article => article.masterCategory === masterCategoryFilter)
-                : articles;
-            renderArticles(filteredArticles); 
-        })
-        .catch(error => console.error("Error loading CSV:", error));
+    // Fetch the articles CSV
+    if(cardContainer) {
+        fetch(csvFile)
+            .then(response => response.text())
+            .then(csvData => {
+                articles = parseCSV(csvData);
+                const filteredArticles = masterCategoryFilter
+                    ? articles.filter(article => article.masterCategory === masterCategoryFilter)
+                    : articles;
+                renderArticles(filteredArticles); 
+            })
+            .catch(error => console.error("Error loading CSV:", error));
+    }
 
+    // Process the CSV string into an array of article objects
     function parseCSV(data) {
         const rows = parseCSVRaw(data);
         return rows.slice(1).map(fields => {
@@ -136,13 +145,14 @@ document.addEventListener("DOMContentLoaded", function () {
           .sort((a, b) => b.date.localeCompare(a.date));
     }
 
+    // Standardize European date formatting
     function formatDate(isoDate) {
         const [year, month, day] = isoDate.split(".");
         const dateObj = new Date(year, month - 1, day);
         return dateObj.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
     }
 
-    // Exponential Fix: Batch HTML in memory and inject once
+    // Build the grid of cards and inject it efficiently into the DOM
     function renderArticles(articleList) {
         let allCardsHTML = ""; 
         
@@ -155,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="card custom-card article">
                                 <div class="card-inner">
                                     <div class="card-content">
-										<p class="card-text">${masterCategory} &raquo; ${category}</p>
+                                        <p class="card-text">${masterCategory} &raquo; ${category}</p>
                                         <h5 class="card-title">${title}</h5>
                                         <p class="card-date">${formattedDate}</p>
                                     </div>
@@ -170,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cardContainer.innerHTML = allCardsHTML; 
     }
 
+    // Algorithm to handle live search queries
     function searchArticles() {
         const searchText = searchInput.value.toLowerCase();
 
@@ -197,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
         renderArticles(filteredForCategory);
     }
 
-    // Exponential Fix: Debounce live search to save CPU
+    // Debounce the live search input to prevent browser lag while typing
     let searchTimeout;
     if (searchInput) {
         searchInput.addEventListener("input", function() {
@@ -209,14 +220,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ==========================================
-// --- PHOTO GALLERY RENDERING ---
-// ==========================================
+
+/* ==========================================================================
+   4. PHOTO GALLERY RENDERING
+   ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
     const galleryContainer = document.querySelector(".gallery-container .row");
     const csvFile = document.querySelector(".gallery-container")?.getAttribute("csvfile") || "photos.csv";
 
+    // Inject lightbox HTML if it doesn't already exist
     if (!document.querySelector(".overlay")) {
         const overlayHTML = `
             <div class="overlay">
@@ -240,11 +253,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let images = []; 
     let currentIndex = -1; 
 
+    // Fetch and build the photo grid
     if(galleryContainer) {
         fetch(csvFile)
             .then(response => response.text())
             .then(data => {
-                images = parseCSV(data).slice(1); 
+                images = parseCSVRaw(data).slice(1); // Exclude header row
                 let galleryHTML = "";
 
                 images.forEach(([thumb, fullres, caption], index) => {
@@ -269,10 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error loading CSV:", error));
     }
 
-    function parseCSV(data) {
-        return parseCSVRaw(data).slice(1); 
-    }
-
+    // Handles the overlay navigation and closing behavior
     function bindImageClickEvents() {
         document.querySelectorAll(".photo-link").forEach(link => {
             link.addEventListener("click", function (event) {
@@ -307,6 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Updates the lightbox image and manages button visibility
     function showImage(index) {
         if (index >= 0 && index < images.length) {
             previewImage.src = images[index][1]; 
@@ -318,13 +330,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ==========================================
-// --- ADVANCED DYNAMIC TABLE ENGINE ---
-// ==========================================
+
+/* ==========================================================================
+   5. ADVANCED DYNAMIC TABLE ENGINE
+   ========================================================================== */
 
 window.masterCsvData = [];
 window.currentVisibleCols = [];
 
+// API to allow buttons to change which columns are visible
 window.toggleTableConfig = function(visibleColsStr, fullWidthStr, priorityStr, dontBreakStr, sortColStr, hideId, showId) {
     const container = document.querySelector('.table-container');
     if (!container) return;
@@ -343,7 +357,9 @@ window.toggleTableConfig = function(visibleColsStr, fullWidthStr, priorityStr, d
     }
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+// The core table logic is wrapped in a function so it can be called on normal page loads
+// AND called dynamically when custom events fire (like the drop-down cinema formats page)
+function initializeDynamicTable() {
     const tableContainer = document.querySelector(".table-container");
     if (!tableContainer) return;
 
@@ -354,6 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let sortOrder = 0;
     let isFullWidth = false;
 
+    // Load the raw CSV table data
     fetch(csvFile)
         .then(response => response.text())
         .then(data => {
@@ -363,6 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error loading CSV:", error));
 
+    // Core processor: Determines what data should be shown based on HTML attributes
     window.rebuildTableFromMaster = function() {
         isFullWidth = tableContainer.getAttribute("fullwidth") === "true";
         let visibleAttr = tableContainer.getAttribute("visiblecolumns");
@@ -401,6 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
         renderTable(dataToRender, isFullWidth);
     };
 
+    // Math algorithm to auto-size columns based on the character length of their contents
     function calculateColumnWidths(data) {
         const numCols = data[0].length;
         let maxChars = new Array(numCols).fill(0);
@@ -506,6 +525,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return finalWidths;
     }
 
+    // Translates the array data into DOM table rows
     function renderTable(data, isFullWidth) {
         const tableHead = document.querySelector("#dynamic-table thead");
         const tableBody = document.querySelector("#dynamic-table tbody");
@@ -529,11 +549,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let absoluteDontBreak = dontBreakAttr ? dontBreakAttr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [];
         let dontBreakCols = absoluteDontBreak.map(abs => window.currentVisibleCols.indexOf(abs)).filter(rel => rel !== -1);
 
-        // --- STEP 1: CREATE IN-MEMORY FRAGMENTS (Zero Layout Thrashing) ---
+        // Document fragments prevent the browser from re-painting until the whole table is built
         const headFragment = document.createDocumentFragment();
         const bodyFragment = document.createDocumentFragment();
         const breakPattern = /([a-z]{1,}?)(?=[a-z])/gi;
 
+        // Build headers
         const headerRow = document.createElement("tr");
         data[0].forEach((header, index) => {
             const th = document.createElement("th");
@@ -547,7 +568,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         headFragment.appendChild(headerRow);
 
-        // --- STEP 2: BUILD ROWS AND INJECT HYPHENS OFFLINE ---
+        // Build data cells and inject hyphens for word-breaks
         data.slice(1).forEach(rowData => {
             const row = document.createElement("tr");
             rowData.forEach((cellData, index) => {
@@ -569,7 +590,7 @@ document.addEventListener("DOMContentLoaded", function () {
             bodyFragment.appendChild(row);
         });
 
-        // --- STEP 3: MERGE CELLS OFFLINE (Lightning Fast) ---
+        // Merge duplicate vertical cells offline using rowspan logic
         const rows = bodyFragment.querySelectorAll('tr');
         const numCols = data[0].length;
 
@@ -592,13 +613,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // --- STEP 4: SINGLE BULK PAINT TO SCREEN ---
+        // Wipe old table and inject new structured elements
         tableHead.innerHTML = "";
         tableBody.innerHTML = "";
         tableHead.appendChild(headFragment);
         tableBody.appendChild(bodyFragment);
     }
 
+    // Handles the actual sorting logic for arrays (alphabetical and numerical)
     function sortData(data, columnIndex, order) {
         if (order === 0) return [...data];
         return [data[0], ...data.slice(1).sort((a, b) => {
@@ -611,11 +633,9 @@ document.addEventListener("DOMContentLoaded", function () {
         })];
     }
 
-	    // Add a timer variable right above the function
+    // Debounce the sorting interaction to prevent main-thread locking if a user clicks rapidly
     let sortTimeout; 
-
     function sortTableByColumn(columnIndex) {
-        // 1. Instantly register the taps and update the sorting state
         if (columnIndex !== currentSortColumn) {
             sortOrder = 1;
             currentSortColumn = columnIndex;
@@ -623,13 +643,22 @@ document.addEventListener("DOMContentLoaded", function () {
             sortOrder = (sortOrder === 1) ? -1 : (sortOrder === -1 ? 0 : 1);
         }
         
-        // 2. Debounce the heavy rendering to prevent main-thread flooding
         clearTimeout(sortTimeout);
         sortTimeout = setTimeout(() => {
             const sortedData = sortOrder === 0 ? [...currentFilteredData] : sortData(currentFilteredData, currentSortColumn, sortOrder);
             renderTable(sortedData, isFullWidth);
-        }, 150); // Waits 150ms after the last tap before building the HTML
+        }, 150); 
     }
-});
+}
+
+// ==========================================================================
+//   BIND TABLE ENGINE TO EVENTS
+// ==========================================================================
+
+// Run normally for standard static pages (e.g. index.html)
+document.addEventListener("DOMContentLoaded", initializeDynamicTable);
+
+// Run specifically when triggered by async scripts (e.g. the dynamic Formats page)
+document.addEventListener('formatTableRendered', initializeDynamicTable);
 
 document.documentElement.lang = "en";
