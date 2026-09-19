@@ -686,6 +686,7 @@ td, th, tr {
   overflow-wrap: break-word;
   word-break: break-word;
   white-space: normal;
+text-align: left !important;
 }
 
 
