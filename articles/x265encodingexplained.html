@@ -50,7 +50,7 @@
             <p>To build an uncompromising mastering pipeline, you need a few specialized command-line tools. You need the x265 engine, VapourSynth for frame processing, and <code>dovi_tool</code> for handling complex Dolby Vision metadata.</p>
             
             <ul>
-                <li><b>macOS Setup:</b> Open your terminal and use Homebrew. Run: <code>brew install x265 vapoursynth ffmpeg dovi_tool</code></li>
+                <li><b>macOS Setup:</b> Open your terminal and use Homebrew. Run: <code>brew install x265 vapoursynth ffms2 ffmpeg dovi_tool</code></li>
                 <li><b>Windows Setup:</b> Use the Scoop package manager, or download the pre-compiled binary `.exe` files from their respective GitHub repositories and add them to your Windows System PATH.</li>
             </ul>
 
@@ -93,17 +93,25 @@
                     
                     <!-- VapourSynth Row 1 -->
                     <div class="row">
-                        <div class="col-12 col-md-6 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Input File Name</label>
                             <input type="text" class="form-control" id="genInputFile" value="input.mp4">
                         </div>
-                        <div class="col-12 col-md-6 mb-4">
+                        <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">Apply 3D LUT (Optional)</label>
                             <input type="text" class="form-control" id="genLutFile" placeholder="e.g. cinematic.cube">
                         </div>
+                        <div class="col-12 col-md-4 mb-4">
+                            <label class="font-weight-bold">Source Filter Engine</label>
+                            <select class="form-control" id="genSourceEngine">
+                                <option value="ffms2" selected>FFmpegSource2 (ffms2)</option>
+                                <option value="lsmas">L-SMASH Works (lsmas)</option>
+                            </select>
+                            <small class="form-text text-muted mt-1">Mac users: ffms2 is strongly recommended.</small>
+                        </div>
                     </div>
 
-                    <!-- VapourSynth Row 2 -->
+                    <!-- VapourSynth Row 2: Temporal Logic -->
                     <div class="row">
                         <div class="col-12 col-md-4 mb-4">
                             <label class="font-weight-bold">1. Lock Framerate (Fix VFR)</label>
@@ -134,40 +142,42 @@
                             <small class="form-text text-muted mt-1">Plays locked frames at this new speed.</small>
                         </div>
                         <div class="col-12 col-md-4 mb-4">
-                            <label class="font-weight-bold">Crop (Top, Bottom, Left, Right)</label>
-                            <div class="d-flex">
-                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropT" value="0" min="0">
-                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropB" value="0" min="0">
-                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropL" value="0" min="0">
-                                <input type="number" class="form-control px-1 text-center" id="cropR" value="0" min="0">
-                            </div>
+                            <label class="font-weight-bold">3. Source FPS (Fallback)</label>
+                            <input type="number" class="form-control" id="genSourceFps" value="24" min="1" step="any">
+                            <small class="form-text text-muted mt-1">Used for GOP math if both are "Original".</small>
                         </div>
                     </div>
 
-                    <!-- VapourSynth Row 3 (Resizing) -->
+                    <!-- VapourSynth Row 3 (Crop & Resizing) -->
                     <div class="row align-items-end mb-4">
-                        <div class="col-12 col-md-4 mb-3">
+                        <div class="col-12 col-md-5 mb-4">
+                            <label class="font-weight-bold">Crop (T, B, L, R) <span class="text-danger small font-weight-normal">- Even only!</span></label>
+                            <div class="d-flex">
+                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropT" value="0" min="0" step="2">
+                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropB" value="0" min="0" step="2">
+                                <input type="number" class="form-control mr-2 px-1 text-center" id="cropL" value="0" min="0" step="2">
+                                <input type="number" class="form-control px-1 text-center" id="cropR" value="0" min="0" step="2">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-4">
                             <div class="custom-control custom-switch mb-2">
                                 <input type="checkbox" class="custom-control-input" id="genResizeToggle">
                                 <label class="custom-control-label font-weight-bold text-dark" for="genResizeToggle" style="cursor: pointer;">Enable Resizing</label>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <label class="font-weight-bold">Target Width</label>
-                            <input type="number" class="form-control" id="genResizeW" value="3840" disabled>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <label class="font-weight-bold">Target Height</label>
-                            <input type="number" class="form-control" id="genResizeH" value="2160" disabled>
-                        </div>
-                        <div class="col-12 col-md-2 mb-3">
-                            <label class="font-weight-bold">Algorithm</label>
                             <select class="form-control" id="genResizeAlgo" disabled>
                                 <option value="Spline36" selected>Spline36</option>
                                 <option value="Lanczos">Lanczos</option>
                                 <option value="Bicubic">Bicubic</option>
                                 <option value="Point">Point (Nearest)</option>
                             </select>
+                        </div>
+                        <div class="col-12 col-md-2 mb-4">
+                            <label class="font-weight-bold">Target W</label>
+                            <input type="number" class="form-control" id="genResizeW" value="3840" step="2" disabled>
+                        </div>
+                        <div class="col-12 col-md-2 mb-4">
+                            <label class="font-weight-bold">Target H</label>
+                            <input type="number" class="form-control" id="genResizeH" value="2160" step="2" disabled>
                         </div>
                     </div>
 
@@ -227,7 +237,6 @@
                                 <option value="bt2020">BT.2020</option>
                                 <option value="dcip3">P3-DCI</option>
                                 <option value="p3d65">P3-D65</option>
-                                <option value="p3d60">P3-D60</option>
                                 <option value="bt709" selected>BT.709</option>
                                 <option value="bt601">BT.601</option>
                             </select>
@@ -264,8 +273,8 @@
                         </div>
                     </div>
 
-                    <!-- Toggles Row -->
-                    <div class="row mt-2">
+                    <!-- Toggles Row (Mobile Stacked) -->
+                    <div class="row mt-1">
                         <div class="col-12 col-md-6 mb-3">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
@@ -449,28 +458,67 @@
                     });
 
                     function updateCommand() {
-                        // VapourSynth Variables
-                        const inFile = document.getElementById('genInputFile').value || 'input.mp4';
-                        const lutFile = document.getElementById('genLutFile').value;
+                        // Dynamic Constraint Logic Handlers
+                        const bitDepthSel = document.getElementById('genBitDepth');
+                        const dvSel = document.getElementById('genDv');
+                        const colorSel = document.getElementById('genColor');
+                        const transferSel = document.getElementById('genTransfer');
+
+                        // 1. Enforce 8-Bit Dolby Vision Paradox
+                        if (bitDepthSel.value === '8') {
+                            dvSel.checked = false;
+                            dvSel.disabled = true;
+                        } else {
+                            dvSel.disabled = false;
+                        }
+
+                        // 2. Enforce Dolby Vision 8.4 Color Paradox
+                        if (transferSel.value === 'hlg' && dvSel.checked) {
+                            colorSel.value = 'bt2020';
+                            colorSel.disabled = true;
+                        } else {
+                            colorSel.disabled = false;
+                        }
+
+                        // Parse UI Input Variables
                         const lockFps = document.getElementById('genLockFps').value;
                         const assumeFps = document.getElementById('genAssumeFps').value;
+                        const sourceFps = parseFloat(document.getElementById('genSourceFps').value) || 24;
                         
-                        const cT = parseInt(document.getElementById('cropT').value) || 0;
-                        const cB = parseInt(document.getElementById('cropB').value) || 0;
-                        const cL = parseInt(document.getElementById('cropL').value) || 0;
-                        const cR = parseInt(document.getElementById('cropR').value) || 0;
+                        // Parse String inputs safely (Escape quotes)
+                        const inFile = document.getElementById('genInputFile').value || 'input.mp4';
+                        const lutFile = document.getElementById('genLutFile').value;
+                        const outFile = document.getElementById('genOutputFile').value || 'output.hevc';
+                        
+                        const safeInFile = inFile.replace(/"/g, '\\"');
+                        const safeLutFile = lutFile.replace(/"/g, '\\"');
+                        const safeOutFile = outFile.replace(/"/g, '\\"');
+
+                        // Enforce Even Numbers mathematically for VapourSynth Crop & Resize
+                        let cT = parseInt(document.getElementById('cropT').value) || 0;
+                        let cB = parseInt(document.getElementById('cropB').value) || 0;
+                        let cL = parseInt(document.getElementById('cropL').value) || 0;
+                        let cR = parseInt(document.getElementById('cropR').value) || 0;
+                        cT = cT - (cT % 2);
+                        cB = cB - (cB % 2);
+                        cL = cL - (cL % 2);
+                        cR = cR - (cR % 2);
 
                         const isResize = document.getElementById('genResizeToggle').checked;
-                        const resW = document.getElementById('genResizeW').value;
-                        const resH = document.getElementById('genResizeH').value;
+                        let resW = parseInt(document.getElementById('genResizeW').value) || 3840;
+                        let resH = parseInt(document.getElementById('genResizeH').value) || 2160;
+                        resW = resW - (resW % 2);
+                        resH = resH - (resH % 2);
                         const resAlgo = document.getElementById('genResizeAlgo').value;
 
+                        // Engine Variables
+                        const sourceEngine = document.getElementById('genSourceEngine').value;
+
                         // x265 Variables
-                        const outFile = document.getElementById('genOutputFile').value || 'output.hevc';
                         const sar = document.getElementById('genSar').value;
-                        const bitDepth = document.getElementById('genBitDepth').value;
-                        const transfer = document.getElementById('genTransfer').value;
-                        const colorSpace = document.getElementById('genColor').value;
+                        const bitDepth = bitDepthSel.value;
+                        const transfer = transferSel.value;
+                        const colorSpace = colorSel.value;
                         const tune = document.getElementById('genTune').value;
                         
                         const isExtreme = document.getElementById('genQualitySwitch').checked;
@@ -481,7 +529,7 @@
                         const crf = document.getElementById('genCrf').value;
                         const vbvMbps = document.getElementById('genVbv').value;
                         
-                        const useDv = document.getElementById('genDv').checked;
+                        const useDv = dvSel.checked;
                         const useHdr10p = document.getElementById('genHdr10p').checked;
                         
                         // Metadata Variables
@@ -496,19 +544,17 @@
                         const bframes = isExtreme ? 8 : 4;
                         const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
 
-                        // Calculate Integer FPS for Keyframe Interval
-                        let baseFps = 24; // Safe cinematic default fallback
+                        // Calculate Smart Keyint (GOP Size)
+                        let baseFps = sourceFps; 
                         if (assumeFps !== "original") {
                             let [num, den] = assumeFps.split('/');
-                            baseFps = Math.round(parseInt(num) / parseInt(den));
+                            baseFps = parseInt(num) / parseInt(den);
                         } else if (lockFps !== "original") {
                             let [num, den] = lockFps.split('/');
-                            baseFps = Math.round(parseInt(num) / parseInt(den));
+                            baseFps = parseInt(num) / parseInt(den);
                         }
-                        
-                        // Calculate Smart Keyint (GOP Size)
                         // Scrubbing ON = 2 second GOP. Scrubbing OFF (Archival) = 10 second GOP.
-                        const keyint = isScrubbing ? baseFps * 2 : baseFps * 10;
+                        const keyint = isScrubbing ? Math.round(baseFps * 2) : Math.round(baseFps * 10);
 
                         // Dynamic Bit Depth Formatting & Max Luma fixing
                         let vsFormat = 'vs.YUV420P10';
@@ -525,9 +571,9 @@
                             maxLuma = 4095;
                         }
 
-                        // UI Elements
-                        const dvToggle = document.getElementById('dvToggleContainer');
-                        const hdr10pToggle = document.getElementById('hdr10pToggleContainer');
+                        // UI Dynamic Element Targeting
+                        const dvToggleContainer = document.getElementById('dvToggleContainer');
+                        const hdr10pToggleContainer = document.getElementById('hdr10pToggleContainer');
                         const advHdr = document.getElementById('advancedHdrMetadata');
                         const advHdrTitle = document.getElementById('advHdrTitle');
                         
@@ -537,17 +583,17 @@
                         const dv84CommandContainer = document.getElementById('dv84CommandContainer');
                         const mainCommandLabel = document.getElementById('mainCommandLabel');
 
-                        // Manage Toggles based on Transfer Function
+                        // Manage Toggles visibility
                         if (transfer === 'hlg' || transfer === 'pq') {
-                            dvToggle.style.display = 'block';
+                            dvToggleContainer.style.display = 'block';
                         } else {
-                            dvToggle.style.display = 'none';
+                            dvToggleContainer.style.display = 'none';
                         }
 
                         if (transfer === 'pq') {
-                            hdr10pToggle.style.display = 'block';
+                            hdr10pToggleContainer.style.display = 'block';
                         } else {
-                            hdr10pToggle.style.display = 'none';
+                            hdr10pToggleContainer.style.display = 'none';
                         }
 
                         // Advanced Metadata visibility
@@ -644,21 +690,27 @@
                         // 2. BUILD UNIFIED ONE-LINE PYTHON STRING 
                         // ==========================================
                         
-                        let sourceArgs = `source=\\"${inFile}\\"`;
+                        let sourceArgs = `source=\\"${safeInFile}\\"`;
                         if (lockFps !== "original") {
                             let [num, den] = lockFps.split('/');
                             sourceArgs += `, fpsnum=${num}, fpsden=${den}`;
                         }
                         
-                        let pyString = `import vapoursynth as vs; core = vs.core; clip = core.lsmas.LWLibavSource(${sourceArgs}); `;
+                        let pyString = `import vapoursynth as vs; core = vs.core; `;
+
+                        if (sourceEngine === 'ffms2') {
+                            pyString += `clip = core.ffms2.Source(${sourceArgs}); `;
+                        } else {
+                            pyString += `clip = core.lsmas.LWLibavSource(${sourceArgs}); `;
+                        }
                         
                         if (assumeFps !== "original") {
                             let [num, den] = assumeFps.split('/');
                             pyString += `clip = core.std.AssumeFPS(clip, fpsnum=${num}, fpsden=${den}); `;
                         }
 
-                        if (lutFile.trim() !== "") {
-                            pyString += `clip = core.timecube.Cube(clip, \\"${lutFile.trim()}\\"); `;
+                        if (safeLutFile.trim() !== "") {
+                            pyString += `clip = core.timecube.Cube(clip, \\"${safeLutFile.trim()}\\"); `;
                         }
 
                         if (cT > 0 || cB > 0 || cL > 0 || cR > 0) {
@@ -694,10 +746,9 @@
                             case 'bt2020': colorFlag = 'bt2020'; matrixFlag = 'bt2020nc'; break;
                             case 'dcip3': colorFlag = 'smpte431'; matrixFlag = 'bt709'; break;
                             case 'p3d65': colorFlag = 'smpte432'; matrixFlag = 'bt709'; break;
-                            case 'p3d60': colorFlag = 'smpte431'; matrixFlag = 'bt709'; break; 
                         }
                         
-                        let chromaloc = (colorSpace === 'bt2020' || colorSpace === 'dcip3' || colorSpace === 'p3d65' || colorSpace === 'p3d60') ? 2 : 0;
+                        let chromaloc = (colorSpace === 'bt2020' || colorSpace === 'dcip3' || colorSpace === 'p3d65') ? 2 : 0;
 
                         let masterCoords = "";
                         switch(masterColorSpace) {
@@ -739,7 +790,7 @@
                             }
                         }
 
-                        args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --level-idc 5.1 --max-luma ${maxLuma} `;
+                        args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --max-luma ${maxLuma} `;
 
                         if (embedInfo) {
                             args += `--info `;
@@ -760,7 +811,7 @@
                         // FINAL SINGLE-LINE EXECUTION 
                         // ==========================================
                         
-                        const singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${outFile}" ${args.trim()} && rm render_script.vpy`;
+                        const singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && rm render_script.vpy`;
                         
                         document.getElementById('finalCommandOutput').innerText = singleLineCommand;
                     }
