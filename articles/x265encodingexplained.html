@@ -604,4 +604,372 @@
                         
                         if (bitDepth === '8') {
                             vsFormat = 'vs.YUV420P8';
-                            x
+                            x265Profile = 'main';
+                            maxLuma = 255;
+                        } else if (bitDepth === '12') {
+                            vsFormat = 'vs.YUV420P12';
+                            x265Profile = 'main12';
+                            maxLuma = 4095;
+                        }
+
+                        // UI Dynamic Element Targeting
+                        const dvToggleContainer = document.getElementById('dvToggleContainer');
+                        const hdr10pToggleContainer = document.getElementById('hdr10pToggleContainer');
+                        const advHdr = document.getElementById('advancedHdrMetadata');
+                        const advHdrTitle = document.getElementById('advHdrTitle');
+                        
+                        const hdr10pCommandContainer = document.getElementById('hdr10pCommandContainer');
+                        const dvRpuCommandContainer = document.getElementById('dvRpuCommandContainer');
+                        const dv81CommandContainer = document.getElementById('dv81CommandContainer');
+                        const dv84CommandContainer = document.getElementById('dv84CommandContainer');
+                        const mainCommandLabel = document.getElementById('mainCommandLabel');
+
+                        // Manage Toggles visibility
+                        if (transfer === 'hlg' || transfer === 'pq') {
+                            dvToggleContainer.style.display = 'block';
+                        } else {
+                            dvToggleContainer.style.display = 'none';
+                        }
+
+                        if (transfer === 'pq') {
+                            hdr10pToggleContainer.style.display = 'block';
+                        } else {
+                            hdr10pToggleContainer.style.display = 'none';
+                        }
+
+                        // Advanced Metadata visibility
+                        if (transfer === 'pq' || (transfer === 'hlg' && useDv)) {
+                            advHdr.style.display = 'block';
+                            if (transfer === 'pq') {
+                                advHdrTitle.innerText = "HDR Advanced Metadata (PQ Base)";
+                            } else {
+                                advHdrTitle.innerText = "HDR Advanced Metadata (Fake Dolby Vision 8.4 Parameters)";
+                            }
+                        } else {
+                            advHdr.style.display = 'none';
+                        }
+
+                        // ==========================================
+                        // INTELLIGENT STEP SEQUENCING
+                        // ==========================================
+                        let stepCount = 1;
+
+                        // Reset containers
+                        hdr10pCommandContainer.style.display = 'none';
+                        dvRpuCommandContainer.style.display = 'none';
+                        dv81CommandContainer.style.display = 'none';
+                        dv84CommandContainer.style.display = 'none';
+
+                        if (transfer === 'pq') {
+                            if (useHdr10p && useDv) {
+                                hdr10pCommandContainer.style.display = 'block';
+                                document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`;
+                                stepCount++;
+                                
+                                dvRpuCommandContainer.style.display = 'block';
+                                document.getElementById('dvRpuStepLabel').innerText = `Step ${stepCount}: Dolby Vision RPU Generator Command`;
+                                stepCount++;
+                                
+                                const rpuCmd = `dovi_tool generate -j fake_hdr10plus.json -o RPU.bin`;
+                                document.getElementById('dvRpuCommandOutput').innerText = rpuCmd;
+                            } else if (useHdr10p && !useDv) {
+                                hdr10pCommandContainer.style.display = 'block';
+                                document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`;
+                                stepCount++;
+                            } else if (!useHdr10p && useDv) {
+                                dv81CommandContainer.style.display = 'block';
+                                document.getElementById('dv81StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.1 RPU Creator`;
+                                stepCount++;
+                            }
+                        } else if (transfer === 'hlg' && useDv) {
+                            dv84CommandContainer.style.display = 'block';
+                            document.getElementById('dv84StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.4 RPU Creator`;
+                            stepCount++;
+
+                            const dv84JsonCmd = `echo '{"mode":0,"algorithm":0,"level1":{"min_pq":0,"max_pq":${maxCll},"avg_pq":${maxFall}},"level6":{"max_display_mastering_luminance":${masterMax},"min_display_mastering_luminance":${masterMin},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}' > fake_dv84.json && dovi_tool generate -j fake_dv84.json --profile 8.4 -o RPU.bin`;
+                            document.getElementById('dv84CommandOutput').innerText = dv84JsonCmd;
+                        }
+
+                        // Final Step Label: Main Encode
+                        if (stepCount > 1) {
+                            mainCommandLabel.innerText = `Step ${stepCount}: Generated Pipeline (Main Encode Command)`;
+                        } else {
+                            mainCommandLabel.innerText = "Generated Pipeline (Main Encode Command):";
+                        }
+
+                        // ==========================================
+                        // 1. PREPARE PQ JSON STRING
+                        // ==========================================
+                        
+                        let displayColorString = "";
+                        switch(masterColorSpace) {
+                            case 'bt2020': displayColorString = "Rec2020"; break;
+                            case 'p3d65': displayColorString = "P3-D65"; break;
+                            case 'dcip3': displayColorString = "P3-DCI"; break;
+                            case 'p3d60': displayColorString = "P3-D60"; break;
+                            case 'bt709': displayColorString = "Rec709"; break;
+                        }
+
+                        const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${masterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
+                        
+                        const jsonCmd = `echo '${pqJsonString}' > fake_hdr10plus.json`;
+                        document.getElementById('hdr10pCommandOutput').innerText = jsonCmd;
+
+                        const dv81Cmd = `echo '${pqJsonString}' > fake_hdr10plus.json && dovi_tool generate -j fake_hdr10plus.json --profile 8.1 -o RPU.bin`;
+                        document.getElementById('dv81CommandOutput').innerText = dv81Cmd;
+
+
+                        // ==========================================
+                        // 2. BUILD UNIFIED ONE-LINE PYTHON STRING 
+                        // ==========================================
+                        
+                        let sourceArgs = `source=\\"${safeInFile}\\"`;
+                        if (lockFps !== "original") {
+                            let [num, den] = lockFps.split('/');
+                            sourceArgs += `, fpsnum=${num}, fpsden=${den}`;
+                        }
+                        
+                        let pyString = `import vapoursynth as vs; core = vs.core; `;
+                        
+                        // Select the appropriate frame-server engine
+                        if (sourceEngine === 'ffms2') {
+                            pyString += `clip = core.ffms2.Source(${sourceArgs}); `;
+                        } else {
+                            pyString += `clip = core.lsmas.LWLibavSource(${sourceArgs}); `;
+                        }
+                        
+                        if (assumeFps !== "original") {
+                            let [num, den] = assumeFps.split('/');
+                            pyString += `clip = core.std.AssumeFPS(clip, fpsnum=${num}, fpsden=${den}); `;
+                        }
+
+                        if (safeLutFile.trim() !== "") {
+                            pyString += `clip = core.timecube.Cube(clip, \\"${safeLutFile.trim()}\\"); `;
+                        }
+
+                        if (cT > 0 || cB > 0 || cL > 0 || cR > 0) {
+                            pyString += `clip = core.std.Crop(clip, top=${cT}, bottom=${cB}, left=${cL}, right=${cR}); `;
+                        }
+
+                        // Assemble VapourSynth Core Resize Logic (Includes range/matrix conversions)
+                        let vsResizeArgs = `clip, width=${finalVideoW}, height=${finalVideoH}, format=${vsFormat}`;
+                        if (sourceRange !== 'auto') {
+                            // Safely convert specific range to standard limited delivery
+                            vsResizeArgs += `, range_in_s="${sourceRange}", range_s="limited"`;
+                        }
+                        if (sourceMatrix !== 'auto') {
+                            vsResizeArgs += `, matrix_in_s="${sourceMatrix}"`;
+                        }
+
+                        if (isResize) {
+                            pyString += `clip = core.resize.${resAlgo}(${vsResizeArgs}); `;
+                        } else {
+                            pyString += `clip = core.resize.Spline36(${vsResizeArgs}); `;
+                        }
+
+                        pyString += `clip.set_output()`;
+
+
+                        // ==========================================
+                        // 3. BUILD X265 COMMAND 
+                        // ==========================================
+                        
+                        let transferFlag = '';
+                        switch(transfer) {
+                            case 'gamma24': transferFlag = 'bt709'; break;
+                            case 'gamma22': transferFlag = 'bt470m'; break;
+                            case 'gamma26': transferFlag = 'smpte428'; break;
+                            case 'hlg': transferFlag = 'arib-std-b67'; break;
+                            case 'pq': transferFlag = 'smpte2084'; break;
+                        }
+
+                        let colorFlag = '';
+                        let matrixFlag = '';
+                        switch(colorSpace) {
+                            case 'bt601': colorFlag = 'smpte170m'; matrixFlag = 'smpte170m'; break;
+                            case 'bt709': colorFlag = 'bt709'; matrixFlag = 'bt709'; break;
+                            case 'bt2020': colorFlag = 'bt2020'; matrixFlag = 'bt2020nc'; break;
+                            case 'dcip3': colorFlag = 'smpte431'; matrixFlag = 'bt709'; break;
+                            case 'p3d65': colorFlag = 'smpte432'; matrixFlag = 'bt709'; break;
+                        }
+                        
+                        let chromaloc = (colorSpace === 'bt2020' || colorSpace === 'dcip3' || colorSpace === 'p3d65') ? 2 : 0;
+
+                        let masterCoords = "";
+                        switch(masterColorSpace) {
+                            case 'bt2020': masterCoords = "G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)"; break;
+                            case 'p3d65': masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)"; break;
+                            case 'dcip3': masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15700,17550)"; break;
+                            case 'p3d60': masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(16084,16884)"; break;
+                            case 'bt709': masterCoords = "G(15000,30000)B(7500,3000)R(32000,16500)WP(15635,16450)"; break;
+                        }
+                        
+                        const calcMaxLum = Math.round(parseFloat(masterMax) * 10000);
+                        const calcMinLum = Math.round(parseFloat(masterMin) * 10000);
+                        const masterDisplayString = `${masterCoords}L(${calcMaxLum},${calcMinLum})`;
+
+                        // Assemble the pipeline argument block
+                        let args = `--preset slow --profile ${x265Profile} --output-depth ${bitDepth} --input-csp i420 `;
+                        
+                        if (tune !== 'none') {
+                            args += `--tune ${tune} `;
+                        }
+
+                        args += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} --crf ${crf} --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} --pools ${pools} `;
+                        
+                        if (isExtreme) {
+                            args += `--hme --tu-intra-depth 4 --tu-inter-depth 4 `;
+                        }
+
+                        args += `--no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip `;
+                        args += `--colorprim ${colorFlag} --transfer ${transferFlag} --colormatrix ${matrixFlag} --range limited --chromaloc ${chromaloc} `;
+
+                        if (transfer === 'hlg') {
+                            args += `--atc-sei 18 --pic-struct 0 `;
+                        }
+
+                        if (transfer === 'pq') {
+                            args += `--hdr10 --master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
+                            if (useHdr10p) {
+                                args += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
+                            }
+                        }
+
+                        args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --max-luma ${maxLuma} `;
+
+                        if (embedInfo) {
+                            args += `--info `;
+                        } else {
+                            args += `--no-info `;
+                        }
+
+                        // ==========================================
+                        // DAR TO SAR GEOMETRIC CONVERSION MATH
+                        // ==========================================
+                        if (darDropdown !== 'original' && finalVideoH > 0) {
+                            const targetDarFloat = parseFloat(darDropdown);
+                            const encodedRatio = finalVideoW / finalVideoH;
+                            const sarFloat = targetDarFloat / encodedRatio;
+                            
+                            // If SAR is virtually 1:1, omit flag. Otherwise, calculate fraction.
+                            if (Math.abs(sarFloat - 1.0) > 0.001) {
+                                const sarW = Math.round(sarFloat * 10000);
+                                const sarH = 10000;
+                                args += `--sar ${sarW}:${sarH} `;
+                            }
+                        }
+
+                        if (useDv) {
+                            if (transfer === 'hlg') args += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin `;
+                            if (transfer === 'pq') args += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin `;
+                        }
+
+                        // ==========================================
+                        // FINAL SINGLE-LINE EXECUTION 
+                        // ==========================================
+                        const singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && rm render_script.vpy`;
+                        
+                        document.getElementById('finalCommandOutput').innerText = singleLineCommand;
+                    }
+
+                    updateCommand();
+                });
+
+                function copyGeneratedCommand() {
+                    const cmdText = document.getElementById('finalCommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyBtn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-primary');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy Encode Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-primary');
+                        }, 2000);
+                    });
+                }
+
+                function copyHdr10pCommand() {
+                    const cmdText = document.getElementById('hdr10pCommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyHdrBtn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-danger');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy JSON Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-danger');
+                        }, 2000);
+                    });
+                }
+
+                function copyDvRpuCommand() {
+                    const cmdText = document.getElementById('dvRpuCommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyDvRpuBtn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-info');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy RPU Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-info');
+                        }, 2000);
+                    });
+                }
+
+                function copyDv81Command() {
+                    const cmdText = document.getElementById('dv81CommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyDv81Btn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-info');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy DV8.1 Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-info');
+                        }, 2000);
+                    });
+                }
+
+                function copyDv84Command() {
+                    const cmdText = document.getElementById('dv84CommandOutput').innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        const btn = document.getElementById('copyDv84Btn');
+                        btn.innerText = "Copied!";
+                        btn.classList.remove('btn-info');
+                        btn.classList.add('btn-success');
+                        setTimeout(() => {
+                            btn.innerText = "Copy DV8.4 Command";
+                            btn.classList.remove('btn-success');
+                            btn.classList.add('btn-info');
+                        }, 2000);
+                    });
+                }
+            </script>
+
+		</div>
+
+	</div>
+	
+	<div id="footer-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+            <div class="container">
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" id="current-year">
+                                Copyright © 2026 by Shrey Tyagi. All rights reserved.
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</body>
+</html>
