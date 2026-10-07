@@ -581,6 +581,11 @@
                         const masterMax = document.getElementById('genMasterMax').value || 1000;
                         const masterMin = document.getElementById('genMasterMin').value || 0.0001;
 
+                        // Pre-calculate scaling logic for both x265 SEI and dovi_tool L6 metadata (Units of 1/10,000 nits)
+                        const calcMaxLumInt = Math.round(parseFloat(masterMax) * 10000);
+                        const calcMinLumInt = Math.round(parseFloat(masterMin) * 10000);
+                        const cleanMasterMax = Math.round(parseFloat(masterMax));
+
                         // Base Math & Conversions
                         const vbvKbps = vbvMbps * 1000;
                         const bframes = isExtreme ? 8 : 4;
@@ -661,7 +666,8 @@
                         dv84CommandContainer.style.display = 'none';
 
                         // Build the pure Dolby Vision Generator Config JSON string 
-                        const dvConfigString = `{"length":999999,"mode":0,"algorithm":0,"level6":{"max_display_mastering_luminance":${masterMax},"min_display_mastering_luminance":${masterMin},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}`;
+                        // It now strictly utilizes the scaled calcMinLumInt to satisfy the u16 spec requirement!
+                        const dvConfigString = `{"length":999999,"mode":0,"algorithm":0,"level6":{"max_display_mastering_luminance":${cleanMasterMax},"min_display_mastering_luminance":${calcMinLumInt},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}`;
 
                         if (transfer === 'pq') {
                             if (useHdr10p && useDv) {
@@ -709,7 +715,7 @@
                             case 'bt709': displayColorString = "Rec709"; break;
                         }
 
-                        const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${masterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
+                        const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${cleanMasterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
                         
                         const jsonCmd = `echo '${pqJsonString}' > fake_hdr10plus.json`;
                         document.getElementById('hdr10pCommandOutput').innerText = jsonCmd;
@@ -718,6 +724,7 @@
                         // 2. BUILD UNIFIED ONE-LINE PYTHON STRING 
                         // ==========================================
                         
+                        // We use Single Quotes ('') for all Python strings so Bash doesn't strip them!
                         let sourceArgs = `source='${safeInFile}'`;
                         if (lockFps !== "original") {
                             let [num, den] = lockFps.split('/');
@@ -745,6 +752,7 @@
                             pyString += `clip = core.std.Crop(clip, top=${cT}, bottom=${cB}, left=${cL}, right=${cR}); `;
                         }
 
+                        // Assemble VapourSynth Core Resize Logic with Single Quotes
                         let vsResizeArgs = `clip, width=${finalVideoW}, height=${finalVideoH}, format=${vsFormat}`;
                         if (sourceRange !== 'auto') {
                             vsResizeArgs += `, range_in_s='${sourceRange}', range_s='limited'`;
@@ -794,9 +802,7 @@
                             case 'bt709': masterCoords = "G(15000,30000)B(7500,3000)R(32000,16500)WP(15635,16450)"; break;
                         }
                         
-                        const calcMaxLum = Math.round(parseFloat(masterMax) * 10000);
-                        const calcMinLum = Math.round(parseFloat(masterMin) * 10000);
-                        const masterDisplayString = `${masterCoords}L(${calcMaxLum},${calcMinLum})`;
+                        const masterDisplayString = `${masterCoords}L(${calcMaxLumInt},${calcMinLumInt})`;
 
                         let args = `--preset slow --profile ${x265Profile} --output-depth ${bitDepth} --input-csp i420 `;
                         
