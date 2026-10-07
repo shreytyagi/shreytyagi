@@ -224,19 +224,19 @@
                             <label class="pro-label">Display Aspect Ratio (DAR)</label>
                             <select class="form-control" id="genDar">
                                 <option value="original" selected>Original Unchanged (SAR 1:1)</option>
-                                <option value="2.76">Ultra Panavision 2.76:1</option>
-                                <option value="2.66">Anamorphic 2.66:1</option>
-                                <option value="2.39">Scope 2.39:1</option>
-                                <option value="2.35">Scope 2.35:1</option>
-                                <option value="2.20">70mm 2.20:1</option>
-                                <option value="2.00">Univision 2.00:1</option>
-                                <option value="1.90">IMAX 1.90:1</option>
-                                <option value="1.85">Flat 1.85:1</option>
-                                <option value="1.777778">Widescreen 16:9</option>
-                                <option value="1.66">European 1.66:1</option>
-                                <option value="1.43">IMAX 1.43:1</option>
-                                <option value="1.37">Academy Ratio 1.37:1</option>
-                                <option value="1.333333">Standard 4:3</option>
+                                <option value="69:25">Ultra Panavision 2.76:1</option>
+                                <option value="8:3">Anamorphic 2.66:1</option>
+                                <option value="1024:429">Scope 2.39:1 (DCI Scope)</option>
+                                <option value="47:20">Scope 2.35:1</option>
+                                <option value="11:5">70mm 2.20:1</option>
+                                <option value="2:1">Univision 2.00:1</option>
+                                <option value="256:135">IMAX 1.90:1 (DCI 4K Full)</option>
+                                <option value="37:20">Flat 1.85:1</option>
+                                <option value="16:9">Widescreen 16:9</option>
+                                <option value="5:3">European 1.66:1</option>
+                                <option value="143:100">IMAX 1.43:1</option>
+                                <option value="11:8">Academy Ratio 1.37:1</option>
+                                <option value="4:3">Standard 4:3</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-4">
@@ -419,7 +419,7 @@
                 <!-- STEP 2 (PQ+HDR10+DV): Dolby Vision RPU Generator from JSON -->
                 <div class="mt-4 pb-4 border-bottom border-light" id="dvRpuCommandContainer" style="display: none;">
                     <label class="font-weight-bold text-info" id="dvRpuStepLabel">Step 2: Dolby Vision RPU Generator Command</label>
-                    <p class="text-muted small mb-2">Run this command to use <code>dovi_tool</code> to instantly generate your Dolby Vision RPU file (<code>RPU.bin</code>) directly from the HDR10+ JSON you just created.</p>
+                    <p class="text-muted small mb-2">Run this command to use <code>dovi_tool</code> to instantly generate your Dolby Vision RPU file (<code>RPU.bin</code>) utilizing the specialized Generator Config.</p>
                     <pre class="bg-dark text-white p-3 rounded shadow-sm" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dvRpuCommandOutput"></code></pre>
                     <button class="btn btn-info px-4 mt-2 shadow-sm" onclick="copyDvRpuCommand()" id="copyDvRpuBtn">Copy RPU Command</button>
                 </div>
@@ -427,7 +427,7 @@
                 <!-- STEP 1 (PQ+DV Only): Fake DV 8.1 RPU Creator (Combined) -->
                 <div class="mt-5 pb-4 border-bottom border-light" id="dv81CommandContainer" style="display: none;">
                     <label class="font-weight-bold text-info" id="dv81StepLabel">Step 1: Fake Dolby Vision 8.1 RPU Creator</label>
-                    <p class="text-muted small mb-2">Run this command first. It will instantly generate an HDR10+ JSON under the hood and use <code>dovi_tool</code> to convert it into a Profile 8.1 <code>RPU.bin</code> file.</p>
+                    <p class="text-muted small mb-2">Run this command first. It will instantly generate a <code>dovi_tool</code> JSON configuration and convert it into a Profile 8.1 <code>RPU.bin</code> file.</p>
                     <pre class="bg-dark text-white p-3 rounded shadow-sm" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dv81CommandOutput"></code></pre>
                     <button class="btn btn-info px-4 mt-2 shadow-sm" onclick="copyDv81Command()" id="copyDv81Btn">Copy DV8.1 Command</button>
                 </div>
@@ -660,6 +660,9 @@
                         dv81CommandContainer.style.display = 'none';
                         dv84CommandContainer.style.display = 'none';
 
+                        // Build the pure Dolby Vision Generator Config JSON string 
+                        const dvConfigString = `{"length":999999,"mode":0,"algorithm":0,"level6":{"max_display_mastering_luminance":${masterMax},"min_display_mastering_luminance":${masterMin},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}`;
+
                         if (transfer === 'pq') {
                             if (useHdr10p && useDv) {
                                 hdr10pCommandContainer.style.display = 'block';
@@ -668,10 +671,8 @@
                                 
                                 dvRpuCommandContainer.style.display = 'block';
                                 document.getElementById('dvRpuStepLabel').innerText = `Step ${stepCount}: Dolby Vision RPU Generator Command`;
+                                document.getElementById('dvRpuCommandOutput').innerText = `echo '${dvConfigString}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile 8.1 -o RPU.bin`;
                                 stepCount++;
-                                
-                                const rpuCmd = `dovi_tool generate -j fake_hdr10plus.json -o RPU.bin`;
-                                document.getElementById('dvRpuCommandOutput').innerText = rpuCmd;
                             } else if (useHdr10p && !useDv) {
                                 hdr10pCommandContainer.style.display = 'block';
                                 document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`;
@@ -679,15 +680,14 @@
                             } else if (!useHdr10p && useDv) {
                                 dv81CommandContainer.style.display = 'block';
                                 document.getElementById('dv81StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.1 RPU Creator`;
+                                document.getElementById('dv81CommandOutput').innerText = `echo '${dvConfigString}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile 8.1 -o RPU.bin`;
                                 stepCount++;
                             }
                         } else if (transfer === 'hlg' && useDv) {
                             dv84CommandContainer.style.display = 'block';
                             document.getElementById('dv84StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.4 RPU Creator`;
+                            document.getElementById('dv84CommandOutput').innerText = `echo '${dvConfigString}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile 8.4 -o RPU.bin`;
                             stepCount++;
-
-                            const dv84JsonCmd = `echo '{"mode":0,"algorithm":0,"level1":{"min_pq":0,"max_pq":${maxCll},"avg_pq":${maxFall}},"level6":{"max_display_mastering_luminance":${masterMax},"min_display_mastering_luminance":${masterMin},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}' > fake_dv84.json && dovi_tool generate -j fake_dv84.json --profile 8.4 -o RPU.bin`;
-                            document.getElementById('dv84CommandOutput').innerText = dv84JsonCmd;
                         }
 
                         // Final Step Label: Main Encode
@@ -698,9 +698,8 @@
                         }
 
                         // ==========================================
-                        // 1. PREPARE PQ JSON STRING
+                        // 1. PREPARE PQ JSON STRING FOR x265 (HDR10+)
                         // ==========================================
-                        
                         let displayColorString = "";
                         switch(masterColorSpace) {
                             case 'bt2020': displayColorString = "Rec2020"; break;
@@ -715,15 +714,11 @@
                         const jsonCmd = `echo '${pqJsonString}' > fake_hdr10plus.json`;
                         document.getElementById('hdr10pCommandOutput').innerText = jsonCmd;
 
-                        const dv81Cmd = `echo '${pqJsonString}' > fake_hdr10plus.json && dovi_tool generate -j fake_hdr10plus.json --profile 8.1 -o RPU.bin`;
-                        document.getElementById('dv81CommandOutput').innerText = dv81Cmd;
-
-
                         // ==========================================
                         // 2. BUILD UNIFIED ONE-LINE PYTHON STRING 
                         // ==========================================
                         
-                        let sourceArgs = `source=\\"${safeInFile}\\"`;
+                        let sourceArgs = `source='${safeInFile}'`;
                         if (lockFps !== "original") {
                             let [num, den] = lockFps.split('/');
                             sourceArgs += `, fpsnum=${num}, fpsden=${den}`;
@@ -731,7 +726,6 @@
                         
                         let pyString = `import vapoursynth as vs; core = vs.core; `;
                         
-                        // Select the appropriate frame-server engine
                         if (sourceEngine === 'ffms2') {
                             pyString += `clip = core.ffms2.Source(${sourceArgs}); `;
                         } else {
@@ -744,21 +738,19 @@
                         }
 
                         if (safeLutFile.trim() !== "") {
-                            pyString += `clip = core.timecube.Cube(clip, \\"${safeLutFile.trim()}\\"); `;
+                            pyString += `clip = core.timecube.Cube(clip, '${safeLutFile.trim()}'); `;
                         }
 
                         if (cT > 0 || cB > 0 || cL > 0 || cR > 0) {
                             pyString += `clip = core.std.Crop(clip, top=${cT}, bottom=${cB}, left=${cL}, right=${cR}); `;
                         }
 
-                        // Assemble VapourSynth Core Resize Logic (Includes range/matrix conversions)
                         let vsResizeArgs = `clip, width=${finalVideoW}, height=${finalVideoH}, format=${vsFormat}`;
                         if (sourceRange !== 'auto') {
-                            // Escaped quotes for passing into the echo command correctly!
-                            vsResizeArgs += `, range_in_s=\\"${sourceRange}\\", range_s=\\"limited\\"`;
+                            vsResizeArgs += `, range_in_s='${sourceRange}', range_s='limited'`;
                         }
                         if (sourceMatrix !== 'auto') {
-                            vsResizeArgs += `, matrix_in_s=\\"${sourceMatrix}\\"`;
+                            vsResizeArgs += `, matrix_in_s='${sourceMatrix}'`;
                         }
 
                         if (isResize) {
@@ -769,11 +761,9 @@
 
                         pyString += `clip.set_output()`;
 
-
                         // ==========================================
                         // 3. BUILD X265 COMMAND 
                         // ==========================================
-                        
                         let transferFlag = '';
                         switch(transfer) {
                             case 'gamma24': transferFlag = 'bt709'; break;
@@ -808,7 +798,6 @@
                         const calcMinLum = Math.round(parseFloat(masterMin) * 10000);
                         const masterDisplayString = `${masterCoords}L(${calcMaxLum},${calcMinLum})`;
 
-                        // Assemble the pipeline argument block
                         let args = `--preset slow --profile ${x265Profile} --output-depth ${bitDepth} --input-csp i420 `;
                         
                         if (tune !== 'none') {
@@ -844,18 +833,35 @@
                         }
 
                         // ==========================================
-                        // DAR TO SAR GEOMETRIC CONVERSION MATH
+                        // EXACT DAR TO SAR GEOMETRIC MATH
                         // ==========================================
-                        if (darDropdown !== 'original' && finalVideoH > 0) {
-                            const targetDarFloat = parseFloat(darDropdown);
-                            const encodedRatio = finalVideoW / finalVideoH;
-                            const sarFloat = targetDarFloat / encodedRatio;
+                        if (darDropdown !== 'original' && finalVideoH > 0 && finalVideoW > 0) {
+                            let targetDarNum, targetDarDen;
                             
-                            // If SAR is virtually 1:1, omit flag. Otherwise, calculate fraction.
-                            if (Math.abs(sarFloat - 1.0) > 0.001) {
-                                const sarW = Math.round(sarFloat * 10000);
-                                const sarH = 10000;
-                                args += `--sar ${sarW}:${sarH} `;
+                            // Parse the exact geometric fraction from the UI
+                            if (darDropdown.includes(':')) {
+                                let parts = darDropdown.split(':');
+                                targetDarNum = parseInt(parts[0]);
+                                targetDarDen = parseInt(parts[1]);
+                            } else {
+                                targetDarNum = Math.round(parseFloat(darDropdown) * 10000);
+                                targetDarDen = 10000;
+                            }
+                            
+                            // Cross-multiply to determine the required Pixel Aspect Ratio (SAR)
+                            let sarNum = targetDarNum * finalVideoH;
+                            let sarDen = targetDarDen * finalVideoW;
+                            
+                            // Calculate Greatest Common Divisor to simplify the fraction natively
+                            const gcd = function(a, b) { return b === 0 ? a : gcd(b, a % b); };
+                            const divisor = gcd(sarNum, sarDen);
+                            
+                            sarNum = sarNum / divisor;
+                            sarDen = sarDen / divisor;
+
+                            // Omit the flag entirely if pixels are already perfectly square
+                            if (sarNum !== sarDen) {
+                                args += `--sar ${sarNum}:${sarDen} `;
                             }
                         }
 
