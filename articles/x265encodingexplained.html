@@ -754,11 +754,11 @@
                         // Assemble VapourSynth Core Resize Logic (Includes range/matrix conversions)
                         let vsResizeArgs = `clip, width=${finalVideoW}, height=${finalVideoH}, format=${vsFormat}`;
                         if (sourceRange !== 'auto') {
-                            // Safely convert specific range to standard limited delivery
-                            vsResizeArgs += `, range_in_s="${sourceRange}", range_s="limited"`;
+                            // Escaped quotes for passing into the echo command correctly!
+                            vsResizeArgs += `, range_in_s=\\"${sourceRange}\\", range_s=\\"limited\\"`;
                         }
                         if (sourceMatrix !== 'auto') {
-                            vsResizeArgs += `, matrix_in_s="${sourceMatrix}"`;
+                            vsResizeArgs += `, matrix_in_s=\\"${sourceMatrix}\\"`;
                         }
 
                         if (isResize) {
