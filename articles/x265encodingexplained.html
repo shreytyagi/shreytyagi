@@ -80,16 +80,53 @@
                 
                 <!-- System Compatibility Guide -->
                 <div class="guide-card shadow-sm">
-                    <h5 class="font-weight-bold mb-3 text-dark">⚙️ System Compatibility Guide</h5>
-                    <p class="small text-muted mb-2">Before using this tool, ensure your Mac or Linux terminal is equipped with the necessary professional frameworks.</p>
-                    <ol class="small text-dark mb-0 pl-3">
-                        <li class="mb-1">Open your Terminal application.</li>
-                        <li class="mb-1">Ensure <b>Homebrew</b> is installed. (If not, get it from <a href="https://brew.sh" target="_blank">brew.sh</a>).</li>
-                        <li class="mb-1">Install the complete encoding suite by running the following command:
-                            <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool</pre>
-                        </li>
-                        <li>Your system is now fully compatible! Paste the generated command from below directly into your terminal.</li>
-                    </ol>
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 border-bottom pb-3">
+                        <h5 class="font-weight-bold mb-3 mb-md-0 text-dark">⚙️ System Compatibility Guide</h5>
+                        <select class="form-control form-control-sm w-auto font-weight-bold text-primary" id="osSelector" style="min-width: 250px;">
+                            <option value="mac" selected>macOS (Apple Silicon / Intel)</option>
+                            <option value="win">Windows</option>
+                            <option value="linux">Linux (Debian / Ubuntu)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- macOS Instructions -->
+                    <div id="guideMac">
+                        <p class="small text-muted mb-2">Before using this tool, ensure your Mac terminal is equipped with the necessary professional frameworks.</p>
+                        <ol class="small text-dark mb-0 pl-3">
+                            <li class="mb-1">Open your Terminal application.</li>
+                            <li class="mb-1">Ensure <b>Homebrew</b> is installed. (If not, get it from <a href="https://brew.sh" target="_blank">brew.sh</a>).</li>
+                            <li class="mb-1">Install the complete encoding suite by running the following command:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool</pre>
+                            </li>
+                            <li>Your system is now fully compatible! Paste the generated command from below directly into your terminal.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Windows Instructions -->
+                    <div id="guideWin" style="display: none;">
+                        <p class="small text-muted mb-2">Before using this tool, ensure your Windows environment is equipped with the necessary professional frameworks.</p>
+                        <ol class="small text-dark mb-0 pl-3">
+                            <li class="mb-1">Open PowerShell or Command Prompt.</li>
+                            <li class="mb-1">We recommend using the <b>Scoop</b> package manager. (Get it from <a href="https://scoop.sh" target="_blank">scoop.sh</a>).</li>
+                            <li class="mb-1">Install the complete encoding suite by running the following command:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">scoop install x265 vapoursynth ffmpeg dovi_tool</pre>
+                            </li>
+                            <li><i>Note:</i> Windows natively supports the `lsmas` frame-server plugin, which is bundled with standard VapourSynth installers. Paste the generated command from below directly into your terminal.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Linux Instructions -->
+                    <div id="guideLinux" style="display: none;">
+                        <p class="small text-muted mb-2">Before using this tool, ensure your Linux terminal is equipped with the necessary professional frameworks.</p>
+                        <ol class="small text-dark mb-0 pl-3">
+                            <li class="mb-1">Open your Terminal.</li>
+                            <li class="mb-1">Update your package repository definitions.</li>
+                            <li class="mb-1">Install the complete encoding suite by running the following command:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">sudo apt install x265 vapoursynth ffmpeg libffms2-4</pre>
+                            </li>
+                            <li><i>Note:</i> <code>dovi_tool</code> must be manually compiled or downloaded from its GitHub releases page and added to your PATH. Once complete, paste the generated command from below directly into your terminal.</li>
+                        </ol>
+                    </div>
                 </div>
 
                 <form id="x265GeneratorForm">
@@ -105,8 +142,8 @@
                         <div class="col-12 col-md-4">
                             <label class="pro-label">Source Filter Engine</label>
                             <select class="form-control" id="genSourceEngine">
-                                <option value="ffms2" selected>FFmpegSource2 (ffms2) - Apple Silicon</option>
-                                <option value="lsmas">L-SMASH Works (lsmas) - Legacy/Win</option>
+                                <option value="ffms2" selected>FFmpegSource2 (ffms2)</option>
+                                <option value="lsmas">L-SMASH Works (lsmas)</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-4">
@@ -126,11 +163,11 @@
                             </select>
                         </div>
                         <div class="col-12 col-md-4">
-                            <label class="pro-label">Source Color Matrix</label>
+                            <label class="pro-label">Source Color Matrix (YUV Math)</label>
                             <select class="form-control" id="genSourceMatrix">
                                 <option value="auto" selected>Automatic Analysis</option>
-                                <option value="709">BT.709 (Standard)</option>
-                                <option value="2020ncl">BT.2020 (HDR/WCG)</option>
+                                <option value="709">BT.709 (Standard SDR / Apple P3 SDR)</option>
+                                <option value="2020ncl">BT.2020 (HDR / WCG)</option>
                             </select>
                         </div>
                     </div>
@@ -462,6 +499,31 @@
                     const resizeW = document.getElementById('genResizeW');
                     const resizeH = document.getElementById('genResizeH');
                     const resizeAlgo = document.getElementById('genResizeAlgo');
+
+                    // OS Guide Switcher Logic
+                    const osSelector = document.getElementById('osSelector');
+                    const guideMac = document.getElementById('guideMac');
+                    const guideWin = document.getElementById('guideWin');
+                    const guideLinux = document.getElementById('guideLinux');
+                    const sourceEngineSelect = document.getElementById('genSourceEngine');
+
+                    osSelector.addEventListener('change', function() {
+                        guideMac.style.display = 'none';
+                        guideWin.style.display = 'none';
+                        guideLinux.style.display = 'none';
+
+                        if (this.value === 'mac') {
+                            guideMac.style.display = 'block';
+                            sourceEngineSelect.value = 'ffms2';
+                        } else if (this.value === 'win') {
+                            guideWin.style.display = 'block';
+                            sourceEngineSelect.value = 'lsmas';
+                        } else if (this.value === 'linux') {
+                            guideLinux.style.display = 'block';
+                            sourceEngineSelect.value = 'ffms2';
+                        }
+                        updateCommand();
+                    });
 
                     // Real-time update for Sliders
                     vbvSlider.addEventListener('input', function() {
