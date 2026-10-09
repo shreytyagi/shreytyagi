@@ -48,6 +48,12 @@
             border-radius: 4px;
             margin-bottom: 2.5rem;
         }
+        .automated-lock {
+            background-color: #e9ecef !important;
+            border-color: #ced4da !important;
+            color: #495057 !important;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
@@ -131,9 +137,86 @@
 
                 <form id="x265GeneratorForm">
                     
-                    <h5 class="font-weight-bold text-success ui-section-title border-bottom border-success">VapourSynth Processing Engine</h5>
+                    <h5 class="font-weight-bold text-success ui-section-title border-bottom border-success mb-4">VapourSynth Processing Engine</h5>
                     
-                    <!-- VapourSynth Row 1: Files & Source Engine -->
+                    <!-- NEW: Source Intelligence Knowledge Corpus -->
+                    <div class="bg-light p-3 rounded border mb-4">
+                        <h6 class="font-weight-bold text-uppercase text-secondary mb-3" style="font-size: 0.80rem;"><span class="text-success">»</span> Source Intelligence (Knowledge Corpus)</h6>
+                        
+                        <div class="row align-items-end mb-3">
+                            <div class="col-12 col-md-4">
+                                <label class="pro-label">Source Codec</label>
+                                <select class="form-control" id="corpusCodec">
+                                    <optgroup label="Apple ProRes">
+                                        <option value="prores_4444_xq" selected>ProRes 4444 XQ</option>
+                                        <option value="prores_4444">ProRes 4444</option>
+                                        <option value="prores_422_hq">ProRes 422 HQ</option>
+                                        <option value="prores_422">ProRes 422</option>
+                                        <option value="prores_422_lt">ProRes 422 LT</option>
+                                    </optgroup>
+                                    <optgroup label="Avid DNxHR">
+                                        <option value="dnxhr_444">DNxHR 444 (12-bit)</option>
+                                        <option value="dnxhr_hqx">DNxHR HQX (10-bit)</option>
+                                        <option value="dnxhr_sq">DNxHR SQ / HQ (8-bit)</option>
+                                        <option value="dnxhr_lb">DNxHR LB</option>
+                                    </optgroup>
+                                    <optgroup label="Consumer / Delivery">
+                                        <option value="dv_p5">HEVC / MP4 (Dolby Vision Profile 5)</option>
+                                        <option value="hevc_avc">Standard HEVC / H.264 (AVC)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="pro-label">Source Transfer</label>
+                                <select class="form-control" id="corpusTransfer">
+                                    <option value="sdr" selected>SDR (Gamma 2.4 / 2.2 / 2.6)</option>
+                                    <option value="hdr_pq">HDR10 / Dolby Vision (PQ ST.2084)</option>
+                                    <option value="hdr_hlg">HDR (HLG)</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="pro-label">Source Gamut / Color Space</label>
+                                <select class="form-control" id="corpusGamut">
+                                    <option value="bt709">Rec.709 (Standard)</option>
+                                    <option value="p3" selected>Display P3 / DCI-P3 (Wide Color)</option>
+                                    <option value="bt2020">Rec.2020 (HDR Wide Color)</option>
+                                    <option value="bt601">Rec.601 (Standard Definition)</option>
+                                    <option value="ictcp">ICtCp / IPT (Dolby Vision P5)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Mathematical Rules Application Area -->
+                        <div class="border-top pt-3 mt-2">
+                            <div class="row align-items-end">
+                                <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="chkOverrideSourceMath">
+                                        <label class="custom-control-label font-weight-bold text-danger" for="chkOverrideSourceMath" style="cursor: pointer; font-size: 0.80rem;">Override Automated Color Science</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="pro-label">VapourSynth Input Range</label>
+                                    <select class="form-control automated-lock" id="genSourceRange" disabled>
+                                        <option value="auto">Automatic Analysis</option>
+                                        <option value="full">Full Range (Apple/PC/DV P5)</option>
+                                        <option value="limited">Limited Range (TV/Legal YUV)</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="pro-label">VapourSynth Input Matrix</label>
+                                    <select class="form-control automated-lock" id="genSourceMatrix" disabled>
+                                        <option value="auto">Automatic Analysis (or ICtCp)</option>
+                                        <option value="709">BT.709 (SDR / Apple P3 SDR)</option>
+                                        <option value="2020ncl">BT.2020 (HDR / WCG)</option>
+                                        <option value="170m">BT.601 (SD / Legacy)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VapourSynth Files & Logic Engine -->
                     <div class="row align-items-end mb-4">
                         <div class="col-12 col-md-4">
                             <label class="pro-label">Input File Name</label>
@@ -152,27 +235,7 @@
                         </div>
                     </div>
 
-                    <!-- VapourSynth Row 2: Source Color Range Engine -->
-                    <div class="row align-items-end mb-4">
-                        <div class="col-12 col-md-4">
-                            <label class="pro-label">Source Color Range</label>
-                            <select class="form-control" id="genSourceRange">
-                                <option value="auto" selected>Automatic Analysis</option>
-                                <option value="full">Full Range (Apple/PC)</option>
-                                <option value="limited">Limited Range (TV/Legal)</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <label class="pro-label">Source Color Matrix (YUV Math)</label>
-                            <select class="form-control" id="genSourceMatrix">
-                                <option value="auto" selected>Automatic Analysis</option>
-                                <option value="709">BT.709 (Standard SDR / Apple P3 SDR)</option>
-                                <option value="2020ncl">BT.2020 (HDR / WCG)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- VapourSynth Row 3: Temporal Logic -->
+                    <!-- VapourSynth Temporal Logic -->
                     <div class="row align-items-end mb-4">
                         <div class="col-12 col-md-4">
                             <label class="pro-label">1. Lock Framerate (Fix VFR)</label>
@@ -206,7 +269,7 @@
                         </div>
                     </div>
 
-                    <!-- VapourSynth Row 4: Geometry (Crop & Resizing) -->
+                    <!-- VapourSynth Geometry (Crop & Resizing) -->
                     <div class="row align-items-end mb-4">
                         <div class="col-12 col-md-3 mb-4 mb-md-0">
                             <label class="pro-label">Source W</label>
@@ -550,7 +613,49 @@
                     });
 
                     function updateCommand() {
-                        // Dynamic Constraint Logic Handlers
+                        // KNOWLEDGE CORPUS INTELLIGENCE
+                        // Calculates mathematical parameters based on codec and color space choices
+                        const corpusCodec = document.getElementById('corpusCodec').value;
+                        const corpusGamut = document.getElementById('corpusGamut').value;
+                        const overrideMath = document.getElementById('chkOverrideSourceMath').checked;
+                        
+                        const rangeSel = document.getElementById('genSourceRange');
+                        const matrixSel = document.getElementById('genSourceMatrix');
+                        
+                        if (overrideMath) {
+                            rangeSel.disabled = false;
+                            matrixSel.disabled = false;
+                            rangeSel.classList.remove('automated-lock');
+                            matrixSel.classList.remove('automated-lock');
+                        } else {
+                            rangeSel.disabled = true;
+                            matrixSel.disabled = true;
+                            rangeSel.classList.add('automated-lock');
+                            matrixSel.classList.add('automated-lock');
+                            
+                            // Corpus Logic Rules
+                            let determinedRange = 'limited'; // Default standard for ProRes/DNxHR/H.264
+                            let determinedMatrix = 'auto';
+                            
+                            // Dolby Vision P5 ICtCp is strictly Full Range
+                            if (corpusCodec === 'dv_p5' || corpusGamut === 'ictcp') {
+                                determinedRange = 'full';
+                            }
+                            
+                            // Gamut routing for YUV Matrix mathematical conversion
+                            if (corpusGamut === 'bt709' || corpusGamut === 'p3') {
+                                determinedMatrix = '709';
+                            } else if (corpusGamut === 'bt2020') {
+                                determinedMatrix = '2020ncl';
+                            } else if (corpusGamut === 'bt601') {
+                                determinedMatrix = '170m';
+                            }
+
+                            rangeSel.value = determinedRange;
+                            matrixSel.value = determinedMatrix;
+                        }
+
+                        // Dynamic Constraint Logic Handlers for x265 Outputs
                         const bitDepthSel = document.getElementById('genBitDepth');
                         const dvSel = document.getElementById('genDv');
                         const colorSel = document.getElementById('genColor');
@@ -886,7 +991,8 @@
                         }
 
                         if (transfer === 'pq') {
-                            args += `--hdr10 --master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
+                            // Automatically inject the HDR10 perceptual optimization flag!
+                            args += `--hdr10 --hdr10-opt --master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
                             if (useHdr10p) {
                                 args += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
                             }
