@@ -876,13 +876,13 @@
                         let displayColorString = "";
                         switch(masterColorSpace) {
                             case 'bt2020': displayColorString = "Rec2020"; break;
-                            case 'p3d65': displayColorString = "P3-D65"; break;
-                            case 'dcip3': displayColorString = "P3-DCI"; break;
-                            case 'p3d60': displayColorString = "P3-D60"; break;
+                            case 'p3d65': displayColorString = "DisplayP3"; break;
+                            case 'dcip3': displayColorString = "DisplayP3"; break;
+                            case 'p3d60': displayColorString = "DisplayP3"; break;
                             case 'bt709': displayColorString = "Rec709"; break;
                         }
 
-                        const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${cleanMasterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
+                        const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${displayColorString}","MaxLuminance":${cleanMasterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"SceneFrameIndex":0,"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
                         
                         const jsonCmd = `echo '${pqJsonString}' > fake_hdr10plus.json`;
                         document.getElementById('hdr10pCommandOutput').innerText = jsonCmd;
