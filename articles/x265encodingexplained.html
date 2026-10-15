@@ -1,535 +1,781 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Mastering Archival Encoding: Explicit Engineering Pipeline</title>
+	<title>Mastering Archival Encoding: x265, Dolby Vision, and the Power of Apple Silicon</title>
 
 	<!-- Bootstrap CSS -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">	
 	
+	<!-- Social Media Meta Tag for Link Sharing -->
+	<meta property="og:image" content="https://www.shreytyagi.com/articles/encoding_masterclass/IMG_COVER.jpg">
+	<meta property="og:title" content="Mastering Archival Encoding: x265, Dolby Vision, and the Power of Apple Silicon">
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<!-- Bootstrap JS -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<!-- Local CSS -->
+	<link href="/css/style.css" rel="stylesheet">
+
+	<!-- Local JS -->
+	<script src="/js/script.js"></script>
 
     <style>
+        /* Pro Console UI Typography & Layout */
         .pro-label {
-            font-size: 0.70rem;
-            letter-spacing: 0.8px;
+            font-size: 0.72rem;
+            letter-spacing: 0.7px;
             font-weight: 700;
             text-transform: uppercase;
-            color: #6c757d;
-            margin-bottom: 0.5rem;
+            color: #5a6268;
+            margin-bottom: 0.45rem;
             display: block;
         }
         .ui-section-title {
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-            padding-bottom: 0.5rem;
+            font-size: 1.15rem;
+            letter-spacing: 0.4px;
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.25rem;
         }
+        .console-panel {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+        .console-panel-muted {
+            background-color: #f8f9fa;
+        }
+        .panel-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .panel-subtitle {
+            font-size: 0.80rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #343a40;
+            margin: 0;
+        }
+        /* Compatibility Guide Card */
         .guide-card {
             background-color: #f8f9fa;
             border-left: 4px solid #007bff;
             padding: 1.5rem;
-            border-radius: 4px;
-            margin-bottom: 2.5rem;
+            border-radius: 6px;
+            margin-bottom: 2.25rem;
         }
-        /* Toggle Section Styling */
-        .toggle-section-body {
-            background-color: #fdfdfd;
-            border: 1px solid #e9ecef;
-            border-top: none;
-            padding: 1.25rem;
-            border-bottom-left-radius: 4px;
-            border-bottom-right-radius: 4px;
-            margin-bottom: 1.5rem;
+        /* Telemetry Readout Bar */
+        .telemetry-bar {
+            background-color: #212529;
+            color: #f8f9fa;
+            border-radius: 5px;
+            padding: 0.65rem 1rem;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.78rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
         }
-        .toggle-header {
-            background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
-            padding: 0.75rem 1.25rem;
-            border-radius: 4px;
-            margin-bottom: 0;
+        .telemetry-item {
+            margin-right: 1rem;
+            margin-bottom: 0.2rem;
+            margin-top: 0.2rem;
         }
-        .toggle-header.active-toggle {
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            border-bottom: none;
+        .telemetry-label {
+            color: #adb5bd;
+            text-transform: uppercase;
+            font-size: 0.68rem;
+            margin-right: 0.35rem;
+        }
+        .telemetry-val {
+            color: #20c997;
+            font-weight: 700;
+        }
+        /* Disabled Input Polish */
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #edf0f2 !important;
+            border-color: #d6d8db !important;
+            color: #868e96 !important;
+            cursor: not-allowed;
+        }
+        .custom-range:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        /* Feature Switch Cards */
+        .switch-card {
+            background: #f8f9fa;
+            border: 1px solid #e2e6ea;
+            border-radius: 5px;
+            padding: 0.7rem 0.9rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .custom-control-label {
+            cursor: pointer;
+            user-select: none;
+        }
+        /* Command Output Boxes */
+        .cmd-box {
+            background-color: #16181b;
+            color: #e9ecef;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #343a40;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
         }
     </style>
 </head>
-<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
 
-	<div class="container mt-4 text-justify flex-grow-1">
+	<!-- Navbar will be loaded here -->
+	<div id="navbar-container"></div>
+
+	<div class="container mt-1 text-justify flex-grow-1">
 
 		<div class="content-container">
-			<h3 class="mb-4">Archival Encoding Generator (Explicit Control)</h3>
+			<h3>Mastering Archival Encoding: x265, Dolby Vision, and the Power of Apple Silicon</h3>
+			<p class="articleauth">Shrey Tyagi • 24 Jun, 2026</p>
+
+            <!-- Main Intro Image -->
+            <img src="encoding_masterclass/IMG_COVER.jpg" class="img-fluid rounded w-100 mb-4" alt="Mac Studio Terminal running x265 encode">
+
+            <p>In the world of high-fidelity video engineering, preserving the absolute raw quality of a camera sensor while keeping file sizes manageable is the ultimate pursuit. Whether capturing vlogs on an iPhone 17 Pro in Dolby Vision or archiving cinematic masters, the tools we use dictate the legacy of the footage.</p>
+
+            <h4>The Great Debate: Hardware vs. Software Encoding</h4>
+            <p>Today, everyone loves hardware encoders. Apple's VideoToolbox, Nvidia's NVENC, and Intel's QuickSync are blisteringly fast. They can chew through 4K video faster than real-time. But speed comes at a heavy cost: <b>Efficiency and Precision.</b></p>
+
+            <p>Hardware encoders are rigidly hardcoded into the silicon. They use massive bitrates to brute-force video quality, and they completely lack the deep, granular mathematical tools required for pristine HDR shadow preservation. For true archival quality—where every microscopic film grain and specular highlight matters—we must abandon the GPU and return to the CPU. <b>x265</b> is the absolute king of software encoding. It is mathematically exhaustive, perfectly compliant, and capable of achieving transparent cinematic quality at incredibly low file sizes.</p>
+
+            <hr class="my-5 border-secondary">
 
             <!-- Interactive Archival Command Generator -->
             <div class="mt-4 mb-5">
+                <h4 class="mb-2 text-primary font-weight-bold">The Ultimate Encoding Generator</h4>
+                <p class="text-muted mb-4">This tool dynamically engineers a pure, unbroken, single-line Unix command. Paste it directly into your terminal. It injects Python frame processing into memory, pipelines it to x265, manages color metadata, and automatically cleans up temporary scripts.</p>
                 
                 <!-- System Compatibility Guide -->
                 <div class="guide-card shadow-sm">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 border-bottom pb-3">
-                        <h5 class="font-weight-bold mb-3 mb-md-0 text-dark">⚙️ Operating System Setup</h5>
-                        <select class="form-control form-control-sm w-auto font-weight-bold text-primary" id="osSelector" style="min-width: 250px;">
+                        <h5 class="font-weight-bold mb-3 mb-md-0 text-dark">⚙️ System Compatibility Guide</h5>
+                        <select class="form-control form-control-sm w-auto font-weight-bold text-primary" id="osSelector" style="min-width: 260px;">
                             <option value="mac" selected>macOS (Apple Silicon / Intel)</option>
-                            <option value="win">Windows</option>
+                            <option value="win">Windows (PowerShell / CMD)</option>
                             <option value="linux">Linux (Debian / Ubuntu)</option>
                         </select>
                     </div>
+                    
                     <!-- macOS Instructions -->
                     <div id="guideMac">
-                        <pre class="bg-dark text-success p-2 rounded mt-2 mb-0 border border-secondary" style="font-family: monospace;">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool</pre>
+                        <p class="small text-muted mb-2">Before using this tool, ensure your Mac terminal is equipped with the necessary professional frameworks.</p>
+                        <ol class="small text-dark mb-0 pl-3">
+                            <li class="mb-1">Open your Terminal application.</li>
+                            <li class="mb-1">Ensure <b>Homebrew</b> is installed. (If not, get it from <a href="https://brew.sh" target="_blank">brew.sh</a>).</li>
+                            <li class="mb-1">Install the complete encoding suite by running the following command:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool</pre>
+                            </li>
+                            <li>Your system is now fully compatible! Paste the generated command from below directly into your terminal.</li>
+                        </ol>
                     </div>
+
                     <!-- Windows Instructions -->
                     <div id="guideWin" style="display: none;">
-                        <pre class="bg-dark text-success p-2 rounded mt-2 mb-0 border border-secondary" style="font-family: monospace;">scoop install x265 vapoursynth ffmpeg dovi_tool</pre>
+                        <p class="small text-muted mb-2">Before using this tool, ensure your Windows environment is equipped with the necessary professional frameworks.</p>
+                        <ol class="small text-dark mb-0 pl-3">
+                            <li class="mb-1">Open PowerShell or Command Prompt.</li>
+                            <li class="mb-1">We recommend using the <b>Scoop</b> package manager. (Get it from <a href="https://scoop.sh" target="_blank">scoop.sh</a>).</li>
+                            <li class="mb-1">Install the complete encoding suite by running the following command:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">scoop install x265 vapoursynth ffmpeg dovi_tool</pre>
+                            </li>
+                            <li><i>Note:</i> Windows natively supports the <code>lsmas</code> frame-server plugin bundled with standard VapourSynth setups. Paste the generated command from below directly into your terminal.</li>
+                        </ol>
                     </div>
+
                     <!-- Linux Instructions -->
                     <div id="guideLinux" style="display: none;">
-                        <pre class="bg-dark text-success p-2 rounded mt-2 mb-0 border border-secondary" style="font-family: monospace;">sudo apt install x265 vapoursynth ffmpeg libffms2-4</pre>
+                        <p class="small text-muted mb-2">Before using this tool, ensure your Linux terminal is equipped with the necessary professional frameworks.</p>
+                        <ol class="small text-dark mb-0 pl-3">
+                            <li class="mb-1">Open your Terminal.</li>
+                            <li class="mb-1">Update your package repository definitions.</li>
+                            <li class="mb-1">Install the complete encoding suite by running the following command:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">sudo apt install x265 vapoursynth ffmpeg libffms2-4</pre>
+                            </li>
+                            <li><i>Note:</i> <code>dovi_tool</code> must be downloaded from its GitHub releases page and added to your PATH. Once complete, paste the generated command from below directly into your terminal.</li>
+                        </ol>
                     </div>
                 </div>
 
-                <form id="x265GeneratorForm">
+                <form id="x265GeneratorForm" onsubmit="return false;">
                     
-                    <h5 class="font-weight-bold text-success ui-section-title border-bottom border-success mb-4">I. VapourSynth Engine (Frame Processing)</h5>
+                    <!-- =========================================================
+                         PART 1: VAPOURSYNTH PROCESSING ENGINE
+                         ========================================================= -->
+                    <h5 class="font-weight-bold text-success ui-section-title border-bottom border-success">1. VapourSynth Input & Frame Server Engine</h5>
                     
-                    <div class="row align-items-end mb-4">
-                        <div class="col-12 col-md-12">
-                            <label class="pro-label text-danger">Input File (Mandatory)</label>
-                            <input type="text" class="form-control font-weight-bold" id="genInputFile" value="input.mov">
+                    <!-- Panel 1A: Input File, Filter Engine, 3D LUT -->
+                    <div class="console-panel">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-success">»</span> Source File, Frame Server & 3D LUT</span>
+                            <span class="badge badge-light border text-muted">Core Input</span>
                         </div>
-                    </div>
-
-                    <!-- TOGGLE: Manual Source Definition -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrSourceParams">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Override Source Color Science (Manual Input Details)</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkSourceParams" data-target="bodySourceParams">
-                            <label class="custom-control-label" for="chkSourceParams"></label>
-                        </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodySourceParams">
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3">
-                                <label class="pro-label">Input Matrix / Chroma Format</label>
-                                <select class="form-control" id="srcChroma">
-                                    <option value="4444">4:4:4:4 (With Alpha)</option>
-                                    <option value="444">4:4:4</option>
-                                    <option value="422" selected>4:2:2</option>
-                                    <option value="420">4:2:0</option>
-                                </select>
+                        <div class="row align-items-end">
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genInputFile">Input File Name (Mandatory)</label>
+                                <input type="text" class="form-control font-weight-bold" id="genInputFile" value="input.mov">
                             </div>
-                            <div class="col-12 col-md-6 mb-3">
-                                <label class="pro-label">Input Bit Depth</label>
-                                <select class="form-control" id="srcDepth">
-                                    <option value="12">12-bit</option>
-                                    <option value="10" selected>10-bit</option>
-                                    <option value="8">8-bit</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">Input Luma Range</label>
-                                <select class="form-control" id="srcRange">
-                                    <option value="limited" selected>Limited Range (Video/TV)</option>
-                                    <option value="full">Full Range (Data/PC)</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">Input Transfer Function</label>
-                                <select class="form-control" id="srcTransfer">
-                                    <option value="sdr" selected>SDR (Rec.709 Base)</option>
-                                    <option value="pq">HDR (PQ ST.2084)</option>
-                                    <option value="hlg">HDR (HLG)</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">Input Gamut</label>
-                                <select class="form-control" id="srcGamut">
-                                    <option value="709" selected>Rec.709</option>
-                                    <option value="p3">Display P3</option>
-                                    <option value="2020">Rec.2020</option>
-                                    <option value="ictcp">ICtCp (DV P5)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- TOGGLE: Custom Source Filter Engine -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrEngine">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Custom Source Filter Engine</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkSourceEngine" data-target="bodyEngine">
-                            <label class="custom-control-label" for="chkSourceEngine"></label>
-                        </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyEngine">
-                        <div class="row">
-                            <div class="col-12 col-md-6">
-                                <label class="pro-label">Source Reader Plugin</label>
-                                <select class="form-control" id="genSourceEngine">
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="pro-label mb-0" for="genSourceEngine">Source Filter Engine</label>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="chkCustomEngine">
+                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomEngine">Custom</label>
+                                    </div>
+                                </div>
+                                <select class="form-control" id="genSourceEngine" disabled>
                                     <option value="ffms2" selected>FFmpegSource2 (ffms2)</option>
                                     <option value="lsmas">L-SMASH Works (lsmas)</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- TOGGLE: Custom 3D LUT -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrLut">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Apply Custom 3D LUT</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkLut" data-target="bodyLut">
-                            <label class="custom-control-label" for="chkLut"></label>
-                        </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyLut">
-                        <div class="row">
-                            <div class="col-12 col-md-12">
-                                <label class="pro-label">LUT File Path (.cube)</label>
-                                <input type="text" class="form-control" id="genLutFile" placeholder="e.g. grading.cube">
+                            <div class="col-12 col-md-4">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="pro-label mb-0" for="genLutFile">Apply Custom 3D LUT (.cube)</label>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="chkCustomLut">
+                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomLut">Enable</label>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" id="genLutFile" placeholder="Optional grading_look.cube" disabled>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TOGGLE: Customize Framerates -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrFps">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Customize Framerates (VFR Fix / Speed)</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkFps" data-target="bodyFps">
-                            <label class="custom-control-label" for="chkFps"></label>
-                        </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyFps">
-                        <div class="row">
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">1. Lock Framerate (Fix VFR)</label>
-                                <select class="form-control" id="genLockFps">
-                                    <option value="original" selected>Do Not Lock (Original)</option>
-                                    <option value="24000/1001">23.976 fps</option>
-                                    <option value="24/1">24.000 fps</option>
-                                    <option value="25/1">25.000 fps</option>
-                                    <option value="30000/1001">29.970 fps</option>
-                                    <option value="30/1">30.000 fps</option>
-                                    <option value="60000/1001">59.940 fps</option>
-                                    <option value="60/1">60.000 fps</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">2. Speed Override</label>
-                                <select class="form-control" id="genAssumeFps">
-                                    <option value="original" selected>1:1 Speed</option>
-                                    <option value="24000/1001">23.976 fps</option>
-                                    <option value="24/1">24.000 fps</option>
-                                    <option value="25/1">25.000 fps</option>
-                                    <option value="30000/1001">29.970 fps</option>
-                                    <option value="30/1">30.000 fps</option>
-                                    <option value="60000/1001">59.940 fps</option>
-                                    <option value="60/1">60.000 fps</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">3. Source FPS (Fallback Logic)</label>
-                                <input type="number" class="form-control" id="genSourceFps" value="24" min="1" step="any">
+                    <!-- Panel 1B: Manual Input Signal Override -->
+                    <div class="console-panel console-panel-muted">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-success">»</span> Input Signal Range & Matrix Override</span>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="chkOverrideSignal">
+                                <label class="custom-control-label font-weight-bold text-dark" for="chkOverrideSignal" style="font-size: 0.82rem;">Manually Specify Input Signal</label>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- TOGGLE: Cropping -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrCrop">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Enable Cropping</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkCrop" data-target="bodyCrop">
-                            <label class="custom-control-label" for="chkCrop"></label>
-                        </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyCrop">
                         <div class="row align-items-end">
-                            <div class="col-12 col-md-3 mb-3">
-                                <label class="pro-label text-primary">Src Width (Required for Math)</label>
-                                <input type="number" class="form-control" id="srcW" value="3840" step="2">
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genSourceRange">Input Color Range (Source)</label>
+                                <select class="form-control" id="genSourceRange" disabled>
+                                    <option value="limited" selected>Limited Range (TV: 64–940)</option>
+                                    <option value="full">Full Range (PC / Apple / DVP5: 0–1023)</option>
+                                </select>
                             </div>
-                            <div class="col-12 col-md-3 mb-3">
-                                <label class="pro-label text-primary">Src Height (Required for Math)</label>
-                                <input type="number" class="form-control" id="srcH" value="2160" step="2">
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genOutputRange">Output Color Range (Target)</label>
+                                <select class="form-control" id="genOutputRange" disabled>
+                                    <option value="limited" selected>Limited Range (Standard Video)</option>
+                                    <option value="full">Full Range (Full Data Pass-Through)</option>
+                                </select>
                             </div>
-                            <div class="col-12 col-md-6 mb-3">
-                                <label class="pro-label text-danger">Crop (Top, Bottom, Left, Right) - Even Only!</label>
-                                <div class="d-flex">
-                                    <input type="number" class="form-control mr-2 px-1 text-center" id="cropT" value="0" min="0" step="2">
-                                    <input type="number" class="form-control mr-2 px-1 text-center" id="cropB" value="0" min="0" step="2">
-                                    <input type="number" class="form-control mr-2 px-1 text-center" id="cropL" value="0" min="0" step="2">
-                                    <input type="number" class="form-control px-1 text-center" id="cropR" value="0" min="0" step="2">
+                            <div class="col-12 col-md-4">
+                                <label class="pro-label" for="genSourceMatrix">Input Signal Type / Matrix</label>
+                                <select class="form-control" id="genSourceMatrix" disabled>
+                                    <option value="2020ncl" selected>YUV — BT.2020 (HDR / WCG)</option>
+                                    <option value="709">YUV — BT.709 (SDR / Display P3 SDR)</option>
+                                    <option value="rgb">RGB Source (ProRes 4444) → Convert to YUV</option>
+                                    <option value="ictcp">ICtCp (Dolby Vision Profile 5 Pass-Through)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 1C: Frame Rate Controls (Always Enabled) -->
+                    <div class="console-panel">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-success">»</span> Temporal & Framerate Controls</span>
+                            <span class="badge badge-success">Always Active (Drives GOP Keyint)</span>
+                        </div>
+                        <div class="row align-items-end">
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genLockFps">1. Lock Framerate (Convert VFR → CFR)</label>
+                                <select class="form-control" id="genLockFps">
+                                    <option value="original" selected>Do Not Lock (Keep Original Timestamps)</option>
+                                    <option value="24000/1001">23.976 fps (24000/1001)</option>
+                                    <option value="24/1">24.000 fps (Cinema Standard)</option>
+                                    <option value="25/1">25.000 fps (PAL)</option>
+                                    <option value="30000/1001">29.970 fps (NTSC)</option>
+                                    <option value="30/1">30.000 fps</option>
+                                    <option value="50/1">50.000 fps</option>
+                                    <option value="60000/1001">59.940 fps</option>
+                                    <option value="60/1">60.000 fps</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genAssumeFps">2. Speed Override (Retiming)</label>
+                                <select class="form-control" id="genAssumeFps">
+                                    <option value="original" selected>1:1 Native Speed (Unchanged)</option>
+                                    <option value="24000/1001">23.976 fps (Slow-Mo / Retime)</option>
+                                    <option value="24/1">24.000 fps</option>
+                                    <option value="25/1">25.000 fps</option>
+                                    <option value="30000/1001">29.970 fps</option>
+                                    <option value="30/1">30.000 fps</option>
+                                    <option value="50/1">50.000 fps</option>
+                                    <option value="60000/1001">59.940 fps</option>
+                                    <option value="60/1">60.000 fps (Fast-Mo)</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="pro-label" for="genSourceFps">3. Base Framerate (For Keyint Math)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control font-weight-bold" id="genSourceFps" value="24" min="1" step="any">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">fps</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TOGGLE: Resizing -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrResize">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Enable Resizing</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkResize" data-target="bodyResize">
-                            <label class="custom-control-label" for="chkResize"></label>
+                    <!-- Panel 1D: Geometry, Cropping & Resizing -->
+                    <div class="console-panel">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-success">»</span> Geometry: Cropping & Resolution Scaling</span>
+                            <span class="small text-muted">Source W/H automatically unlocks when Cropping or Non-Square DAR is active</span>
                         </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyResize">
+
+                        <!-- Live Telemetry Bar -->
+                        <div class="telemetry-bar">
+                            <div class="telemetry-item">
+                                <span class="telemetry-label">Active Canvas:</span>
+                                <span class="telemetry-val" id="telCanvas">Native Source (Unchanged)</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="telemetry-label">Post-Crop:</span>
+                                <span class="telemetry-val" id="telCropped">3840 × 2160 (1.78:1)</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="telemetry-label">Output SAR:</span>
+                                <span class="telemetry-val" id="telSar">1:1 (Square Pixels)</span>
+                            </div>
+                        </div>
+
+                        <!-- Cropping Row -->
+                        <div class="row align-items-end mb-4 pb-3 border-bottom">
+                            <div class="col-12 mb-2">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="chkCrop">
+                                    <label class="custom-control-label font-weight-bold text-dark" for="chkCrop" style="font-size: 0.85rem;">Enable Cropping (Even Pixel Values Only)</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-2 mb-3 mb-md-0">
+                                <label class="pro-label" for="srcW">Source Width</label>
+                                <input type="number" class="form-control font-weight-bold" id="srcW" value="3840" min="2" step="2" disabled>
+                            </div>
+                            <div class="col-6 col-md-2 mb-3 mb-md-0">
+                                <label class="pro-label" for="srcH">Source Height</label>
+                                <input type="number" class="form-control font-weight-bold" id="srcH" value="2160" min="2" step="2" disabled>
+                            </div>
+                            <div class="col-6 col-md-2 mb-3 mb-md-0">
+                                <label class="pro-label text-danger" for="cropT">Crop Top</label>
+                                <input type="number" class="form-control text-center" id="cropT" value="0" min="0" step="2" disabled>
+                            </div>
+                            <div class="col-6 col-md-2 mb-3 mb-md-0">
+                                <label class="pro-label text-danger" for="cropB">Crop Bottom</label>
+                                <input type="number" class="form-control text-center" id="cropB" value="0" min="0" step="2" disabled>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="pro-label text-danger" for="cropL">Crop Left</label>
+                                <input type="number" class="form-control text-center" id="cropL" value="0" min="0" step="2" disabled>
+                            </div>
+                            <div class="col-6 col-md-2">
+                                <label class="pro-label text-danger" for="cropR">Crop Right</label>
+                                <input type="number" class="form-control text-center" id="cropR" value="0" min="0" step="2" disabled>
+                            </div>
+                        </div>
+
+                        <!-- Resizing Row -->
                         <div class="row align-items-end">
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">Target Width</label>
-                                <input type="number" class="form-control" id="genResizeW" value="3840" step="2">
+                            <div class="col-12 mb-2">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="genResizeToggle">
+                                    <label class="custom-control-label font-weight-bold text-dark" for="genResizeToggle" style="font-size: 0.85rem;">Enable Resolution Resizing</label>
+                                </div>
                             </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">Target Height</label>
-                                <input type="number" class="form-control" id="genResizeH" value="2160" step="2">
-                            </div>
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">Scaling Algorithm</label>
-                                <select class="form-control" id="genResizeAlgo">
-                                    <option value="Spline36" selected>Spline36</option>
-                                    <option value="Lanczos">Lanczos</option>
-                                    <option value="Bicubic">Bicubic</option>
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genResizeAlgo">Scaling Algorithm</label>
+                                <select class="form-control" id="genResizeAlgo" disabled>
+                                    <option value="Spline36" selected>Spline36 (Neutral & Sharp)</option>
+                                    <option value="Lanczos">Lanczos (High Frequency Detail)</option>
+                                    <option value="Bicubic">Bicubic (Smooth Roll-off)</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-
-
-                    <h5 class="font-weight-bold text-primary ui-section-title mt-5 border-bottom border-primary mb-4">II. x265 Delivery Engine</h5>
-
-                    <div class="row align-items-end mb-4">
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="pro-label text-danger">Output File Name (Mandatory)</label>
-                            <input type="text" class="form-control font-weight-bold" id="genOutputFile" value="output.hevc">
-                        </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="pro-label text-danger d-flex justify-content-between">
-                                <span>CRF (Quality)</span>
-                                <span id="crfLabel" class="text-primary font-weight-bold">14</span>
-                            </label>
-                            <input type="range" class="custom-range mt-1" id="genCrf" min="0" max="30" value="14" step="1">
-                        </div>
-                    </div>
-
-                    <!-- Mandatory Output Color Routing -->
-                    <div class="row align-items-end mb-4 bg-light p-3 rounded border">
-                        <div class="col-12 col-md-6 mb-3 mb-md-0">
-                            <label class="pro-label">Output Transfer Function</label>
-                            <select class="form-control" id="outTransfer">
-                                <option value="sdr" selected>SDR (Rec.709 Curve)</option>
-                                <option value="pq">HDR (PQ ST.2084)</option>
-                                <option value="hlg">HDR (HLG)</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label class="pro-label">Output Gamut (Color Primaries)</label>
-                            <select class="form-control" id="outGamut">
-                                <option value="bt709" selected>Rec.709</option>
-                                <option value="p3">Display P3</option>
-                                <option value="bt2020">Rec.2020</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- TOGGLE: Aspect Ratio -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrDar">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Custom Aspect Ratio (Non-Square Pixels)</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkDar" data-target="bodyDar">
-                            <label class="custom-control-label" for="chkDar"></label>
-                        </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyDar">
-                        <div class="row">
-                            <div class="col-12 col-md-6">
-                                <label class="pro-label">Display Aspect Ratio (DAR)</label>
-                                <select class="form-control" id="genDar">
-                                    <option value="69:25">Ultra Panavision 2.76:1</option>
-                                    <option value="1024:429">Scope 2.39:1 (DCI Scope)</option>
-                                    <option value="47:20">Scope 2.35:1</option>
-                                    <option value="256:135" selected>IMAX 1.90:1 (DCI 4K Full)</option>
-                                    <option value="37:20">Flat 1.85:1</option>
-                                    <option value="16:9">Widescreen 16:9</option>
-                                    <option value="4:3">Standard 4:3</option>
-                                </select>
+                            <div class="col-6 col-md-4">
+                                <label class="pro-label" for="genResizeW">Target Width</label>
+                                <input type="number" class="form-control" id="genResizeW" value="3840" min="2" step="2" disabled>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <label class="pro-label" for="genResizeH">Target Height</label>
+                                <input type="number" class="form-control" id="genResizeH" value="2160" min="2" step="2" disabled>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TOGGLE: Output Bit Depth -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrOutDepth">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Custom Output Bit Depth</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkOutDepth" data-target="bodyOutDepth">
-                            <label class="custom-control-label" for="chkOutDepth"></label>
+
+                    <!-- =========================================================
+                         PART 2: x265 ENCODING ENGINE
+                         ========================================================= -->
+                    <h5 class="font-weight-bold text-primary ui-section-title mt-5 border-bottom border-primary">2. x265 Master Encoding Engine</h5>
+
+                    <!-- Panel 2A: Output File & Pixel Format (Bit Depth + Chroma) -->
+                    <div class="console-panel">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-primary">»</span> Output Bitstream & Pixel Format</span>
+                            <span class="badge badge-primary">Default: YUV420P10</span>
                         </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyOutDepth">
-                        <div class="row">
-                            <div class="col-12 col-md-6">
-                                <label class="pro-label">Output Depth</label>
-                                <select class="form-control" id="genBitDepth">
+                        <div class="row align-items-end">
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genOutputFile">Output File Name (Mandatory)</label>
+                                <input type="text" class="form-control font-weight-bold" id="genOutputFile" value="output.hevc">
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <label class="pro-label" for="genBitDepth">Output Bit Depth</label>
+                                <select class="form-control font-weight-bold" id="genBitDepth">
                                     <option value="8">8-bit</option>
                                     <option value="10" selected>10-bit</option>
                                     <option value="12">12-bit</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- TOGGLE: VBV Cap -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrVbv">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Cap Peak Variable Bitrate (VBV Limits)</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkVbv" data-target="bodyVbv">
-                            <label class="custom-control-label" for="chkVbv"></label>
-                        </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyVbv">
-                        <div class="row align-items-end">
-                            <div class="col-12 col-md-4 mb-3">
-                                <label class="pro-label">Enforce HEVC Hardware Level</label>
-                                <select class="form-control font-weight-bold text-danger" id="genLevel">
-                                    <option value="4.0">Level 4.0 (Max 30 Mbps)</option>
-                                    <option value="4.1">Level 4.1 (Max 50 Mbps)</option>
-                                    <option value="5.0">Level 5.0 (Max 100 Mbps)</option>
-                                    <option value="5.1" selected>Level 5.1 (Max 160 Mbps)</option>
-                                    <option value="5.2">Level 5.2 (Max 240 Mbps)</option>
-                                    <option value="6.0">Level 6.0 (Max 240 Mbps)</option>
-                                    <option value="6.1">Level 6.1 (Max 480 Mbps)</option>
-                                    <option value="6.2">Level 6.2 (Max 800 Mbps)</option>
+                            <div class="col-6 col-md-4">
+                                <label class="pro-label" for="genChroma">Output Chroma Subsampling</label>
+                                <select class="form-control font-weight-bold" id="genChroma">
+                                    <option value="420" selected>4:2:0</option>
+                                    <option value="422" id="optChroma422">4:2:2</option>
+                                    <option value="444">4:4:4</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-8 mb-3">
-                                <label class="pro-label d-flex justify-content-between">
-                                    <span>Peak VBV Target</span>
-                                    <span id="vbvLabel" class="text-primary font-weight-bold">160 Mbps</span>
-                                </label>
-                                <input type="range" class="custom-range mt-1" id="genVbv" min="1" max="160" value="160" step="1">
+                        </div>
+                    </div>
+
+                    <!-- Panel 2B: VUI Color Science Metadata (Always Active) -->
+                    <div class="console-panel">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-primary">»</span> Video Usability Information (VUI Color Science)</span>
+                            <span class="badge badge-light border text-muted">Independent Stream Tags</span>
+                        </div>
+                        <div class="row align-items-end">
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genTransfer">Transfer Function (--transfer)</label>
+                                <select class="form-control" id="genTransfer">
+                                    <option value="bt709">SDR (BT.709 / BT.1886)</option>
+                                    <option value="pq">HDR (PQ / SMPTE ST 2084)</option>
+                                    <option value="hlg" selected>HDR (HLG / ARIB STD-B67)</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <label class="pro-label" for="genColorPrim">Color Primaries (--colorprim)</label>
+                                <select class="form-control" id="genColorPrim">
+                                    <option value="bt709">BT.709</option>
+                                    <option value="p3d65">P3-D65 (Display P3)</option>
+                                    <option value="dcip3">P3-DCI (Cinema P3)</option>
+                                    <option value="bt2020" selected>BT.2020</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="pro-label" for="genColorMatrix">Color Matrix (--colormatrix)</label>
+                                <select class="form-control" id="genColorMatrix">
+                                    <option value="bt709">BT.709</option>
+                                    <option value="bt2020nc" selected>BT.2020</option>
+                                    <option value="ictcp">ICtCp (Dolby Vision IPT)</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TOGGLE: Tune -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrTune">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Custom Tuning Profile</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkTune" data-target="bodyTune">
-                            <label class="custom-control-label" for="chkTune"></label>
+                    <!-- Panel 2C: Non-Square Aspect Ratio & Psychovisual Tuning -->
+                    <div class="console-panel console-panel-muted">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-primary">»</span> Aspect Ratio Override & Psychovisual Tuning</span>
+                            <span class="small text-muted">Optional Overrides</span>
                         </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyTune">
-                        <div class="row">
+                        <div class="row align-items-end">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="pro-label mb-0" for="genDar">Non-Square Pixels (Display Aspect Ratio)</label>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="chkCustomDar">
+                                        <label class="custom-control-label small font-weight-bold text-dark" for="chkCustomDar">Override DAR</label>
+                                    </div>
+                                </div>
+                                <select class="form-control" id="genDar" disabled>
+                                    <option value="69:25">Ultra Panavision 2.76:1 (69:25)</option>
+                                    <option value="8:3">Anamorphic 2.66:1 (8:3)</option>
+                                    <option value="1024:429" selected>DCI Scope 2.39:1 (1024:429)</option>
+                                    <option value="47:20">Scope 2.35:1 (47:20)</option>
+                                    <option value="11:5">70mm 2.20:1 (11:5)</option>
+                                    <option value="2:1">Univisium 2.00:1 (2:1)</option>
+                                    <option value="256:135">DCI 4K / IMAX 1.90:1 (256:135)</option>
+                                    <option value="37:20">Flat 1.85:1 (37:20)</option>
+                                    <option value="16:9">Widescreen 1.78:1 (16:9)</option>
+                                    <option value="5:3">European 1.66:1 (5:3)</option>
+                                    <option value="143:100">IMAX 1.43:1 (143:100)</option>
+                                    <option value="11:8">Academy Ratio 1.37:1 (11:8)</option>
+                                    <option value="4:3">Standard 1.33:1 (4:3)</option>
+                                </select>
+                            </div>
                             <div class="col-12 col-md-6">
-                                <label class="pro-label">Tuning Engine</label>
-                                <select class="form-control" id="genTune">
-                                    <option value="none" selected>None (Standard)</option>
-                                    <option value="grain">Grain (Lock in Film Grain)</option>
-                                    <option value="animation">Animation</option>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="pro-label mb-0" for="genTune">Custom Tuning Profile (--tune)</label>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="chkCustomTune">
+                                        <label class="custom-control-label small font-weight-bold text-dark" for="chkCustomTune">Custom Tune</label>
+                                    </div>
+                                </div>
+                                <select class="form-control" id="genTune" disabled>
+                                    <option value="grain" selected>Grain (Preserve Film Grain Structure)</option>
+                                    <option value="animation">Animation (Flat Cel Shading)</option>
+                                    <option value="psnr">PSNR (Objective Signal-to-Noise)</option>
+                                    <option value="ssim">SSIM (Structural Similarity)</option>
+                                    <option value="zerolatency">Zero Latency</option>
                                     <option value="fastdecode">Fast Decode</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- TOGGLE: Pools -->
-                    <div class="toggle-header d-flex justify-content-between align-items-center" id="hdrPools">
-                        <span class="font-weight-bold text-dark" style="font-size: 0.9rem;">Custom CPU Pools (Multi-Threading)</span>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input toggle-trigger" id="chkPools" data-target="bodyPools">
-                            <label class="custom-control-label" for="chkPools"></label>
+                    <!-- Panel 2D: HEVC Level/Tier, CRF & VBV Bitrate Control -->
+                    <div class="console-panel">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-primary">»</span> HEVC Level Compliance & Rate Control</span>
+                            <span class="badge badge-info" id="levelCapBadge">Level 5.0 High Tier Cap: 100 Mbps</span>
                         </div>
-                    </div>
-                    <div class="toggle-section-body d-none" id="bodyPools">
-                        <div class="row">
+                        <div class="row align-items-end">
+                            <div class="col-12 mb-4">
+                                <label class="pro-label" for="genHevcLevel">HEVC Level & Tier Specification (--level-idc / Tier Hardware Limits)</label>
+                                <select class="form-control font-weight-bold text-dark" id="genHevcLevel">
+                                    <optgroup label="Level 4.x (Full HD 1080p)">
+                                        <option value="4.0|main|12">Level 4.0 (Main Tier) — Max: 1920×1080 @ 30fps | Max Bitrate: 12 Mbps</option>
+                                        <option value="4.0|high|30">Level 4.0 (High Tier) — Max: 1920×1080 @ 30fps | Max Bitrate: 30 Mbps</option>
+                                        <option value="4.1|main|20">Level 4.1 (Main Tier) — Max: 1920×1080 @ 60fps | Max Bitrate: 20 Mbps</option>
+                                        <option value="4.1|high|50">Level 4.1 (High Tier) — Max: 1920×1080 @ 60fps | Max Bitrate: 50 Mbps</option>
+                                    </optgroup>
+                                    <optgroup label="Level 5.x (4K UHD / DCI 4K)">
+                                        <option value="5.0|main|25">Level 5.0 (Main Tier) — Max: 4096×2160 @ 30fps | Max Bitrate: 25 Mbps</option>
+                                        <option value="5.0|high|100" selected>Level 5.0 (High Tier) — Max: 4096×2160 @ 30fps | Max Bitrate: 100 Mbps (Recommended 4K24/30)</option>
+                                        <option value="5.1|main|40">Level 5.1 (Main Tier) — Max: 4096×2160 @ 60fps | Max Bitrate: 40 Mbps</option>
+                                        <option value="5.1|high|160">Level 5.1 (High Tier) — Max: 4096×2160 @ 60fps | Max Bitrate: 160 Mbps</option>
+                                        <option value="5.2|main|60">Level 5.2 (Main Tier) — Max: 4096×2160 @ 120fps | Max Bitrate: 60 Mbps</option>
+                                        <option value="5.2|high|240">Level 5.2 (High Tier) — Max: 4096×2160 @ 120fps | Max Bitrate: 240 Mbps</option>
+                                    </optgroup>
+                                    <optgroup label="Level 6.x (8K UHD)">
+                                        <option value="6.0|main|60">Level 6.0 (Main Tier) — Max: 8192×4320 @ 30fps | Max Bitrate: 60 Mbps</option>
+                                        <option value="6.0|high|240">Level 6.0 (High Tier) — Max: 8192×4320 @ 30fps | Max Bitrate: 240 Mbps</option>
+                                        <option value="6.1|main|120">Level 6.1 (Main Tier) — Max: 8192×4320 @ 60fps | Max Bitrate: 120 Mbps</option>
+                                        <option value="6.1|high|480">Level 6.1 (High Tier) — Max: 8192×4320 @ 60fps | Max Bitrate: 480 Mbps</option>
+                                        <option value="6.2|main|240">Level 6.2 (Main Tier) — Max: 8192×4320 @ 120fps | Max Bitrate: 240 Mbps</option>
+                                        <option value="6.2|high|800">Level 6.2 (High Tier) — Max: 8192×4320 @ 120fps | Max Bitrate: 800 Mbps</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <label class="pro-label d-flex justify-content-between" for="genCrf">
+                                    <span>Constant Rate Factor (CRF Quality)</span>
+                                    <span id="crfLabel" class="text-primary font-weight-bold" style="font-size: 0.85rem;">19</span>
+                                </label>
+                                <input type="range" class="custom-range" id="genCrf" min="0" max="30" value="19" step="1">
+                                <div class="d-flex justify-content-between small text-muted" style="font-size: 0.70rem;">
+                                    <span>0 (Lossless)</span>
+                                    <span>14 (Archival)</span>
+                                    <span>19 (Balanced Default)</span>
+                                    <span>30 (Compressed)</span>
+                                </div>
+                            </div>
                             <div class="col-12 col-md-6">
-                                <label class="pro-label">CPU Pools (P-Cores)</label>
-                                <input type="number" class="form-control" id="genPools" value="10" min="1" step="1">
+                                <label class="pro-label d-flex justify-content-between" for="genVbv">
+                                    <span>Peak VBV Bitrate Cap (--vbv-maxrate)</span>
+                                    <span id="vbvLabel" class="text-primary font-weight-bold" style="font-size: 0.85rem;">100 Mbps</span>
+                                </label>
+                                <input type="range" class="custom-range" id="genVbv" min="1" max="100" value="100" step="1">
+                                <div class="d-flex justify-content-between small text-muted" style="font-size: 0.70rem;">
+                                    <span>1 Mbps</span>
+                                    <span id="vbvMidTick">50 Mbps</span>
+                                    <span id="vbvMaxTick">100 Mbps (Level Cap)</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- General Switch Flags -->
-                    <div class="row mt-4">
-                        <div class="col-12 col-md-6 mb-3">
+                    <!-- Panel 2E: Custom CPU Performance Allocation -->
+                    <div class="console-panel console-panel-muted">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-primary">»</span> CPU Thread Pool Architecture</span>
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
-                                <label class="custom-control-label font-weight-bold text-dark" for="genQualitySwitch" style="cursor: pointer; font-size: 0.9rem;">Extreme Quality (Max Compression)</label>
+                                <input type="checkbox" class="custom-control-input" id="chkCustomCpu">
+                                <label class="custom-control-label font-weight-bold text-dark" for="chkCustomCpu" style="font-size: 0.82rem;">Customize CPU Performance</label>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
-                                <label class="custom-control-label font-weight-bold text-dark" for="genScrubbing" style="cursor: pointer; font-size: 0.9rem;">Scrubbing & Editing Friendly GOP</label>
+                        <div class="row align-items-end">
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                                <label class="pro-label" for="cpuPCores">Performance Cores (P-Cores)</label>
+                                <input type="number" class="form-control" id="cpuPCores" value="10" min="1" step="1" disabled>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="genInfoSEI" checked>
-                                <label class="custom-control-label font-weight-bold text-dark" for="genInfoSEI" style="cursor: pointer; font-size: 0.9rem;">Embed Encoding Logs (SEI Info)</label>
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                                <label class="pro-label" for="cpuECores">Efficiency Cores (E-Cores)</label>
+                                <input type="number" class="form-control" id="cpuECores" value="4" min="0" step="1" disabled>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-6 mb-3" id="dvToggleContainer" style="display: none;">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="genDv">
-                                <label class="custom-control-label font-weight-bold text-dark" for="genDv" style="cursor: pointer; font-size: 0.9rem;">Inject Dolby Vision RPU</label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 mb-3" id="hdr10pToggleContainer" style="display: none;">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="genHdr10p">
-                                <label class="custom-control-label font-weight-bold text-dark" for="genHdr10p" style="cursor: pointer; font-size: 0.9rem;">Inject HDR10+ JSON</label>
+                            <div class="col-12 col-md-6">
+                                <label class="pro-label" for="cpuStrategy">Thread Scheduling Strategy (--pools)</label>
+                                <select class="form-control" id="cpuStrategy" disabled>
+                                    <option value="p_only" id="optCpuPOnly" selected>Use Performance Cores Only (Recommended — 10 Threads)</option>
+                                    <option value="all_cores" id="optCpuAll">Use All Cores (P + E — 14 Threads, May Bottleneck on E-Cores)</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Advanced HDR Metadata -->
-                    <div class="mt-4" id="advancedHdrMetadata" style="display: none;">
-                        <h5 class="font-weight-bold text-danger ui-section-title mt-5 border-bottom border-danger" id="advHdrTitle">HDR Metadata Definitions</h5>
-                        
-                        <div class="mb-4">
-                            <h6 class="font-weight-bold text-uppercase text-secondary mb-3 mt-4" style="font-size: 0.85rem;"><span style="color: #d9534f;">»</span> Content Metadata</h6>
-                            <div class="row align-items-end">
-                                <div class="col-12 col-md-6 mb-3">
-                                    <label class="pro-label">MaxCLL (Content Light Level)</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="genMaxCll" value="1000" min="0">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">nits</span>
-                                        </div>
+                    <!-- Panel 2F: Pipeline Feature Switches -->
+                    <div class="console-panel">
+                        <div class="panel-header-bar">
+                            <span class="panel-subtitle"><span class="text-primary">»</span> Encoder Feature Switches & Dynamic HDR Injection</span>
+                            <span class="badge badge-light border text-muted">Bit-Stream Modifiers</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="switch-card">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
+                                        <label class="custom-control-label font-weight-bold text-dark" for="genQualitySwitch" style="font-size: 0.88rem;">
+                                            Extreme Quality (HME, 8 B-Frames & TU Depth 4)
+                                        </label>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
-                                    <label class="pro-label">MaxFALL (Frame Average)</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="genMaxFall" value="400" min="0">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">nits</span>
-                                        </div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="switch-card">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
+                                        <label class="custom-control-label font-weight-bold text-dark" for="genScrubbing" style="font-size: 0.88rem;">
+                                            Scrubbing & Editing Friendly GOP (Closed 2-Sec GOP)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <div class="switch-card">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="genInfoSEI" checked>
+                                        <label class="custom-control-label font-weight-bold text-dark" for="genInfoSEI" style="font-size: 0.88rem;">
+                                            Embed Encoding Logs (SEI Info)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                                <div class="switch-card" style="border-color: #b8daff; background-color: #f0f7ff;">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="genDv" checked>
+                                        <label class="custom-control-label font-weight-bold text-primary" for="genDv" style="font-size: 0.88rem;">
+                                            Inject Dolby Vision RPU
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="switch-card" style="border-color: #f5c6cb; background-color: #fff5f6;">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="genHdr10p">
+                                        <label class="custom-control-label font-weight-bold text-danger" for="genHdr10p" style="font-size: 0.88rem;">
+                                            Inject HDR10+ Dynamic JSON
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="mb-3">
-                            <h6 class="font-weight-bold text-uppercase text-secondary mb-3" style="font-size: 0.85rem;"><span style="color: #d9534f;">»</span> Mastering Display Limits</h6>
-                            <div class="row align-items-end">
-                                <div class="col-12 col-md-6 mb-3">
-                                    <label class="pro-label">Display Max Brightness</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="genMasterMax" value="1000" min="1" step="1">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">nits</span>
-                                        </div>
+                    </div>
+
+                    <!-- =========================================================
+                         PART 3: HDR & DOLBY VISION MASTERING METADATA
+                         ========================================================= -->
+                    <h5 class="font-weight-bold text-danger ui-section-title mt-5 border-bottom border-danger" id="advHdrTitle">3. HDR & Dolby Vision Mastering Metadata</h5>
+
+                    <div class="console-panel">
+                        <!-- Dolby Vision RPU Source Strategy -->
+                        <div class="row align-items-end pb-3 mb-3 border-bottom">
+                            <div class="col-12 col-md-8">
+                                <label class="pro-label text-info" for="dvRpuMode">Dolby Vision RPU Acquisition Mode</label>
+                                <select class="form-control font-weight-bold" id="dvRpuMode">
+                                    <option value="generate" selected>Generate Static RPU from Mastering Metadata Below (Profile 8.1 / 8.4)</option>
+                                    <option value="extract">Extract & Copy Existing RPU Directly from Source File (Profile 5 / 8.1 / 8.4)</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4 mt-2 mt-md-0">
+                                <div class="p-2 rounded bg-light border text-center small font-weight-bold text-secondary" id="activeDvProfileBadge">
+                                    Active DV Profile: 8.4 (HLG)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Light Level & Mastering Display Inputs -->
+                        <div class="row align-items-end">
+                            <div class="col-12 col-md-4 mb-3">
+                                <label class="pro-label" for="genMasterColor">Mastering Display Color Space</label>
+                                <select class="form-control" id="genMasterColor">
+                                    <option value="bt2020">BT.2020 (Rec. 2020)</option>
+                                    <option value="p3d65" selected>P3-D65 (Display P3)</option>
+                                    <option value="dcip3">P3-DCI (Theater P3)</option>
+                                    <option value="p3d60">P3-D60 (ACES Cinema)</option>
+                                    <option value="bt709">BT.709</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-4 mb-3">
+                                <label class="pro-label" for="genMasterMax">Display Peak Brightness</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMasterMax" value="1000" min="1" step="1">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 mb-3">
-                                    <label class="pro-label">Display Black Level</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="genMasterMin" value="0.0001" min="0" step="0.0001">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">nits</span>
-                                        </div>
+                            </div>
+                            <div class="col-6 col-md-4 mb-3">
+                                <label class="pro-label" for="genMasterMin">Display Minimum Black Level</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMasterMin" value="0.0001" min="0" step="0.0001">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6">
+                                <label class="pro-label" for="genMaxCll">MaxCLL (Maximum Content Light Level)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMaxCll" value="1000" min="0" step="1">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6">
+                                <label class="pro-label" for="genMaxFall">MaxFALL (Maximum Frame-Average Light Level)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genMaxFall" value="400" min="0" step="1">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">nits</span>
                                     </div>
                                 </div>
                             </div>
@@ -541,424 +787,613 @@
                      DYNAMIC COMMAND OUTPUT AREAS
                      ============================================== -->
 
-                <div class="mt-5 pb-4 border-bottom border-light" id="hdr10pCommandContainer" style="display: none;">
-                    <label class="font-weight-bold text-danger" id="hdr10pStepLabel">Step 1: HDR10+ JSON Creator Command</label>
-                    <pre class="bg-dark text-white p-3 rounded shadow-sm" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="hdr10pCommandOutput"></code></pre>
-                    <button class="btn btn-danger px-4 mt-2 shadow-sm" onclick="copyHdr10pCommand()" id="copyHdrBtn">Copy JSON Command</button>
+                <!-- OPTIONAL STEP: HDR10+ JSON Creator -->
+                <div class="mt-4 pb-3 border-bottom" id="hdr10pCommandContainer" style="display: none;">
+                    <label class="font-weight-bold text-danger" id="hdr10pStepLabel">Step 1: HDR10+ Dynamic JSON Creator Command</label>
+                    <p class="text-muted small mb-2">Run this command first to generate a compliant <code>fake_hdr10plus.json</code> metadata file in your working directory.</p>
+                    <pre class="cmd-box"><code id="hdr10pCommandOutput"></code></pre>
+                    <button type="button" class="btn btn-danger px-4 shadow-sm font-weight-bold" onclick="copyTextById('hdr10pCommandOutput', this, 'Copy JSON Command', 'btn-danger')">Copy JSON Command</button>
                 </div>
 
-                <div class="mt-4 pb-4 border-bottom border-light" id="dvRpuCommandContainer" style="display: none;">
-                    <label class="font-weight-bold text-info" id="dvRpuStepLabel">Step 2: Dolby Vision RPU Generator Command</label>
-                    <pre class="bg-dark text-white p-3 rounded shadow-sm" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dvRpuCommandOutput"></code></pre>
-                    <button class="btn btn-info px-4 mt-2 shadow-sm" onclick="copyDvRpuCommand()" id="copyDvRpuBtn">Copy RPU Command</button>
+                <!-- OPTIONAL STEP: Dolby Vision RPU Generator / Extractor -->
+                <div class="mt-4 pb-3 border-bottom" id="dvCommandContainer" style="display: none;">
+                    <label class="font-weight-bold text-info" id="dvStepLabel">Step 1: Dolby Vision RPU Command</label>
+                    <p class="text-muted small mb-2" id="dvStepDesc">Run this command to prepare your <code>RPU.bin</code> file before starting the main encode.</p>
+                    <pre class="cmd-box"><code id="dvCommandOutput"></code></pre>
+                    <button type="button" class="btn btn-info px-4 shadow-sm font-weight-bold" onclick="copyTextById('dvCommandOutput', this, 'Copy RPU Command', 'btn-info')">Copy RPU Command</button>
                 </div>
 
-                <div class="mt-5 pb-4 border-bottom border-light" id="dv81CommandContainer" style="display: none;">
-                    <label class="font-weight-bold text-info" id="dv81StepLabel">Step 1: Fake Dolby Vision 8.1 RPU Creator</label>
-                    <pre class="bg-dark text-white p-3 rounded shadow-sm" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dv81CommandOutput"></code></pre>
-                    <button class="btn btn-info px-4 mt-2 shadow-sm" onclick="copyDv81Command()" id="copyDv81Btn">Copy DV8.1 Command</button>
-                </div>
-
-                <div class="mt-5 pb-4 border-bottom border-light" id="dv84CommandContainer" style="display: none;">
-                    <label class="font-weight-bold text-info" id="dv84StepLabel">Step 1: Fake Dolby Vision 8.4 RPU Creator</label>
-                    <pre class="bg-dark text-white p-3 rounded shadow-sm" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="dv84CommandOutput"></code></pre>
-                    <button class="btn btn-info px-4 mt-2 shadow-sm" onclick="copyDv84Command()" id="copyDv84Btn">Copy DV8.4 Command</button>
-                </div>
-
+                <!-- FINAL STEP: Primary Encode Command Output Area -->
                 <div class="mt-4">
-                    <label class="font-weight-bold text-primary" id="mainCommandLabel">Generated Pipeline (Main Encode Command):</label>
-                    <p class="text-muted small mb-2">Paste this directly into your terminal. It instantly injects Python frame processing into memory, pipelines it to x265, and automatically cleans up.</p>
-                    <pre class="bg-dark text-white p-3 rounded shadow-sm" style="white-space: pre-wrap; word-break: break-all; font-size: 13px;"><code id="finalCommandOutput"></code></pre>
-                    <button class="btn btn-primary px-4 mt-2 shadow-sm font-weight-bold" onclick="copyGeneratedCommand()" id="copyBtn">Copy Encode Command</button>
+                    <label class="font-weight-bold text-primary" id="mainCommandLabel">Step 2: Generated Pipeline (Main Encode Command)</label>
+                    <p class="text-muted small mb-2">Paste this directly into your terminal. It writes the VapourSynth script, pipes the frames into x265, and cleans up temporary files automatically.</p>
+                    <pre class="cmd-box"><code id="finalCommandOutput"></code></pre>
+                    <button type="button" class="btn btn-primary px-4 shadow-sm font-weight-bold" onclick="copyTextById('finalCommandOutput', this, 'Copy Encode Command', 'btn-primary')">Copy Encode Command</button>
                 </div>
             </div>
 
             <!-- Generator Logic -->
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
-                    
-                    // Toggle Logic Application
-                    const toggleTriggers = document.querySelectorAll('.toggle-trigger');
-                    toggleTriggers.forEach(trigger => {
-                        trigger.addEventListener('change', function() {
-                            const targetId = this.getAttribute('data-target');
-                            const targetEl = document.getElementById(targetId);
-                            const headerEl = this.closest('.toggle-header');
-                            if (this.checked) {
-                                targetEl.classList.remove('d-none');
-                                headerEl.classList.add('active-toggle');
-                            } else {
-                                targetEl.classList.add('d-none');
-                                headerEl.classList.remove('active-toggle');
-                            }
-                            updateCommand();
-                        });
-                    });
-
-                    // HEVC Level to Max VBV Mapping Matrix
-                    const levelLimits = {
-                        "4.0": 30, "4.1": 50, "5.0": 100, "5.1": 160, 
-                        "5.2": 240, "6.0": 240, "6.1": 480, "6.2": 800
-                    };
-
-                    const levelSelect = document.getElementById('genLevel');
-                    const vbvSlider = document.getElementById('genVbv');
-                    const vbvLabel = document.getElementById('vbvLabel');
-                    
-                    levelSelect.addEventListener('change', function() {
-                        const maxMbps = levelLimits[this.value];
-                        vbvSlider.setAttribute('max', maxMbps);
-                        if (parseInt(vbvSlider.value) > maxMbps) {
-                            vbvSlider.value = maxMbps;
-                        }
-                        vbvLabel.innerText = vbvSlider.value + ' Mbps';
-                        updateCommand();
-                    });
-
-                    const crfSlider = document.getElementById('genCrf');
-                    const crfLabel = document.getElementById('crfLabel');
-                    
-                    vbvSlider.addEventListener('input', function() {
-                        vbvLabel.innerText = this.value + ' Mbps';
-                        updateCommand();
-                    });
-                    crfSlider.addEventListener('input', function() {
-                        crfLabel.innerText = this.value;
-                        updateCommand();
-                    });
-
-                    // OS Select
                     const osSelector = document.getElementById('osSelector');
                     const guideMac = document.getElementById('guideMac');
                     const guideWin = document.getElementById('guideWin');
                     const guideLinux = document.getElementById('guideLinux');
-                    const sourceEngineSelect = document.getElementById('genSourceEngine');
 
+                    const chkCustomEngine = document.getElementById('chkCustomEngine');
+                    const genSourceEngine = document.getElementById('genSourceEngine');
+                    const chkCustomLut = document.getElementById('chkCustomLut');
+                    const genLutFile = document.getElementById('genLutFile');
+
+                    const chkOverrideSignal = document.getElementById('chkOverrideSignal');
+                    const genSourceRange = document.getElementById('genSourceRange');
+                    const genOutputRange = document.getElementById('genOutputRange');
+                    const genSourceMatrix = document.getElementById('genSourceMatrix');
+
+                    const chkCrop = document.getElementById('chkCrop');
+                    const srcWInput = document.getElementById('srcW');
+                    const srcHInput = document.getElementById('srcH');
+                    const cropTInput = document.getElementById('cropT');
+                    const cropBInput = document.getElementById('cropB');
+                    const cropLInput = document.getElementById('cropL');
+                    const cropRInput = document.getElementById('cropR');
+
+                    const genResizeToggle = document.getElementById('genResizeToggle');
+                    const genResizeAlgo = document.getElementById('genResizeAlgo');
+                    const genResizeW = document.getElementById('genResizeW');
+                    const genResizeH = document.getElementById('genResizeH');
+
+                    const genBitDepth = document.getElementById('genBitDepth');
+                    const genChroma = document.getElementById('genChroma');
+                    const optChroma422 = document.getElementById('optChroma422');
+
+                    const genTransfer = document.getElementById('genTransfer');
+                    const genColorPrim = document.getElementById('genColorPrim');
+                    const genColorMatrix = document.getElementById('genColorMatrix');
+
+                    const chkCustomDar = document.getElementById('chkCustomDar');
+                    const genDar = document.getElementById('genDar');
+                    const chkCustomTune = document.getElementById('chkCustomTune');
+                    const genTune = document.getElementById('genTune');
+
+                    const genHevcLevel = document.getElementById('genHevcLevel');
+                    const levelCapBadge = document.getElementById('levelCapBadge');
+                    const genCrf = document.getElementById('genCrf');
+                    const crfLabel = document.getElementById('crfLabel');
+                    const genVbv = document.getElementById('genVbv');
+                    const vbvLabel = document.getElementById('vbvLabel');
+                    const vbvMidTick = document.getElementById('vbvMidTick');
+                    const vbvMaxTick = document.getElementById('vbvMaxTick');
+
+                    const chkCustomCpu = document.getElementById('chkCustomCpu');
+                    const cpuPCores = document.getElementById('cpuPCores');
+                    const cpuECores = document.getElementById('cpuECores');
+                    const cpuStrategy = document.getElementById('cpuStrategy');
+                    const optCpuPOnly = document.getElementById('optCpuPOnly');
+                    const optCpuAll = document.getElementById('optCpuAll');
+
+                    const genDv = document.getElementById('genDv');
+                    const genHdr10p = document.getElementById('genHdr10p');
+                    const dvRpuMode = document.getElementById('dvRpuMode');
+                    const activeDvProfileBadge = document.getElementById('activeDvProfileBadge');
+
+                    const genMasterColor = document.getElementById('genMasterColor');
+                    const genMasterMax = document.getElementById('genMasterMax');
+                    const genMasterMin = document.getElementById('genMasterMin');
+                    const genMaxCll = document.getElementById('genMaxCll');
+                    const genMaxFall = document.getElementById('genMaxFall');
+
+                    // OS Compatibility Switcher
                     osSelector.addEventListener('change', function() {
-                        guideMac.style.display = 'none'; guideWin.style.display = 'none'; guideLinux.style.display = 'none';
-                        if (this.value === 'mac') { guideMac.style.display = 'block'; sourceEngineSelect.value = 'ffms2'; }
-                        else if (this.value === 'win') { guideWin.style.display = 'block'; sourceEngineSelect.value = 'lsmas'; }
-                        else if (this.value === 'linux') { guideLinux.style.display = 'block'; sourceEngineSelect.value = 'ffms2'; }
+                        guideMac.style.display = (this.value === 'mac') ? 'block' : 'none';
+                        guideWin.style.display = (this.value === 'win') ? 'block' : 'none';
+                        guideLinux.style.display = (this.value === 'linux') ? 'block' : 'none';
+
+                        if (!chkCustomEngine.checked) {
+                            genSourceEngine.value = (this.value === 'win') ? 'lsmas' : 'ffms2';
+                        }
                         updateCommand();
                     });
 
-                    const formElements = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
-                    formElements.forEach(el => {
-                        el.addEventListener('change', updateCommand);
-                        if(el.type !== 'range') el.addEventListener('input', updateCommand);
+                    // HEVC Level & Tier change handler -> updates VBV slider max & value
+                    genHevcLevel.addEventListener('change', function() {
+                        const [lvl, tier, maxRateStr] = this.value.split('|');
+                        const maxRate = parseInt(maxRateStr, 10);
+                        genVbv.max = maxRate;
+                        genVbv.value = maxRate;
+                        vbvLabel.innerText = maxRate + ' Mbps';
+                        vbvMidTick.innerText = Math.round(maxRate / 2) + ' Mbps';
+                        vbvMaxTick.innerText = maxRate + ' Mbps (Level Cap)';
+                        const tierName = (tier === 'high') ? 'High Tier' : 'Main Tier';
+                        levelCapBadge.innerText = `Level ${lvl} ${tierName} Cap: ${maxRate} Mbps`;
+                        updateCommand();
+                    });
+
+                    // Real-time Sliders
+                    genCrf.addEventListener('input', function() {
+                        crfLabel.innerText = this.value;
+                        updateCommand();
+                    });
+                    genVbv.addEventListener('input', function() {
+                        vbvLabel.innerText = this.value + ' Mbps';
+                        updateCommand();
+                    });
+
+                    // Attach listeners to all form inputs
+                    const allInputs = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
+                    allInputs.forEach(el => {
+                        if (el.id !== 'genHevcLevel' && el.id !== 'genCrf' && el.id !== 'genVbv') {
+                            el.addEventListener('change', updateCommand);
+                            if (el.type === 'text' || el.type === 'number') {
+                                el.addEventListener('input', updateCommand);
+                            }
+                        }
                     });
 
                     function updateCommand() {
-                        // Gather Toggle States
-                        const useSrcParams = document.getElementById('chkSourceParams').checked;
-                        const useEngine = document.getElementById('chkSourceEngine').checked;
-                        const useLut = document.getElementById('chkLut').checked;
-                        const useFps = document.getElementById('chkFps').checked;
-                        const useCrop = document.getElementById('chkCrop').checked;
-                        const useResize = document.getElementById('chkResize').checked;
-                        const useDar = document.getElementById('chkDar').checked;
-                        const useOutDepth = document.getElementById('chkOutDepth').checked;
-                        const useVbv = document.getElementById('chkVbv').checked;
-                        const useTune = document.getElementById('chkTune').checked;
-                        const usePools = document.getElementById('chkPools').checked;
+                        // 1. Toggle States & Field Enabling/Disabling
+                        genSourceEngine.disabled = !chkCustomEngine.checked;
+                        if (!chkCustomEngine.checked) {
+                            genSourceEngine.value = (osSelector.value === 'win') ? 'lsmas' : 'ffms2';
+                        }
 
-                        // UI Metadata Dependencies
-                        const outTransfer = document.getElementById('outTransfer').value;
-                        const outGamut = document.getElementById('outGamut').value;
-                        const dvSel = document.getElementById('genDv');
-                        const hdr10pSel = document.getElementById('genHdr10p');
-                        
-                        const outDepth = useOutDepth ? document.getElementById('genBitDepth').value : "10"; // Default to 10-bit
+                        genLutFile.disabled = !chkCustomLut.checked;
 
-                        // HDR vs SDR Enforcements
-                        if (outDepth === '8') {
-                            dvSel.checked = false; dvSel.disabled = true;
-                        } else { dvSel.disabled = false; }
+                        const isSignalOverride = chkOverrideSignal.checked;
+                        genSourceRange.disabled = !isSignalOverride;
+                        genOutputRange.disabled = !isSignalOverride;
+                        genSourceMatrix.disabled = !isSignalOverride;
 
-                        const dvToggleContainer = document.getElementById('dvToggleContainer');
-                        const hdr10pToggleContainer = document.getElementById('hdr10pToggleContainer');
-                        const advHdr = document.getElementById('advancedHdrMetadata');
-                        const advHdrTitle = document.getElementById('advHdrTitle');
-                        
-                        if (outTransfer === 'hlg' || outTransfer === 'pq') {
-                            dvToggleContainer.style.display = 'block';
-                        } else { dvToggleContainer.style.display = 'none'; }
+                        const isCrop = chkCrop.checked;
+                        const isCustomDar = chkCustomDar.checked;
+                        const isResize = genResizeToggle.checked;
 
-                        if (outTransfer === 'pq') {
-                            hdr10pToggleContainer.style.display = 'block';
-                        } else { hdr10pToggleContainer.style.display = 'none'; }
+                        // Source Width & Height only enabled if Cropping OR Custom DAR is enabled
+                        const needSourceDims = isCrop || isCustomDar;
+                        srcWInput.disabled = !needSourceDims;
+                        srcHInput.disabled = !needSourceDims;
 
-                        if (outTransfer === 'pq' || (outTransfer === 'hlg' && dvSel.checked)) {
-                            advHdr.style.display = 'block';
-                            advHdrTitle.innerText = outTransfer === 'pq' ? "HDR Advanced Metadata (PQ Base)" : "HDR Advanced Metadata (Fake Dolby Vision 8.4 Parameters)";
-                        } else { advHdr.style.display = 'none'; }
+                        cropTInput.disabled = !isCrop;
+                        cropBInput.disabled = !isCrop;
+                        cropLInput.disabled = !isCrop;
+                        cropRInput.disabled = !isCrop;
 
-                        // Safely parse input strings
-                        const safeInFile = (document.getElementById('genInputFile').value || 'input.mov').replace(/"/g, '\\"');
-                        const safeOutFile = (document.getElementById('genOutputFile').value || 'output.hevc').replace(/"/g, '\\"');
-                        const safeLutFile = document.getElementById('genLutFile').value.replace(/"/g, '\\"');
+                        genResizeAlgo.disabled = !isResize;
+                        genResizeW.disabled = !isResize;
+                        genResizeH.disabled = !isResize;
 
-                        // ==========================================
-                        // PYTHON VAPOURSYNTH STRING BUILDER 
-                        // ==========================================
-                        let pyString = `import vapoursynth as vs; core = vs.core; `;
-                        
-                        // FFmpeg Engine
-                        const engine = useEngine ? document.getElementById('genSourceEngine').value : "ffms2";
+                        genDar.disabled = !isCustomDar;
+                        genTune.disabled = !chkCustomTune.checked;
+
+                        const isCustomCpu = chkCustomCpu.checked;
+                        cpuPCores.disabled = !isCustomCpu;
+                        cpuECores.disabled = !isCustomCpu;
+                        cpuStrategy.disabled = !isCustomCpu;
+
+                        // Update CPU Pool labels dynamically
+                        const pCores = Math.max(1, parseInt(cpuPCores.value, 10) || 10);
+                        const eCores = Math.max(0, parseInt(cpuECores.value, 10) || 0);
+                        const totalCores = pCores + eCores;
+                        optCpuPOnly.innerText = `Use Performance Cores Only (Recommended — ${pCores} Threads)`;
+                        optCpuAll.innerText = `Use All Cores (P + E — ${totalCores} Threads, May Bottleneck on E-Cores)`;
+
+                        // 2. Enforce 8-Bit Chroma Rule: Hide 4:2:2 when 8-bit is selected
+                        if (genBitDepth.value === '8') {
+                            optChroma422.style.display = 'none';
+                            optChroma422.disabled = true;
+                            if (genChroma.value === '422') {
+                                genChroma.value = '420';
+                            }
+                        } else {
+                            optChroma422.style.display = 'block';
+                            optChroma422.disabled = false;
+                        }
+
+                        // 3. Dolby Vision & HDR Mastering Metadata State Management
+                        const useDv = genDv.checked;
+                        const useHdr10p = genHdr10p.checked;
+                        const transfer = genTransfer.value;
+                        const colorPrim = genColorPrim.value;
+                        const colorMatrix = genColorMatrix.value;
+                        const isIctcp = (colorMatrix === 'ictcp');
+
+                        if (!useDv) {
+                            dvRpuMode.disabled = true;
+                            activeDvProfileBadge.innerText = 'Dolby Vision: Disabled';
+                            activeDvProfileBadge.className = 'p-2 rounded bg-light border text-center small font-weight-bold text-muted';
+                        } else if (isIctcp) {
+                            // DVP5 strictly extracts RPU from source file
+                            dvRpuMode.value = 'extract';
+                            dvRpuMode.disabled = true;
+                            activeDvProfileBadge.innerText = 'Active DV Profile: 5 (ICtCp Full Range)';
+                            activeDvProfileBadge.className = 'p-2 rounded bg-info text-white text-center small font-weight-bold';
+                        } else {
+                            dvRpuMode.disabled = false;
+                            const dvProf = (transfer === 'hlg') ? '8.4 (HLG)' : '8.1 (HDR10 PQ)';
+                            activeDvProfileBadge.innerText = `Active DV Profile: ${dvProf}`;
+                            activeDvProfileBadge.className = 'p-2 rounded bg-primary text-white text-center small font-weight-bold';
+                        }
+
+                        // Enable Mastering Display & Content Light Level fields whenever needed by PQ, HDR10+, or Static DV Generation
+                        const needMasteringMeta = (transfer === 'pq' && !isIctcp) || useHdr10p || (useDv && dvRpuMode.value === 'generate' && !isIctcp);
+                        genMasterColor.disabled = !needMasteringMeta;
+                        genMasterMax.disabled = !needMasteringMeta;
+                        genMasterMin.disabled = !needMasteringMeta;
+                        genMaxCll.disabled = !needMasteringMeta;
+                        genMaxFall.disabled = !needMasteringMeta;
+
+                        // 4. Geometry & Aspect Ratio Calculations
+                        let srcW = Math.max(2, parseInt(srcWInput.value, 10) || 3840);
+                        let srcH = Math.max(2, parseInt(srcHInput.value, 10) || 2160);
+                        srcW = srcW - (srcW % 2);
+                        srcH = srcH - (srcH % 2);
+
+                        let cT = isCrop ? (Math.max(0, parseInt(cropTInput.value, 10) || 0)) : 0;
+                        let cB = isCrop ? (Math.max(0, parseInt(cropBInput.value, 10) || 0)) : 0;
+                        let cL = isCrop ? (Math.max(0, parseInt(cropLInput.value, 10) || 0)) : 0;
+                        let cR = isCrop ? (Math.max(0, parseInt(cropRInput.value, 10) || 0)) : 0;
+                        cT -= (cT % 2);
+                        cB -= (cB % 2);
+                        cL -= (cL % 2);
+                        cR -= (cR % 2);
+
+                        let resW = Math.max(2, parseInt(genResizeW.value, 10) || 3840);
+                        let resH = Math.max(2, parseInt(genResizeH.value, 10) || 2160);
+                        resW -= (resW % 2);
+                        resH -= (resH % 2);
+
+                        const croppedW = Math.max(2, srcW - cL - cR);
+                        const croppedH = Math.max(2, srcH - cT - cB);
+                        const finalVideoW = isResize ? resW : croppedW;
+                        const finalVideoH = isResize ? resH : croppedH;
+
+                        // Calculate SAR if Custom DAR is enabled
+                        const gcd = function(a, b) { return b === 0 ? a : gcd(b, a % b); };
+                        let sarFlag = '';
+                        let sarDisplay = '1:1 (Square Pixels)';
+
+                        if (isCustomDar && finalVideoW > 0 && finalVideoH > 0) {
+                            const [darNumStr, darDenStr] = genDar.value.split(':');
+                            const targetDarNum = parseInt(darNumStr, 10);
+                            const targetDarDen = parseInt(darDenStr, 10);
+
+                            let sarNum = targetDarNum * finalVideoH;
+                            let sarDen = targetDarDen * finalVideoW;
+                            const divisor = gcd(sarNum, sarDen);
+                            sarNum = sarNum / divisor;
+                            sarDen = sarDen / divisor;
+
+                            const darFloat = (targetDarNum / targetDarDen).toFixed(2);
+                            if (sarNum !== sarDen) {
+                                sarFlag = `--sar ${sarNum}:${sarDen} `;
+                                sarDisplay = `${sarNum}:${sarDen} (Target DAR ${darFloat}:1)`;
+                            } else {
+                                sarDisplay = `1:1 (Matches ${darFloat}:1 Naturally)`;
+                            }
+                        }
+
+                        // Update Live Geometry Telemetry Bar
+                        const cropAr = (croppedW / croppedH).toFixed(2);
+                        const finalAr = (finalVideoW / finalVideoH).toFixed(2);
+                        document.getElementById('telCropped').innerText = isCrop
+                            ? `${croppedW} × ${croppedH} (${cropAr}:1)`
+                            : (needSourceDims ? `${srcW} × ${srcH} (${cropAr}:1)` : `Auto (No Crop)`);
+
+                        if (isResize) {
+                            document.getElementById('telCanvas').innerText = `${resW} × ${resH} (${finalAr}:1 Scaled)`;
+                        } else if (isCrop) {
+                            document.getElementById('telCanvas').innerText = `${croppedW} × ${croppedH} (${cropAr}:1 Cropped)`;
+                        } else {
+                            document.getElementById('telCanvas').innerText = `Native Source (1:1 Pass-Through)`;
+                        }
+                        document.getElementById('telSar').innerText = sarDisplay;
+
+                        // 5. Parse Filenames Safely
+                        const rawInFile = document.getElementById('genInputFile').value || 'input.mov';
+                        const rawOutFile = document.getElementById('genOutputFile').value || 'output.hevc';
+                        const rawLutFile = genLutFile.value || '';
+
+                        const safeInFile = rawInFile.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                        const safeOutFile = rawOutFile.replace(/"/g, '\\"');
+                        const safeLutFile = rawLutFile.replace(/'/g, "\\'").replace(/"/g, '\\"');
+
+                        // 6. Determine VapourSynth Format & x265 Profile/CSP
+                        const bitDepth = genBitDepth.value;
+                        const chroma = genChroma.value;
+
+                        const vsFormat = `vs.YUV${chroma}P${bitDepth}`;
+                        const inputCsp = `i${chroma}`;
+                        let x265Profile = 'main10';
+                        let maxLuma = 1023;
+
+                        if (bitDepth === '8') {
+                            maxLuma = 255;
+                            x265Profile = (chroma === '444') ? 'main444-8' : 'main';
+                        } else if (bitDepth === '10') {
+                            maxLuma = 1023;
+                            if (chroma === '420') x265Profile = 'main10';
+                            else if (chroma === '422') x265Profile = 'main422-10';
+                            else if (chroma === '444') x265Profile = 'main444-10';
+                        } else if (bitDepth === '12') {
+                            maxLuma = 4095;
+                            if (chroma === '420') x265Profile = 'main12';
+                            else if (chroma === '422') x265Profile = 'main422-12';
+                            else if (chroma === '444') x265Profile = 'main444-12';
+                        }
+
+                        // 7. Build One-Line VapourSynth Python Script
+                        const lockFps = document.getElementById('genLockFps').value;
+                        const assumeFps = document.getElementById('genAssumeFps').value;
+                        const sourceFps = parseFloat(document.getElementById('genSourceFps').value) || 24;
+
                         let sourceArgs = `source='${safeInFile}'`;
-                        
-                        if (useFps && document.getElementById('genLockFps').value !== "original") {
-                            let [num, den] = document.getElementById('genLockFps').value.split('/');
+                        if (lockFps !== 'original') {
+                            const [num, den] = lockFps.split('/');
                             sourceArgs += `, fpsnum=${num}, fpsden=${den}`;
                         }
-                        
-                        if (engine === 'ffms2') { pyString += `clip = core.ffms2.Source(${sourceArgs}); `; } 
-                        else { pyString += `clip = core.lsmas.LWLibavSource(${sourceArgs}); `; }
 
-                        // FPS Override
-                        if (useFps && document.getElementById('genAssumeFps').value !== "original") {
-                            let [num, den] = document.getElementById('genAssumeFps').value.split('/');
+                        let pyString = `import vapoursynth as vs; core = vs.core; `;
+                        if (genSourceEngine.value === 'ffms2') {
+                            pyString += `clip = core.ffms2.Source(${sourceArgs}); `;
+                        } else {
+                            pyString += `clip = core.lsmas.LWLibavSource(${sourceArgs}); `;
+                        }
+
+                        if (assumeFps !== 'original') {
+                            const [num, den] = assumeFps.split('/');
                             pyString += `clip = core.std.AssumeFPS(clip, fpsnum=${num}, fpsden=${den}); `;
                         }
 
-                        // LUT
-                        if (useLut && safeLutFile.trim() !== "") {
+                        if (chkCustomLut.checked && safeLutFile.trim() !== '') {
                             pyString += `clip = core.timecube.Cube(clip, '${safeLutFile.trim()}'); `;
                         }
 
-                        // Cropping Logic
-                        let srcW = 3840; let srcH = 2160;
-                        let cT = 0; let cB = 0; let cL = 0; let cR = 0;
-                        if (useCrop) {
-                            srcW = parseInt(document.getElementById('srcW').value) || 3840;
-                            srcH = parseInt(document.getElementById('srcH').value) || 2160;
-                            cT = parseInt(document.getElementById('cropT').value) || 0;
-                            cB = parseInt(document.getElementById('cropB').value) || 0;
-                            cL = parseInt(document.getElementById('cropL').value) || 0;
-                            cR = parseInt(document.getElementById('cropR').value) || 0;
-                            cT -= (cT % 2); cB -= (cB % 2); cL -= (cL % 2); cR -= (cR % 2); // Enforce Even
-                            if (cT > 0 || cB > 0 || cL > 0 || cR > 0) {
-                                pyString += `clip = core.std.Crop(clip, top=${cT}, bottom=${cB}, left=${cL}, right=${cR}); `;
+                        if (isCrop && (cT > 0 || cB > 0 || cL > 0 || cR > 0)) {
+                            pyString += `clip = core.std.Crop(clip, top=${cT}, bottom=${cB}, left=${cL}, right=${cR}); `;
+                        }
+
+                        // Assemble core.resize arguments (omitting width/height when Resizing is OFF)
+                        let vsResizeArgs = `clip`;
+                        if (isResize) {
+                            vsResizeArgs += `, width=${resW}, height=${resH}`;
+                        }
+                        vsResizeArgs += `, format=${vsFormat}`;
+
+                        if (isSignalOverride) {
+                            const inRange = genSourceRange.value;
+                            const outRange = genOutputRange.value;
+                            const inMat = genSourceMatrix.value;
+
+                            if (inMat === 'rgb') {
+                                // RGB source conversion to target YUV matrix
+                                const targetVsMat = (colorMatrix === 'bt709') ? '709' : '2020ncl';
+                                vsResizeArgs += `, range_s='${outRange}', matrix_s='${targetVsMat}'`;
+                            } else if (inMat === 'ictcp') {
+                                vsResizeArgs += `, range_in_s='${inRange}', range_s='${outRange}'`;
+                            } else {
+                                // Explicit YUV matrix lock (both in & out to prevent Resize error 3074)
+                                vsResizeArgs += `, range_in_s='${inRange}', range_s='${outRange}', matrix_in_s='${inMat}', matrix_s='${inMat}'`;
                             }
                         }
 
-                        // Format / Geometry Conversion logic
-                        let vsFormat = 'vs.YUV420P10';
-                        if (outDepth === '8') vsFormat = 'vs.YUV420P8';
-                        else if (outDepth === '12') vsFormat = 'vs.YUV420P12';
+                        const activeScaler = isResize ? genResizeAlgo.value : 'Spline36';
+                        pyString += `clip = core.resize.${activeScaler}(${vsResizeArgs}); clip.set_output()`;
 
-                        let vsResizeArgs = `clip, format=${vsFormat}`;
-                        
-                        // Dimensions
-                        const croppedW = srcW - cL - cR;
-                        const croppedH = srcH - cT - cB;
-                        let finalW = croppedW; let finalH = croppedH;
-                        
-                        if (useResize) {
-                            finalW = parseInt(document.getElementById('genResizeW').value) || 3840;
-                            finalH = parseInt(document.getElementById('genResizeH').value) || 2160;
-                            finalW -= (finalW % 2); finalH -= (finalH % 2);
-                            vsResizeArgs += `, width=${finalW}, height=${finalH}`;
-                        }
+                        // 8. Build x265 Command Arguments
+                        const [lvlIdc, lvlTier] = genHevcLevel.value.split('|');
+                        const tierFlag = (lvlTier === 'high') ? '--high-tier' : '--no-high-tier';
 
-                        // Explicit Input Matrixing (Manual Override)
-                        if (useSrcParams) {
-                            const srcRange = document.getElementById('srcRange').value;
-                            const srcGamut = document.getElementById('srcGamut').value;
-                            
-                            vsResizeArgs += `, range_in_s='${srcRange}'`;
-                            // Matrix deduction based on Gamut
-                            if (srcGamut === '709' || srcGamut === 'p3') vsResizeArgs += `, matrix_in_s='709'`;
-                            else if (srcGamut === '2020') vsResizeArgs += `, matrix_in_s='2020ncl'`;
-                        }
-
-                        const resAlgo = useResize ? document.getElementById('genResizeAlgo').value : "Spline36";
-                        pyString += `clip = core.resize.${resAlgo}(${vsResizeArgs}); `;
-                        pyString += `clip.set_output()`;
-
-
-                        // ==========================================
-                        // X265 COMMAND BUILDER 
-                        // ==========================================
-                        let x265Profile = 'main10'; let maxLuma = 1023;
-                        if (outDepth === '8') { x265Profile = 'main'; maxLuma = 255; }
-                        else if (outDepth === '12') { x265Profile = 'main12'; maxLuma = 4095; }
-
-                        let args = `--preset slow --profile ${x265Profile} --output-depth ${outDepth} --input-csp i420 `;
-
-                        if (useTune) args += `--tune ${document.getElementById('genTune').value} `;
-                        if (usePools) args += `--pools ${document.getElementById('genPools').value} `;
-
-                        const crf = document.getElementById('genCrf').value;
-                        args += `--crf ${crf} `;
-
-                        if (useVbv) {
-                            const vbvKbps = document.getElementById('genVbv').value * 1000;
-                            args += `--level-idc ${document.getElementById('genLevel').value} `;
-                            args += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} `;
-                        }
-
-                        // General optimization flags
+                        const vbvKbps = (parseInt(genVbv.value, 10) || 100) * 1000;
+                        const crfVal = genCrf.value;
                         const isExtreme = document.getElementById('genQualitySwitch').checked;
+                        const isScrubbing = document.getElementById('genScrubbing').checked;
+                        const embedInfo = document.getElementById('genInfoSEI').checked;
+
                         const bframes = isExtreme ? 8 : 4;
-                        args += `--aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} `;
-                        if (isExtreme) args += `--hme --tu-intra-depth 4 --tu-inter-depth 4 `;
+                        const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
+
+                        // Calculate effective FPS for GOP Keyint
+                        let effectiveFps = sourceFps;
+                        if (assumeFps !== 'original') {
+                            const [num, den] = assumeFps.split('/');
+                            effectiveFps = parseInt(num, 10) / parseInt(den, 10);
+                        } else if (lockFps !== 'original') {
+                            const [num, den] = lockFps.split('/');
+                            effectiveFps = parseInt(num, 10) / parseInt(den, 10);
+                        }
+                        const keyint = isScrubbing ? Math.round(effectiveFps * 2) : Math.round(effectiveFps * 10);
+
+                        // VUI Flags
+                        let transferFlag = 'arib-std-b67';
+                        if (transfer === 'bt709') transferFlag = 'bt709';
+                        else if (transfer === 'pq') transferFlag = 'smpte2084';
+
+                        let colorPrimFlag = 'bt2020';
+                        if (colorPrim === 'bt709') colorPrimFlag = 'bt709';
+                        else if (colorPrim === 'p3d65') colorPrimFlag = 'smpte432';
+                        else if (colorPrim === 'dcip3') colorPrimFlag = 'smpte431';
+
+                        const matrixFlag = colorMatrix; // 'bt709', 'bt2020nc', or 'ictcp'
+
+                        let x265Range = 'limited';
+                        if (isSignalOverride) {
+                            x265Range = genOutputRange.value;
+                        } else if (isIctcp) {
+                            x265Range = 'full';
+                        }
+
+                        // Mastering Display & Light Level Math
+                        const maxCll = parseInt(genMaxCll.value, 10) || 1000;
+                        const maxFall = parseInt(genMaxFall.value, 10) || 400;
+                        const masterColorSpace = genMasterColor.value;
+                        const masterMax = parseFloat(genMasterMax.value) || 1000;
+                        const masterMin = parseFloat(genMasterMin.value) || 0.0001;
+
+                        const calcMaxLumInt = Math.round(masterMax * 10000);
+                        const calcMinLumInt = Math.round(masterMin * 10000);
+                        const cleanMasterMax = Math.round(masterMax);
+
+                        let masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)";
+                        switch (masterColorSpace) {
+                            case 'bt2020': masterCoords = "G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)"; break;
+                            case 'p3d65':  masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)"; break;
+                            case 'dcip3':  masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15700,17550)"; break;
+                            case 'p3d60':  masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(16084,16884)"; break;
+                            case 'bt709':  masterCoords = "G(15000,30000)B(7500,3000)R(32000,16500)WP(15635,16450)"; break;
+                        }
+                        const masterDisplayString = `${masterCoords}L(${calcMaxLumInt},${calcMinLumInt})`;
+
+                        // Assemble x265 argument string
+                        let args = `--preset slow --profile ${x265Profile} --level-idc ${lvlIdc} ${tierFlag} --output-depth ${bitDepth} --input-csp ${inputCsp} `;
+
+                        if (chkCustomTune.checked) {
+                            args += `--tune ${genTune.value} `;
+                        }
+
+                        args += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} --crf ${crfVal} --aq-mode 3 --no-cutree --dynamic-rd 4 --ref 5 --bframes ${bframes} `;
+
+                        if (isCustomCpu) {
+                            const activeThreads = (cpuStrategy.value === 'p_only') ? pCores : totalCores;
+                            args += `--pools ${activeThreads} `;
+                        }
+
+                        if (isExtreme) {
+                            args += `--hme --tu-intra-depth 4 --tu-inter-depth 4 `;
+                        }
+
                         args += `--no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip `;
+                        args += `--colorprim ${colorPrimFlag} --transfer ${transferFlag} --colormatrix ${matrixFlag} --range ${x265Range} `;
 
-                        // Output Color Space Routing
-                        let tFlag = 'bt709'; let cFlag = 'bt709'; let mFlag = 'bt709';
-                        let chromaloc = 0;
+                        // Only inject --chromaloc when 4:2:0 is selected
+                        if (chroma === '420') {
+                            const chromaloc = (colorPrim === 'bt2020' || colorPrim === 'dcip3' || colorPrim === 'p3d65') ? 2 : 0;
+                            args += `--chromaloc ${chromaloc} `;
+                        }
 
-                        if (outTransfer === 'pq') tFlag = 'smpte2084';
-                        else if (outTransfer === 'hlg') tFlag = 'arib-std-b67';
+                        if (transfer === 'hlg') {
+                            args += `--atc-sei 18 --pic-struct 0 `;
+                        }
 
-                        if (outGamut === 'bt2020') { cFlag = 'bt2020'; mFlag = 'bt2020nc'; chromaloc = 2; }
-                        else if (outGamut === 'p3') { cFlag = 'smpte432'; mFlag = 'bt709'; chromaloc = 2; }
-
-                        args += `--colorprim ${cFlag} --transfer ${tFlag} --colormatrix ${mFlag} --range limited --chromaloc ${chromaloc} `;
-
-                        if (outTransfer === 'hlg') args += `--atc-sei 18 --pic-struct 0 `;
-
-                        // HDR Advanced Injectors
-                        const maxCll = document.getElementById('genMaxCll').value || 1000;
-                        const maxFall = document.getElementById('genMaxFall').value || 400;
-                        
-                        if (outTransfer === 'pq') {
-                            const masterMax = document.getElementById('genMasterMax').value || 1000;
-                            const masterMin = document.getElementById('genMasterMin').value || 0.0001;
-                            const calcMaxLumInt = Math.round(parseFloat(masterMax) * 10000);
-                            const calcMinLumInt = Math.round(parseFloat(masterMin) * 10000);
-                            
-                            // Map P3 correctly to Master Display coordinates
-                            let masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)"; // Default P3-D65
-                            if (outGamut === 'bt2020') masterCoords = "G(8500,39850)B(6550,2300)R(35400,14600)WP(15635,16450)";
-                            else if (outGamut === 'bt709') masterCoords = "G(15000,30000)B(7500,3000)R(32000,16500)WP(15635,16450)";
-                            
-                            const masterDisplayString = `${masterCoords}L(${calcMaxLumInt},${calcMinLumInt})`;
+                        if (transfer === 'pq' && !isIctcp) {
                             args += `--hdr10 --hdr10-opt --master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
-                            
-                            if (hdr10pSel.checked) args += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
                         }
 
-                        const gopType = document.getElementById('genScrubbing').checked ? '--no-open-gop' : '--open-gop';
-                        
-                        // Smart Keyint
-                        let baseFps = parseFloat(document.getElementById('genSourceFps').value) || 24;
-                        if (useFps && document.getElementById('genAssumeFps').value !== "original") {
-                            let [n, d] = document.getElementById('genAssumeFps').value.split('/'); baseFps = parseInt(n)/parseInt(d);
+                        if (useHdr10p) {
+                            args += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
                         }
-                        const keyint = document.getElementById('genScrubbing').checked ? Math.round(baseFps * 2) : Math.round(baseFps * 10);
 
                         args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --max-luma ${maxLuma} `;
-                        args += document.getElementById('genInfoSEI').checked ? `--info ` : `--no-info `;
+                        args += embedInfo ? `--info ` : `--no-info `;
 
-                        // Aspect Ratio Logic
-                        if (useDar && finalH > 0 && finalW > 0) {
-                            let darStr = document.getElementById('genDar').value;
-                            let tNum, tDen;
-                            if (darStr.includes(':')) {
-                                let parts = darStr.split(':'); tNum = parseInt(parts[0]); tDen = parseInt(parts[1]);
-                            } else { tNum = Math.round(parseFloat(darStr)*10000); tDen = 10000; }
-                            
-                            let sarNum = tNum * finalH; let sarDen = tDen * finalW;
-                            const gcd = function(a, b) { return b === 0 ? a : gcd(b, a % b); };
-                            const d = gcd(sarNum, sarDen);
-                            sarNum /= d; sarDen /= d;
-                            if (sarNum !== sarDen) args += `--sar ${sarNum}:${sarDen} `;
+                        if (sarFlag !== '') {
+                            args += sarFlag;
                         }
 
-                        if (dvSel.checked) {
-                            if (outTransfer === 'hlg') args += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin `;
-                            if (outTransfer === 'pq') args += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin `;
+                        if (useDv) {
+                            if (isIctcp) {
+                                args += `--dolby-vision-profile 5 --dolby-vision-rpu RPU.bin `;
+                            } else if (transfer === 'hlg') {
+                                args += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin `;
+                            } else {
+                                args += `--dolby-vision-profile 8.1 --dolby-vision-rpu RPU.bin `;
+                            }
                         }
 
-                        // Dynamic Steps logic for DV/HDR10+
+                        // 9. Step Sequencing for HDR10+ JSON & Dolby Vision RPU
                         let stepCount = 1;
-                        const dvRpuCommandContainer = document.getElementById('dvRpuCommandContainer');
-                        const hdr10pCommandContainer = document.getElementById('hdr10pCommandContainer');
-                        const dv81CommandContainer = document.getElementById('dv81CommandContainer');
-                        const dv84CommandContainer = document.getElementById('dv84CommandContainer');
-                        
-                        hdr10pCommandContainer.style.display = 'none'; dvRpuCommandContainer.style.display = 'none';
-                        dv81CommandContainer.style.display = 'none'; dv84CommandContainer.style.display = 'none';
+                        const hdr10pContainer = document.getElementById('hdr10pCommandContainer');
+                        const dvContainer = document.getElementById('dvCommandContainer');
+                        const mainCommandLabel = document.getElementById('mainCommandLabel');
 
-                        if (outTransfer === 'pq') {
-                            const cMax = document.getElementById('genMasterMax').value || 1000;
-                            const cMinInt = Math.round(parseFloat(document.getElementById('genMasterMin').value || 0.0001) * 10000);
-                            const dvCfg = `{"length":999999,"mode":0,"algorithm":0,"level6":{"max_display_mastering_luminance":${cMax},"min_display_mastering_luminance":${cMinInt},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}`;
-                            
-                            if (hdr10pSel.checked) {
-                                hdr10pCommandContainer.style.display = 'block';
-                                document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ JSON Creator Command`; stepCount++;
-                                let dpString = outGamut === 'bt2020' ? "Rec2020" : "DisplayP3";
-                                const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${dpString}","MaxLuminance":${cMax},"MinLuminance":${document.getElementById('genMasterMin').value || 0.0001}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"SceneFrameIndex":0,"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
-                                document.getElementById('hdr10pCommandOutput').innerText = `echo '${pqJsonString}' > fake_hdr10plus.json`;
-                            }
-                            if (dvSel.checked) {
-                                if (hdr10pSel.checked) {
-                                    dvRpuCommandContainer.style.display = 'block';
-                                    document.getElementById('dvRpuStepLabel').innerText = `Step ${stepCount}: Dolby Vision RPU Generator Command`;
-                                    document.getElementById('dvRpuCommandOutput').innerText = `echo '${dvCfg}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile 8.1 -o RPU.bin`;
-                                    stepCount++;
-                                } else {
-                                    dv81CommandContainer.style.display = 'block';
-                                    document.getElementById('dv81StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.1 RPU Creator`;
-                                    document.getElementById('dv81CommandOutput').innerText = `echo '${dvCfg}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile 8.1 -o RPU.bin`;
-                                    stepCount++;
-                                }
-                            }
-                        } else if (outTransfer === 'hlg' && dvSel.checked) {
-                            const cMax = document.getElementById('genMasterMax').value || 1000;
-                            const cMinInt = Math.round(parseFloat(document.getElementById('genMasterMin').value || 0.0001) * 10000);
-                            const dvCfg = `{"length":999999,"mode":0,"algorithm":0,"level6":{"max_display_mastering_luminance":${cMax},"min_display_mastering_luminance":${cMinInt},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}`;
-                            dv84CommandContainer.style.display = 'block';
-                            document.getElementById('dv84StepLabel').innerText = `Step ${stepCount}: Fake Dolby Vision 8.4 RPU Creator`;
-                            document.getElementById('dv84CommandOutput').innerText = `echo '${dvCfg}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile 8.4 -o RPU.bin`;
+                        // HDR10+ Step
+                        if (useHdr10p) {
+                            let hdr10pColorStr = "DisplayP3";
+                            if (masterColorSpace === 'bt2020') hdr10pColorStr = "Rec2020";
+                            else if (masterColorSpace === 'bt709') hdr10pColorStr = "Rec709";
+
+                            const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${hdr10pColorStr}","MaxLuminance":${cleanMasterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"SceneFrameIndex":0,"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
+
+                            hdr10pContainer.style.display = 'block';
+                            document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ Dynamic JSON Creator Command`;
+                            document.getElementById('hdr10pCommandOutput').innerText = `echo '${pqJsonString}' > fake_hdr10plus.json`;
                             stepCount++;
+                        } else {
+                            hdr10pContainer.style.display = 'none';
                         }
 
-                        document.getElementById('mainCommandLabel').innerText = stepCount > 1 ? `Step ${stepCount}: Generated Pipeline (Main Encode Command)` : "Generated Pipeline (Main Encode Command):";
+                        // Dolby Vision Step
+                        if (useDv) {
+                            dvContainer.style.display = 'block';
+                            const dvStepLabel = document.getElementById('dvStepLabel');
+                            const dvStepDesc = document.getElementById('dvStepDesc');
+                            const dvCommandOutput = document.getElementById('dvCommandOutput');
 
+                            if (isIctcp || dvRpuMode.value === 'extract') {
+                                dvStepLabel.innerText = `Step ${stepCount}: Extract Existing Dolby Vision RPU from Source`;
+                                dvStepDesc.innerHTML = `Run this command first to demux and extract the native dynamic <code>RPU.bin</code> directly from your input file.`;
+                                dvCommandOutput.innerText = `ffmpeg -loglevel error -i "${safeInFile}" -c:v copy -bsf:v hevc_mp4toannexb -f hevc - | dovi_tool extract-rpu - -o RPU.bin`;
+                            } else {
+                                const targetDvProf = (transfer === 'hlg') ? '8.4' : '8.1';
+                                const dvConfigString = `{"length":999999,"mode":0,"algorithm":0,"level6":{"max_display_mastering_luminance":${cleanMasterMax},"min_display_mastering_luminance":${calcMinLumInt},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}`;
+                                dvStepLabel.innerText = `Step ${stepCount}: Dolby Vision Profile ${targetDvProf} Static RPU Generator`;
+                                dvStepDesc.innerHTML = `Run this command first to generate a Profile ${targetDvProf} <code>RPU.bin</code> file using your Mastering Display and MaxCLL/MaxFALL parameters.`;
+                                dvCommandOutput.innerText = `echo '${dvConfigString}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile ${targetDvProf} -o RPU.bin && rm fake_dv.json`;
+                            }
+                            stepCount++;
+                        } else {
+                            dvContainer.style.display = 'none';
+                        }
+
+                        // Main Encode Step Label
+                        if (stepCount > 1) {
+                            mainCommandLabel.innerText = `Step ${stepCount}: Generated Pipeline (Main Encode Command)`;
+                        } else {
+                            mainCommandLabel.innerText = `Generated Pipeline (Main Encode Command):`;
+                        }
+
+                        // Final Single-Line Command Output
                         const singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && rm render_script.vpy`;
                         document.getElementById('finalCommandOutput').innerText = singleLineCommand;
                     }
 
+                    // Initialize on load
                     updateCommand();
                 });
 
-                function copyGeneratedCommand() {
-                    navigator.clipboard.writeText(document.getElementById('finalCommandOutput').innerText).then(() => {
-                        const btn = document.getElementById('copyBtn'); btn.innerText = "Copied!"; btn.classList.replace('btn-primary', 'btn-success');
-                        setTimeout(() => { btn.innerText = "Copy Encode Command"; btn.classList.replace('btn-success', 'btn-primary'); }, 2000);
-                    });
-                }
-                function copyHdr10pCommand() {
-                    navigator.clipboard.writeText(document.getElementById('hdr10pCommandOutput').innerText).then(() => {
-                        const btn = document.getElementById('copyHdrBtn'); btn.innerText = "Copied!"; btn.classList.replace('btn-danger', 'btn-success');
-                        setTimeout(() => { btn.innerText = "Copy JSON Command"; btn.classList.replace('btn-success', 'btn-danger'); }, 2000);
-                    });
-                }
-                function copyDvRpuCommand() {
-                    navigator.clipboard.writeText(document.getElementById('dvRpuCommandOutput').innerText).then(() => {
-                        const btn = document.getElementById('copyDvRpuBtn'); btn.innerText = "Copied!"; btn.classList.replace('btn-info', 'btn-success');
-                        setTimeout(() => { btn.innerText = "Copy RPU Command"; btn.classList.replace('btn-success', 'btn-info'); }, 2000);
-                    });
-                }
-                function copyDv81Command() {
-                    navigator.clipboard.writeText(document.getElementById('dv81CommandOutput').innerText).then(() => {
-                        const btn = document.getElementById('copyDv81Btn'); btn.innerText = "Copied!"; btn.classList.replace('btn-info', 'btn-success');
-                        setTimeout(() => { btn.innerText = "Copy DV8.1 Command"; btn.classList.replace('btn-success', 'btn-info'); }, 2000);
-                    });
-                }
-                function copyDv84Command() {
-                    navigator.clipboard.writeText(document.getElementById('dv84CommandOutput').innerText).then(() => {
-                        const btn = document.getElementById('copyDv84Btn'); btn.innerText = "Copied!"; btn.classList.replace('btn-info', 'btn-success');
-                        setTimeout(() => { btn.innerText = "Copy DV8.4 Command"; btn.classList.replace('btn-success', 'btn-info'); }, 2000);
+                function copyTextById(elementId, btnElement, originalText, btnClass) {
+                    const cmdText = document.getElementById(elementId).innerText;
+                    navigator.clipboard.writeText(cmdText).then(() => {
+                        btnElement.innerText = "Copied!";
+                        btnElement.classList.remove(btnClass);
+                        btnElement.classList.add('btn-success');
+                        setTimeout(() => {
+                            btnElement.innerText = originalText;
+                            btnElement.classList.remove('btn-success');
+                            btnElement.classList.add(btnClass);
+                        }, 2000);
                     });
                 }
             </script>
 
 		</div>
+
 	</div>
+	
+	<div id="footer-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+            <div class="container">
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" id="current-year">
+                                Copyright © 2026 by Shrey Tyagi. All rights reserved.
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
 </body>
 </html>
