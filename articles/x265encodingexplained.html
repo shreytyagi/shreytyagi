@@ -462,7 +462,7 @@
                         </div>
                     </div>
 
-                    <!-- Panel 1B: Manual Color Range Override (No Matrix Clutter) -->
+                    <!-- Panel 1B: Manual Color Range Override -->
                     <div class="console-panel console-panel-muted">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-success">»</span> Input & Output Color Range Override</span>
@@ -493,7 +493,7 @@
                         </div>
                     </div>
 
-                    <!-- Panel 1C: Frame Rate Controls (Main Rates + Fractional Checkboxes) -->
+                    <!-- Panel 1C: Frame Rate Controls -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-success">»</span> Temporal & Framerate Controls</span>
@@ -1102,7 +1102,6 @@
             <!-- Generator Logic -->
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
-                    // Official ITU-T H.265 Max Bitrate Lookup Table (in Mbps) per Level & Tier
                     const HEVC_LEVEL_LIMITS = {
                         '4.0': { main: 12,  high: 30  },
                         '4.1': { main: 20,  high: 50  },
@@ -1190,7 +1189,6 @@
                     const genMaxCll = document.getElementById('genMaxCll');
                     const genMaxFall = document.getElementById('genMaxFall');
 
-                    // Update Framerate Dropdown Labels when Fractional (/1001) Checkbox is toggled
                     function refreshFpsDropdownLabels(selectEl, isFractional) {
                         Array.from(selectEl.options).forEach(opt => {
                             if (opt.value !== 'original') {
@@ -1217,7 +1215,6 @@
                         updateCommand();
                     });
 
-                    // OS Compatibility Switcher
                     osSelector.addEventListener('change', function() {
                         guideMac.style.display = (this.value === 'mac') ? 'block' : 'none';
                         guideWin.style.display = (this.value === 'win') ? 'block' : 'none';
@@ -1229,7 +1226,6 @@
                         updateCommand();
                     });
 
-                    // HEVC Level & Tier change handler -> updates VBV slider & manual box max
                     function applyLevelTierCap() {
                         const lvl = genHevcLevel.value;
                         const tier = genHevcTier.value;
@@ -1252,13 +1248,11 @@
                     genHevcLevel.addEventListener('change', applyLevelTierCap);
                     genHevcTier.addEventListener('change', applyLevelTierCap);
 
-                    // Sync CRF Slider
                     genCrf.addEventListener('input', function() {
                         crfLabel.innerText = 'CRF ' + this.value;
                         updateCommand();
                     });
 
-                    // Sync Peak VBV Bitrate Slider <-> Manual Mbps Input
                     genVbv.addEventListener('input', function() {
                         genVbvManual.value = this.value;
                         updateCommand();
@@ -1283,7 +1277,6 @@
                         updateCommand();
                     });
 
-                    // Attach listeners to all remaining form inputs
                     const allInputs = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
                     allInputs.forEach(el => {
                         const skipIds = ['genHevcLevel', 'genHevcTier', 'genCrf', 'genVbv', 'genVbvManual', 'chkLockFrac', 'chkAssumeFrac', 'chkSourceFrac'];
@@ -1296,7 +1289,6 @@
                     });
 
                     function updateCommand() {
-                        // 1. Toggle States & Field Enabling/Disabling
                         genSourceEngine.disabled = !chkCustomEngine.checked;
                         if (!chkCustomEngine.checked) {
                             genSourceEngine.value = (osSelector.value === 'win') ? 'lsmas' : 'ffms2';
@@ -1329,14 +1321,12 @@
                         cpuECores.disabled = !isCustomCpu;
                         cpuStrategy.disabled = !isCustomCpu;
 
-                        // Update CPU Pool labels dynamically
                         const pCores = Math.max(1, parseInt(cpuPCores.value, 10) || 10);
                         const eCores = Math.max(0, parseInt(cpuECores.value, 10) || 0);
                         const totalCores = pCores + eCores;
                         optCpuPOnly.innerText = `Use Performance Cores Only (Recommended — ${pCores} Threads)`;
                         optCpuAll.innerText = `Use All Cores (P + E — ${totalCores} Threads, May Bottleneck on E-Cores)`;
 
-                        // 2. Enforce 8-Bit Chroma Rule: Hide 4:2:2 when 8-bit is selected
                         if (genBitDepth.value === '8') {
                             optChroma422.style.display = 'none';
                             optChroma422.disabled = true;
@@ -1348,14 +1338,12 @@
                             optChroma422.disabled = false;
                         }
 
-                        // 3. Automatic Matrix & Dolby Vision Profile Resolution
                         const useDv = genDv.checked;
                         const useHdr10p = genHdr10p.checked;
                         const transfer = genTransfer.value;
                         const colorPrim = genColorPrim.value;
                         const isDvp5 = (useDv && dvRpuMode.value === 'dvp5');
 
-                        // Automatically derive --colormatrix from Color Primaries (or DVP5 ICtCp)
                         let matrixFlag = 'bt2020nc';
                         if (isDvp5) {
                             matrixFlag = 'ictcp';
@@ -1381,15 +1369,13 @@
                             activeDvProfileBadge.className = 'rounded bg-primary text-white text-center small font-weight-bold d-flex align-items-center justify-content-center';
                         }
 
-                        // Enable Mastering Display & Content Light Level fields whenever needed by PQ, HDR10+, or Static DV Generation
-                        const needMasteringMeta = (transfer === 'pq' && !isDvp5) || useHdr10p || (useDv && dvRpuMode.value === 'generate' && !isDvp5);
+                        const needMasteringMeta = (transfer === 'pq' && !isDvp5) || useHdr10p || useDv;
                         genMasterColor.disabled = !needMasteringMeta;
                         genMasterMax.disabled = !needMasteringMeta;
                         genMasterMin.disabled = !needMasteringMeta;
                         genMaxCll.disabled = !needMasteringMeta;
                         genMaxFall.disabled = !needMasteringMeta;
 
-                        // 4. Mandatory Source Dimensions, Cropping & Aspect Ratio Math
                         let srcW = Math.max(2, parseInt(srcWInput.value, 10) || 3840);
                         let srcH = Math.max(2, parseInt(srcHInput.value, 10) || 2160);
                         srcW = srcW - (srcW % 2);
@@ -1414,7 +1400,6 @@
                         const finalVideoW = isResize ? resW : croppedW;
                         const finalVideoH = isResize ? resH : croppedH;
 
-                        // Calculate SAR if Custom DAR is enabled
                         const gcd = function(a, b) { return b === 0 ? a : gcd(b, a % b); };
                         let sarFlag = '';
                         let sarDisplay = '1:1 (Square Pixels)';
@@ -1438,7 +1423,6 @@
                             }
                         }
 
-                        // Update Live Geometry Telemetry Bar using reduced fractions
                         const cropGcd = gcd(croppedW, croppedH);
                         const cropRatioFrac = `${croppedW / cropGcd}:${croppedH / cropGcd}`;
                         const finalGcd = gcd(finalVideoW, finalVideoH);
@@ -1457,7 +1441,6 @@
                         }
                         document.getElementById('telSar').innerText = sarDisplay;
 
-                        // 5. Parse Filenames Safely
                         const rawInFile = document.getElementById('genInputFile').value || 'input.mov';
                         const rawOutFile = document.getElementById('genOutputFile').value || 'output.hevc';
                         const rawLutFile = genLutFile.value || '';
@@ -1466,7 +1449,6 @@
                         const safeOutFile = rawOutFile.replace(/"/g, '\\"');
                         const safeLutFile = rawLutFile.replace(/'/g, "\\'").replace(/"/g, '\\"');
 
-                        // 6. Determine VapourSynth Format & x265 Profile/CSP
                         const bitDepth = genBitDepth.value;
                         const chroma = genChroma.value;
 
@@ -1490,7 +1472,6 @@
                             else if (chroma === '444') x265Profile = 'main444-12';
                         }
 
-                        // 7. Build One-Line VapourSynth Python Script
                         const lockBase = genLockFps.value;
                         const assumeBase = genAssumeFps.value;
                         const sourceBase = parseInt(genSourceFps.value, 10) || 24;
@@ -1525,7 +1506,6 @@
                             pyString += `clip = core.std.Crop(clip, top=${cT}, bottom=${cB}, left=${cL}, right=${cR}); `;
                         }
 
-                        // Assemble core.resize arguments (omitting width/height when Resizing is OFF)
                         let vsResizeArgs = `clip`;
                         if (isResize) {
                             vsResizeArgs += `, width=${resW}, height=${resH}`;
@@ -1538,14 +1518,12 @@
                             vsResizeArgs += `, range_in_s='${inRange}', range_s='${outRange}'`;
                         }
 
-                        // Automatically supply matrix_s ONLY if input source is RGB (e.g. ProRes 4444), leaving YUV untouched
                         const autoVsRgbMatrix = (matrixFlag === 'bt709') ? '709' : '2020ncl';
                         vsResizeArgs += `, matrix_s='${autoVsRgbMatrix}' if clip.format.color_family==vs.RGB else None`;
 
                         const activeScaler = isResize ? genResizeAlgo.value : 'Spline36';
                         pyString += `clip = core.resize.${activeScaler}(${vsResizeArgs}); clip.set_output()`;
 
-                        // 8. Build x265 Command Arguments
                         const lvlIdc = genHevcLevel.value;
                         const lvlTier = genHevcTier.value;
                         const tierFlag = (lvlTier === 'high') ? '--high-tier' : '--no-high-tier';
@@ -1560,7 +1538,6 @@
                         const bframes = isExtreme ? 8 : 4;
                         const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
 
-                        // Calculate effective FPS for GOP Keyint
                         let effectiveFps = chkSourceFrac.checked ? ((sourceBase * 1000) / 1001) : sourceBase;
                         if (assumeBase !== 'original') {
                             const assumeInt = parseInt(assumeBase, 10);
@@ -1571,7 +1548,6 @@
                         }
                         const keyint = isScrubbing ? Math.round(effectiveFps * 2) : Math.round(effectiveFps * 10);
 
-                        // VUI Flags
                         let transferFlag = 'arib-std-b67';
                         if (transfer === 'bt709') transferFlag = 'bt709';
                         else if (transfer === 'pq') transferFlag = 'smpte2084';
@@ -1588,7 +1564,6 @@
                             x265Range = 'full';
                         }
 
-                        // Mastering Display & Light Level Math
                         const maxCll = parseInt(genMaxCll.value, 10) || 1000;
                         const maxFall = parseInt(genMaxFall.value, 10) || 400;
                         const masterColorSpace = genMasterColor.value;
@@ -1598,6 +1573,9 @@
                         const calcMaxLumInt = Math.round(masterMax * 10000);
                         const calcMinLumInt = Math.round(masterMin * 10000);
                         const cleanMasterMax = Math.round(masterMax);
+
+                        const hdr10pMaxScl = Math.round(maxCll * 10);
+                        const hdr10pAvgRgb = Math.round(maxFall * 10);
 
                         let masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)";
                         switch (masterColorSpace) {
@@ -1609,7 +1587,11 @@
                         }
                         const masterDisplayString = `${masterCoords}L(${calcMaxLumInt},${calcMinLumInt})`;
 
-                        // Assemble x265 argument string
+                        // Determine if Dolby Vision must use post-encode injection to prevent x265 VUI overwrite
+                        const isStandardDvConfig = (colorPrim === 'bt2020' && chroma === '420' && bitDepth === '10' && (transfer === 'pq' || transfer === 'hlg'));
+                        const useNativeDvFlag = useDv && isStandardDvConfig;
+                        const usePostDvInjection = useDv && !isStandardDvConfig;
+
                         let args = `--preset slow --profile ${x265Profile} --level-idc ${lvlIdc} ${tierFlag} --output-depth ${bitDepth} --input-csp ${inputCsp} `;
 
                         if (chkCustomTune.checked) {
@@ -1630,7 +1612,6 @@
                         args += `--no-sao --deblock -3:-3 --cbqpoffs -2 --crqpoffs -2 --tskip `;
                         args += `--colorprim ${colorPrimFlag} --transfer ${transferFlag} --colormatrix ${matrixFlag} --range ${x265Range} `;
 
-                        // Only inject --chromaloc when 4:2:0 is selected
                         if (chroma === '420') {
                             const chromaloc = (colorPrim === 'bt2020' || colorPrim === 'dcip3' || colorPrim === 'p3d65') ? 2 : 0;
                             args += `--chromaloc ${chromaloc} `;
@@ -1640,8 +1621,10 @@
                             args += `--atc-sei 18 --pic-struct 0 `;
                         }
 
-                        if (transfer === 'pq' && !isDvp5) {
-                            args += `--hdr10 --hdr10-opt --master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
+                        // Inject Mastering Display for PQ, HDR10+, or any active Mastering metadata
+                        if (transfer === 'pq' || useHdr10p || needMasteringMeta) {
+                            const hdr10OptFlag = (colorPrim === 'bt2020' && chroma === '420' && bitDepth === '10') ? '--hdr10 --hdr10-opt ' : '--hdr10 ';
+                            args += `${hdr10OptFlag}--master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
                         }
 
                         if (useHdr10p) {
@@ -1655,7 +1638,7 @@
                             args += sarFlag;
                         }
 
-                        if (useDv) {
+                        if (useNativeDvFlag) {
                             if (isDvp5) {
                                 args += `--dolby-vision-profile 5 --dolby-vision-rpu RPU.bin `;
                             } else if (transfer === 'hlg') {
@@ -1671,13 +1654,12 @@
                         const dvContainer = document.getElementById('dvCommandContainer');
                         const mainCommandLabel = document.getElementById('mainCommandLabel');
 
-                        // HDR10+ Step
                         if (useHdr10p) {
                             let hdr10pColorStr = "DisplayP3";
                             if (masterColorSpace === 'bt2020') hdr10pColorStr = "Rec2020";
                             else if (masterColorSpace === 'bt709') hdr10pColorStr = "Rec709";
 
-                            const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${hdr10pColorStr}","MaxLuminance":${cleanMasterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"SceneFrameIndex":0,"Sequence":0,"LuminanceParameters":{"AverageRGB":${maxFall},"MaxScl":[${maxCll},${maxCll},${maxCll}]}}]}`;
+                            const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${hdr10pColorStr}","MaxLuminance":${cleanMasterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"SceneFrameIndex":0,"Sequence":0,"LuminanceParameters":{"AverageRGB":${hdr10pAvgRgb},"MaxScl":[${hdr10pMaxScl},${hdr10pMaxScl},${hdr10pMaxScl}]}}]}`;
 
                             hdr10pContainer.style.display = 'block';
                             document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ Dynamic JSON Creator Command`;
@@ -1687,7 +1669,6 @@
                             hdr10pContainer.style.display = 'none';
                         }
 
-                        // Dolby Vision Step
                         if (useDv) {
                             dvContainer.style.display = 'block';
                             const dvStepLabel = document.getElementById('dvStepLabel');
@@ -1710,19 +1691,24 @@
                             dvContainer.style.display = 'none';
                         }
 
-                        // Main Encode Step Label
                         if (stepCount > 1) {
                             mainCommandLabel.innerText = `Step ${stepCount}: Generated Pipeline (Main Encode Command)`;
                         } else {
                             mainCommandLabel.innerText = `Generated Pipeline (Main Encode Command):`;
                         }
 
-                        // Final Single-Line Command Output
-                        const singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && rm render_script.vpy`;
+                        // Final Single-Line Command Output (with automatic post-encode dovi_tool inject-rpu for experimental color spaces)
+                        let singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && rm render_script.vpy`;
+                        
+                        if (usePostDvInjection) {
+                            const tempOut = "temp_encoded.hevc";
+                            const targetDvProf = (transfer === 'hlg') ? '8.4' : (isDvp5 ? '5' : '8.1');
+                            singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${tempOut}" ${args.trim()} && rm render_script.vpy && dovi_tool inject-rpu -i "${tempOut}" --rpu-in RPU.bin --profile ${targetDvProf} -o "${safeOutFile}" && rm "${tempOut}"`;
+                        }
+
                         document.getElementById('finalCommandOutput').innerText = singleLineCommand;
                     }
 
-                    // Initialize on load
                     updateCommand();
                 });
 
