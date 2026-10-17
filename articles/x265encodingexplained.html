@@ -42,7 +42,7 @@
             text-align: right !important;
         }
 
-        /* Uniform Field Header Row (Locks label & toggle switch height so inputs never misalign) */
+        /* Uniform Field Header Row (Locks label & toggle/checkbox height so inputs never misalign) */
         #encoding-tool-wrapper .field-header {
             display: flex !important;
             justify-content: space-between !important;
@@ -133,8 +133,8 @@
         }
         #encoding-tool-wrapper .input-group-text {
             height: 38px !important;
-            padding: 0 0.75rem !important;
-            font-size: 0.82rem !important;
+            padding: 0 0.7rem !important;
+            font-size: 0.80rem !important;
             font-weight: 600 !important;
             display: flex !important;
             align-items: center !important;
@@ -145,9 +145,34 @@
             border-bottom-right-radius: 4px !important;
         }
 
-        /* Bootstrap Custom Switch Reset & Vertical Centering */
+        /* Slider + Manual Input Row Alignment */
+        #encoding-tool-wrapper .slider-input-row {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.85rem !important;
+            min-height: 38px !important;
+        }
+        #encoding-tool-wrapper .slider-input-row .custom-range {
+            flex: 1 1 auto !important;
+            margin: 0 !important;
+        }
+        #encoding-tool-wrapper .slider-manual-box {
+            width: 130px !important;
+            flex: 0 0 130px !important;
+        }
+
+        /* Bootstrap Custom Switch & Checkbox Reset */
         #encoding-tool-wrapper .custom-control.custom-switch {
             padding-left: 2.25rem !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin: 0 !important;
+            min-height: 20px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        #encoding-tool-wrapper .custom-control.custom-checkbox {
+            padding-left: 1.4rem !important;
             padding-top: 0 !important;
             padding-bottom: 0 !important;
             margin: 0 !important;
@@ -175,6 +200,13 @@
             width: calc(1rem - 4px) !important;
             height: calc(1rem - 4px) !important;
             border-radius: 0.5rem !important;
+        }
+        #encoding-tool-wrapper .custom-checkbox .custom-control-label::before,
+        #encoding-tool-wrapper .custom-checkbox .custom-control-label::after {
+            top: 0.12rem !important;
+            left: -1.4rem !important;
+            width: 0.95rem !important;
+            height: 0.95rem !important;
         }
 
         /* Compatibility Guide Card */
@@ -365,25 +397,51 @@
                          ========================================================= -->
                     <h5 class="font-weight-bold text-success ui-section-title border-bottom border-success">1. VapourSynth Input & Frame Server Engine</h5>
                     
-                    <!-- Panel 1A: Input File, Filter Engine, 3D LUT -->
+                    <!-- Panel 1A: Input File, Mandatory Source Dimensions, Filter Engine, 3D LUT -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-success">»</span> Source File, Frame Server & 3D LUT</span>
-                            <span class="badge badge-light border text-muted">Core Input</span>
+                            <span class="panel-subtitle"><span class="text-success">»</span> Source File, Dimensions, Frame Server & 3D LUT</span>
+                            <span class="badge badge-light border text-muted">Mandatory Source Specs</span>
                         </div>
-                        <div class="row">
+                        <!-- Row 1: Mandatory File & Dimensions -->
+                        <div class="row mb-3 pb-3 border-bottom">
                             <div class="col-12 col-md-4 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label" for="genInputFile">Input File Name (Mandatory)</label>
                                 </div>
                                 <input type="text" class="form-control font-weight-bold" id="genInputFile" value="input.mov">
                             </div>
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="col-6 col-md-4">
+                                <div class="field-header">
+                                    <label class="pro-label" for="srcW">Input Frame Width (Mandatory)</label>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" class="form-control font-weight-bold" id="srcW" value="3840" min="2" step="2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">px</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <div class="field-header">
+                                    <label class="pro-label" for="srcH">Input Frame Height (Mandatory)</label>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" class="form-control font-weight-bold" id="srcH" value="2160" min="2" step="2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">px</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Row 2: Optional Filter Engine & 3D LUT -->
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label" for="genSourceEngine">Source Filter Engine</label>
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="chkCustomEngine">
-                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomEngine">Custom</label>
+                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomEngine">Custom Engine</label>
                                     </div>
                                 </div>
                                 <select class="form-control" id="genSourceEngine" disabled>
@@ -391,12 +449,12 @@
                                     <option value="lsmas">L-SMASH Works (lsmas)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <div class="field-header">
                                     <label class="pro-label" for="genLutFile">Apply Custom 3D LUT (.cube)</label>
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="chkCustomLut">
-                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomLut">Enable</label>
+                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomLut">Enable 3D LUT</label>
                                     </div>
                                 </div>
                                 <input type="text" class="form-control" id="genLutFile" placeholder="Optional grading_look.cube" disabled>
@@ -404,26 +462,26 @@
                         </div>
                     </div>
 
-                    <!-- Panel 1B: Manual Input Signal Override -->
+                    <!-- Panel 1B: Manual Color Range Override (No Matrix Clutter) -->
                     <div class="console-panel console-panel-muted">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-success">»</span> Input Signal Range & Matrix Override</span>
+                            <span class="panel-subtitle"><span class="text-success">»</span> Input & Output Color Range Override</span>
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="chkOverrideSignal">
-                                <label class="custom-control-label font-weight-bold text-dark" for="chkOverrideSignal" style="font-size: 0.82rem;">Manually Specify Input Signal</label>
+                                <label class="custom-control-label font-weight-bold text-dark" for="chkOverrideSignal" style="font-size: 0.82rem;">Manually Override Color Range</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label" for="genSourceRange">Input Color Range (Source)</label>
                                 </div>
                                 <select class="form-control" id="genSourceRange" disabled>
-                                    <option value="limited" selected>Limited Range (TV: 64–940)</option>
+                                    <option value="limited" selected>Limited Range (TV / Broadcast: 64–940)</option>
                                     <option value="full">Full Range (PC / Apple / DVP5: 0–1023)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="col-12 col-md-6">
                                 <div class="field-header">
                                     <label class="pro-label" for="genOutputRange">Output Color Range (Target)</label>
                                 </div>
@@ -432,120 +490,90 @@
                                     <option value="full">Full Range (Full Data Pass-Through)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-4">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genSourceMatrix">Input Signal Type / Matrix</label>
-                                </div>
-                                <select class="form-control" id="genSourceMatrix" disabled>
-                                    <option value="2020ncl" selected>YUV — BT.2020 (HDR / WCG)</option>
-                                    <option value="709">YUV — BT.709 (SDR / Display P3 SDR)</option>
-                                    <option value="rgb">RGB Source (ProRes 4444) → Convert to YUV</option>
-                                    <option value="ictcp">ICtCp (Dolby Vision Profile 5 Pass-Through)</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Panel 1C: Frame Rate Controls (Strict Fractional Representation) -->
+                    <!-- Panel 1C: Frame Rate Controls (Main Rates + Fractional Checkboxes) -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-success">»</span> Temporal & Fractional Framerate Controls</span>
-                            <span class="badge badge-success">Always Active (Drives GOP Keyint)</span>
+                            <span class="panel-subtitle"><span class="text-success">»</span> Temporal & Framerate Controls</span>
+                            <span class="badge badge-success">Check "Fractional (/1001)" for NTSC / Pull-Down Rates</span>
                         </div>
                         <div class="row">
+                            <!-- 1. Lock Framerate -->
                             <div class="col-12 col-md-4 mb-3 mb-md-0">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genLockFps">1. Lock Framerate (Fix VFR → CFR)</label>
+                                    <label class="pro-label" for="genLockFps">1. Lock Framerate (Fix VFR)</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="chkLockFrac">
+                                        <label class="custom-control-label small font-weight-bold text-primary" for="chkLockFrac">Fractional (/1001)</label>
+                                    </div>
                                 </div>
                                 <select class="form-control" id="genLockFps">
-                                    <option value="original" selected>Do Not Lock (Keep Original Timestamps)</option>
-                                    <option value="24000/1001">24000/1001 fps</option>
-                                    <option value="24/1">24/1 fps (24 fps)</option>
-                                    <option value="25000/1001">25000/1001 fps</option>
-                                    <option value="25/1">25/1 fps (25 fps)</option>
-                                    <option value="30000/1001">30000/1001 fps</option>
-                                    <option value="30/1">30/1 fps (30 fps)</option>
-                                    <option value="48000/1001">48000/1001 fps</option>
-                                    <option value="48/1">48/1 fps (48 fps)</option>
-                                    <option value="50000/1001">50000/1001 fps</option>
-                                    <option value="50/1">50/1 fps (50 fps)</option>
-                                    <option value="60000/1001">60000/1001 fps</option>
-                                    <option value="60/1">60/1 fps (60 fps)</option>
-                                    <option value="72000/1001">72000/1001 fps</option>
-                                    <option value="72/1">72/1 fps (72 fps)</option>
-                                    <option value="75000/1001">75000/1001 fps</option>
-                                    <option value="75/1">75/1 fps (75 fps)</option>
-                                    <option value="90000/1001">90000/1001 fps</option>
-                                    <option value="90/1">90/1 fps (90 fps)</option>
-                                    <option value="96000/1001">96000/1001 fps</option>
-                                    <option value="96/1">96/1 fps (96 fps)</option>
-                                    <option value="100000/1001">100000/1001 fps</option>
-                                    <option value="100/1">100/1 fps (100 fps)</option>
-                                    <option value="120000/1001">120000/1001 fps</option>
-                                    <option value="120/1">120/1 fps (120 fps)</option>
+                                    <option value="original" selected>Do Not Lock (Original)</option>
+                                    <option value="24">24 fps</option>
+                                    <option value="25">25 fps</option>
+                                    <option value="30">30 fps</option>
+                                    <option value="48">48 fps</option>
+                                    <option value="50">50 fps</option>
+                                    <option value="60">60 fps</option>
+                                    <option value="72">72 fps</option>
+                                    <option value="75">75 fps</option>
+                                    <option value="90">90 fps</option>
+                                    <option value="96">96 fps</option>
+                                    <option value="100">100 fps</option>
+                                    <option value="120">120 fps</option>
                                 </select>
                             </div>
+
+                            <!-- 2. Speed Override -->
                             <div class="col-12 col-md-4 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label" for="genAssumeFps">2. Speed Override (Retiming)</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="chkAssumeFrac">
+                                        <label class="custom-control-label small font-weight-bold text-primary" for="chkAssumeFrac">Fractional (/1001)</label>
+                                    </div>
                                 </div>
                                 <select class="form-control" id="genAssumeFps">
                                     <option value="original" selected>1:1 Native Speed (Unchanged)</option>
-                                    <option value="24000/1001">24000/1001 fps</option>
-                                    <option value="24/1">24/1 fps (24 fps)</option>
-                                    <option value="25000/1001">25000/1001 fps</option>
-                                    <option value="25/1">25/1 fps (25 fps)</option>
-                                    <option value="30000/1001">30000/1001 fps</option>
-                                    <option value="30/1">30/1 fps (30 fps)</option>
-                                    <option value="48000/1001">48000/1001 fps</option>
-                                    <option value="48/1">48/1 fps (48 fps)</option>
-                                    <option value="50000/1001">50000/1001 fps</option>
-                                    <option value="50/1">50/1 fps (50 fps)</option>
-                                    <option value="60000/1001">60000/1001 fps</option>
-                                    <option value="60/1">60/1 fps (60 fps)</option>
-                                    <option value="72000/1001">72000/1001 fps</option>
-                                    <option value="72/1">72/1 fps (72 fps)</option>
-                                    <option value="75000/1001">75000/1001 fps</option>
-                                    <option value="75/1">75/1 fps (75 fps)</option>
-                                    <option value="90000/1001">90000/1001 fps</option>
-                                    <option value="90/1">90/1 fps (90 fps)</option>
-                                    <option value="96000/1001">96000/1001 fps</option>
-                                    <option value="96/1">96/1 fps (96 fps)</option>
-                                    <option value="100000/1001">100000/1001 fps</option>
-                                    <option value="100/1">100/1 fps (100 fps)</option>
-                                    <option value="120000/1001">120000/1001 fps</option>
-                                    <option value="120/1">120/1 fps (120 fps)</option>
+                                    <option value="24">24 fps</option>
+                                    <option value="25">25 fps</option>
+                                    <option value="30">30 fps</option>
+                                    <option value="48">48 fps</option>
+                                    <option value="50">50 fps</option>
+                                    <option value="60">60 fps</option>
+                                    <option value="72">72 fps</option>
+                                    <option value="75">75 fps</option>
+                                    <option value="90">90 fps</option>
+                                    <option value="96">96 fps</option>
+                                    <option value="100">100 fps</option>
+                                    <option value="120">120 fps</option>
                                 </select>
                             </div>
+
+                            <!-- 3. Base Framerate -->
                             <div class="col-12 col-md-4">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genSourceFps">3. Base Framerate (For Keyint Math)</label>
+                                    <label class="pro-label" for="genSourceFps">3. Base Framerate (Keyint)</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="chkSourceFrac">
+                                        <label class="custom-control-label small font-weight-bold text-primary" for="chkSourceFrac">Fractional (/1001)</label>
+                                    </div>
                                 </div>
                                 <select class="form-control font-weight-bold" id="genSourceFps">
-                                    <option value="24000/1001">24000/1001 fps</option>
-                                    <option value="24/1" selected>24/1 fps (24 fps)</option>
-                                    <option value="25000/1001">25000/1001 fps</option>
-                                    <option value="25/1">25/1 fps (25 fps)</option>
-                                    <option value="30000/1001">30000/1001 fps</option>
-                                    <option value="30/1">30/1 fps (30 fps)</option>
-                                    <option value="48000/1001">48000/1001 fps</option>
-                                    <option value="48/1">48/1 fps (48 fps)</option>
-                                    <option value="50000/1001">50000/1001 fps</option>
-                                    <option value="50/1">50/1 fps (50 fps)</option>
-                                    <option value="60000/1001">60000/1001 fps</option>
-                                    <option value="60/1">60/1 fps (60 fps)</option>
-                                    <option value="72000/1001">72000/1001 fps</option>
-                                    <option value="72/1">72/1 fps (72 fps)</option>
-                                    <option value="75000/1001">75000/1001 fps</option>
-                                    <option value="75/1">75/1 fps (75 fps)</option>
-                                    <option value="90000/1001">90000/1001 fps</option>
-                                    <option value="90/1">90/1 fps (90 fps)</option>
-                                    <option value="96000/1001">96000/1001 fps</option>
-                                    <option value="96/1">96/1 fps (96 fps)</option>
-                                    <option value="100000/1001">100000/1001 fps</option>
-                                    <option value="100/1">100/1 fps (100 fps)</option>
-                                    <option value="120000/1001">120000/1001 fps</option>
-                                    <option value="120/1">120/1 fps (120 fps)</option>
+                                    <option value="24" selected>24 fps</option>
+                                    <option value="25">25 fps</option>
+                                    <option value="30">30 fps</option>
+                                    <option value="48">48 fps</option>
+                                    <option value="50">50 fps</option>
+                                    <option value="60">60 fps</option>
+                                    <option value="72">72 fps</option>
+                                    <option value="75">75 fps</option>
+                                    <option value="90">90 fps</option>
+                                    <option value="96">96 fps</option>
+                                    <option value="100">100 fps</option>
+                                    <option value="120">120 fps</option>
                                 </select>
                             </div>
                         </div>
@@ -555,18 +583,18 @@
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-success">»</span> Geometry: Cropping & Resolution Scaling</span>
-                            <span class="small text-muted">Source W/H automatically unlocks when Cropping or Non-Square DAR is active</span>
+                            <span class="small text-muted">Uses Mandatory Input Width & Height from Panel 1A</span>
                         </div>
 
                         <!-- Live Telemetry Bar -->
                         <div class="telemetry-bar">
                             <div class="telemetry-item">
-                                <span class="telemetry-label">Active Canvas:</span>
-                                <span class="telemetry-val" id="telCanvas">Native Source (Unchanged)</span>
+                                <span class="telemetry-label">Post-Crop Canvas:</span>
+                                <span class="telemetry-val" id="telCropped">3840 × 2160 (16:9)</span>
                             </div>
                             <div class="telemetry-item">
-                                <span class="telemetry-label">Post-Crop:</span>
-                                <span class="telemetry-val" id="telCropped">3840 × 2160 (16:9)</span>
+                                <span class="telemetry-label">Final Encode Resolution:</span>
+                                <span class="telemetry-val" id="telCanvas">3840 × 2160 (Native Pass-Through)</span>
                             </div>
                             <div class="telemetry-item">
                                 <span class="telemetry-label">Output SAR:</span>
@@ -582,41 +610,41 @@
                                     <label class="custom-control-label font-weight-bold text-dark" for="chkCrop" style="font-size: 0.85rem;">Enable Cropping (Even Pixel Values Only)</label>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-2 mb-3 mb-md-0">
-                                <div class="field-header">
-                                    <label class="pro-label" for="srcW">Source Width</label>
-                                </div>
-                                <input type="number" class="form-control font-weight-bold" id="srcW" value="3840" min="2" step="2" disabled>
-                            </div>
-                            <div class="col-6 col-md-2 mb-3 mb-md-0">
-                                <div class="field-header">
-                                    <label class="pro-label" for="srcH">Source Height</label>
-                                </div>
-                                <input type="number" class="form-control font-weight-bold" id="srcH" value="2160" min="2" step="2" disabled>
-                            </div>
-                            <div class="col-6 col-md-2 mb-3 mb-md-0">
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label text-danger" for="cropT">Crop Top</label>
                                 </div>
-                                <input type="number" class="form-control text-center" id="cropT" value="0" min="0" step="2" disabled>
+                                <div class="input-group">
+                                    <input type="number" class="form-control text-center" id="cropT" value="0" min="0" step="2" disabled>
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                </div>
                             </div>
-                            <div class="col-6 col-md-2 mb-3 mb-md-0">
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label text-danger" for="cropB">Crop Bottom</label>
                                 </div>
-                                <input type="number" class="form-control text-center" id="cropB" value="0" min="0" step="2" disabled>
+                                <div class="input-group">
+                                    <input type="number" class="form-control text-center" id="cropB" value="0" min="0" step="2" disabled>
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                </div>
                             </div>
-                            <div class="col-6 col-md-2">
+                            <div class="col-6 col-md-3">
                                 <div class="field-header">
                                     <label class="pro-label text-danger" for="cropL">Crop Left</label>
                                 </div>
-                                <input type="number" class="form-control text-center" id="cropL" value="0" min="0" step="2" disabled>
+                                <div class="input-group">
+                                    <input type="number" class="form-control text-center" id="cropL" value="0" min="0" step="2" disabled>
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                </div>
                             </div>
-                            <div class="col-6 col-md-2">
+                            <div class="col-6 col-md-3">
                                 <div class="field-header">
                                     <label class="pro-label text-danger" for="cropR">Crop Right</label>
                                 </div>
-                                <input type="number" class="form-control text-center" id="cropR" value="0" min="0" step="2" disabled>
+                                <div class="input-group">
+                                    <input type="number" class="form-control text-center" id="cropR" value="0" min="0" step="2" disabled>
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                </div>
                             </div>
                         </div>
 
@@ -642,13 +670,19 @@
                                 <div class="field-header">
                                     <label class="pro-label" for="genResizeW">Target Width</label>
                                 </div>
-                                <input type="number" class="form-control" id="genResizeW" value="3840" min="2" step="2" disabled>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genResizeW" value="3840" min="2" step="2" disabled>
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                </div>
                             </div>
                             <div class="col-6 col-md-4">
                                 <div class="field-header">
                                     <label class="pro-label" for="genResizeH">Target Height</label>
                                 </div>
-                                <input type="number" class="form-control" id="genResizeH" value="2160" min="2" step="2" disabled>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="genResizeH" value="2160" min="2" step="2" disabled>
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -695,14 +729,14 @@
                         </div>
                     </div>
 
-                    <!-- Panel 2B: VUI Color Science Metadata (Always Active) -->
+                    <!-- Panel 2B: VUI Color Science Metadata (Transfer & Primaries Only) -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> Video Usability Information (VUI Color Science)</span>
-                            <span class="badge badge-light border text-muted">Independent Stream Tags</span>
+                            <span class="badge badge-light border text-muted" id="autoMatrixBadge">Matrix Automatically Managed (--colormatrix bt2020nc)</span>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label" for="genTransfer">Transfer Function (--transfer)</label>
                                 </div>
@@ -712,7 +746,7 @@
                                     <option value="hlg" selected>HDR (HLG / ARIB STD-B67)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="col-12 col-md-6">
                                 <div class="field-header">
                                     <label class="pro-label" for="genColorPrim">Color Primaries (--colorprim)</label>
                                 </div>
@@ -721,16 +755,6 @@
                                     <option value="p3d65">P3-D65 (Display P3)</option>
                                     <option value="dcip3">P3-DCI (Cinema P3)</option>
                                     <option value="bt2020" selected>BT.2020</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genColorMatrix">Color Matrix (--colormatrix)</label>
-                                </div>
-                                <select class="form-control" id="genColorMatrix">
-                                    <option value="bt709">BT.709</option>
-                                    <option value="bt2020nc" selected>BT.2020</option>
-                                    <option value="ictcp">ICtCp (Dolby Vision IPT)</option>
                                 </select>
                             </div>
                         </div>
@@ -787,65 +811,76 @@
                         </div>
                     </div>
 
-                    <!-- Panel 2D: HEVC Level/Tier, CRF & VBV Bitrate Control -->
+                    <!-- Panel 2D: Split HEVC Level & Tier Selectors + CRF & VBV Slider/Manual Input -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> HEVC Level Compliance & Rate Control</span>
                             <span class="badge badge-info" id="levelCapBadge">Level 5.0 High Tier Cap: 100 Mbps</span>
                         </div>
-                        <div class="row">
-                            <div class="col-12 mb-4">
+
+                        <!-- Row 1: Two Separate Dropdowns for Level and Tier -->
+                        <div class="row mb-4 pb-3 border-bottom">
+                            <div class="col-12 col-md-7 mb-3 mb-md-0">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genHevcLevel">HEVC Level & Tier Specification (--level-idc / Tier Hardware Limits)</label>
+                                    <label class="pro-label" for="genHevcLevel">HEVC Level (--level-idc)</label>
                                 </div>
                                 <select class="form-control font-weight-bold text-dark" id="genHevcLevel">
-                                    <optgroup label="Level 4.x (Full HD 1080p)">
-                                        <option value="4.0|main|12">Level 4.0 (Main Tier) — Max: 1920×1080 @ 30/1 fps | Max Bitrate: 12 Mbps</option>
-                                        <option value="4.0|high|30">Level 4.0 (High Tier) — Max: 1920×1080 @ 30/1 fps | Max Bitrate: 30 Mbps</option>
-                                        <option value="4.1|main|20">Level 4.1 (Main Tier) — Max: 1920×1080 @ 60/1 fps | Max Bitrate: 20 Mbps</option>
-                                        <option value="4.1|high|50">Level 4.1 (High Tier) — Max: 1920×1080 @ 60/1 fps | Max Bitrate: 50 Mbps</option>
-                                    </optgroup>
-                                    <optgroup label="Level 5.x (4K UHD / DCI 4K)">
-                                        <option value="5.0|main|25">Level 5.0 (Main Tier) — Max: 4096×2160 @ 30/1 fps | Max Bitrate: 25 Mbps</option>
-                                        <option value="5.0|high|100" selected>Level 5.0 (High Tier) — Max: 4096×2160 @ 30/1 fps | Max Bitrate: 100 Mbps (Recommended 4K 24/1)</option>
-                                        <option value="5.1|main|40">Level 5.1 (Main Tier) — Max: 4096×2160 @ 60/1 fps | Max Bitrate: 40 Mbps</option>
-                                        <option value="5.1|high|160">Level 5.1 (High Tier) — Max: 4096×2160 @ 60/1 fps | Max Bitrate: 160 Mbps</option>
-                                        <option value="5.2|main|60">Level 5.2 (Main Tier) — Max: 4096×2160 @ 120/1 fps | Max Bitrate: 60 Mbps</option>
-                                        <option value="5.2|high|240">Level 5.2 (High Tier) — Max: 4096×2160 @ 120/1 fps | Max Bitrate: 240 Mbps</option>
-                                    </optgroup>
-                                    <optgroup label="Level 6.x (8K UHD)">
-                                        <option value="6.0|main|60">Level 6.0 (Main Tier) — Max: 8192×4320 @ 30/1 fps | Max Bitrate: 60 Mbps</option>
-                                        <option value="6.0|high|240">Level 6.0 (High Tier) — Max: 8192×4320 @ 30/1 fps | Max Bitrate: 240 Mbps</option>
-                                        <option value="6.1|main|120">Level 6.1 (Main Tier) — Max: 8192×4320 @ 60/1 fps | Max Bitrate: 120 Mbps</option>
-                                        <option value="6.1|high|480">Level 6.1 (High Tier) — Max: 8192×4320 @ 60/1 fps | Max Bitrate: 480 Mbps</option>
-                                        <option value="6.2|main|240">Level 6.2 (Main Tier) — Max: 8192×4320 @ 120/1 fps | Max Bitrate: 240 Mbps</option>
-                                        <option value="6.2|high|800">Level 6.2 (High Tier) — Max: 8192×4320 @ 120/1 fps | Max Bitrate: 800 Mbps</option>
-                                    </optgroup>
+                                    <option value="4.0">Level 4.0 — Max: 1920×1080 @ 30 fps</option>
+                                    <option value="4.1">Level 4.1 — Max: 1920×1080 @ 60 fps</option>
+                                    <option value="5.0" selected>Level 5.0 — Max: 4096×2160 @ 30 fps</option>
+                                    <option value="5.1">Level 5.1 — Max: 4096×2160 @ 60 fps</option>
+                                    <option value="5.2">Level 5.2 — Max: 4096×2160 @ 120 fps</option>
+                                    <option value="6.0">Level 6.0 — Max: 8192×4320 @ 30 fps</option>
+                                    <option value="6.1">Level 6.1 — Max: 8192×4320 @ 60 fps</option>
+                                    <option value="6.2">Level 6.2 — Max: 8192×4320 @ 120 fps</option>
                                 </select>
                             </div>
+                            <div class="col-12 col-md-5">
+                                <div class="field-header">
+                                    <label class="pro-label" for="genHevcTier">HEVC Tier</label>
+                                </div>
+                                <select class="form-control font-weight-bold text-dark" id="genHevcTier">
+                                    <option value="high" selected>High Tier</option>
+                                    <option value="main">Main Tier</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: CRF & Peak VBV Bitrate (Slider + Manual Mbps Input) -->
+                        <div class="row">
                             <div class="col-12 col-md-6 mb-3 mb-md-0">
                                 <div class="field-header">
                                     <label class="pro-label" for="genCrf">Constant Rate Factor (CRF Quality)</label>
-                                    <span id="crfLabel" class="text-primary font-weight-bold" style="font-size: 0.85rem;">19</span>
+                                    <span id="crfLabel" class="text-primary font-weight-bold" style="font-size: 0.85rem;">CRF 19</span>
                                 </div>
-                                <input type="range" class="custom-range" id="genCrf" min="0" max="30" value="19" step="1">
+                                <div class="slider-input-row">
+                                    <input type="range" class="custom-range" id="genCrf" min="0" max="30" value="19" step="1">
+                                </div>
                                 <div class="d-flex justify-content-between small text-muted mt-1" style="font-size: 0.70rem;">
                                     <span>0 (Lossless)</span>
                                     <span>14 (Archival)</span>
-                                    <span>19 (Balanced Default)</span>
+                                    <span>19 (Default)</span>
                                     <span>30 (Compressed)</span>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <div class="field-header">
                                     <label class="pro-label" for="genVbv">Peak VBV Bitrate Cap (--vbv-maxrate)</label>
-                                    <span id="vbvLabel" class="text-primary font-weight-bold" style="font-size: 0.85rem;">100 Mbps</span>
+                                    <span class="small font-weight-bold text-secondary" id="vbvMaxHeaderNote">Tier Max: 100 Mbps</span>
                                 </div>
-                                <input type="range" class="custom-range" id="genVbv" min="1" max="100" value="100" step="1">
+                                <div class="slider-input-row">
+                                    <input type="range" class="custom-range" id="genVbv" min="1" max="100" value="100" step="1">
+                                    <div class="input-group slider-manual-box">
+                                        <input type="number" class="form-control font-weight-bold text-primary text-center" id="genVbvManual" value="100" min="1" max="100" step="1">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Mbps</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="d-flex justify-content-between small text-muted mt-1" style="font-size: 0.70rem;">
                                     <span>1 Mbps</span>
                                     <span id="vbvMidTick">50 Mbps</span>
-                                    <span id="vbvMaxTick">100 Mbps (Level Cap)</span>
+                                    <span id="vbvMaxTick">100 Mbps (Tier Max)</span>
                                 </div>
                             </div>
                         </div>
@@ -955,11 +990,12 @@
                         <div class="row pb-3 mb-3 border-bottom">
                             <div class="col-12 col-md-8 mb-3 mb-md-0">
                                 <div class="field-header">
-                                    <label class="pro-label text-info" for="dvRpuMode">Dolby Vision RPU Acquisition Mode</label>
+                                    <label class="pro-label text-info" for="dvRpuMode">Dolby Vision RPU Mode & Profile</label>
                                 </div>
                                 <select class="form-control font-weight-bold" id="dvRpuMode">
-                                    <option value="generate" selected>Generate Static RPU from Mastering Metadata Below (Profile 8.1 / 8.4)</option>
-                                    <option value="extract">Extract & Copy Existing RPU Directly from Source File (Profile 5 / 8.1 / 8.4)</option>
+                                    <option value="generate" selected>Generate Static RPU from Mastering Metadata Below (Profile 8.1 PQ / 8.4 HLG)</option>
+                                    <option value="extract">Extract & Copy Existing RPU from Source File (Profile 8.1 PQ / 8.4 HLG)</option>
+                                    <option value="dvp5">Dolby Vision Profile 5 Pass-Through (ICtCp Full Range — Extract RPU from Source)</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-4">
@@ -1066,6 +1102,18 @@
             <!-- Generator Logic -->
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
+                    // Official ITU-T H.265 Max Bitrate Lookup Table (in Mbps) per Level & Tier
+                    const HEVC_LEVEL_LIMITS = {
+                        '4.0': { main: 12,  high: 30  },
+                        '4.1': { main: 20,  high: 50  },
+                        '5.0': { main: 25,  high: 100 },
+                        '5.1': { main: 40,  high: 160 },
+                        '5.2': { main: 60,  high: 240 },
+                        '6.0': { main: 60,  high: 240 },
+                        '6.1': { main: 120, high: 480 },
+                        '6.2': { main: 240, high: 800 }
+                    };
+
                     const osSelector = document.getElementById('osSelector');
                     const guideMac = document.getElementById('guideMac');
                     const guideWin = document.getElementById('guideWin');
@@ -1079,7 +1127,13 @@
                     const chkOverrideSignal = document.getElementById('chkOverrideSignal');
                     const genSourceRange = document.getElementById('genSourceRange');
                     const genOutputRange = document.getElementById('genOutputRange');
-                    const genSourceMatrix = document.getElementById('genSourceMatrix');
+
+                    const genLockFps = document.getElementById('genLockFps');
+                    const chkLockFrac = document.getElementById('chkLockFrac');
+                    const genAssumeFps = document.getElementById('genAssumeFps');
+                    const chkAssumeFrac = document.getElementById('chkAssumeFrac');
+                    const genSourceFps = document.getElementById('genSourceFps');
+                    const chkSourceFrac = document.getElementById('chkSourceFrac');
 
                     const chkCrop = document.getElementById('chkCrop');
                     const srcWInput = document.getElementById('srcW');
@@ -1100,7 +1154,7 @@
 
                     const genTransfer = document.getElementById('genTransfer');
                     const genColorPrim = document.getElementById('genColorPrim');
-                    const genColorMatrix = document.getElementById('genColorMatrix');
+                    const autoMatrixBadge = document.getElementById('autoMatrixBadge');
 
                     const chkCustomDar = document.getElementById('chkCustomDar');
                     const genDar = document.getElementById('genDar');
@@ -1108,11 +1162,13 @@
                     const genTune = document.getElementById('genTune');
 
                     const genHevcLevel = document.getElementById('genHevcLevel');
+                    const genHevcTier = document.getElementById('genHevcTier');
                     const levelCapBadge = document.getElementById('levelCapBadge');
+                    const vbvMaxHeaderNote = document.getElementById('vbvMaxHeaderNote');
                     const genCrf = document.getElementById('genCrf');
                     const crfLabel = document.getElementById('crfLabel');
                     const genVbv = document.getElementById('genVbv');
-                    const vbvLabel = document.getElementById('vbvLabel');
+                    const genVbvManual = document.getElementById('genVbvManual');
                     const vbvMidTick = document.getElementById('vbvMidTick');
                     const vbvMaxTick = document.getElementById('vbvMaxTick');
 
@@ -1134,6 +1190,33 @@
                     const genMaxCll = document.getElementById('genMaxCll');
                     const genMaxFall = document.getElementById('genMaxFall');
 
+                    // Update Framerate Dropdown Labels when Fractional (/1001) Checkbox is toggled
+                    function refreshFpsDropdownLabels(selectEl, isFractional) {
+                        Array.from(selectEl.options).forEach(opt => {
+                            if (opt.value !== 'original') {
+                                const baseRate = parseInt(opt.value, 10);
+                                if (isFractional) {
+                                    opt.text = `${baseRate * 1000}/1001 fps (${baseRate} fps)`;
+                                } else {
+                                    opt.text = `${baseRate} fps`;
+                                }
+                            }
+                        });
+                    }
+
+                    chkLockFrac.addEventListener('change', function() {
+                        refreshFpsDropdownLabels(genLockFps, this.checked);
+                        updateCommand();
+                    });
+                    chkAssumeFrac.addEventListener('change', function() {
+                        refreshFpsDropdownLabels(genAssumeFps, this.checked);
+                        updateCommand();
+                    });
+                    chkSourceFrac.addEventListener('change', function() {
+                        refreshFpsDropdownLabels(genSourceFps, this.checked);
+                        updateCommand();
+                    });
+
                     // OS Compatibility Switcher
                     osSelector.addEventListener('change', function() {
                         guideMac.style.display = (this.value === 'mac') ? 'block' : 'none';
@@ -1146,46 +1229,71 @@
                         updateCommand();
                     });
 
-                    // HEVC Level & Tier change handler -> updates VBV slider max & value
-                    genHevcLevel.addEventListener('change', function() {
-                        const [lvl, tier, maxRateStr] = this.value.split('|');
-                        const maxRate = parseInt(maxRateStr, 10);
+                    // HEVC Level & Tier change handler -> updates VBV slider & manual box max
+                    function applyLevelTierCap() {
+                        const lvl = genHevcLevel.value;
+                        const tier = genHevcTier.value;
+                        const maxRate = HEVC_LEVEL_LIMITS[lvl][tier];
+
                         genVbv.max = maxRate;
                         genVbv.value = maxRate;
-                        vbvLabel.innerText = maxRate + ' Mbps';
+                        genVbvManual.max = maxRate;
+                        genVbvManual.value = maxRate;
+
                         vbvMidTick.innerText = Math.round(maxRate / 2) + ' Mbps';
-                        vbvMaxTick.innerText = maxRate + ' Mbps (Level Cap)';
+                        vbvMaxTick.innerText = maxRate + ' Mbps (Tier Max)';
+                        vbvMaxHeaderNote.innerText = `Tier Max: ${maxRate} Mbps`;
+
                         const tierName = (tier === 'high') ? 'High Tier' : 'Main Tier';
                         levelCapBadge.innerText = `Level ${lvl} ${tierName} Cap: ${maxRate} Mbps`;
                         updateCommand();
-                    });
+                    }
 
-                    // Real-time Sliders
+                    genHevcLevel.addEventListener('change', applyLevelTierCap);
+                    genHevcTier.addEventListener('change', applyLevelTierCap);
+
+                    // Sync CRF Slider
                     genCrf.addEventListener('input', function() {
-                        crfLabel.innerText = this.value;
-                        updateCommand();
-                    });
-                    genVbv.addEventListener('input', function() {
-                        vbvLabel.innerText = this.value + ' Mbps';
+                        crfLabel.innerText = 'CRF ' + this.value;
                         updateCommand();
                     });
 
-                    // Attach listeners to all form inputs
+                    // Sync Peak VBV Bitrate Slider <-> Manual Mbps Input
+                    genVbv.addEventListener('input', function() {
+                        genVbvManual.value = this.value;
+                        updateCommand();
+                    });
+                    genVbvManual.addEventListener('input', function() {
+                        const maxAllowed = parseFloat(genVbv.max) || 100;
+                        let val = parseFloat(this.value);
+                        if (!isNaN(val)) {
+                            if (val > maxAllowed) val = maxAllowed;
+                            if (val < 1) val = 1;
+                            genVbv.value = Math.round(val);
+                        }
+                        updateCommand();
+                    });
+                    genVbvManual.addEventListener('change', function() {
+                        const maxAllowed = parseFloat(genVbv.max) || 100;
+                        let val = parseFloat(this.value);
+                        if (isNaN(val) || val < 1) val = 1;
+                        if (val > maxAllowed) val = maxAllowed;
+                        this.value = val;
+                        genVbv.value = Math.round(val);
+                        updateCommand();
+                    });
+
+                    // Attach listeners to all remaining form inputs
                     const allInputs = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
                     allInputs.forEach(el => {
-                        if (el.id !== 'genHevcLevel' && el.id !== 'genCrf' && el.id !== 'genVbv') {
+                        const skipIds = ['genHevcLevel', 'genHevcTier', 'genCrf', 'genVbv', 'genVbvManual', 'chkLockFrac', 'chkAssumeFrac', 'chkSourceFrac'];
+                        if (!skipIds.includes(el.id)) {
                             el.addEventListener('change', updateCommand);
                             if (el.type === 'text' || el.type === 'number') {
                                 el.addEventListener('input', updateCommand);
                             }
                         }
                     });
-
-                    function parseFractionFps(fracStr) {
-                        if (!fracStr || !fracStr.includes('/')) return 24;
-                        const [num, den] = fracStr.split('/');
-                        return parseInt(num, 10) / parseInt(den, 10);
-                    }
 
                     function updateCommand() {
                         // 1. Toggle States & Field Enabling/Disabling
@@ -1199,16 +1307,10 @@
                         const isSignalOverride = chkOverrideSignal.checked;
                         genSourceRange.disabled = !isSignalOverride;
                         genOutputRange.disabled = !isSignalOverride;
-                        genSourceMatrix.disabled = !isSignalOverride;
 
                         const isCrop = chkCrop.checked;
                         const isCustomDar = chkCustomDar.checked;
                         const isResize = genResizeToggle.checked;
-
-                        // Source Width & Height only enabled if Cropping OR Custom DAR is enabled
-                        const needSourceDims = isCrop || isCustomDar;
-                        srcWInput.disabled = !needSourceDims;
-                        srcHInput.disabled = !needSourceDims;
 
                         cropTInput.disabled = !isCrop;
                         cropBInput.disabled = !isCrop;
@@ -1246,22 +1348,30 @@
                             optChroma422.disabled = false;
                         }
 
-                        // 3. Dolby Vision & HDR Mastering Metadata State Management
+                        // 3. Automatic Matrix & Dolby Vision Profile Resolution
                         const useDv = genDv.checked;
                         const useHdr10p = genHdr10p.checked;
                         const transfer = genTransfer.value;
                         const colorPrim = genColorPrim.value;
-                        const colorMatrix = genColorMatrix.value;
-                        const isIctcp = (colorMatrix === 'ictcp');
+                        const isDvp5 = (useDv && dvRpuMode.value === 'dvp5');
+
+                        // Automatically derive --colormatrix from Color Primaries (or DVP5 ICtCp)
+                        let matrixFlag = 'bt2020nc';
+                        if (isDvp5) {
+                            matrixFlag = 'ictcp';
+                        } else if (colorPrim === 'bt2020') {
+                            matrixFlag = 'bt2020nc';
+                        } else {
+                            matrixFlag = 'bt709';
+                        }
+                        autoMatrixBadge.innerText = `Matrix Automatically Managed (--colormatrix ${matrixFlag})`;
 
                         if (!useDv) {
                             dvRpuMode.disabled = true;
                             activeDvProfileBadge.innerText = 'Dolby Vision: Disabled';
                             activeDvProfileBadge.className = 'rounded bg-light border text-center small font-weight-bold text-muted d-flex align-items-center justify-content-center';
-                        } else if (isIctcp) {
-                            // DVP5 strictly extracts RPU from source file
-                            dvRpuMode.value = 'extract';
-                            dvRpuMode.disabled = true;
+                        } else if (isDvp5) {
+                            dvRpuMode.disabled = false;
                             activeDvProfileBadge.innerText = 'Active DV Profile: 5 (ICtCp Full Range)';
                             activeDvProfileBadge.className = 'rounded bg-info text-white text-center small font-weight-bold d-flex align-items-center justify-content-center';
                         } else {
@@ -1272,14 +1382,14 @@
                         }
 
                         // Enable Mastering Display & Content Light Level fields whenever needed by PQ, HDR10+, or Static DV Generation
-                        const needMasteringMeta = (transfer === 'pq' && !isIctcp) || useHdr10p || (useDv && dvRpuMode.value === 'generate' && !isIctcp);
+                        const needMasteringMeta = (transfer === 'pq' && !isDvp5) || useHdr10p || (useDv && dvRpuMode.value === 'generate' && !isDvp5);
                         genMasterColor.disabled = !needMasteringMeta;
                         genMasterMax.disabled = !needMasteringMeta;
                         genMasterMin.disabled = !needMasteringMeta;
                         genMaxCll.disabled = !needMasteringMeta;
                         genMaxFall.disabled = !needMasteringMeta;
 
-                        // 4. Geometry & Fractional Aspect Ratio Calculations
+                        // 4. Mandatory Source Dimensions, Cropping & Aspect Ratio Math
                         let srcW = Math.max(2, parseInt(srcWInput.value, 10) || 3840);
                         let srcH = Math.max(2, parseInt(srcHInput.value, 10) || 2160);
                         srcW = srcW - (srcW % 2);
@@ -1328,22 +1438,22 @@
                             }
                         }
 
-                        // Update Live Geometry Telemetry Bar using exact reduced fractions
+                        // Update Live Geometry Telemetry Bar using reduced fractions
                         const cropGcd = gcd(croppedW, croppedH);
                         const cropRatioFrac = `${croppedW / cropGcd}:${croppedH / cropGcd}`;
                         const finalGcd = gcd(finalVideoW, finalVideoH);
                         const finalRatioFrac = `${finalVideoW / finalGcd}:${finalVideoH / finalGcd}`;
 
                         document.getElementById('telCropped').innerText = isCrop
-                            ? `${croppedW} × ${croppedH} (${cropRatioFrac})`
-                            : (needSourceDims ? `${srcW} × ${srcH} (${cropRatioFrac})` : `Auto (No Crop)`);
+                            ? `${croppedW} × ${croppedH} (${cropRatioFrac} Cropped)`
+                            : `${srcW} × ${srcH} (${cropRatioFrac} Uncropped)`;
 
                         if (isResize) {
                             document.getElementById('telCanvas').innerText = `${resW} × ${resH} (${finalRatioFrac} Scaled)`;
                         } else if (isCrop) {
                             document.getElementById('telCanvas').innerText = `${croppedW} × ${croppedH} (${cropRatioFrac} Cropped)`;
                         } else {
-                            document.getElementById('telCanvas').innerText = `Native Source (1:1 Pass-Through)`;
+                            document.getElementById('telCanvas').innerText = `${srcW} × ${srcH} (${cropRatioFrac} Native Pass-Through)`;
                         }
                         document.getElementById('telSar').innerText = sarDisplay;
 
@@ -1381,14 +1491,16 @@
                         }
 
                         // 7. Build One-Line VapourSynth Python Script
-                        const lockFps = document.getElementById('genLockFps').value;
-                        const assumeFps = document.getElementById('genAssumeFps').value;
-                        const baseFpsStr = document.getElementById('genSourceFps').value;
+                        const lockBase = genLockFps.value;
+                        const assumeBase = genAssumeFps.value;
+                        const sourceBase = parseInt(genSourceFps.value, 10) || 24;
 
                         let sourceArgs = `source='${safeInFile}'`;
-                        if (lockFps !== 'original') {
-                            const [num, den] = lockFps.split('/');
-                            sourceArgs += `, fpsnum=${num}, fpsden=${den}`;
+                        if (lockBase !== 'original') {
+                            const lockInt = parseInt(lockBase, 10);
+                            const fpsNum = chkLockFrac.checked ? (lockInt * 1000) : lockInt;
+                            const fpsDen = chkLockFrac.checked ? 1001 : 1;
+                            sourceArgs += `, fpsnum=${fpsNum}, fpsden=${fpsDen}`;
                         }
 
                         let pyString = `import vapoursynth as vs; core = vs.core; `;
@@ -1398,9 +1510,11 @@
                             pyString += `clip = core.lsmas.LWLibavSource(${sourceArgs}); `;
                         }
 
-                        if (assumeFps !== 'original') {
-                            const [num, den] = assumeFps.split('/');
-                            pyString += `clip = core.std.AssumeFPS(clip, fpsnum=${num}, fpsden=${den}); `;
+                        if (assumeBase !== 'original') {
+                            const assumeInt = parseInt(assumeBase, 10);
+                            const fpsNum = chkAssumeFrac.checked ? (assumeInt * 1000) : assumeInt;
+                            const fpsDen = chkAssumeFrac.checked ? 1001 : 1;
+                            pyString += `clip = core.std.AssumeFPS(clip, fpsnum=${fpsNum}, fpsden=${fpsDen}); `;
                         }
 
                         if (chkCustomLut.checked && safeLutFile.trim() !== '') {
@@ -1421,26 +1535,23 @@
                         if (isSignalOverride) {
                             const inRange = genSourceRange.value;
                             const outRange = genOutputRange.value;
-                            const inMat = genSourceMatrix.value;
-
-                            if (inMat === 'rgb') {
-                                const targetVsMat = (colorMatrix === 'bt709') ? '709' : '2020ncl';
-                                vsResizeArgs += `, range_s='${outRange}', matrix_s='${targetVsMat}'`;
-                            } else if (inMat === 'ictcp') {
-                                vsResizeArgs += `, range_in_s='${inRange}', range_s='${outRange}'`;
-                            } else {
-                                vsResizeArgs += `, range_in_s='${inRange}', range_s='${outRange}', matrix_in_s='${inMat}', matrix_s='${inMat}'`;
-                            }
+                            vsResizeArgs += `, range_in_s='${inRange}', range_s='${outRange}'`;
                         }
+
+                        // Automatically supply matrix_s ONLY if input source is RGB (e.g. ProRes 4444), leaving YUV untouched
+                        const autoVsRgbMatrix = (matrixFlag === 'bt709') ? '709' : '2020ncl';
+                        vsResizeArgs += `, matrix_s='${autoVsRgbMatrix}' if clip.format.color_family==vs.RGB else None`;
 
                         const activeScaler = isResize ? genResizeAlgo.value : 'Spline36';
                         pyString += `clip = core.resize.${activeScaler}(${vsResizeArgs}); clip.set_output()`;
 
                         // 8. Build x265 Command Arguments
-                        const [lvlIdc, lvlTier] = genHevcLevel.value.split('|');
+                        const lvlIdc = genHevcLevel.value;
+                        const lvlTier = genHevcTier.value;
                         const tierFlag = (lvlTier === 'high') ? '--high-tier' : '--no-high-tier';
 
-                        const vbvKbps = (parseInt(genVbv.value, 10) || 100) * 1000;
+                        const vbvMbpsVal = parseFloat(genVbvManual.value) || parseFloat(genVbv.value) || 100;
+                        const vbvKbps = Math.round(vbvMbpsVal * 1000);
                         const crfVal = genCrf.value;
                         const isExtreme = document.getElementById('genQualitySwitch').checked;
                         const isScrubbing = document.getElementById('genScrubbing').checked;
@@ -1449,14 +1560,15 @@
                         const bframes = isExtreme ? 8 : 4;
                         const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
 
-                        // Calculate effective FPS from exact fractional selection for GOP Keyint
-                        let activeFpsFraction = baseFpsStr;
-                        if (assumeFps !== 'original') {
-                            activeFpsFraction = assumeFps;
-                        } else if (lockFps !== 'original') {
-                            activeFpsFraction = lockFps;
+                        // Calculate effective FPS for GOP Keyint
+                        let effectiveFps = chkSourceFrac.checked ? ((sourceBase * 1000) / 1001) : sourceBase;
+                        if (assumeBase !== 'original') {
+                            const assumeInt = parseInt(assumeBase, 10);
+                            effectiveFps = chkAssumeFrac.checked ? ((assumeInt * 1000) / 1001) : assumeInt;
+                        } else if (lockBase !== 'original') {
+                            const lockInt = parseInt(lockBase, 10);
+                            effectiveFps = chkLockFrac.checked ? ((lockInt * 1000) / 1001) : lockInt;
                         }
-                        const effectiveFps = parseFractionFps(activeFpsFraction);
                         const keyint = isScrubbing ? Math.round(effectiveFps * 2) : Math.round(effectiveFps * 10);
 
                         // VUI Flags
@@ -1469,12 +1581,10 @@
                         else if (colorPrim === 'p3d65') colorPrimFlag = 'smpte432';
                         else if (colorPrim === 'dcip3') colorPrimFlag = 'smpte431';
 
-                        const matrixFlag = colorMatrix;
-
                         let x265Range = 'limited';
                         if (isSignalOverride) {
                             x265Range = genOutputRange.value;
-                        } else if (isIctcp) {
+                        } else if (isDvp5) {
                             x265Range = 'full';
                         }
 
@@ -1530,7 +1640,7 @@
                             args += `--atc-sei 18 --pic-struct 0 `;
                         }
 
-                        if (transfer === 'pq' && !isIctcp) {
+                        if (transfer === 'pq' && !isDvp5) {
                             args += `--hdr10 --hdr10-opt --master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
                         }
 
@@ -1546,7 +1656,7 @@
                         }
 
                         if (useDv) {
-                            if (isIctcp) {
+                            if (isDvp5) {
                                 args += `--dolby-vision-profile 5 --dolby-vision-rpu RPU.bin `;
                             } else if (transfer === 'hlg') {
                                 args += `--dolby-vision-profile 8.4 --dolby-vision-rpu RPU.bin `;
@@ -1584,7 +1694,7 @@
                             const dvStepDesc = document.getElementById('dvStepDesc');
                             const dvCommandOutput = document.getElementById('dvCommandOutput');
 
-                            if (isIctcp || dvRpuMode.value === 'extract') {
+                            if (isDvp5 || dvRpuMode.value === 'extract') {
                                 dvStepLabel.innerText = `Step ${stepCount}: Extract Existing Dolby Vision RPU from Source`;
                                 dvStepDesc.innerHTML = `Run this command first to demux and extract the native dynamic <code>RPU.bin</code> directly from your input file.`;
                                 dvCommandOutput.innerText = `ffmpeg -loglevel error -i "${safeInFile}" -c:v copy -bsf:v hevc_mp4toannexb -f hevc - | dovi_tool extract-rpu - -o RPU.bin`;
