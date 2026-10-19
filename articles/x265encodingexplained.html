@@ -27,13 +27,23 @@
 
     <style>
         /* =====================================================================
-           SCOPED CSS ISOLATION & GLOBAL ALIGNMENT OVERRIDES
-           Neutralizes parent .text-justify and global /css/style.css rules
+           1. PREVENT HORIZONTAL OVERFLOW BEYOND HEADER & FOOTER
+           ===================================================================== */
+        html, body {
+            overflow-x: hidden !important;
+            max-width: 100% !important;
+            width: 100% !important;
+        }
+
+        /* =====================================================================
+           2. SCOPED CSS ISOLATION & ANTI-JUSTIFY RESET FOR THE GENERATOR
            ===================================================================== */
         #encoding-tool-wrapper,
         #encoding-tool-wrapper * {
             box-sizing: border-box !important;
             text-align: left !important;
+            text-justify: none !important;
+            word-spacing: normal !important;
         }
         #encoding-tool-wrapper .text-center {
             text-align: center !important;
@@ -42,46 +52,95 @@
             text-align: right !important;
         }
 
-        /* Uniform Field Header Row (Locks label & toggle/checkbox height so inputs never misalign) */
+        /* =====================================================================
+           3. CSS GRID SYSTEM FOR PERFECT COLUMN & BASELINE ALIGNMENT
+           Ensures adjacent inputs/selects always sit on the exact same line
+           even if one label wraps to 2 lines and the neighbor is 1 line.
+           ===================================================================== */
+        #encoding-tool-wrapper .pro-grid-2,
+        #encoding-tool-wrapper .pro-grid-3,
+        #encoding-tool-wrapper .pro-grid-4 {
+            display: grid !important;
+            gap: 1rem !important;
+            width: 100% !important;
+            align-items: stretch !important;
+        }
+        #encoding-tool-wrapper .pro-grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+        #encoding-tool-wrapper .pro-grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        }
+        #encoding-tool-wrapper .pro-grid-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        }
+        @media (max-width: 767.98px) {
+            #encoding-tool-wrapper .pro-grid-2,
+            #encoding-tool-wrapper .pro-grid-3 {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+            #encoding-tool-wrapper .pro-grid-4 {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
+        @media (max-width: 420px) {
+            #encoding-tool-wrapper .pro-grid-4 {
+                grid-template-columns: minmax(0, 1fr) !important;
+            }
+        }
+
+        /* Individual Field Container: Pushes the input/select to the bottom baseline */
+        #encoding-tool-wrapper .pro-field {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            min-width: 0 !important;
+            width: 100% !important;
+        }
+
         #encoding-tool-wrapper .field-header {
             display: flex !important;
             justify-content: space-between !important;
             align-items: center !important;
+            gap: 0.5rem !important;
             min-height: 24px !important;
             margin-bottom: 0.45rem !important;
             width: 100% !important;
         }
 
-        /* Pro Console UI Typography */
+        /* =====================================================================
+           4. TYPOGRAPHY & PANEL STYLING
+           ===================================================================== */
         #encoding-tool-wrapper .pro-label {
             font-size: 0.72rem !important;
-            letter-spacing: 0.65px !important;
+            letter-spacing: 0.5px !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
-            color: #5a6268 !important;
+            color: #495057 !important;
             margin: 0 !important;
             padding: 0 !important;
-            line-height: 1.2 !important;
-            display: inline-block !important;
+            line-height: 1.3 !important;
+            display: block !important;
         }
 
         #encoding-tool-wrapper .ui-section-title {
-            font-size: 1.15rem !important;
-            letter-spacing: 0.4px !important;
-            padding-bottom: 0.6rem !important;
+            font-size: 1.1rem !important;
+            letter-spacing: 0.3px !important;
+            padding-bottom: 0.55rem !important;
             margin-top: 2rem !important;
-            margin-bottom: 1.25rem !important;
-            line-height: 1.3 !important;
+            margin-bottom: 1.15rem !important;
+            line-height: 1.35 !important;
         }
 
-        /* Hardware Console Panels */
         #encoding-tool-wrapper .console-panel {
             background-color: #ffffff !important;
             border: 1px solid #dee2e6 !important;
             border-radius: 6px !important;
-            padding: 1.25rem !important;
-            margin-bottom: 1.25rem !important;
+            padding: 1.15rem !important;
+            margin-bottom: 1.15rem !important;
             box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+            max-width: 100% !important;
+            overflow: hidden !important;
         }
         #encoding-tool-wrapper .console-panel-muted {
             background-color: #f8f9fa !important;
@@ -93,48 +152,150 @@
             justify-content: space-between !important;
             align-items: center !important;
             border-bottom: 1px solid #e9ecef !important;
-            padding-bottom: 0.75rem !important;
-            margin-bottom: 1.1rem !important;
+            padding-bottom: 0.7rem !important;
+            margin-bottom: 1rem !important;
             gap: 0.5rem !important;
         }
 
         #encoding-tool-wrapper .panel-subtitle {
-            font-size: 0.80rem !important;
+            font-size: 0.78rem !important;
             font-weight: 700 !important;
             text-transform: uppercase !important;
-            letter-spacing: 0.6px !important;
-            color: #343a40 !important;
+            letter-spacing: 0.5px !important;
+            color: #212529 !important;
             margin: 0 !important;
-            line-height: 1.4 !important;
+            line-height: 1.35 !important;
         }
 
-        /* Strict Uniform Input, Select & Addon Heights */
+        /* Safe Wrapping Badges (Never overflow card edges) */
+        #encoding-tool-wrapper .pro-badge {
+            display: inline-block !important;
+            padding: 0.3rem 0.6rem !important;
+            font-size: 0.70rem !important;
+            font-weight: 700 !important;
+            line-height: 1.25 !important;
+            border-radius: 4px !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+            max-width: 100% !important;
+        }
+
+        /* =====================================================================
+           5. CUSTOM FLEXBOX TOGGLE SWITCHES & CHECKBOXES
+           Immune to global /css/style.css overrides; always vertically centered
+           ===================================================================== */
+        #encoding-tool-wrapper .pro-switch {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.55rem !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            min-width: 0 !important;
+        }
+        #encoding-tool-wrapper .pro-switch-input {
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            width: 36px !important;
+            height: 20px !important;
+            background-color: #adb5bd !important;
+            border-radius: 20px !important;
+            position: relative !important;
+            cursor: pointer !important;
+            outline: none !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            transition: background-color 0.2s ease !important;
+        }
+        #encoding-tool-wrapper .pro-switch-input::after {
+            content: "" !important;
+            position: absolute !important;
+            top: 2px !important;
+            left: 2px !important;
+            width: 16px !important;
+            height: 16px !important;
+            background-color: #ffffff !important;
+            border-radius: 50% !important;
+            transition: transform 0.2s ease !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.25) !important;
+        }
+        #encoding-tool-wrapper .pro-switch-input:checked {
+            background-color: #007bff !important;
+        }
+        #encoding-tool-wrapper .pro-switch-input:checked::after {
+            transform: translateX(16px) !important;
+        }
+        #encoding-tool-wrapper .pro-switch-text {
+            font-size: 0.80rem !important;
+            font-weight: 700 !important;
+            color: #212529 !important;
+            line-height: 1.3 !important;
+        }
+
+        /* Compact Non-Wrapping Fractional (/1001) Pill Checkbox */
+        #encoding-tool-wrapper .frac-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.35rem !important;
+            background-color: #eef5ff !important;
+            border: 1px solid #b8daff !important;
+            border-radius: 4px !important;
+            padding: 0.15rem 0.45rem !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+        }
+        #encoding-tool-wrapper .frac-pill input[type="checkbox"] {
+            margin: 0 !important;
+            width: 13px !important;
+            height: 13px !important;
+            cursor: pointer !important;
+            flex-shrink: 0 !important;
+        }
+        #encoding-tool-wrapper .frac-pill span {
+            font-size: 0.68rem !important;
+            font-weight: 700 !important;
+            color: #0056b3 !important;
+            line-height: 1 !important;
+        }
+
+        /* =====================================================================
+           6. UNIFORM INPUT, SELECT & ADDON HEIGHTS (38PX LOCKED)
+           ===================================================================== */
         #encoding-tool-wrapper .form-control {
             height: 38px !important;
             min-height: 38px !important;
-            padding: 0.375rem 0.75rem !important;
-            font-size: 0.9rem !important;
-            line-height: 1.5 !important;
+            padding: 0.375rem 0.65rem !important;
+            font-size: 0.88rem !important;
+            line-height: 1.4 !important;
             border-radius: 4px !important;
             margin: 0 !important;
+            width: 100% !important;
         }
         #encoding-tool-wrapper .input-group {
             display: flex !important;
             align-items: stretch !important;
             width: 100% !important;
+            flex-wrap: nowrap !important;
         }
         #encoding-tool-wrapper .input-group > .form-control {
             border-top-right-radius: 0 !important;
             border-bottom-right-radius: 0 !important;
+            min-width: 0 !important;
+            flex: 1 1 auto !important;
         }
         #encoding-tool-wrapper .input-group-append {
             display: flex !important;
             margin-left: -1px !important;
+            flex-shrink: 0 !important;
         }
         #encoding-tool-wrapper .input-group-text {
             height: 38px !important;
-            padding: 0 0.7rem !important;
-            font-size: 0.80rem !important;
+            padding: 0 0.6rem !important;
+            font-size: 0.78rem !important;
             font-weight: 600 !important;
             display: flex !important;
             align-items: center !important;
@@ -143,111 +304,7 @@
             border: 1px solid #ced4da !important;
             border-top-right-radius: 4px !important;
             border-bottom-right-radius: 4px !important;
-        }
-
-        /* Slider + Manual Input Row Alignment */
-        #encoding-tool-wrapper .slider-input-row {
-            display: flex !important;
-            align-items: center !important;
-            gap: 0.85rem !important;
-            min-height: 38px !important;
-        }
-        #encoding-tool-wrapper .slider-input-row .custom-range {
-            flex: 1 1 auto !important;
-            margin: 0 !important;
-        }
-        #encoding-tool-wrapper .slider-manual-box {
-            width: 130px !important;
-            flex: 0 0 130px !important;
-        }
-
-        /* Bootstrap Custom Switch & Checkbox Reset */
-        #encoding-tool-wrapper .custom-control.custom-switch {
-            padding-left: 2.25rem !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin: 0 !important;
-            min-height: 20px !important;
-            display: inline-flex !important;
-            align-items: center !important;
-        }
-        #encoding-tool-wrapper .custom-control.custom-checkbox {
-            padding-left: 1.4rem !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin: 0 !important;
-            min-height: 20px !important;
-            display: inline-flex !important;
-            align-items: center !important;
-        }
-        #encoding-tool-wrapper .custom-control-label {
-            cursor: pointer !important;
-            user-select: none !important;
-            margin-bottom: 0 !important;
-            line-height: 1.3 !important;
-            padding-top: 1px !important;
-        }
-        #encoding-tool-wrapper .custom-switch .custom-control-label::before {
-            top: 0.12rem !important;
-            left: -2.25rem !important;
-            width: 1.75rem !important;
-            height: 1rem !important;
-            border-radius: 0.5rem !important;
-        }
-        #encoding-tool-wrapper .custom-switch .custom-control-label::after {
-            top: calc(0.12rem + 2px) !important;
-            left: calc(-2.25rem + 2px) !important;
-            width: calc(1rem - 4px) !important;
-            height: calc(1rem - 4px) !important;
-            border-radius: 0.5rem !important;
-        }
-        #encoding-tool-wrapper .custom-checkbox .custom-control-label::before,
-        #encoding-tool-wrapper .custom-checkbox .custom-control-label::after {
-            top: 0.12rem !important;
-            left: -1.4rem !important;
-            width: 0.95rem !important;
-            height: 0.95rem !important;
-        }
-
-        /* Compatibility Guide Card */
-        #encoding-tool-wrapper .guide-card {
-            background-color: #f8f9fa !important;
-            border: 1px solid #dee2e6 !important;
-            border-left: 4px solid #007bff !important;
-            padding: 1.5rem !important;
-            border-radius: 6px !important;
-            margin-bottom: 2rem !important;
-        }
-
-        /* Telemetry Readout Bar */
-        #encoding-tool-wrapper .telemetry-bar {
-            background-color: #212529 !important;
-            color: #f8f9fa !important;
-            border-radius: 5px !important;
-            padding: 0.7rem 1rem !important;
-            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-            font-size: 0.78rem !important;
-            margin-bottom: 1.15rem !important;
-            display: flex !important;
-            flex-wrap: wrap !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            gap: 0.75rem !important;
-        }
-        #encoding-tool-wrapper .telemetry-item {
-            display: inline-flex !important;
-            align-items: center !important;
-            margin: 0 !important;
-        }
-        #encoding-tool-wrapper .telemetry-label {
-            color: #adb5bd !important;
-            text-transform: uppercase !important;
-            font-size: 0.68rem !important;
-            margin-right: 0.4rem !important;
-        }
-        #encoding-tool-wrapper .telemetry-val {
-            color: #20c997 !important;
-            font-weight: 700 !important;
+            white-space: nowrap !important;
         }
 
         /* Disabled Input Polish */
@@ -259,53 +316,155 @@
             cursor: not-allowed !important;
             opacity: 1 !important;
         }
-        #encoding-tool-wrapper .custom-range:disabled {
-            opacity: 0.45 !important;
-            cursor: not-allowed !important;
+
+        /* =====================================================================
+           7. RATE CONTROL SUB-CARDS (CRF & VBV SLIDERS ALIGNED)
+           ===================================================================== */
+        #encoding-tool-wrapper .rate-subcard {
+            background-color: #f8f9fa !important;
+            border: 1px solid #e2e6ea !important;
+            border-radius: 5px !important;
+            padding: 0.85rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+        }
+        #encoding-tool-wrapper .rate-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            min-height: 32px !important;
+            margin-bottom: 0.6rem !important;
+        }
+        #encoding-tool-wrapper .vbv-compact-group {
+            width: 118px !important;
+            flex: 0 0 118px !important;
+        }
+        #encoding-tool-wrapper .vbv-compact-group .form-control {
+            height: 30px !important;
+            min-height: 30px !important;
+            padding: 0.2rem 0.4rem !important;
+            font-size: 0.82rem !important;
+            text-align: center !important;
+        }
+        #encoding-tool-wrapper .vbv-compact-group .input-group-text {
+            height: 30px !important;
+            padding: 0 0.45rem !important;
+            font-size: 0.72rem !important;
+        }
+        #encoding-tool-wrapper .slider-ticks {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            font-size: 0.68rem !important;
+            color: #6c757d !important;
+            margin-top: 0.35rem !important;
+            white-space: nowrap !important;
         }
 
-        /* Feature Switch Cards */
+        /* =====================================================================
+           8. TELEMETRY BAR, COMPATIBILITY CARD & FEATURE CARDS
+           ===================================================================== */
+        #encoding-tool-wrapper .guide-card {
+            background-color: #f8f9fa !important;
+            border: 1px solid #dee2e6 !important;
+            border-left: 4px solid #007bff !important;
+            padding: 1.25rem !important;
+            border-radius: 6px !important;
+            margin-bottom: 1.75rem !important;
+            max-width: 100% !important;
+            overflow: hidden !important;
+        }
+        #encoding-tool-wrapper .guide-pre {
+            background-color: #16181b !important;
+            color: #28a745 !important;
+            padding: 0.6rem 0.8rem !important;
+            border-radius: 4px !important;
+            border: 1px solid #495057 !important;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+            font-size: 0.78rem !important;
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            margin: 0.5rem 0 !important;
+            max-width: 100% !important;
+        }
+
+        #encoding-tool-wrapper .telemetry-bar {
+            background-color: #212529 !important;
+            color: #f8f9fa !important;
+            border-radius: 5px !important;
+            padding: 0.75rem 0.9rem !important;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+            margin-bottom: 1.1rem !important;
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 0.75rem !important;
+        }
+        @media (max-width: 767.98px) {
+            #encoding-tool-wrapper .telemetry-bar {
+                grid-template-columns: minmax(0, 1fr) !important;
+                gap: 0.5rem !important;
+            }
+        }
+        #encoding-tool-wrapper .telemetry-item {
+            display: flex !important;
+            flex-direction: column !important;
+            min-width: 0 !important;
+        }
+        #encoding-tool-wrapper .telemetry-label {
+            color: #adb5bd !important;
+            text-transform: uppercase !important;
+            font-size: 0.65rem !important;
+            letter-spacing: 0.5px !important;
+            margin-bottom: 0.15rem !important;
+        }
+        #encoding-tool-wrapper .telemetry-val {
+            color: #20c997 !important;
+            font-weight: 700 !important;
+            font-size: 0.78rem !important;
+            word-break: break-word !important;
+        }
+
         #encoding-tool-wrapper .switch-card {
             background: #f8f9fa !important;
             border: 1px solid #e2e6ea !important;
             border-radius: 5px !important;
-            padding: 0.75rem 1rem !important;
-            min-height: 50px !important;
-            height: 100% !important;
+            padding: 0.75rem 0.9rem !important;
+            min-height: 48px !important;
             display: flex !important;
             align-items: center !important;
+            width: 100% !important;
         }
 
-        /* Command Output Boxes & Buttons */
+        /* Command Output Boxes & Copy Buttons */
         #encoding-tool-wrapper .cmd-box {
             background-color: #16181b !important;
             color: #e9ecef !important;
-            padding: 1rem !important;
+            padding: 0.95rem !important;
             border-radius: 6px !important;
             border: 1px solid #343a40 !important;
             white-space: pre-wrap !important;
             word-break: break-all !important;
-            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-            font-size: 13px !important;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+            font-size: 12.5px !important;
             line-height: 1.5 !important;
             margin-top: 0 !important;
             margin-bottom: 0.75rem !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
         }
-        #encoding-tool-wrapper .btn {
+        #encoding-tool-wrapper .btn-copy-cmd {
             text-align: center !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             height: 38px !important;
-            font-size: 0.88rem !important;
-            border-radius: 4px !important;
-        }
-        #encoding-tool-wrapper .badge {
-            display: inline-flex !important;
-            align-items: center !important;
-            padding: 0.35em 0.65em !important;
-            font-size: 0.72rem !important;
+            padding: 0 1.25rem !important;
+            font-size: 0.85rem !important;
             font-weight: 700 !important;
+            border-radius: 4px !important;
+            white-space: nowrap !important;
         }
     </style>
 </head>
@@ -341,9 +500,9 @@
                 
                 <!-- System Compatibility Guide -->
                 <div class="guide-card shadow-sm">
-                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 border-bottom pb-3">
-                        <h5 class="font-weight-bold mb-3 mb-md-0 text-dark" style="margin: 0;">⚙️ System Compatibility Guide</h5>
-                        <select class="form-control w-auto font-weight-bold text-primary" id="osSelector" style="min-width: 260px;">
+                    <div class="panel-header-bar">
+                        <h5 class="font-weight-bold text-dark" style="margin: 0; font-size: 0.95rem;">⚙️ System Compatibility Guide</h5>
+                        <select class="form-control font-weight-bold text-primary" id="osSelector" style="max-width: 260px;">
                             <option value="mac" selected>macOS (Apple Silicon / Intel)</option>
                             <option value="win">Windows (PowerShell / CMD)</option>
                             <option value="linux">Linux (Debian / Ubuntu)</option>
@@ -357,7 +516,7 @@
                             <li class="mb-1">Open your Terminal application.</li>
                             <li class="mb-1">Ensure <b>Homebrew</b> is installed. (If not, get it from <a href="https://brew.sh" target="_blank">brew.sh</a>).</li>
                             <li class="mb-1">Install the complete encoding suite by running the following command:
-                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool</pre>
+                                <pre class="guide-pre">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool</pre>
                             </li>
                             <li>Your system is now fully compatible! Paste the generated command from below directly into your terminal.</li>
                         </ol>
@@ -370,7 +529,7 @@
                             <li class="mb-1">Open PowerShell or Command Prompt.</li>
                             <li class="mb-1">We recommend using the <b>Scoop</b> package manager. (Get it from <a href="https://scoop.sh" target="_blank">scoop.sh</a>).</li>
                             <li class="mb-1">Install the complete encoding suite by running the following command:
-                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">scoop install x265 vapoursynth ffmpeg dovi_tool</pre>
+                                <pre class="guide-pre">scoop install x265 vapoursynth ffmpeg dovi_tool</pre>
                             </li>
                             <li><i>Note:</i> Windows natively supports the <code>lsmas</code> frame-server plugin bundled with standard VapourSynth setups. Paste the generated command from below directly into your terminal.</li>
                         </ol>
@@ -383,7 +542,7 @@
                             <li class="mb-1">Open your Terminal.</li>
                             <li class="mb-1">Update your package repository definitions.</li>
                             <li class="mb-1">Install the complete encoding suite by running the following command:
-                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace;">sudo apt install x265 vapoursynth ffmpeg libffms2-4</pre>
+                                <pre class="guide-pre">sudo apt install x265 vapoursynth ffmpeg libffms2-4</pre>
                             </li>
                             <li><i>Note:</i> <code>dovi_tool</code> must be downloaded from its GitHub releases page and added to your PATH. Once complete, paste the generated command from below directly into your terminal.</li>
                         </ol>
@@ -401,19 +560,20 @@
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-success">»</span> Source File, Dimensions, Frame Server & 3D LUT</span>
-                            <span class="badge badge-light border text-muted">Mandatory Source Specs</span>
+                            <span class="pro-badge bg-light border text-muted">Mandatory Source Specs</span>
                         </div>
+
                         <!-- Row 1: Mandatory File & Dimensions -->
-                        <div class="row mb-3 pb-3 border-bottom">
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <div class="pro-grid-3 mb-3 pb-3 border-bottom">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genInputFile">Input File Name (Mandatory)</label>
+                                    <label class="pro-label" for="genInputFile">Input File Name</label>
                                 </div>
                                 <input type="text" class="form-control font-weight-bold" id="genInputFile" value="input.mov">
                             </div>
-                            <div class="col-6 col-md-4">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="srcW">Input Frame Width (Mandatory)</label>
+                                    <label class="pro-label" for="srcW">Input Width (Mandatory)</label>
                                 </div>
                                 <div class="input-group">
                                     <input type="number" class="form-control font-weight-bold" id="srcW" value="3840" min="2" step="2">
@@ -422,9 +582,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-4">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="srcH">Input Frame Height (Mandatory)</label>
+                                    <label class="pro-label" for="srcH">Input Height (Mandatory)</label>
                                 </div>
                                 <div class="input-group">
                                     <input type="number" class="form-control font-weight-bold" id="srcH" value="2160" min="2" step="2">
@@ -434,28 +594,27 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Row 2: Optional Filter Engine & 3D LUT -->
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+
+                        <!-- Row 2: Optional Filter Engine & 3D LUT (Switch serves as clean field header) -->
+                        <div class="pro-grid-2">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genSourceEngine">Source Filter Engine</label>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="chkCustomEngine">
-                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomEngine">Custom Engine</label>
-                                    </div>
+                                    <label class="pro-switch" for="chkCustomEngine">
+                                        <input type="checkbox" class="pro-switch-input" id="chkCustomEngine">
+                                        <span class="pro-switch-text">Custom Source Filter Engine</span>
+                                    </label>
                                 </div>
                                 <select class="form-control" id="genSourceEngine" disabled>
                                     <option value="ffms2" selected>FFmpegSource2 (ffms2)</option>
                                     <option value="lsmas">L-SMASH Works (lsmas)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genLutFile">Apply Custom 3D LUT (.cube)</label>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="chkCustomLut">
-                                        <label class="custom-control-label small font-weight-bold text-secondary" for="chkCustomLut">Enable 3D LUT</label>
-                                    </div>
+                                    <label class="pro-switch" for="chkCustomLut">
+                                        <input type="checkbox" class="pro-switch-input" id="chkCustomLut">
+                                        <span class="pro-switch-text">Apply Custom 3D LUT (.cube)</span>
+                                    </label>
                                 </div>
                                 <input type="text" class="form-control" id="genLutFile" placeholder="Optional grading_look.cube" disabled>
                             </div>
@@ -466,13 +625,13 @@
                     <div class="console-panel console-panel-muted">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-success">»</span> Input & Output Color Range Override</span>
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="chkOverrideSignal">
-                                <label class="custom-control-label font-weight-bold text-dark" for="chkOverrideSignal" style="font-size: 0.82rem;">Manually Override Color Range</label>
-                            </div>
+                            <label class="pro-switch" for="chkOverrideSignal">
+                                <input type="checkbox" class="pro-switch-input" id="chkOverrideSignal">
+                                <span class="pro-switch-text">Manually Override Color Range</span>
+                            </label>
                         </div>
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <div class="pro-grid-2">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genSourceRange">Input Color Range (Source)</label>
                                 </div>
@@ -481,7 +640,7 @@
                                     <option value="full">Full Range (PC / Apple / DVP5: 0–1023)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genOutputRange">Output Color Range (Target)</label>
                                 </div>
@@ -497,17 +656,17 @@
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-success">»</span> Temporal & Framerate Controls</span>
-                            <span class="badge badge-success">Check "Fractional (/1001)" for NTSC / Pull-Down Rates</span>
+                            <span class="pro-badge bg-success text-white">Check "/1001" for Fractional NTSC Rates</span>
                         </div>
-                        <div class="row">
+                        <div class="pro-grid-3">
                             <!-- 1. Lock Framerate -->
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genLockFps">1. Lock Framerate (Fix VFR)</label>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="chkLockFrac">
-                                        <label class="custom-control-label small font-weight-bold text-primary" for="chkLockFrac">Fractional (/1001)</label>
-                                    </div>
+                                    <label class="pro-label" for="genLockFps">1. Lock FPS (Fix VFR)</label>
+                                    <label class="frac-pill" for="chkLockFrac">
+                                        <input type="checkbox" id="chkLockFrac">
+                                        <span>/1001</span>
+                                    </label>
                                 </div>
                                 <select class="form-control" id="genLockFps">
                                     <option value="original" selected>Do Not Lock (Original)</option>
@@ -527,16 +686,16 @@
                             </div>
 
                             <!-- 2. Speed Override -->
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genAssumeFps">2. Speed Override (Retiming)</label>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="chkAssumeFrac">
-                                        <label class="custom-control-label small font-weight-bold text-primary" for="chkAssumeFrac">Fractional (/1001)</label>
-                                    </div>
+                                    <label class="pro-label" for="genAssumeFps">2. Speed Override</label>
+                                    <label class="frac-pill" for="chkAssumeFrac">
+                                        <input type="checkbox" id="chkAssumeFrac">
+                                        <span>/1001</span>
+                                    </label>
                                 </div>
                                 <select class="form-control" id="genAssumeFps">
-                                    <option value="original" selected>1:1 Native Speed (Unchanged)</option>
+                                    <option value="original" selected>1:1 Native Speed</option>
                                     <option value="24">24 fps</option>
                                     <option value="25">25 fps</option>
                                     <option value="30">30 fps</option>
@@ -553,13 +712,13 @@
                             </div>
 
                             <!-- 3. Base Framerate -->
-                            <div class="col-12 col-md-4">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genSourceFps">3. Base Framerate (Keyint)</label>
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="chkSourceFrac">
-                                        <label class="custom-control-label small font-weight-bold text-primary" for="chkSourceFrac">Fractional (/1001)</label>
-                                    </div>
+                                    <label class="pro-label" for="genSourceFps">3. Base FPS (Keyint)</label>
+                                    <label class="frac-pill" for="chkSourceFrac">
+                                        <input type="checkbox" id="chkSourceFrac">
+                                        <span>/1001</span>
+                                    </label>
                                 </div>
                                 <select class="form-control font-weight-bold" id="genSourceFps">
                                     <option value="24" selected>24 fps</option>
@@ -583,105 +742,109 @@
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-success">»</span> Geometry: Cropping & Resolution Scaling</span>
-                            <span class="small text-muted">Uses Mandatory Input Width & Height from Panel 1A</span>
+                            <span class="pro-badge bg-light border text-muted">Uses Input W × H from Panel 1A</span>
                         </div>
 
                         <!-- Live Telemetry Bar -->
                         <div class="telemetry-bar">
                             <div class="telemetry-item">
-                                <span class="telemetry-label">Post-Crop Canvas:</span>
+                                <span class="telemetry-label">Post-Crop Canvas</span>
                                 <span class="telemetry-val" id="telCropped">3840 × 2160 (16:9)</span>
                             </div>
                             <div class="telemetry-item">
-                                <span class="telemetry-label">Final Encode Resolution:</span>
+                                <span class="telemetry-label">Final Encode Resolution</span>
                                 <span class="telemetry-val" id="telCanvas">3840 × 2160 (Native Pass-Through)</span>
                             </div>
                             <div class="telemetry-item">
-                                <span class="telemetry-label">Output SAR:</span>
+                                <span class="telemetry-label">Output Pixel Aspect (SAR)</span>
                                 <span class="telemetry-val" id="telSar">1:1 (Square Pixels)</span>
                             </div>
                         </div>
 
-                        <!-- Cropping Row -->
-                        <div class="row mb-4 pb-3 border-bottom">
-                            <div class="col-12 mb-3">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="chkCrop">
-                                    <label class="custom-control-label font-weight-bold text-dark" for="chkCrop" style="font-size: 0.85rem;">Enable Cropping (Even Pixel Values Only)</label>
-                                </div>
+                        <!-- Cropping Section -->
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="mb-3">
+                                <label class="pro-switch" for="chkCrop">
+                                    <input type="checkbox" class="pro-switch-input" id="chkCrop">
+                                    <span class="pro-switch-text">Enable Cropping (Even Pixel Values Only)</span>
+                                </label>
                             </div>
-                            <div class="col-6 col-md-3 mb-3 mb-md-0">
-                                <div class="field-header">
-                                    <label class="pro-label text-danger" for="cropT">Crop Top</label>
+                            <div class="pro-grid-4">
+                                <div class="pro-field">
+                                    <div class="field-header">
+                                        <label class="pro-label text-danger" for="cropT">Crop Top</label>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control text-center" id="cropT" value="0" min="0" step="2" disabled>
+                                        <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control text-center" id="cropT" value="0" min="0" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                <div class="pro-field">
+                                    <div class="field-header">
+                                        <label class="pro-label text-danger" for="cropB">Crop Bottom</label>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control text-center" id="cropB" value="0" min="0" step="2" disabled>
+                                        <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6 col-md-3 mb-3 mb-md-0">
-                                <div class="field-header">
-                                    <label class="pro-label text-danger" for="cropB">Crop Bottom</label>
+                                <div class="pro-field">
+                                    <div class="field-header">
+                                        <label class="pro-label text-danger" for="cropL">Crop Left</label>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control text-center" id="cropL" value="0" min="0" step="2" disabled>
+                                        <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control text-center" id="cropB" value="0" min="0" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="field-header">
-                                    <label class="pro-label text-danger" for="cropL">Crop Left</label>
-                                </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control text-center" id="cropL" value="0" min="0" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="field-header">
-                                    <label class="pro-label text-danger" for="cropR">Crop Right</label>
-                                </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control text-center" id="cropR" value="0" min="0" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                <div class="pro-field">
+                                    <div class="field-header">
+                                        <label class="pro-label text-danger" for="cropR">Crop Right</label>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control text-center" id="cropR" value="0" min="0" step="2" disabled>
+                                        <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Resizing Row -->
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="genResizeToggle">
-                                    <label class="custom-control-label font-weight-bold text-dark" for="genResizeToggle" style="font-size: 0.85rem;">Enable Resolution Resizing</label>
-                                </div>
+                        <!-- Resizing Section -->
+                        <div>
+                            <div class="mb-3">
+                                <label class="pro-switch" for="genResizeToggle">
+                                    <input type="checkbox" class="pro-switch-input" id="genResizeToggle">
+                                    <span class="pro-switch-text">Enable Resolution Resizing</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genResizeAlgo">Scaling Algorithm</label>
+                            <div class="pro-grid-3">
+                                <div class="pro-field">
+                                    <div class="field-header">
+                                        <label class="pro-label" for="genResizeAlgo">Scaling Algorithm</label>
+                                    </div>
+                                    <select class="form-control" id="genResizeAlgo" disabled>
+                                        <option value="Spline36" selected>Spline36 (Neutral & Sharp)</option>
+                                        <option value="Lanczos">Lanczos (High Frequency Detail)</option>
+                                        <option value="Bicubic">Bicubic (Smooth Roll-off)</option>
+                                    </select>
                                 </div>
-                                <select class="form-control" id="genResizeAlgo" disabled>
-                                    <option value="Spline36" selected>Spline36 (Neutral & Sharp)</option>
-                                    <option value="Lanczos">Lanczos (High Frequency Detail)</option>
-                                    <option value="Bicubic">Bicubic (Smooth Roll-off)</option>
-                                </select>
-                            </div>
-                            <div class="col-6 col-md-4">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genResizeW">Target Width</label>
+                                <div class="pro-field">
+                                    <div class="field-header">
+                                        <label class="pro-label" for="genResizeW">Target Width</label>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="genResizeW" value="3840" min="2" step="2" disabled>
+                                        <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genResizeW" value="3840" min="2" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-4">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genResizeH">Target Height</label>
-                                </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genResizeH" value="2160" min="2" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                <div class="pro-field">
+                                    <div class="field-header">
+                                        <label class="pro-label" for="genResizeH">Target Height</label>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="genResizeH" value="2160" min="2" step="2" disabled>
+                                        <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -697,16 +860,16 @@
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> Output Bitstream & Pixel Format</span>
-                            <span class="badge badge-primary">Default: YUV420P10</span>
+                            <span class="pro-badge bg-primary text-white">Default: YUV420P10</span>
                         </div>
-                        <div class="row">
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <div class="pro-grid-3">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genOutputFile">Output File Name (Mandatory)</label>
+                                    <label class="pro-label" for="genOutputFile">Output File Name</label>
                                 </div>
                                 <input type="text" class="form-control font-weight-bold" id="genOutputFile" value="output.hevc">
                             </div>
-                            <div class="col-6 col-md-4">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genBitDepth">Output Bit Depth</label>
                                 </div>
@@ -716,9 +879,9 @@
                                     <option value="12">12-bit</option>
                                 </select>
                             </div>
-                            <div class="col-6 col-md-4">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genChroma">Output Chroma Subsampling</label>
+                                    <label class="pro-label" for="genChroma">Chroma Subsampling</label>
                                 </div>
                                 <select class="form-control font-weight-bold" id="genChroma">
                                     <option value="420" selected>4:2:0</option>
@@ -729,14 +892,14 @@
                         </div>
                     </div>
 
-                    <!-- Panel 2B: VUI Color Science Metadata (Transfer & Primaries Only) -->
+                    <!-- Panel 2B: VUI Color Science Metadata -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> Video Usability Information (VUI Color Science)</span>
-                            <span class="badge badge-light border text-muted" id="autoMatrixBadge">Matrix Automatically Managed (--colormatrix bt2020nc)</span>
+                            <span class="pro-badge bg-light border text-muted" id="autoMatrixBadge">Auto Matrix: bt2020nc</span>
                         </div>
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <div class="pro-grid-2">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genTransfer">Transfer Function (--transfer)</label>
                                 </div>
@@ -746,7 +909,7 @@
                                     <option value="hlg" selected>HDR (HLG / ARIB STD-B67)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genColorPrim">Color Primaries (--colorprim)</label>
                                 </div>
@@ -764,16 +927,15 @@
                     <div class="console-panel console-panel-muted">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> Aspect Ratio Override & Psychovisual Tuning</span>
-                            <span class="small text-muted">Optional Overrides</span>
+                            <span class="pro-badge bg-light border text-muted">Optional Overrides</span>
                         </div>
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <div class="pro-grid-2">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genDar">Non-Square Pixels (Display Aspect Ratio)</label>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="chkCustomDar">
-                                        <label class="custom-control-label small font-weight-bold text-dark" for="chkCustomDar">Override DAR</label>
-                                    </div>
+                                    <label class="pro-switch" for="chkCustomDar">
+                                        <input type="checkbox" class="pro-switch-input" id="chkCustomDar">
+                                        <span class="pro-switch-text">Override Display Aspect Ratio (DAR)</span>
+                                    </label>
                                 </div>
                                 <select class="form-control" id="genDar" disabled>
                                     <option value="69:25">Ultra Panavision (69:25)</option>
@@ -791,13 +953,12 @@
                                     <option value="4:3">Standard Fullscreen (4:3)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genTune">Custom Tuning Profile (--tune)</label>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="chkCustomTune">
-                                        <label class="custom-control-label small font-weight-bold text-dark" for="chkCustomTune">Custom Tune</label>
-                                    </div>
+                                    <label class="pro-switch" for="chkCustomTune">
+                                        <input type="checkbox" class="pro-switch-input" id="chkCustomTune">
+                                        <span class="pro-switch-text">Custom Tuning Profile (--tune)</span>
+                                    </label>
                                 </div>
                                 <select class="form-control" id="genTune" disabled>
                                     <option value="grain" selected>Grain (Preserve Film Grain Structure)</option>
@@ -811,16 +972,16 @@
                         </div>
                     </div>
 
-                    <!-- Panel 2D: Split HEVC Level & Tier Selectors + CRF & VBV Slider/Manual Input -->
+                    <!-- Panel 2D: Split HEVC Level & Tier Selectors + Aligned Rate Control Subcards -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> HEVC Level Compliance & Rate Control</span>
-                            <span class="badge badge-info" id="levelCapBadge">Level 5.0 High Tier Cap: 100 Mbps</span>
+                            <span class="pro-badge bg-info text-white" id="levelCapBadge">Level 5.0 High Tier Cap: 100 Mbps</span>
                         </div>
 
                         <!-- Row 1: Two Separate Dropdowns for Level and Tier -->
-                        <div class="row mb-4 pb-3 border-bottom">
-                            <div class="col-12 col-md-7 mb-3 mb-md-0">
+                        <div class="pro-grid-2 mb-3 pb-3 border-bottom">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genHevcLevel">HEVC Level (--level-idc)</label>
                                 </div>
@@ -835,7 +996,7 @@
                                     <option value="6.2">Level 6.2 — Max: 8192×4320 @ 120 fps</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-5">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genHevcTier">HEVC Tier</label>
                                 </div>
@@ -846,41 +1007,43 @@
                             </div>
                         </div>
 
-                        <!-- Row 2: CRF & Peak VBV Bitrate (Slider + Manual Mbps Input) -->
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3 mb-md-0">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genCrf">Constant Rate Factor (CRF Quality)</label>
-                                    <span id="crfLabel" class="text-primary font-weight-bold" style="font-size: 0.85rem;">CRF 19</span>
+                        <!-- Row 2: Symmetrical Rate Control Sub-Cards (CRF & Peak VBV) -->
+                        <div class="pro-grid-2">
+                            <!-- CRF Sub-Card -->
+                            <div class="rate-subcard">
+                                <div class="rate-header">
+                                    <label class="pro-label" for="genCrf">Constant Rate Factor (CRF)</label>
+                                    <span id="crfLabel" class="pro-badge bg-primary text-white">CRF 19</span>
                                 </div>
-                                <div class="slider-input-row">
+                                <div>
                                     <input type="range" class="custom-range" id="genCrf" min="0" max="30" value="19" step="1">
-                                </div>
-                                <div class="d-flex justify-content-between small text-muted mt-1" style="font-size: 0.70rem;">
-                                    <span>0 (Lossless)</span>
-                                    <span>14 (Archival)</span>
-                                    <span>19 (Default)</span>
-                                    <span>30 (Compressed)</span>
+                                    <div class="slider-ticks">
+                                        <span>0 (Lossless)</span>
+                                        <span>14 (Archival)</span>
+                                        <span>19 (Default)</span>
+                                        <span>30</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genVbv">Peak VBV Bitrate Cap (--vbv-maxrate)</label>
-                                    <span class="small font-weight-bold text-secondary" id="vbvMaxHeaderNote">Tier Max: 100 Mbps</span>
-                                </div>
-                                <div class="slider-input-row">
-                                    <input type="range" class="custom-range" id="genVbv" min="1" max="100" value="100" step="1">
-                                    <div class="input-group slider-manual-box">
-                                        <input type="number" class="form-control font-weight-bold text-primary text-center" id="genVbvManual" value="100" min="1" max="100" step="1">
+
+                            <!-- Peak VBV Sub-Card -->
+                            <div class="rate-subcard">
+                                <div class="rate-header">
+                                    <label class="pro-label" for="genVbv">Peak VBV Bitrate Cap</label>
+                                    <div class="input-group vbv-compact-group">
+                                        <input type="number" class="form-control font-weight-bold text-primary" id="genVbvManual" value="100" min="1" max="100" step="1">
                                         <div class="input-group-append">
                                             <span class="input-group-text">Mbps</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between small text-muted mt-1" style="font-size: 0.70rem;">
-                                    <span>1 Mbps</span>
-                                    <span id="vbvMidTick">50 Mbps</span>
-                                    <span id="vbvMaxTick">100 Mbps (Tier Max)</span>
+                                <div>
+                                    <input type="range" class="custom-range" id="genVbv" min="1" max="100" value="100" step="1">
+                                    <div class="slider-ticks">
+                                        <span>1 Mbps</span>
+                                        <span id="vbvMidTick">50 Mbps</span>
+                                        <span id="vbvMaxTick">100 Mbps Max</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -890,31 +1053,31 @@
                     <div class="console-panel console-panel-muted">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> CPU Thread Pool Architecture</span>
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="chkCustomCpu">
-                                <label class="custom-control-label font-weight-bold text-dark" for="chkCustomCpu" style="font-size: 0.82rem;">Customize CPU Performance</label>
-                            </div>
+                            <label class="pro-switch" for="chkCustomCpu">
+                                <input type="checkbox" class="pro-switch-input" id="chkCustomCpu">
+                                <span class="pro-switch-text">Customize CPU Performance</span>
+                            </label>
                         </div>
-                        <div class="row">
-                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                        <div class="pro-grid-3">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="cpuPCores">Performance Cores (P-Cores)</label>
                                 </div>
                                 <input type="number" class="form-control" id="cpuPCores" value="10" min="1" step="1" disabled>
                             </div>
-                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="cpuECores">Efficiency Cores (E-Cores)</label>
                                 </div>
                                 <input type="number" class="form-control" id="cpuECores" value="4" min="0" step="1" disabled>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="cpuStrategy">Thread Scheduling Strategy (--pools)</label>
                                 </div>
                                 <select class="form-control" id="cpuStrategy" disabled>
-                                    <option value="p_only" id="optCpuPOnly" selected>Use Performance Cores Only (Recommended — 10 Threads)</option>
-                                    <option value="all_cores" id="optCpuAll">Use All Cores (P + E — 14 Threads, May Bottleneck on E-Cores)</option>
+                                    <option value="p_only" id="optCpuPOnly" selected>Performance Cores Only (10 Threads)</option>
+                                    <option value="all_cores" id="optCpuAll">All Cores (14 Threads — May Bottleneck)</option>
                                 </select>
                             </div>
                         </div>
@@ -924,58 +1087,40 @@
                     <div class="console-panel">
                         <div class="panel-header-bar">
                             <span class="panel-subtitle"><span class="text-primary">»</span> Encoder Feature Switches & Dynamic HDR Injection</span>
-                            <span class="badge badge-light border text-muted">Bit-Stream Modifiers</span>
+                            <span class="pro-badge bg-light border text-muted">Bit-Stream Modifiers</span>
                         </div>
-                        <div class="row">
-                            <div class="col-12 col-md-6 mb-3">
-                                <div class="switch-card">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
-                                        <label class="custom-control-label font-weight-bold text-dark" for="genQualitySwitch" style="font-size: 0.88rem;">
-                                            Extreme Quality (HME, 8 B-Frames & TU Depth 4)
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="pro-grid-2 mb-3">
+                            <div class="switch-card">
+                                <label class="pro-switch" for="genQualitySwitch">
+                                    <input type="checkbox" class="pro-switch-input" id="genQualitySwitch">
+                                    <span class="pro-switch-text">Extreme Quality (HME, 8 B-Frames & TU Depth 4)</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-md-6 mb-3">
-                                <div class="switch-card">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
-                                        <label class="custom-control-label font-weight-bold text-dark" for="genScrubbing" style="font-size: 0.88rem;">
-                                            Scrubbing & Editing Friendly GOP (Closed 2-Sec GOP)
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="switch-card">
+                                <label class="pro-switch" for="genScrubbing">
+                                    <input type="checkbox" class="pro-switch-input" id="genScrubbing" checked>
+                                    <span class="pro-switch-text">Scrubbing & Editing Friendly GOP (Closed 2-Sec GOP)</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
-                                <div class="switch-card">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="genInfoSEI" checked>
-                                        <label class="custom-control-label font-weight-bold text-dark" for="genInfoSEI" style="font-size: 0.88rem;">
-                                            Embed Encoding Logs (SEI Info)
-                                        </label>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="pro-grid-3">
+                            <div class="switch-card">
+                                <label class="pro-switch" for="genInfoSEI">
+                                    <input type="checkbox" class="pro-switch-input" id="genInfoSEI" checked>
+                                    <span class="pro-switch-text">Embed Encoding Logs (SEI Info)</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
-                                <div class="switch-card" style="border-color: #b8daff !important; background-color: #f0f7ff !important;">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="genDv" checked>
-                                        <label class="custom-control-label font-weight-bold text-primary" for="genDv" style="font-size: 0.88rem;">
-                                            Inject Dolby Vision RPU
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="switch-card" style="border-color: #b8daff !important; background-color: #f0f7ff !important;">
+                                <label class="pro-switch" for="genDv">
+                                    <input type="checkbox" class="pro-switch-input" id="genDv" checked>
+                                    <span class="pro-switch-text text-primary">Inject Dolby Vision RPU</span>
+                                </label>
                             </div>
-                            <div class="col-12 col-md-4">
-                                <div class="switch-card" style="border-color: #f5c6cb !important; background-color: #fff5f6 !important;">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="genHdr10p">
-                                        <label class="custom-control-label font-weight-bold text-danger" for="genHdr10p" style="font-size: 0.88rem;">
-                                            Inject HDR10+ Dynamic JSON
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="switch-card" style="border-color: #f5c6cb !important; background-color: #fff5f6 !important;">
+                                <label class="pro-switch" for="genHdr10p">
+                                    <input type="checkbox" class="pro-switch-input" id="genHdr10p">
+                                    <span class="pro-switch-text text-danger">Inject HDR10+ Dynamic JSON</span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -987,32 +1132,32 @@
 
                     <div class="console-panel">
                         <!-- Dolby Vision RPU Source Strategy -->
-                        <div class="row pb-3 mb-3 border-bottom">
-                            <div class="col-12 col-md-8 mb-3 mb-md-0">
+                        <div class="pro-grid-2 pb-3 mb-3 border-bottom">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label text-info" for="dvRpuMode">Dolby Vision RPU Mode & Profile</label>
                                 </div>
                                 <select class="form-control font-weight-bold" id="dvRpuMode">
-                                    <option value="generate" selected>Generate Static RPU from Mastering Metadata Below (Profile 8.1 PQ / 8.4 HLG)</option>
-                                    <option value="extract">Extract & Copy Existing RPU from Source File (Profile 8.1 PQ / 8.4 HLG)</option>
-                                    <option value="dvp5">Dolby Vision Profile 5 Pass-Through (ICtCp Full Range — Extract RPU from Source)</option>
+                                    <option value="generate" selected>Generate Static RPU from Metadata Below (Profile 8.1 / 8.4)</option>
+                                    <option value="extract">Extract & Copy RPU from Source File (Profile 8.1 / 8.4)</option>
+                                    <option value="dvp5">Dolby Vision Profile 5 (ICtCp Full Range — Extract Source RPU)</option>
                                 </select>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <span class="pro-label text-secondary">Active Dolby Vision Profile</span>
+                                    <span class="pro-label text-secondary">Active Dolby Vision Status</span>
                                 </div>
-                                <div class="rounded bg-primary text-white text-center small font-weight-bold d-flex align-items-center justify-content-center" id="activeDvProfileBadge" style="height: 38px;">
+                                <div class="rounded bg-primary text-white text-center small font-weight-bold d-flex align-items-center justify-content-center" id="activeDvProfileBadge" style="height: 38px; padding: 0 0.75rem;">
                                     Active DV Profile: 8.4 (HLG)
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Content Light Level & Mastering Display Inputs -->
-                        <div class="row">
-                            <div class="col-12 col-md-4 mb-3">
+                        <!-- Mastering Display Row (3 Columns) -->
+                        <div class="pro-grid-3 mb-3">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genMasterColor">Mastering Display Color Space</label>
+                                    <label class="pro-label" for="genMasterColor">Mastering Display Gamut</label>
                                 </div>
                                 <select class="form-control" id="genMasterColor">
                                     <option value="bt2020">BT.2020 (Rec. 2020)</option>
@@ -1022,7 +1167,7 @@
                                     <option value="bt709">BT.709</option>
                                 </select>
                             </div>
-                            <div class="col-6 col-md-4 mb-3">
+                            <div class="pro-field">
                                 <div class="field-header">
                                     <label class="pro-label" for="genMasterMax">Display Peak Brightness</label>
                                 </div>
@@ -1033,9 +1178,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-4 mb-3">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genMasterMin">Display Minimum Black Level</label>
+                                    <label class="pro-label" for="genMasterMin">Display Min Black Level</label>
                                 </div>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="genMasterMin" value="0.0001" min="0" step="0.0001">
@@ -1044,9 +1189,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6">
+                        </div>
+
+                        <!-- Content Light Level Row (2 Columns) -->
+                        <div class="pro-grid-2">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genMaxCll">MaxCLL (Maximum Content Light Level)</label>
+                                    <label class="pro-label" for="genMaxCll">MaxCLL (Peak Content Light)</label>
                                 </div>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="genMaxCll" value="1000" min="0" step="1">
@@ -1055,9 +1204,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6">
+                            <div class="pro-field">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genMaxFall">MaxFALL (Maximum Frame-Average Light Level)</label>
+                                    <label class="pro-label" for="genMaxFall">MaxFALL (Max Frame-Average Light)</label>
                                 </div>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="genMaxFall" value="400" min="0" step="1">
@@ -1076,26 +1225,26 @@
 
                 <!-- OPTIONAL STEP: HDR10+ JSON Creator -->
                 <div class="mt-4 pb-3 border-bottom" id="hdr10pCommandContainer" style="display: none;">
-                    <label class="font-weight-bold text-danger" id="hdr10pStepLabel">Step 1: HDR10+ Dynamic JSON Creator Command</label>
+                    <label class="font-weight-bold text-danger d-block mb-1" id="hdr10pStepLabel">Step 1: HDR10+ Dynamic JSON Creator Command</label>
                     <p class="text-muted small mb-2">Run this command first to generate a compliant <code>fake_hdr10plus.json</code> metadata file in your working directory.</p>
                     <pre class="cmd-box"><code id="hdr10pCommandOutput"></code></pre>
-                    <button type="button" class="btn btn-danger px-4 shadow-sm font-weight-bold" onclick="copyTextById('hdr10pCommandOutput', this, 'Copy JSON Command', 'btn-danger')">Copy JSON Command</button>
+                    <button type="button" class="btn btn-danger btn-copy-cmd shadow-sm" onclick="copyTextById('hdr10pCommandOutput', this, 'Copy JSON Command', 'btn-danger')">Copy JSON Command</button>
                 </div>
 
                 <!-- OPTIONAL STEP: Dolby Vision RPU Generator / Extractor -->
                 <div class="mt-4 pb-3 border-bottom" id="dvCommandContainer" style="display: none;">
-                    <label class="font-weight-bold text-info" id="dvStepLabel">Step 1: Dolby Vision RPU Command</label>
+                    <label class="font-weight-bold text-info d-block mb-1" id="dvStepLabel">Step 1: Dolby Vision RPU Command</label>
                     <p class="text-muted small mb-2" id="dvStepDesc">Run this command to prepare your <code>RPU.bin</code> file before starting the main encode.</p>
                     <pre class="cmd-box"><code id="dvCommandOutput"></code></pre>
-                    <button type="button" class="btn btn-info px-4 shadow-sm font-weight-bold" onclick="copyTextById('dvCommandOutput', this, 'Copy RPU Command', 'btn-info')">Copy RPU Command</button>
+                    <button type="button" class="btn btn-info btn-copy-cmd shadow-sm" onclick="copyTextById('dvCommandOutput', this, 'Copy RPU Command', 'btn-info')">Copy RPU Command</button>
                 </div>
 
                 <!-- FINAL STEP: Primary Encode Command Output Area -->
                 <div class="mt-4">
-                    <label class="font-weight-bold text-primary" id="mainCommandLabel">Step 2: Generated Pipeline (Main Encode Command)</label>
+                    <label class="font-weight-bold text-primary d-block mb-1" id="mainCommandLabel">Step 2: Generated Pipeline (Main Encode Command)</label>
                     <p class="text-muted small mb-2">Paste this directly into your terminal. It writes the VapourSynth script, pipes the frames into x265, and cleans up temporary files automatically.</p>
                     <pre class="cmd-box"><code id="finalCommandOutput"></code></pre>
-                    <button type="button" class="btn btn-primary px-4 shadow-sm font-weight-bold" onclick="copyTextById('finalCommandOutput', this, 'Copy Encode Command', 'btn-primary')">Copy Encode Command</button>
+                    <button type="button" class="btn btn-primary btn-copy-cmd shadow-sm" onclick="copyTextById('finalCommandOutput', this, 'Copy Encode Command', 'btn-primary')">Copy Encode Command</button>
                 </div>
             </div>
 
@@ -1163,7 +1312,6 @@
                     const genHevcLevel = document.getElementById('genHevcLevel');
                     const genHevcTier = document.getElementById('genHevcTier');
                     const levelCapBadge = document.getElementById('levelCapBadge');
-                    const vbvMaxHeaderNote = document.getElementById('vbvMaxHeaderNote');
                     const genCrf = document.getElementById('genCrf');
                     const crfLabel = document.getElementById('crfLabel');
                     const genVbv = document.getElementById('genVbv');
@@ -1194,7 +1342,7 @@
                             if (opt.value !== 'original') {
                                 const baseRate = parseInt(opt.value, 10);
                                 if (isFractional) {
-                                    opt.text = `${baseRate * 1000}/1001 fps (${baseRate} fps)`;
+                                    opt.text = `${baseRate * 1000}/1001 fps`;
                                 } else {
                                     opt.text = `${baseRate} fps`;
                                 }
@@ -1237,8 +1385,7 @@
                         genVbvManual.value = maxRate;
 
                         vbvMidTick.innerText = Math.round(maxRate / 2) + ' Mbps';
-                        vbvMaxTick.innerText = maxRate + ' Mbps (Tier Max)';
-                        vbvMaxHeaderNote.innerText = `Tier Max: ${maxRate} Mbps`;
+                        vbvMaxTick.innerText = maxRate + ' Mbps Max';
 
                         const tierName = (tier === 'high') ? 'High Tier' : 'Main Tier';
                         levelCapBadge.innerText = `Level ${lvl} ${tierName} Cap: ${maxRate} Mbps`;
@@ -1324,8 +1471,8 @@
                         const pCores = Math.max(1, parseInt(cpuPCores.value, 10) || 10);
                         const eCores = Math.max(0, parseInt(cpuECores.value, 10) || 0);
                         const totalCores = pCores + eCores;
-                        optCpuPOnly.innerText = `Use Performance Cores Only (Recommended — ${pCores} Threads)`;
-                        optCpuAll.innerText = `Use All Cores (P + E — ${totalCores} Threads, May Bottleneck on E-Cores)`;
+                        optCpuPOnly.innerText = `Performance Cores Only (${pCores} Threads)`;
+                        optCpuAll.innerText = `All Cores (${totalCores} Threads — May Bottleneck)`;
 
                         if (genBitDepth.value === '8') {
                             optChroma422.style.display = 'none';
@@ -1352,7 +1499,7 @@
                         } else {
                             matrixFlag = 'bt709';
                         }
-                        autoMatrixBadge.innerText = `Matrix Automatically Managed (--colormatrix ${matrixFlag})`;
+                        autoMatrixBadge.innerText = `Auto Matrix: ${matrixFlag}`;
 
                         if (!useDv) {
                             dvRpuMode.disabled = true;
@@ -1369,7 +1516,7 @@
                             activeDvProfileBadge.className = 'rounded bg-primary text-white text-center small font-weight-bold d-flex align-items-center justify-content-center';
                         }
 
-                        const needMasteringMeta = (transfer === 'pq' && !isDvp5) || useHdr10p || useDv;
+                        const needMasteringMeta = (transfer === 'pq' && !isDvp5) || useHdr10p || (useDv && dvRpuMode.value === 'generate' && !isDvp5);
                         genMasterColor.disabled = !needMasteringMeta;
                         genMasterMax.disabled = !needMasteringMeta;
                         genMasterMin.disabled = !needMasteringMeta;
@@ -1419,7 +1566,7 @@
                                 sarFlag = `--sar ${sarNum}:${sarDen} `;
                                 sarDisplay = `${sarNum}:${sarDen} (Target DAR ${targetDarNum}:${targetDarDen})`;
                             } else {
-                                sarDisplay = `1:1 (Matches DAR ${targetDarNum}:${targetDarDen} Naturally)`;
+                                sarDisplay = `1:1 (Matches DAR ${targetDarNum}:${targetDarDen})`;
                             }
                         }
 
@@ -1437,7 +1584,7 @@
                         } else if (isCrop) {
                             document.getElementById('telCanvas').innerText = `${croppedW} × ${croppedH} (${cropRatioFrac} Cropped)`;
                         } else {
-                            document.getElementById('telCanvas').innerText = `${srcW} × ${srcH} (${cropRatioFrac} Native Pass-Through)`;
+                            document.getElementById('telCanvas').innerText = `${srcW} × ${srcH} (${cropRatioFrac} Native)`;
                         }
                         document.getElementById('telSar').innerText = sarDisplay;
 
@@ -1621,9 +1768,8 @@
                             args += `--atc-sei 18 --pic-struct 0 `;
                         }
 
-                        // Inject Mastering Display for PQ, HDR10+, or any active Mastering metadata
-                        if (transfer === 'pq' || useHdr10p || needMasteringMeta) {
-                            const hdr10OptFlag = (colorPrim === 'bt2020' && chroma === '420' && bitDepth === '10') ? '--hdr10 --hdr10-opt ' : '--hdr10 ';
+                        if ((transfer === 'pq' && !isDvp5) || useHdr10p) {
+                            const hdr10OptFlag = (transfer === 'pq' && colorPrim === 'bt2020' && chroma === '420' && bitDepth === '10') ? '--hdr10 --hdr10-opt ' : '--hdr10 ';
                             args += `${hdr10OptFlag}--master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
                         }
 
@@ -1648,7 +1794,6 @@
                             }
                         }
 
-                        // 9. Step Sequencing for HDR10+ JSON & Dolby Vision RPU
                         let stepCount = 1;
                         const hdr10pContainer = document.getElementById('hdr10pCommandContainer');
                         const dvContainer = document.getElementById('dvCommandContainer');
@@ -1697,7 +1842,6 @@
                             mainCommandLabel.innerText = `Generated Pipeline (Main Encode Command):`;
                         }
 
-                        // Final Single-Line Command Output (with automatic post-encode dovi_tool inject-rpu for experimental color spaces)
                         let singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && rm render_script.vpy`;
                         
                         if (usePostDvInjection) {
