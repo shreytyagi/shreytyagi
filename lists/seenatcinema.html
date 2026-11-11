@@ -30,23 +30,32 @@
 
 
 
-<div class="container mt-1 text-justify flex-grow-1">
-
-
-
-	<div class="content-container">
-	<h3>Seen At Cinema</h3>
-	<p>This is a list of all movies seen at cinema by Shrey Tyagi.</p>
+	<div class="container mt-1 text-justify flex-grow-1 above-table">
+		<div class="content-container above-table">
+			<h3>Seen At Cinema</h3>
+			<p>
+				This is a list of all movies seen at cinema by Shrey Tyagi.
+			</p>
+		</div>
 	</div>
 
-	    <div class="table-container" csvfile="/data/seenatcinema.csv" fullwidth="true" sortcolumn="0" sortorder="asc">
-        <table id="dynamic-table">
-            <thead></thead>
-            <tbody></tbody>
-        </table>
-    </div>		
+<!-- New separate container for the table -->
+	<div class="table-wrapper below-table above-table">
+		<div class="table-container" csvfile="/data/seenatcinema.csv" fullwidth="true" sortcolumn="1" sortorder="asc">
+			<table id="dynamic-table">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
 
-</div>
+	<div class="container mt-1 text-justify flex-grow-1 below-table">
+		<div class="content-container below-table">
+			<p>
+				Please Note: This list is still being refined.
+			</p>
+		</div>
+	</div>
 	
 	
 
