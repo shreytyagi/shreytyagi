@@ -6,7 +6,7 @@ Lists,Cinemas,Flat Screens of India,2025.03.26,/lists/flatscreensofindia.html
 Lists,Movies,IMAX Movies,2025.03.26,/lists/imaxmovies.html
 Lists,Cinemas,IMAX Cinemas of India,2025.03.27,/lists/imaxcinemasofindia.html
 Lists,Movies,I've Seen At IMAX,2025.03.27,/lists/seenatimax.html
-Lists,Movies,I've Seen At Cinemas,2025.03.27,/lists/seenatcinema.html
+Lists,Movies,I've Seen At Cinemas,2026.11.11,/lists/seenatcinema.html
 Lists,Cinemas,Biggest Screens of India,2025.03.31,/lists/biggestscreensofindia.html
 Lists,Cinemas,Indian IMAX DMR Movies,2025.08.27,/lists/indianimaxdmrmovies.html
 Lists,Cinemas,Indian Dolby Cinema Movies,2025.08.27,/lists/indiandolbycinemamovies.html
@@ -33,3 +33,4 @@ Articles,Technology,AI: Killing The Friction Between Imagination and Execution,2
 Articles,Cinemas,3D Cinema Explained in The Simplest Way Possible,2026.06.19,/articles/3dexplained.html
 Articles,Technology,x265 Encoding Explained,2026.06.21,/articles/x265encodingexplained.html
 Utilities,Media,Bitrate Calculator,2026.07.14,/utilities/bitratecalculator.html
+Articles,Media,YouTube's AV1 HDR Streams Suprpass Apple TV+ and Netflix,2026.11.12,/articles/youtube_av1_encoding/
