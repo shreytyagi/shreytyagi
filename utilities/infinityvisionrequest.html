@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">	
 	
 	<!-- Social Media Meta Tag for Link Sharing -->
-	<meta property="og:image" content="https://www.shreytyagi.com/articles/ref2.jpg">
+	<meta property="og:image" content="https://www.shreytyagi.com/utilities/IMG_0153.jpeg">
 	<meta property="og:title" content="Avengers: Doomsday — Infinity Vision (1.85:1 Flat) Cinema Request Letter Generator">
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -58,85 +58,104 @@
 			color: #1f2937;
 			border: 1px solid #d1d5db;
 			border-radius: 6px;
-			padding: 28px 34px;
+			padding: 24px 28px;
 			margin-bottom: 40px;
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-			font-size: 10.2pt;
-			line-height: 1.48;
+			font-size: 9.8pt;
+			line-height: 1.42;
 			text-align: left;
 			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+			box-sizing: border-box;
+			width: 100%;
 		}
-		.doc-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: flex-start;
+		#printable-letter *,
+		#printable-letter *::before,
+		#printable-letter *::after {
+			box-sizing: border-box;
+		}
+
+		/* Table-based 2-column layouts (100% immune to print flex overflow) */
+		.doc-header-table {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
 			border-bottom: 2px solid #1e293b;
-			padding-bottom: 10px;
-			margin-bottom: 14px;
-			gap: 20px;
+			padding-bottom: 8px;
+			margin-bottom: 10px;
 		}
-		.doc-header-col {
-			width: 48%;
-			font-size: 9.5pt;
-			line-height: 1.38;
+		.doc-header-cell {
+			display: table-cell;
+			vertical-align: top;
+			width: 50%;
+			font-size: 9.2pt;
+			line-height: 1.35;
+			word-wrap: break-word;
+			overflow-wrap: break-word;
 		}
 		.doc-header-right {
 			text-align: right;
 		}
+
 		.doc-subject {
 			background-color: #f1f5f9;
 			border-left: 4px solid #0f172a;
-			padding: 8px 12px;
+			padding: 6px 10px;
 			font-weight: 700;
-			font-size: 10.8pt;
+			font-size: 10.2pt;
 			color: #0f172a;
-			margin-bottom: 12px;
+			margin-bottom: 9px;
 		}
 		.doc-section-title {
-			font-size: 10.8pt;
+			font-size: 10.2pt;
 			font-weight: 700;
 			color: #0f172a;
-			margin-top: 12px;
-			margin-bottom: 5px;
+			margin-top: 9px;
+			margin-bottom: 4px;
 			border-bottom: 1px solid #e2e8f0;
 			padding-bottom: 2px;
 		}
 		#printable-letter p {
-			margin-bottom: 8px;
+			margin-bottom: 6px;
 		}
 		#printable-letter ul, #printable-letter ol {
-			margin-bottom: 8px;
-			padding-left: 20px;
+			margin-bottom: 6px;
+			padding-left: 18px;
 		}
 		#printable-letter li {
-			margin-bottom: 4px;
+			margin-bottom: 3px;
 		}
 
-		/* Side-by-Side Visual Rows (Never stack in Print) */
-		.side-by-side-row {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: stretch;
-			gap: 14px;
-			margin: 10px 0 12px 0;
+		/* Side-by-Side Comparison Grid (Never overflows, never crops 4:3 images) */
+		.comparison-grid {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+			margin: 7px 0 9px 0;
 			page-break-inside: avoid;
 		}
+		.comparison-col {
+			display: table-cell;
+			width: 50%;
+			vertical-align: top;
+		}
+		.comparison-col-left {
+			padding-right: 6px;
+		}
+		.comparison-col-right {
+			padding-left: 6px;
+		}
 		.visual-card {
-			width: 48.8%;
 			border: 1px solid #cbd5e1;
 			border-radius: 5px;
-			padding: 8px;
+			padding: 7px;
 			background: #f8fafc;
 			text-align: center;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
+			width: 100%;
 		}
 		.visual-card-title {
-			font-size: 8.8pt;
+			font-size: 8.6pt;
 			font-weight: 700;
-			margin-bottom: 6px;
+			margin-bottom: 5px;
 			color: #1e293b;
 		}
 		.visual-card-title.bad {
@@ -148,74 +167,81 @@
 		.visual-card svg {
 			width: 100%;
 			height: auto;
-			max-height: 125px;
+			max-height: 105px;
 			display: block;
 			margin: 0 auto;
 			border-radius: 3px;
 		}
-		.ref-img-wrapper {
-			width: 100%;
-			aspect-ratio: 4 / 3;
-			max-height: 155px;
-			background: #0f172a;
-			border-radius: 3px;
-			overflow: hidden;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin: 0 auto;
-		}
-		.ref-img-wrapper img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
+
+		/* Full Uncropped 4:3 Photo Styling */
+		.ref-photo {
 			display: block;
+			width: 100%;
+			height: auto;
+			border-radius: 3px;
+			border: 1px solid #334155;
+			margin: 0 auto;
 		}
 		.visual-caption {
-			font-size: 8.2pt;
+			font-size: 8pt;
 			color: #475569;
-			margin-top: 5px;
+			margin-top: 4px;
 			line-height: 1.25;
 		}
+
+		/* Compact 2x2 Grid for Section 3 Requirements */
+		.req-grid {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+			margin-bottom: 4px;
+		}
+		.req-col {
+			display: table-cell;
+			width: 50%;
+			vertical-align: top;
+			padding-right: 8px;
+		}
+
 		.action-callout {
 			background-color: #eff6ff;
 			border: 1px solid #bfdbfe;
 			border-left: 4px solid #1d4ed8;
 			border-radius: 4px;
-			padding: 9px 12px;
-			margin-top: 10px;
-			margin-bottom: 12px;
+			padding: 7px 10px;
+			margin-top: 8px;
+			margin-bottom: 8px;
 			page-break-inside: avoid;
 		}
 		.doc-signoff {
-			margin-top: 12px;
-			padding-top: 8px;
+			margin-top: 8px;
+			padding-top: 6px;
 			border-top: 1px solid #e2e8f0;
 			page-break-inside: avoid;
 		}
 
 		/* Mobile responsiveness for web preview only */
 		@media screen and (max-width: 640px) {
-			.side-by-side-row {
-				flex-direction: column;
-			}
-			.visual-card {
+			.comparison-grid, .comparison-col, .doc-header-table, .doc-header-cell, .req-grid, .req-col {
+				display: block;
 				width: 100%;
+				padding-left: 0;
+				padding-right: 0;
 			}
-			.doc-header {
-				flex-direction: column;
+			.comparison-col-left {
+				margin-bottom: 10px;
 			}
-			.doc-header-col, .doc-header-right {
-				width: 100%;
+			.doc-header-right {
 				text-align: left;
+				margin-top: 6px;
 			}
 		}
 
-		/* STRICT PRINT STYLES: Hide Website Chrome & Form, Keep Clean A4 Layout */
+		/* STRICT PRINT STYLES: Override Bootstrap's 992px min-width & Fit on 1 Clean A4 Page */
 		@media print {
 			@page {
 				size: A4 portrait;
-				margin: 10mm 12mm;
+				margin: 0mm;
 			}
 			* {
 				-webkit-print-color-adjust: exact !important;
@@ -226,53 +252,61 @@
 			.no-print {
 				display: none !important;
 			}
-			body, html {
-				background: #ffffff !important;
+			html,
+			html body,
+			body .container,
+			body .content-container {
+				width: 100% !important;
+				min-width: 0 !important;
+				max-width: 100% !important;
 				margin: 0 !important;
 				padding: 0 !important;
-				min-height: auto !important;
+				background: #ffffff !important;
+				border: none !important;
+				box-shadow: none !important;
 				display: block !important;
 			}
-			.container,
-			.content-container {
+			body #printable-letter {
+				width: 100% !important;
+				min-width: 0 !important;
 				max-width: 100% !important;
-				width: 100% !important;
 				margin: 0 !important;
-				padding: 0 !important;
-				box-shadow: none !important;
-				border: none !important;
-			}
-			#printable-letter {
+				padding: 8mm 11mm !important;
 				border: none !important;
 				box-shadow: none !important;
-				padding: 0 !important;
-				margin: 0 !important;
+				font-size: 9.1pt !important;
+				line-height: 1.36 !important;
+			}
+			.doc-header-table,
+			.comparison-grid,
+			.req-grid {
+				display: table !important;
 				width: 100% !important;
-				font-size: 9.6pt !important;
-				line-height: 1.42 !important;
+				table-layout: fixed !important;
 			}
-			.doc-header {
-				flex-direction: row !important;
+			.doc-header-cell,
+			.comparison-col,
+			.req-col {
+				display: table-cell !important;
+				width: 50% !important;
+				vertical-align: top !important;
 			}
-			.doc-header-col {
-				width: 48% !important;
+			.comparison-col-left {
+				padding-right: 5px !important;
+			}
+			.comparison-col-right {
+				padding-left: 5px !important;
 			}
 			.doc-header-right {
 				text-align: right !important;
 			}
-			.side-by-side-row {
-				display: flex !important;
-				flex-direction: row !important;
-				justify-content: space-between !important;
-			}
-			.visual-card {
-				width: 48.8% !important;
-			}
 			.visual-card svg {
-				max-height: 110px !important;
+				max-height: 88px !important;
 			}
-			.ref-img-wrapper {
-				max-height: 135px !important;
+			.ref-photo {
+				width: 100% !important;
+				height: auto !important;
+				max-height: none !important;
 			}
 		}
 	</style>
@@ -339,13 +373,13 @@
 			<div id="printable-letter">
 				
 				<!-- Top Header: TO and FROM -->
-				<div class="doc-header">
-					<div class="doc-header-col">
+				<div class="doc-header-table">
+					<div class="doc-header-cell">
 						<strong>TO:</strong><br>
 						Cinema Management &amp; Projection Team<br>
 						<span id="outCinemaDetails" style="white-space: pre-line;">[Cinema Name &amp; Address]</span>
 					</div>
-					<div class="doc-header-col doc-header-right">
+					<div class="doc-header-cell doc-header-right">
 						<strong>FROM:</strong><br>
 						<span id="outHeaderName">[Your Name]</span><br>
 						<span id="outHeaderContact">[Your Phone] | [Your Email]</span>
@@ -369,42 +403,38 @@
 				</ul>
 
 				<!-- Side-by-Side SVG Illustrations -->
-				<div class="side-by-side-row">
-					<!-- Left SVG: Scope with Black Bars -->
-					<div class="visual-card">
-						<div class="visual-card-title bad">❌ Scope (2.39:1) on Your <span class="screen-label-cap">Flat Screen</span></div>
-						<svg viewBox="0 0 370 200" xmlns="http://www.w3.org/2000/svg">
-							<!-- Outer Tall Screen Frame (1.85:1 ratio) -->
-							<rect x="2" y="2" width="366" height="196" fill="#090d16" stroke="#475569" stroke-width="3"/>
-							<!-- Top Black Bar -->
-							<rect x="5" y="5" width="360" height="24" fill="#090d16"/>
-							<text x="185" y="21" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#f87171" text-anchor="middle">TOP BLACK BAR (WASTED SCREEN SPACE)</text>
-							<!-- Active 2.39:1 Scope Picture in Middle -->
-							<rect x="5" y="29" width="360" height="142" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
-							<text x="185" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">2.39:1 SCOPE PICTURE</text>
-							<text x="185" y="114" font-family="Arial, sans-serif" font-size="10.5" fill="#bfdbfe" text-anchor="middle">(Top &amp; Bottom of Picture Cut Off)</text>
-							<!-- Bottom Black Bar -->
-							<rect x="5" y="171" width="360" height="24" fill="#090d16"/>
-							<text x="185" y="187" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#f87171" text-anchor="middle">BOTTOM BLACK BAR (WASTED SCREEN SPACE)</text>
-						</svg>
-						<div class="visual-caption">Leaves thick black bars on top &amp; bottom of your tall screen.</div>
+				<div class="comparison-grid">
+					<div class="comparison-col comparison-col-left">
+						<div class="visual-card">
+							<div class="visual-card-title bad">❌ Scope (2.39:1) on Your <span class="screen-label-cap">Flat Screen</span></div>
+							<svg viewBox="0 0 370 185" xmlns="http://www.w3.org/2000/svg">
+								<rect x="2" y="2" width="366" height="181" fill="#090d16" stroke="#475569" stroke-width="3"/>
+								<rect x="5" y="5" width="360" height="22" fill="#090d16"/>
+								<text x="185" y="19" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#f87171" text-anchor="middle">TOP BLACK BAR (WASTED SCREEN SPACE)</text>
+								<rect x="5" y="27" width="360" height="131" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+								<text x="185" y="88" font-family="Arial, sans-serif" font-size="13.5" font-weight="bold" fill="#ffffff" text-anchor="middle">2.39:1 SCOPE PICTURE</text>
+								<text x="185" y="106" font-family="Arial, sans-serif" font-size="10" fill="#bfdbfe" text-anchor="middle">(Top &amp; Bottom of Picture Cut Off)</text>
+								<rect x="5" y="158" width="360" height="22" fill="#090d16"/>
+								<text x="185" y="173" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#f87171" text-anchor="middle">BOTTOM BLACK BAR (WASTED SCREEN SPACE)</text>
+							</svg>
+							<div class="visual-caption">Leaves thick black bars on top &amp; bottom of your tall screen.</div>
+						</div>
 					</div>
 
-					<!-- Right SVG: Flat Full Screen -->
-					<div class="visual-card">
-						<div class="visual-card-title good">✅ Flat (1.85:1) on Your <span class="screen-label-cap">Flat Screen</span></div>
-						<svg viewBox="0 0 370 200" xmlns="http://www.w3.org/2000/svg">
-							<!-- Full 1.85:1 Active Screen Area -->
-							<rect x="2" y="2" width="366" height="196" fill="#065f46" stroke="#10b981" stroke-width="3"/>
-							<!-- Dashed guide showing where Scope would have cut off -->
-							<line x1="6" y1="29" x2="364" y2="29" stroke="#6ee7b7" stroke-width="1.2" stroke-dasharray="5,5"/>
-							<line x1="6" y1="171" x2="364" y2="171" stroke="#6ee7b7" stroke-width="1.2" stroke-dasharray="5,5"/>
-							<text x="185" y="21" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#a7f3d0" text-anchor="middle">+ EXTRA TOP IMAGE AREA (NO BLACK BAR)</text>
-							<text x="185" y="94" font-family="Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#ffffff" text-anchor="middle">100% FULL-SCREEN PICTURE</text>
-							<text x="185" y="114" font-family="Arial, sans-serif" font-size="11" fill="#d1fae5" text-anchor="middle">1.85:1 Expanded Flat — Zero Black Bars</text>
-							<text x="185" y="187" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#a7f3d0" text-anchor="middle">+ EXTRA BOTTOM IMAGE AREA (NO BLACK BAR)</text>
-						</svg>
-						<div class="visual-caption">Fills 100% of your entire screen height &amp; width.</div>
+					<div class="comparison-col comparison-col-right">
+						<div class="visual-card">
+							<div class="visual-card-title good">✅ Flat (1.85:1) on Your <span class="screen-label-cap">Flat Screen</span></div>
+							<svg viewBox="0 0 370 185" xmlns="http://www.w3.org/2000/svg">
+								<rect x="2" y="2" width="366" height="181" fill="#065f46" stroke="#10b981" stroke-width="3"/>
+								<line x1="6" y1="27" x2="364" y2="27" stroke="#6ee7b7" stroke-width="1.2" stroke-dasharray="5,5"/>
+								<line x1="6" y1="158" x2="364" y2="158" stroke="#6ee7b7" stroke-width="1.2" stroke-dasharray="5,5"/>
+								<text x="185" y="19" font-family="Arial, sans-serif" font-size="9.5" font-weight="bold" fill="#a7f3d0" text-anchor="middle">+ EXTRA TOP IMAGE AREA (NO BLACK BAR)</text>
+								<text x="185" y="88" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">100% FULL-SCREEN PICTURE</text>
+								<text x="185" y="106" font-family="Arial, sans-serif" font-size="10.5" fill="#d1fae5" text-anchor="middle">1.85:1 Expanded Flat — Zero Black Bars</text>
+								<text x="185" y="173" font-family="Arial, sans-serif" font-size="9.5" font-weight="bold" fill="#a7f3d0" text-anchor="middle">+ EXTRA BOTTOM IMAGE AREA (NO BLACK BAR)</text>
+							</svg>
+							<div class="visual-caption">Fills 100% of your entire screen height &amp; width.</div>
+						</div>
 					</div>
 				</div>
 
@@ -416,35 +446,43 @@
 					<li><strong>If you APPLY for Infinity Vision:</strong> Because you have a tall <strong><span class="screen-label">flat screen</span></strong>, Disney will approve and send you the exclusive <strong>1.85:1 Expanded Flat DCP</strong>, filling your entire screen.</li>
 				</ul>
 
-				<!-- Side-by-Side 4:3 Reference Images (ref1.jpg & ref2.jpg) -->
-				<div class="side-by-side-row">
-					<div class="visual-card">
-						<div class="visual-card-title bad">Without Infinity Vision (Scope 2.39:1 DCP)</div>
-						<div class="ref-img-wrapper">
-							<img src="IMG_0149.jpeg" alt="Avengers Doomsday Scope 2.39:1 with Black Bars on Flat Screen">
+				<!-- Side-by-Side Uncropped 4:3 Reference Images (IMG_049.jpeg & IMG_0153.jpeg) -->
+				<div class="comparison-grid">
+					<div class="comparison-col comparison-col-left">
+						<div class="visual-card">
+							<div class="visual-card-title bad">Without Infinity Vision (Scope 2.39:1 DCP)</div>
+							<img src="IMG_049.jpeg" class="ref-photo" alt="Avengers Doomsday Scope 2.39:1 with Black Bars on Flat Screen">
+							<div class="visual-caption">Standard Scope (2.39:1) — Cropped frame with top &amp; bottom black bars on your <span class="screen-label">flat screen</span>.</div>
 						</div>
-						<div class="visual-caption">Standard Scope (2.39:1) — Cropped frame with top &amp; bottom black bars on your <span class="screen-label">flat screen</span>.</div>
 					</div>
 
-					<div class="visual-card">
-						<div class="visual-card-title good">With Infinity Vision (Flat 1.85:1 DCP)</div>
-						<div class="ref-img-wrapper">
-							<img src="IMG_0153.jpeg" alt="Avengers Doomsday Expanded Flat 1.85:1 Full Screen">
+					<div class="comparison-col comparison-col-right">
+						<div class="visual-card">
+							<div class="visual-card-title good">With Infinity Vision (Flat 1.85:1 DCP)</div>
+							<img src="IMG_0153.jpeg" class="ref-photo" alt="Avengers Doomsday Expanded Flat 1.85:1 Full Screen">
+							<div class="visual-caption">Infinity Vision Flat (1.85:1) — Full Expanded Aspect Ratio filling your entire <span class="screen-label">flat screen</span>.</div>
 						</div>
-						<div class="visual-caption">Infinity Vision Flat (1.85:1) — Full Expanded Aspect Ratio filling your entire <span class="screen-label">flat screen</span>.</div>
 					</div>
 				</div>
 
 				<!-- Section 3 -->
 				<div class="doc-section-title">3. Your Screen Already Meets All Marvel Requirements</div>
 				<p>To get <strong>Infinity Vision</strong> certification from Disney, an auditorium only needs:</p>
-				<ul>
-					<li><strong>Screen Width:</strong> At least <strong>45 feet wide</strong></li>
-					<li><strong>Brightness:</strong> Standard <strong>14 fL</strong> for 2D / <strong>6 fL</strong> for 3D</li>
-					<li><strong>Audio:</strong> <strong>7.1 Surround Sound</strong> or <strong>Dolby Atmos</strong></li>
-					<li><strong>Screen Shape for Flat DCP:</strong> While wide screens get the Scope Infinity Vision DCP, your <strong><span class="screen-label">flat screen</span></strong> qualifies directly for the <strong>1.85:1 Expanded Flat DCP</strong>.</li>
-				</ul>
-				<p>Your auditorium already meets every single requirement—<strong>no new equipment or hardware changes are needed.</strong></p>
+				<div class="req-grid">
+					<div class="req-col">
+						<ul class="mb-0">
+							<li><strong>Screen Width:</strong> At least <strong>45 feet wide</strong></li>
+							<li><strong>Brightness:</strong> Standard <strong>14 fL</strong> (2D) / <strong>6 fL</strong> (3D)</li>
+						</ul>
+					</div>
+					<div class="req-col">
+						<ul class="mb-0">
+							<li><strong>Audio:</strong> <strong>7.1 Surround</strong> or <strong>Dolby Atmos</strong></li>
+							<li><strong>Flat Screen:</strong> Qualifies for the <strong>1.85:1 Flat DCP</strong></li>
+						</ul>
+					</div>
+				</div>
+				<p class="mb-1">Your auditorium already meets every single requirement—<strong>no new equipment or hardware changes are needed.</strong></p>
 
 				<!-- Section 4 -->
 				<div class="doc-section-title">4. Why This Will Bring Huge Crowds to Your Cinema</div>
@@ -462,8 +500,7 @@
 				<!-- Sign-off -->
 				<div class="doc-signoff">
 					<strong>Best Regards,</strong><br>
-					<strong id="outFooterName">[Your Name]</strong><br>
-					<span id="outFooterContact">[Your Phone] | [Your Email]</span>
+					<strong id="outFooterName">[Your Name]</strong> — <span id="outFooterContact">[Your Phone] | [Your Email]</span>
 				</div>
 
 			</div>
