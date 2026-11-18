@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Avengers: Doomsday — Infinity Vision (1.85:1 Flat) Cinema Request Letter Generator</title>
+
+	<!-- Bootstrap CSS -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	
+	<!-- Social Media Meta Tag for Link Sharing -->
+	<meta property="og:image" content="https://www.shreytyagi.com/articles/ref2.jpg">
+	<meta property="og:title" content="Avengers: Doomsday — Infinity Vision (1.85:1 Flat) Cinema Request Letter Generator">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	
+	<!-- Bootstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<!-- Local CSS -->
+	<link href="/css/style.css" rel="stylesheet">
+
+	<!-- Local JS -->
+	<script src="/js/script.js"></script>
+
+	<!-- YouTube JS -->
+	<script src="https://apis.google.com/js/platform.js"></script>
+
+	<style>
+		/* Generator Form Styling (Web View Only) */
+		.generator-box {
+			background-color: #f8f9fa;
+			border: 1px solid #dee2e6;
+			border-radius: 8px;
+			padding: 20px;
+			margin-bottom: 30px;
+		}
+		.generator-box label {
+			font-weight: 600;
+			font-size: 0.92rem;
+			margin-bottom: 4px;
+			color: #212529;
+		}
+		.preview-label {
+			font-size: 0.85rem;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: #6c757d;
+			font-weight: 700;
+			margin-bottom: 8px;
+		}
+
+		/* Printable Document Card Styling */
+		#printable-letter {
+			background: #ffffff;
+			color: #1f2937;
+			border: 1px solid #d1d5db;
+			border-radius: 6px;
+			padding: 28px 34px;
+			margin-bottom: 40px;
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+			font-size: 10.2pt;
+			line-height: 1.48;
+			text-align: left;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+		}
+		.doc-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			border-bottom: 2px solid #1e293b;
+			padding-bottom: 10px;
+			margin-bottom: 14px;
+			gap: 20px;
+		}
+		.doc-header-col {
+			width: 48%;
+			font-size: 9.5pt;
+			line-height: 1.38;
+		}
+		.doc-header-right {
+			text-align: right;
+		}
+		.doc-subject {
+			background-color: #f1f5f9;
+			border-left: 4px solid #0f172a;
+			padding: 8px 12px;
+			font-weight: 700;
+			font-size: 10.8pt;
+			color: #0f172a;
+			margin-bottom: 12px;
+		}
+		.doc-section-title {
+			font-size: 10.8pt;
+			font-weight: 700;
+			color: #0f172a;
+			margin-top: 12px;
+			margin-bottom: 5px;
+			border-bottom: 1px solid #e2e8f0;
+			padding-bottom: 2px;
+		}
+		#printable-letter p {
+			margin-bottom: 8px;
+		}
+		#printable-letter ul, #printable-letter ol {
+			margin-bottom: 8px;
+			padding-left: 20px;
+		}
+		#printable-letter li {
+			margin-bottom: 4px;
+		}
+
+		/* Side-by-Side Visual Rows (Never stack in Print) */
+		.side-by-side-row {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: stretch;
+			gap: 14px;
+			margin: 10px 0 12px 0;
+			page-break-inside: avoid;
+		}
+		.visual-card {
+			width: 48.8%;
+			border: 1px solid #cbd5e1;
+			border-radius: 5px;
+			padding: 8px;
+			background: #f8fafc;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+		.visual-card-title {
+			font-size: 8.8pt;
+			font-weight: 700;
+			margin-bottom: 6px;
+			color: #1e293b;
+		}
+		.visual-card-title.bad {
+			color: #991b1b;
+		}
+		.visual-card-title.good {
+			color: #166534;
+		}
+		.visual-card svg {
+			width: 100%;
+			height: auto;
+			max-height: 125px;
+			display: block;
+			margin: 0 auto;
+			border-radius: 3px;
+		}
+		.ref-img-wrapper {
+			width: 100%;
+			aspect-ratio: 4 / 3;
+			max-height: 155px;
+			background: #0f172a;
+			border-radius: 3px;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto;
+		}
+		.ref-img-wrapper img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+		.visual-caption {
+			font-size: 8.2pt;
+			color: #475569;
+			margin-top: 5px;
+			line-height: 1.25;
+		}
+		.action-callout {
+			background-color: #eff6ff;
+			border: 1px solid #bfdbfe;
+			border-left: 4px solid #1d4ed8;
+			border-radius: 4px;
+			padding: 9px 12px;
+			margin-top: 10px;
+			margin-bottom: 12px;
+			page-break-inside: avoid;
+		}
+		.doc-signoff {
+			margin-top: 12px;
+			padding-top: 8px;
+			border-top: 1px solid #e2e8f0;
+			page-break-inside: avoid;
+		}
+
+		/* Mobile responsiveness for web preview only */
+		@media screen and (max-width: 640px) {
+			.side-by-side-row {
+				flex-direction: column;
+			}
+			.visual-card {
+				width: 100%;
+			}
+			.doc-header {
+				flex-direction: column;
+			}
+			.doc-header-col, .doc-header-right {
+				width: 100%;
+				text-align: left;
+			}
+		}
+
+		/* STRICT PRINT STYLES: Hide Website Chrome & Form, Keep Clean A4 Layout */
+		@media print {
+			@page {
+				size: A4 portrait;
+				margin: 10mm 12mm;
+			}
+			* {
+				-webkit-print-color-adjust: exact !important;
+				print-color-adjust: exact !important;
+			}
+			#navbar-container,
+			#footer-container,
+			.no-print {
+				display: none !important;
+			}
+			body, html {
+				background: #ffffff !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				min-height: auto !important;
+				display: block !important;
+			}
+			.container,
+			.content-container {
+				max-width: 100% !important;
+				width: 100% !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				box-shadow: none !important;
+				border: none !important;
+			}
+			#printable-letter {
+				border: none !important;
+				box-shadow: none !important;
+				padding: 0 !important;
+				margin: 0 !important;
+				width: 100% !important;
+				font-size: 9.6pt !important;
+				line-height: 1.42 !important;
+			}
+			.doc-header {
+				flex-direction: row !important;
+			}
+			.doc-header-col {
+				width: 48% !important;
+			}
+			.doc-header-right {
+				text-align: right !important;
+			}
+			.side-by-side-row {
+				display: flex !important;
+				flex-direction: row !important;
+				justify-content: space-between !important;
+			}
+			.visual-card {
+				width: 48.8% !important;
+			}
+			.visual-card svg {
+				max-height: 110px !important;
+			}
+			.ref-img-wrapper {
+				max-height: 135px !important;
+			}
+		}
+	</style>
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;" data-master-category="">
+
+	<!-- Navbar will be loaded here -->
+	<div id="navbar-container" class="no-print"></div>
+
+	<div class="container mt-1 text-justify flex-grow-1">
+
+		<div class="content-container">
+
+			<!-- Website Header & Form Section (Hidden when Printing) -->
+			<div class="no-print">
+				<h3>Avengers: Doomsday — "Infinity Vision" (1.85:1 Flat) Cinema Letter Generator</h3>
+				<p class="articleauth">Shrey Tyagi • Cinema Technology Initiative</p>
+
+				<p>Since <i>Avengers: Doomsday</i> is not releasing in IMAX, large non-IMAX flat screens (45+ ft wide) are our best way to watch the movie in its full <b>1.85:1 Expanded Aspect Ratio</b> without black bars. However, Disney will only send the 1.85:1 Flat DCP to cinemas that apply for <b>Infinity Vision</b> certification beforehand. Fill in the details below to generate a ready-to-print letter you can hand over or email to your local cinema management.</p>
+
+				<div class="generator-box shadow-sm">
+					<h5 class="mb-3">1. Enter Details to Customize Your Letter</h5>
+					<div class="row">
+						<div class="col-md-4 col-12 mb-3">
+							<label for="userName">Your Name</label>
+							<input type="text" id="userName" class="form-control" placeholder="e.g., Shrey Tyagi">
+						</div>
+						<div class="col-md-4 col-12 mb-3">
+							<label for="userPhone">Your Phone Number</label>
+							<input type="text" id="userPhone" class="form-control" placeholder="e.g., +91 9876543210">
+						</div>
+						<div class="col-md-4 col-12 mb-3">
+							<label for="userEmail">Your Email Address</label>
+							<input type="email" id="userEmail" class="form-control" placeholder="e.g., name@email.com">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-7 col-12 mb-3">
+							<label for="cinemaDetails">Cinema Name, Mall/Location &amp; City</label>
+							<textarea id="cinemaDetails" class="form-control" rows="3" placeholder="e.g., PVR INOX Cinemas&#10;Elante Mall, Industrial Area Phase 1&#10;Chandigarh"></textarea>
+						</div>
+						<div class="col-md-5 col-12 mb-3">
+							<label for="screenType">Screen Format Name <span class="text-muted font-weight-normal">(Optional)</span></label>
+							<input type="text" id="screenType" class="form-control" placeholder="e.g., BIGPIX, PXL, PCX, EPIQ (Leave blank if standard)">
+							<small class="form-text text-muted">
+								If you enter <b>BIGPIX</b>, the letter will say <b>"BIGPIX flat screen"</b>. If left blank, it will simply say <b>"flat screen"</b>.
+							</small>
+						</div>
+					</div>
+
+					<div class="d-flex flex-wrap align-items-center justify-content-between mt-2">
+						<span class="text-muted small mb-2 mb-md-0">Tip: In the print dialog, choose <b>"Save as PDF"</b> or print directly on A4 paper.</span>
+						<button type="button" class="btn btn-primary font-weight-bold px-4" onclick="window.print()">
+							🖨️ Print / Save Clean PDF
+						</button>
+					</div>
+				</div>
+
+				<div class="preview-label">Live Printable Document Preview</div>
+			</div>
+
+			<!-- PRINTABLE DOCUMENT AREA -->
+			<div id="printable-letter">
+				
+				<!-- Top Header: TO and FROM -->
+				<div class="doc-header">
+					<div class="doc-header-col">
+						<strong>TO:</strong><br>
+						Cinema Management &amp; Projection Team<br>
+						<span id="outCinemaDetails" style="white-space: pre-line;">[Cinema Name &amp; Address]</span>
+					</div>
+					<div class="doc-header-col doc-header-right">
+						<strong>FROM:</strong><br>
+						<span id="outHeaderName">[Your Name]</span><br>
+						<span id="outHeaderContact">[Your Phone] | [Your Email]</span>
+					</div>
+				</div>
+
+				<!-- Subject Line -->
+				<div class="doc-subject">
+					SUBJECT: How to Get the Full-Screen (1.85:1) Version of <em>Avengers: Doomsday</em> for Your <span class="screen-label-cap">Flat Screen</span>
+				</div>
+
+				<p><strong>Dear Management &amp; Projection Team,</strong></p>
+
+				<p><strong>Avengers: Doomsday</strong> is not releasing in IMAX. Because of this, moviegoers are looking for large, tall screens that can play the movie full-screen without black bars. Your <strong><span class="screen-label">flat screen</span></strong> is one of the only screens in the entire region that can do this—<strong>but only if you apply to Disney for "Infinity Vision" certification beforehand.</strong></p>
+
+				<!-- Section 1 -->
+				<div class="doc-section-title">1. The Basics: Scope vs. Flat on Your Screen</div>
+				<ul>
+					<li><strong>Scope (2.39:1 — Wide Format):</strong> About 95% of movies come in this wide format. Because your <strong><span class="screen-label">flat screen</span></strong> is built tall, playing a Scope movie leaves <strong>big black bars at the top and bottom</strong>.</li>
+					<li><strong>Flat (1.85:1 — Tall Format):</strong> This taller format <strong>fills 100% of your <span class="screen-label">flat screen</span></strong> from top to bottom with <strong>zero black bars</strong>, giving audiences a massive, full-screen picture.</li>
+				</ul>
+
+				<!-- Side-by-Side SVG Illustrations -->
+				<div class="side-by-side-row">
+					<!-- Left SVG: Scope with Black Bars -->
+					<div class="visual-card">
+						<div class="visual-card-title bad">❌ Scope (2.39:1) on Your <span class="screen-label-cap">Flat Screen</span></div>
+						<svg viewBox="0 0 370 200" xmlns="http://www.w3.org/2000/svg">
+							<!-- Outer Tall Screen Frame (1.85:1 ratio) -->
+							<rect x="2" y="2" width="366" height="196" fill="#090d16" stroke="#475569" stroke-width="3"/>
+							<!-- Top Black Bar -->
+							<rect x="5" y="5" width="360" height="24" fill="#090d16"/>
+							<text x="185" y="21" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#f87171" text-anchor="middle">TOP BLACK BAR (WASTED SCREEN SPACE)</text>
+							<!-- Active 2.39:1 Scope Picture in Middle -->
+							<rect x="5" y="29" width="360" height="142" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+							<text x="185" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">2.39:1 SCOPE PICTURE</text>
+							<text x="185" y="114" font-family="Arial, sans-serif" font-size="10.5" fill="#bfdbfe" text-anchor="middle">(Top &amp; Bottom of Picture Cut Off)</text>
+							<!-- Bottom Black Bar -->
+							<rect x="5" y="171" width="360" height="24" fill="#090d16"/>
+							<text x="185" y="187" font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#f87171" text-anchor="middle">BOTTOM BLACK BAR (WASTED SCREEN SPACE)</text>
+						</svg>
+						<div class="visual-caption">Leaves thick black bars on top &amp; bottom of your tall screen.</div>
+					</div>
+
+					<!-- Right SVG: Flat Full Screen -->
+					<div class="visual-card">
+						<div class="visual-card-title good">✅ Flat (1.85:1) on Your <span class="screen-label-cap">Flat Screen</span></div>
+						<svg viewBox="0 0 370 200" xmlns="http://www.w3.org/2000/svg">
+							<!-- Full 1.85:1 Active Screen Area -->
+							<rect x="2" y="2" width="366" height="196" fill="#065f46" stroke="#10b981" stroke-width="3"/>
+							<!-- Dashed guide showing where Scope would have cut off -->
+							<line x1="6" y1="29" x2="364" y2="29" stroke="#6ee7b7" stroke-width="1.2" stroke-dasharray="5,5"/>
+							<line x1="6" y1="171" x2="364" y2="171" stroke="#6ee7b7" stroke-width="1.2" stroke-dasharray="5,5"/>
+							<text x="185" y="21" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#a7f3d0" text-anchor="middle">+ EXTRA TOP IMAGE AREA (NO BLACK BAR)</text>
+							<text x="185" y="94" font-family="Arial, sans-serif" font-size="14.5" font-weight="bold" fill="#ffffff" text-anchor="middle">100% FULL-SCREEN PICTURE</text>
+							<text x="185" y="114" font-family="Arial, sans-serif" font-size="11" fill="#d1fae5" text-anchor="middle">1.85:1 Expanded Flat — Zero Black Bars</text>
+							<text x="185" y="187" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#a7f3d0" text-anchor="middle">+ EXTRA BOTTOM IMAGE AREA (NO BLACK BAR)</text>
+						</svg>
+						<div class="visual-caption">Fills 100% of your entire screen height &amp; width.</div>
+					</div>
+				</div>
+
+				<!-- Section 2 -->
+				<div class="doc-section-title">2. The Catch with <em>Avengers: Doomsday</em> ("Infinity Vision")</div>
+				<p>Marvel is releasing <em>Avengers: Doomsday</em> in two DCP versions: a standard <strong>Scope (2.39:1)</strong> version and an <strong>Expanded Flat (1.85:1)</strong> version. Both versions are also offered under Marvel's <strong>"Infinity Vision"</strong> certification depending on a cinema's screen shape:</p>
+				<ul>
+					<li><strong>If you DO NOT apply for Infinity Vision:</strong> Disney will only send you the standard <strong>Scope (2.39:1)</strong> DCP. Your tall <strong><span class="screen-label">flat screen</span></strong> will be forced to play the movie with big black bars on top and bottom.</li>
+					<li><strong>If you APPLY for Infinity Vision:</strong> Because you have a tall <strong><span class="screen-label">flat screen</span></strong>, Disney will approve and send you the exclusive <strong>1.85:1 Expanded Flat DCP</strong>, filling your entire screen.</li>
+				</ul>
+
+				<!-- Side-by-Side 4:3 Reference Images (ref1.jpg & ref2.jpg) -->
+				<div class="side-by-side-row">
+					<div class="visual-card">
+						<div class="visual-card-title bad">Without Infinity Vision (Scope 2.39:1 DCP)</div>
+						<div class="ref-img-wrapper">
+							<img src="ref1.jpg" alt="Avengers Doomsday Scope 2.39:1 with Black Bars on Flat Screen">
+						</div>
+						<div class="visual-caption">Standard Scope (2.39:1) — Cropped frame with top &amp; bottom black bars on your <span class="screen-label">flat screen</span>.</div>
+					</div>
+
+					<div class="visual-card">
+						<div class="visual-card-title good">With Infinity Vision (Flat 1.85:1 DCP)</div>
+						<div class="ref-img-wrapper">
+							<img src="ref2.jpg" alt="Avengers Doomsday Expanded Flat 1.85:1 Full Screen">
+						</div>
+						<div class="visual-caption">Infinity Vision Flat (1.85:1) — Full Expanded Aspect Ratio filling your entire <span class="screen-label">flat screen</span>.</div>
+					</div>
+				</div>
+
+				<!-- Section 3 -->
+				<div class="doc-section-title">3. Your Screen Already Meets All Marvel Requirements</div>
+				<p>To get <strong>Infinity Vision</strong> certification from Disney, an auditorium only needs:</p>
+				<ul>
+					<li><strong>Screen Width:</strong> At least <strong>45 feet wide</strong></li>
+					<li><strong>Brightness:</strong> Standard <strong>14 fL</strong> for 2D / <strong>6 fL</strong> for 3D</li>
+					<li><strong>Audio:</strong> <strong>7.1 Surround Sound</strong> or <strong>Dolby Atmos</strong></li>
+					<li><strong>Screen Shape for Flat DCP:</strong> While wide screens get the Scope Infinity Vision DCP, your <strong><span class="screen-label">flat screen</span></strong> qualifies directly for the <strong>1.85:1 Expanded Flat DCP</strong>.</li>
+				</ul>
+				<p>Your auditorium already meets every single requirement—<strong>no new equipment or hardware changes are needed.</strong></p>
+
+				<!-- Section 4 -->
+				<div class="doc-section-title">4. Why This Will Bring Huge Crowds to Your Cinema</div>
+				<p>Very few cinemas in a massive geographical radius have a 45+ ft tall <strong><span class="screen-label">flat screen</span></strong>. If you get certified and play the <strong>1.85:1 Flat version</strong>, fans from neighboring cities and towns will travel long distances specifically to your cinema to watch <em>Avengers: Doomsday</em> full-screen.</p>
+
+				<!-- Action Callout -->
+				<div class="action-callout">
+					<strong>What You Need to Do:</strong>
+					<ol class="mb-0 mt-1">
+						<li><strong>Apply to Disney/Marvel Distribution Now:</strong> Request <strong>Infinity Vision certification</strong> for your <strong><span class="screen-label">flat screen</span></strong> well ahead of release.</li>
+						<li><strong>Request the 1.85:1 Flat DCP:</strong> Once approved, ensure your programming and projection team specifically orders and plays the <strong>1.85:1 Flat version</strong> (not the Scope version) on your <strong><span class="screen-label">flat screen</span></strong>.</li>
+					</ol>
+				</div>
+
+				<!-- Sign-off -->
+				<div class="doc-signoff">
+					<strong>Best Regards,</strong><br>
+					<strong id="outFooterName">[Your Name]</strong><br>
+					<span id="outFooterContact">[Your Phone] | [Your Email]</span>
+				</div>
+
+			</div>
+			<!-- END PRINTABLE DOCUMENT AREA -->
+
+		</div>
+
+	</div>
+	
+	<div id="footer-container" class="no-print">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark nav-bottom">
+			<div class="container">
+				<div class="navbar-collapse">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item">
+							<a class="nav-link disabled" href="#" id="current-year">
+								Copyright © 2027 by Shrey Tyagi. All rights reserved.
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+	<script>
+		function updateLetterPreview() {
+			var name = document.getElementById('userName').value.trim();
+			var phone = document.getElementById('userPhone').value.trim();
+			var email = document.getElementById('userEmail').value.trim();
+			var cinema = document.getElementById('cinemaDetails').value.trim();
+			var screenRaw = document.getElementById('screenType').value.trim();
+
+			// Name fallback
+			var displayName = name ? name : '[Your Name]';
+
+			// Contact line formatting
+			var contactParts = [];
+			if (phone) contactParts.push(phone);
+			if (email) contactParts.push(email);
+			var displayContact = contactParts.length > 0 ? contactParts.join(' | ') : '[Your Phone / Email]';
+
+			// Cinema address fallback
+			var displayCinema = cinema ? cinema : '[Cinema Name, Mall/Area & City]';
+
+			// Screen label logic: if blank -> "flat screen", if "BIGPIX" -> "BIGPIX flat screen"
+			var cleanScreen = screenRaw.replace(/\bflat\s*screen\b/ig, '').replace(/\bflat\b/ig, '').trim();
+			var screenLower = cleanScreen ? (cleanScreen + ' flat screen') : 'flat screen';
+			var screenCap = cleanScreen ? (cleanScreen + ' Flat Screen') : 'Flat Screen';
+
+			// Populate DOM elements
+			document.getElementById('outHeaderName').textContent = displayName;
+			document.getElementById('outFooterName').textContent = displayName;
+			document.getElementById('outHeaderContact').textContent = displayContact;
+			document.getElementById('outFooterContact').textContent = displayContact;
+			document.getElementById('outCinemaDetails').textContent = displayCinema;
+
+			var lowerNodes = document.querySelectorAll('.screen-label');
+			for (var i = 0; i < lowerNodes.length; i++) {
+				lowerNodes[i].textContent = screenLower;
+			}
+
+			var capNodes = document.querySelectorAll('.screen-label-cap');
+			for (var j = 0; j < capNodes.length; j++) {
+				capNodes[j].textContent = screenCap;
+			}
+		}
+
+		// Attach live input listeners
+		var inputIds = ['userName', 'userPhone', 'userEmail', 'cinemaDetails', 'screenType'];
+		for (var i = 0; i < inputIds.length; i++) {
+			document.getElementById(inputIds[i]).addEventListener('input', updateLetterPreview);
+		}
+	</script>
+
+</body>
+</html>
