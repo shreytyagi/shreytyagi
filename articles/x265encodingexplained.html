@@ -231,6 +231,27 @@
             height: 0.95rem !important;
         }
 
+        /* Non-Square DAR Sub-Panel */
+        #encoding-tool-wrapper .dar-subpanel {
+            background-color: #f0f7ff !important;
+            border: 1px solid #b8daff !important;
+            border-radius: 6px !important;
+            padding: 1rem !important;
+            margin-top: 1rem !important;
+            width: 100% !important;
+        }
+
+        /* Compact Utility Button (Match Source) */
+        #encoding-tool-wrapper .btn-compact {
+            height: 26px !important;
+            padding: 0 0.65rem !important;
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.4px !important;
+            border-radius: 4px !important;
+        }
+
         /* Compatibility Guide Card */
         #encoding-tool-wrapper .guide-card {
             background-color: #f8f9fa !important;
@@ -255,12 +276,12 @@
             padding: 0.7rem 1rem !important;
             font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
             font-size: 0.78rem !important;
-            margin-bottom: 1.15rem !important;
+            margin-bottom: 1rem !important;
             display: flex !important;
             flex-wrap: wrap !important;
             justify-content: space-between !important;
             align-items: center !important;
-            gap: 0.75rem !important;
+            gap: 0.65rem !important;
             width: 100% !important;
         }
         #encoding-tool-wrapper .telemetry-item {
@@ -278,6 +299,20 @@
         #encoding-tool-wrapper .telemetry-val {
             color: #20c997 !important;
             font-weight: 700 !important;
+        }
+
+        /* Inline Warning Banners */
+        #encoding-tool-wrapper .hw-warn-banner {
+            background-color: #fff3cd !important;
+            border: 1px solid #ffeeba !important;
+            border-left: 4px solid #e0a800 !important;
+            color: #856404 !important;
+            border-radius: 5px !important;
+            padding: 0.65rem 0.9rem !important;
+            font-size: 0.80rem !important;
+            line-height: 1.4 !important;
+            margin-bottom: 1rem !important;
+            display: none;
         }
 
         /* Disabled Input Polish */
@@ -300,7 +335,7 @@
             border: 1px solid #e2e6ea !important;
             border-radius: 5px !important;
             padding: 0.75rem 1rem !important;
-            min-height: 56px !important;
+            min-height: 58px !important;
             height: 100% !important;
             display: flex !important;
             align-items: center !important;
@@ -383,7 +418,7 @@
                  ================================================================= -->
             <div id="encoding-tool-wrapper" class="mt-4 mb-5">
                 <h4 class="mb-2 text-primary font-weight-bold">The Ultimate Encoding Generator</h4>
-                <p class="text-muted mb-4">This tool dynamically engineers a pure, unbroken, single-line Unix command. Paste it directly into your terminal. It injects Python frame processing into memory, pipelines it to x265, manages color metadata, and automatically cleans up temporary scripts.</p>
+                <p class="text-muted mb-4">This tool dynamically engineers a pure, unbroken, single-line Unix command. Paste it directly into your terminal. It injects Python frame processing into memory, pipelines it to x265, manages Dolby Vision &amp; HDR10+ dynamic metadata, and automatically cleans up temporary scripts.</p>
                 
                 <!-- System Compatibility Guide -->
                 <div class="guide-card shadow-sm">
@@ -402,8 +437,8 @@
                         <ol class="small text-dark mb-0 pl-3">
                             <li class="mb-1">Open your Terminal application.</li>
                             <li class="mb-1">Ensure <b>Homebrew</b> is installed. (If not, get it from <a href="https://brew.sh" target="_blank">brew.sh</a>).</li>
-                            <li class="mb-1">Install the complete encoding suite by running the following command:
-                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace; white-space: pre-wrap; word-break: break-all;">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool</pre>
+                            <li class="mb-1">Install the complete encoding, HDR10+, Dolby Vision &amp; packaging suite:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace; white-space: pre-wrap; word-break: break-all;">brew install x265 vapoursynth ffmpeg ffms2 dovi_tool hdr10plus_tool gpac</pre>
                             </li>
                             <li>Your system is now fully compatible! Paste the generated command from below directly into your terminal.</li>
                         </ol>
@@ -415,10 +450,10 @@
                         <ol class="small text-dark mb-0 pl-3">
                             <li class="mb-1">Open PowerShell or Command Prompt.</li>
                             <li class="mb-1">We recommend using the <b>Scoop</b> package manager. (Get it from <a href="https://scoop.sh" target="_blank">scoop.sh</a>).</li>
-                            <li class="mb-1">Install the complete encoding suite by running the following command:
-                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace; white-space: pre-wrap; word-break: break-all;">scoop install x265 vapoursynth ffmpeg dovi_tool</pre>
+                            <li class="mb-1">Install the core encoding &amp; packaging suite:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace; white-space: pre-wrap; word-break: break-all;">scoop install x265 vapoursynth ffmpeg dovi_tool gpac</pre>
                             </li>
-                            <li><i>Note:</i> Windows natively supports the <code>lsmas</code> frame-server plugin bundled with standard VapourSynth setups. Paste the generated command from below directly into your terminal.</li>
+                            <li><i>Note:</i> For HDR10+ injection, download <code>hdr10plus_tool</code> from <a href="https://github.com/quietvoid/hdr10plus_tool/releases" target="_blank">GitHub Releases</a> and add it to your PATH. Windows natively supports the <code>lsmas</code> frame-server plugin bundled with standard VapourSynth setups.</li>
                         </ol>
                     </div>
 
@@ -428,10 +463,10 @@
                         <ol class="small text-dark mb-0 pl-3">
                             <li class="mb-1">Open your Terminal.</li>
                             <li class="mb-1">Update your package repository definitions.</li>
-                            <li class="mb-1">Install the complete encoding suite by running the following command:
-                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace; white-space: pre-wrap; word-break: break-all;">sudo apt install x265 vapoursynth ffmpeg libffms2-4</pre>
+                            <li class="mb-1">Install the complete encoding &amp; packaging suite:
+                                <pre class="bg-dark text-success p-2 rounded mt-2 mb-2 border border-secondary" style="font-family: monospace; white-space: pre-wrap; word-break: break-all;">sudo apt install x265 vapoursynth ffmpeg libffms2-4 gpac</pre>
                             </li>
-                            <li><i>Note:</i> <code>dovi_tool</code> must be downloaded from its GitHub releases page and added to your PATH. Once complete, paste the generated command from below directly into your terminal.</li>
+                            <li><i>Note:</i> Download <code>dovi_tool</code> and <code>hdr10plus_tool</code> from their GitHub Releases pages and add them to your PATH. Once complete, paste the generated command from below directly into your terminal.</li>
                         </ol>
                     </div>
                 </div>
@@ -441,12 +476,12 @@
                     <!-- =========================================================
                          PART 1: VAPOURSYNTH PROCESSING ENGINE
                          ========================================================= -->
-                    <h5 class="font-weight-bold text-success ui-section-title border-bottom border-success">1. VapourSynth Input & Frame Server Engine</h5>
+                    <h5 class="font-weight-bold text-success ui-section-title border-bottom border-success">1. VapourSynth Input &amp; Frame Server Engine</h5>
                     
                     <!-- Panel 1A: Input File, Mandatory Source Dimensions, Filter Engine, 3D LUT -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-success">»</span> Source File, Dimensions, Frame Server & 3D LUT</span>
+                            <span class="panel-subtitle"><span class="text-success">»</span> Source File, Dimensions, Frame Server &amp; 3D LUT</span>
                             <span class="badge badge-light border text-muted">Mandatory Source Specs</span>
                         </div>
                         <!-- Row 1: Mandatory File & Dimensions -->
@@ -511,7 +546,7 @@
                     <!-- Panel 1B: Manual Color Range Override -->
                     <div class="console-panel console-panel-muted">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-success">»</span> Input & Output Color Range Override</span>
+                            <span class="panel-subtitle"><span class="text-success">»</span> Input &amp; Output Color Range Override</span>
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="chkOverrideSignal">
                                 <label class="custom-control-label font-weight-bold text-dark" for="chkOverrideSignal" style="font-size: 0.82rem;">Manually Override Color Range</label>
@@ -542,7 +577,7 @@
                     <!-- Panel 1C: Frame Rate Controls -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-success">»</span> Temporal & Framerate Controls</span>
+                            <span class="panel-subtitle"><span class="text-success">»</span> Temporal &amp; Framerate Controls</span>
                             <span class="badge badge-success">Check "Fractional (/1001)" for NTSC / Pull-Down Rates</span>
                         </div>
                         <div class="row">
@@ -625,27 +660,36 @@
                         </div>
                     </div>
 
-                    <!-- Panel 1D: Geometry, Cropping & Resizing -->
+                    <!-- Panel 1D: Unified Geometry — Cropping, Output Pixel Resolution & Aspect Ratio -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-success">»</span> Geometry: Cropping & Resolution Scaling</span>
-                            <span class="small text-muted">Uses Mandatory Input Width & Height from Panel 1A</span>
+                            <span class="panel-subtitle"><span class="text-success">»</span> Geometry: Cropping, Output Resolution &amp; Aspect Ratio</span>
+                            <button type="button" class="btn btn-outline-secondary btn-compact" id="btnMatchSource">Match Source Dimensions</button>
                         </div>
 
                         <!-- Live Telemetry Bar -->
                         <div class="telemetry-bar">
                             <div class="telemetry-item">
-                                <span class="telemetry-label">Post-Crop Canvas:</span>
+                                <span class="telemetry-label">Post-Crop:</span>
                                 <span class="telemetry-val" id="telCropped">3840 × 2160 (16:9)</span>
                             </div>
                             <div class="telemetry-item">
-                                <span class="telemetry-label">Final Encode Resolution:</span>
-                                <span class="telemetry-val" id="telCanvas">3840 × 2160 (Native Pass-Through)</span>
+                                <span class="telemetry-label">Output Pixels:</span>
+                                <span class="telemetry-val" id="telCanvas">3840 × 2160 (Pass-Through)</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="telemetry-label">Display AR (DAR):</span>
+                                <span class="telemetry-val" id="telDar">16:9 (1.78:1)</span>
                             </div>
                             <div class="telemetry-item">
                                 <span class="telemetry-label">Output SAR:</span>
-                                <span class="telemetry-val" id="telSar">1:1 (Square Pixels)</span>
+                                <span class="telemetry-val" id="telSar">1:1 (Square)</span>
                             </div>
+                        </div>
+
+                        <!-- Non-Standard Smart TV Width Alert (Shown only when Safe Mode is ON and output > 3840x2160) -->
+                        <div class="hw-warn-banner" id="hwDimWarning">
+                            <b>Smart TV USB Compatibility Notice:</b> Your output pixel dimensions (<span id="hwDimText"></span>) exceed standard UHD <b>3840×2160</b>. Apple Silicon and Android/Google TV players handle DCI/VistaVision widths (such as 3996×2160), but strict LG webOS and Samsung USB players expect <b>≤ 3840×2160</b>. You can either set Output Pixel Width to <b>3840</b> with <b>Square Pixels</b> (auto-scales height proportionally), or uncheck <b>Square Pixels</b> to store <b>3840×2160</b> while preserving your exact Display Aspect Ratio via <code>--sar</code>.
                         </div>
 
                         <!-- Cropping Row -->
@@ -694,40 +738,86 @@
                             </div>
                         </div>
 
-                        <!-- Resizing Row -->
+                        <!-- Output Pixel Dimensions & Square Pixel Lock -->
                         <div class="row">
-                            <div class="col-12 mb-3">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="genResizeToggle">
-                                    <label class="custom-control-label font-weight-bold text-dark" for="genResizeToggle" style="font-size: 0.85rem;">Enable Resolution Resizing</label>
+                            <div class="col-12 mb-3 d-flex flex-wrap justify-content-between align-items-center" style="gap: 0.5rem;">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chkSquarePixels" checked>
+                                    <label class="custom-control-label font-weight-bold text-dark" for="chkSquarePixels" style="font-size: 0.85rem;">
+                                        Square Pixels (1:1 PAR — Auto-Lock Output Width &amp; Height to Source Aspect Ratio)
+                                    </label>
+                                </div>
+                                <span class="badge badge-light border text-muted" id="resizeStatusBadge">Pass-Through (No Scaling)</span>
+                            </div>
+                            <div class="col-6 col-md-4 mb-3 mb-md-0">
+                                <div class="field-header">
+                                    <label class="pro-label" for="genResizeW">Output Pixel Width</label>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" class="form-control font-weight-bold" id="genResizeW" value="3840" min="2" step="2">
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                            <div class="col-6 col-md-4 mb-3 mb-md-0">
+                                <div class="field-header">
+                                    <label class="pro-label" for="genResizeH">Output Pixel Height</label>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" class="form-control font-weight-bold" id="genResizeH" value="2160" min="2" step="2">
+                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
                                 <div class="field-header">
                                     <label class="pro-label" for="genResizeAlgo">Scaling Algorithm</label>
                                 </div>
                                 <select class="form-control" id="genResizeAlgo" disabled>
-                                    <option value="Spline36" selected>Spline36 (Neutral & Sharp)</option>
+                                    <option value="Spline36" selected>Spline36 (Neutral &amp; Sharp)</option>
                                     <option value="Lanczos">Lanczos (High Frequency Detail)</option>
                                     <option value="Bicubic">Bicubic (Smooth Roll-off)</option>
                                 </select>
                             </div>
-                            <div class="col-6 col-md-4">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genResizeW">Target Width</label>
-                                </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genResizeW" value="3840" min="2" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
-                                </div>
+                        </div>
+
+                        <!-- Non-Square Pixels: Final Display Aspect Ratio (Appears ONLY when Square Pixels is unchecked) -->
+                        <div class="dar-subpanel" id="nonSquareDarPanel" style="display: none;">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 pb-2 border-bottom" style="border-color: #b8daff !important; gap: 0.5rem;">
+                                <span class="panel-subtitle text-primary" style="font-size: 0.76rem !important;">Non-Square Pixels — Final Video Display Aspect Ratio (DAR)</span>
+                                <span class="badge badge-primary" id="darSarPreviewBadge">Auto SAR: 1:1</span>
                             </div>
-                            <div class="col-6 col-md-4">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genResizeH">Target Height</label>
+                            <div class="row">
+                                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                    <div class="field-header">
+                                        <label class="pro-label text-primary" for="genDarPreset">Target Display Aspect Ratio</label>
+                                    </div>
+                                    <select class="form-control font-weight-bold" id="genDarPreset">
+                                        <option value="69:25">Ultra Panavision 2.76:1 (69:25)</option>
+                                        <option value="8:3">Anamorphic 2.66:1 (8:3)</option>
+                                        <option value="1024:429">DCI Scope 2.39:1 (1024:429)</option>
+                                        <option value="47:20">CinemaScope 2.35:1 (47:20)</option>
+                                        <option value="11:5">70mm Standard 2.20:1 (11:5)</option>
+                                        <option value="2:1">Univisium 2.00:1 (2:1)</option>
+                                        <option value="256:135">DCI 4K / Digital IMAX 1.90:1 (256:135)</option>
+                                        <option value="37:20" selected>DCI Flat / VistaVision 1.85:1 (37:20)</option>
+                                        <option value="16:9">Widescreen 1.78:1 (16:9)</option>
+                                        <option value="5:3">European Widescreen 1.66:1 (5:3)</option>
+                                        <option value="143:100">IMAX 70mm 1.43:1 (143:100)</option>
+                                        <option value="11:8">Academy Ratio 1.37:1 (11:8)</option>
+                                        <option value="4:3">Standard Fullscreen 1.33:1 (4:3)</option>
+                                        <option value="custom">Custom (Manual Width × Height)</option>
+                                    </select>
                                 </div>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="genResizeH" value="2160" min="2" step="2" disabled>
-                                    <div class="input-group-append"><span class="input-group-text">px</span></div>
+                                <div class="col-6 col-md-3">
+                                    <div class="field-header">
+                                        <label class="pro-label" for="customDarW">Custom DAR Width</label>
+                                    </div>
+                                    <input type="number" class="form-control font-weight-bold" id="customDarW" value="3840" min="0.01" step="any" disabled>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="field-header">
+                                        <label class="pro-label" for="customDarH">Custom DAR Height</label>
+                                    </div>
+                                    <input type="number" class="form-control font-weight-bold" id="customDarH" value="2160" min="0.01" step="any" disabled>
                                 </div>
                             </div>
                         </div>
@@ -742,8 +832,8 @@
                     <!-- Panel 2A: Output File & Pixel Format (Bit Depth + Chroma) -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-primary">»</span> Output Bitstream & Pixel Format</span>
-                            <span class="badge badge-primary">Default: YUV420P10</span>
+                            <span class="panel-subtitle"><span class="text-primary">»</span> Output Bitstream &amp; Pixel Format</span>
+                            <span class="badge badge-primary" id="pixelFormatBadge">Default: YUV420P10</span>
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-4 mb-3 mb-md-0">
@@ -759,7 +849,7 @@
                                 <select class="form-control font-weight-bold" id="genBitDepth">
                                     <option value="8">8-bit</option>
                                     <option value="10" selected>10-bit</option>
-                                    <option value="12">12-bit</option>
+                                    <option value="12" id="optBit12">12-bit</option>
                                 </select>
                             </div>
                             <div class="col-6 col-md-4">
@@ -769,7 +859,7 @@
                                 <select class="form-control font-weight-bold" id="genChroma">
                                     <option value="420" selected>4:2:0</option>
                                     <option value="422" id="optChroma422">4:2:2</option>
-                                    <option value="444">4:4:4</option>
+                                    <option value="444" id="optChroma444">4:4:4</option>
                                 </select>
                             </div>
                         </div>
@@ -806,48 +896,24 @@
                         </div>
                     </div>
 
-                    <!-- Panel 2C: Non-Square Aspect Ratio & Psychovisual Tuning -->
+                    <!-- Panel 2C: Psychovisual Tuning -->
                     <div class="console-panel console-panel-muted">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-primary">»</span> Aspect Ratio Override & Psychovisual Tuning</span>
-                            <span class="small text-muted">Optional Overrides</span>
+                            <span class="panel-subtitle"><span class="text-primary">»</span> Psychovisual Tuning Profile</span>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="chkCustomTune">
+                                <label class="custom-control-label font-weight-bold text-dark" for="chkCustomTune" style="font-size: 0.82rem;">Enable Custom Tune</label>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <div class="col-12">
                                 <div class="field-header">
-                                    <label class="pro-label" for="genDar">Non-Square Pixels (Display Aspect Ratio)</label>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="chkCustomDar">
-                                        <label class="custom-control-label small font-weight-bold text-dark" for="chkCustomDar">Override DAR</label>
-                                    </div>
-                                </div>
-                                <select class="form-control" id="genDar" disabled>
-                                    <option value="69:25">Ultra Panavision (69:25)</option>
-                                    <option value="8:3">Anamorphic (8:3)</option>
-                                    <option value="1024:429" selected>DCI Scope (1024:429)</option>
-                                    <option value="47:20">CinemaScope (47:20)</option>
-                                    <option value="11:5">70mm Standard (11:5)</option>
-                                    <option value="2:1">Univisium (2:1)</option>
-                                    <option value="256:135">DCI 4K / Digital IMAX (256:135)</option>
-                                    <option value="37:20">DCI Flat (37:20)</option>
-                                    <option value="16:9">Widescreen (16:9)</option>
-                                    <option value="5:3">European Widescreen (5:3)</option>
-                                    <option value="143:100">IMAX 70mm (143:100)</option>
-                                    <option value="11:8">Academy Ratio (11:8)</option>
-                                    <option value="4:3">Standard Fullscreen (4:3)</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="field-header">
-                                    <label class="pro-label" for="genTune">Custom Tuning Profile</label>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="chkCustomTune">
-                                        <label class="custom-control-label small font-weight-bold text-dark" for="chkCustomTune">Custom Tune</label>
-                                    </div>
+                                    <label class="pro-label" for="genTune">Tuning Target</label>
+                                    <span class="badge badge-light border text-muted" id="tuneFlagsBadge">Default (--preset slow psychovisuals)</span>
                                 </div>
                                 <select class="form-control" id="genTune" disabled>
                                     <option value="film_grain_safe" selected>Film Grain — Hardware Safe (Recommended for Raw Film)</option>
-                                    <option value="grain">Raw --tune grain (Auto-Drops AQ-3 & Sets --qpstep 4)</option>
+                                    <option value="grain">Raw --tune grain (Auto-Drops AQ-3 &amp; Sets --qpstep 4)</option>
                                     <option value="animation">Animation (Flat Cel Shading)</option>
                                     <option value="psnr">PSNR (Objective Signal-to-Noise)</option>
                                     <option value="ssim">SSIM (Structural Similarity)</option>
@@ -861,8 +927,8 @@
                     <!-- Panel 2D: Split HEVC Level & Tier Selectors + CRF & VBV Slider/Manual Input -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-primary">»</span> HEVC Level Compliance & Rate Control</span>
-                            <span class="badge badge-info" id="levelCapBadge">Level 5.0 High Tier Cap: 100 Mbps | AU Guard: 0.7</span>
+                            <span class="panel-subtitle"><span class="text-primary">»</span> HEVC Level Compliance &amp; Rate Control</span>
+                            <span class="badge badge-info" id="levelCapBadge">Level 5.0 High Tier Cap: 100 Mbps</span>
                         </div>
 
                         <!-- Row 1: Two Separate Dropdowns for Level and Tier -->
@@ -876,10 +942,10 @@
                                     <option value="4.1">Level 4.1 — Max: 1920×1080 @ 60 fps</option>
                                     <option value="5.0" selected>Level 5.0 — Max: 4096×2160 @ 30 fps</option>
                                     <option value="5.1">Level 5.1 — Max: 4096×2160 @ 60 fps</option>
-                                    <option value="5.2">Level 5.2 — Max: 4096×2160 @ 120 fps</option>
-                                    <option value="6.0">Level 6.0 — Max: 8192×4320 @ 30 fps</option>
-                                    <option value="6.1">Level 6.1 — Max: 8192×4320 @ 60 fps</option>
-                                    <option value="6.2">Level 6.2 — Max: 8192×4320 @ 120 fps</option>
+                                    <option value="5.2" id="optLvl52">Level 5.2 — Max: 4096×2160 @ 120 fps</option>
+                                    <option value="6.0" id="optLvl60">Level 6.0 — Max: 8192×4320 @ 30 fps</option>
+                                    <option value="6.1" id="optLvl61">Level 6.1 — Max: 8192×4320 @ 60 fps</option>
+                                    <option value="6.2" id="optLvl62">Level 6.2 — Max: 8192×4320 @ 120 fps</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-5">
@@ -970,18 +1036,18 @@
                     <!-- Panel 2F: Pipeline Feature Switches & Hardware Safety Guardrails -->
                     <div class="console-panel">
                         <div class="panel-header-bar">
-                            <span class="panel-subtitle"><span class="text-primary">»</span> Encoder Feature Switches, Hardware Guardrails & HDR Injection</span>
-                            <span class="badge badge-success">AU Guard Active (--max-ausize-factor 0.7)</span>
+                            <span class="panel-subtitle"><span class="text-primary">»</span> Encoder Feature Switches, Universal Hardware Guardrails &amp; HDR Injection</span>
+                            <span class="badge badge-light border text-muted" id="hwGuardBadge">Hardware Guardrails: OFF (Full Archival Mode)</span>
                         </div>
                         <div class="row">
                             <!-- Row 1: Hardware Safe Mode & Extreme Quality -->
                             <div class="col-12 col-md-6 mb-3">
-                                <div class="switch-card" style="border-color: #c3e6cb !important; background-color: #f1fbf3 !important;">
+                                <div class="switch-card" id="hwSafeCard">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="genHwSafeMode" checked>
-                                        <label class="custom-control-label font-weight-bold text-success" for="genHwSafeMode" style="font-size: 0.88rem;">
-                                            Hardware Decoder Safe Mode (Apple / TV ASIC)
-                                            <span class="switch-subtext">Adds --slices 4 (4K+) and caps --ref 4 --bframes 4 (no --hme)</span>
+                                        <input type="checkbox" class="custom-control-input" id="genHwSafeMode">
+                                        <label class="custom-control-label font-weight-bold text-dark" id="hwSafeLabel" for="genHwSafeMode" style="font-size: 0.88rem;">
+                                            Hardware Decoder Safe Mode (Apple / iMovie / Smart TV USB)
+                                            <span class="switch-subtext">Enforces 4:2:0 (≤10-bit), L≤5.1, ≤100 Mbps VBV, 2s closed GOP, AU 0.75, 4 slices, --ref 4 --bframes 4 &amp; universal MP4 mux</span>
                                         </label>
                                     </div>
                                 </div>
@@ -991,8 +1057,8 @@
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="genQualitySwitch">
                                         <label class="custom-control-label font-weight-bold text-dark" for="genQualitySwitch" style="font-size: 0.88rem;">
-                                            Extreme Quality (TU Depth 4 + Deep Motion)
-                                            <span class="switch-subtext" id="extremeSubtext">Safe Mode ON: Adds TU Depth 4 (turn Safe Mode OFF for --bframes 8 & --hme)</span>
+                                            Extreme Quality (HME, 8 B-Frames &amp; TU Depth 4)
+                                            <span class="switch-subtext" id="extremeSubtext">Safe Mode OFF: Full --hme, --bframes 8, --ref 5 &amp; TU Depth 4</span>
                                         </label>
                                     </div>
                                 </div>
@@ -1004,8 +1070,8 @@
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="genScrubbing" checked>
                                         <label class="custom-control-label font-weight-bold text-dark" for="genScrubbing" style="font-size: 0.88rem;">
-                                            Scrubbing & Editing Friendly GOP (Closed 2-Sec GOP)
-                                            <span class="switch-subtext">Strict --no-open-gop with 2-second keyframe interval</span>
+                                            Scrubbing &amp; Editing Friendly GOP (Closed 2-Sec GOP)
+                                            <span class="switch-subtext" id="scrubbingSubtext">Strict --no-open-gop with 2-second keyframe ceiling &amp; natural scene cuts</span>
                                         </label>
                                     </div>
                                 </div>
@@ -1048,7 +1114,7 @@
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="genHdr10p">
                                         <label class="custom-control-label font-weight-bold text-danger" for="genHdr10p" style="font-size: 0.88rem;">
-                                            Inject HDR10+ Dynamic JSON
+                                            Inject HDR10+ (Profile B SEI)
                                         </label>
                                     </div>
                                 </div>
@@ -1057,20 +1123,25 @@
                     </div>
 
                     <!-- =========================================================
-                         PART 3: HDR & DOLBY VISION MASTERING METADATA
+                         PART 3: HDR, DOLBY VISION & HDR10+ MASTERING METADATA
                          ========================================================= -->
-                    <h5 class="font-weight-bold text-danger ui-section-title border-bottom border-danger" id="advHdrTitle">3. HDR & Dolby Vision Mastering Metadata</h5>
+                    <h5 class="font-weight-bold text-danger ui-section-title border-bottom border-danger" id="advHdrTitle">3. HDR, Dolby Vision &amp; HDR10+ Mastering Metadata</h5>
 
                     <div class="console-panel">
+                        <!-- HDR10+ Compatibility Warning Banner (Shown if HDR10+ enabled with non-PQ / non-BT.2020) -->
+                        <div class="hw-warn-banner" id="hdr10pCompatWarning">
+                            <b>Samsung TV &amp; MediaInfo HDR10+ Requirement:</b> HDR10+ (SMPTE ST 2094-40) strictly requires <b>HDR (PQ / SMPTE ST 2084)</b> transfer, <b>BT.2020</b> primaries, and <b>10-bit</b> output. Because your current VUI uses <span id="hdr10pCompatReason"></span>, Samsung TVs and MediaInfo will not flag this file as HDR10+ unless you switch to <b>PQ + BT.2020 + 10-bit</b>.
+                        </div>
+
                         <!-- Dolby Vision RPU Source Strategy -->
                         <div class="row pb-3 mb-3 border-bottom">
                             <div class="col-12 col-md-8 mb-3 mb-md-0">
                                 <div class="field-header">
-                                    <label class="pro-label text-info" for="dvRpuMode">Dolby Vision RPU Mode & Profile</label>
+                                    <label class="pro-label text-info" for="dvRpuMode">Dolby Vision RPU Mode &amp; Profile</label>
                                 </div>
                                 <select class="form-control font-weight-bold" id="dvRpuMode">
                                     <option value="generate" selected>Generate Static RPU from Mastering Metadata Below (Profile 8.1 PQ / 8.4 HLG)</option>
-                                    <option value="extract">Extract & Copy Existing RPU from Source File (Profile 8.1 PQ / 8.4 HLG)</option>
+                                    <option value="extract">Extract &amp; Copy Existing RPU from Source File (Profile 8.1 PQ / 8.4 HLG)</option>
                                     <option value="dvp5">Dolby Vision Profile 5 Pass-Through (ICtCp Full Range — Extract RPU from Source)</option>
                                 </select>
                             </div>
@@ -1080,6 +1151,27 @@
                                 </div>
                                 <div class="rounded bg-primary text-white text-center small font-weight-bold d-flex align-items-center justify-content-center" id="activeDvProfileBadge" style="height: 38px;">
                                     Active DV Profile: 8.4 (HLG)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HDR10+ Metadata Source Strategy -->
+                        <div class="row pb-3 mb-3 border-bottom">
+                            <div class="col-12 col-md-8 mb-3 mb-md-0">
+                                <div class="field-header">
+                                    <label class="pro-label text-danger" for="hdr10pMode">HDR10+ Dynamic SEI Injection Mode (hdr10plus_tool)</label>
+                                </div>
+                                <select class="form-control font-weight-bold" id="hdr10pMode" disabled>
+                                    <option value="generate" selected>Generate Spec-Compliant Profile B JSON from Mastering Metadata Below (All Frames)</option>
+                                    <option value="extract">Extract &amp; Inject Existing Dynamic HDR10+ JSON from Source File</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="field-header">
+                                    <span class="pro-label text-secondary">Active HDR10+ Status</span>
+                                </div>
+                                <div class="rounded bg-light border text-center small font-weight-bold text-muted d-flex align-items-center justify-content-center" id="activeHdr10pBadge" style="height: 38px;">
+                                    HDR10+: Disabled
                                 </div>
                             </div>
                         </div>
@@ -1150,12 +1242,12 @@
                      DYNAMIC COMMAND OUTPUT AREAS
                      ============================================== -->
 
-                <!-- OPTIONAL STEP: HDR10+ JSON Creator -->
+                <!-- OPTIONAL STEP: HDR10+ JSON Creator / Extractor -->
                 <div class="mt-4 pb-3 border-bottom" id="hdr10pCommandContainer" style="display: none;">
-                    <label class="font-weight-bold text-danger" id="hdr10pStepLabel">Step 1: HDR10+ Dynamic JSON Creator Command</label>
-                    <p class="text-muted small mb-2">Run this command first to generate a compliant <code>fake_hdr10plus.json</code> metadata file in your working directory.</p>
+                    <label class="font-weight-bold text-danger" id="hdr10pStepLabel">Step 1: HDR10+ Profile B JSON Command</label>
+                    <p class="text-muted small mb-2" id="hdr10pStepDesc">Run this command first to generate a spec-compliant SMPTE ST 2094-40 Profile B <code>hdr10plus.json</code> file. It will be injected onto every frame automatically by <code>hdr10plus_tool</code> at the end of the main encode step.</p>
                     <pre class="cmd-box"><code id="hdr10pCommandOutput"></code></pre>
-                    <button type="button" class="btn btn-danger px-4 shadow-sm font-weight-bold" onclick="copyTextById('hdr10pCommandOutput', this, 'Copy JSON Command', 'btn-danger')">Copy JSON Command</button>
+                    <button type="button" class="btn btn-danger px-4 shadow-sm font-weight-bold" onclick="copyTextById('hdr10pCommandOutput', this, 'Copy HDR10+ JSON Command', 'btn-danger')">Copy HDR10+ JSON Command</button>
                 </div>
 
                 <!-- OPTIONAL STEP: Dolby Vision RPU Generator / Extractor -->
@@ -1166,12 +1258,20 @@
                     <button type="button" class="btn btn-info px-4 shadow-sm font-weight-bold" onclick="copyTextById('dvCommandOutput', this, 'Copy RPU Command', 'btn-info')">Copy RPU Command</button>
                 </div>
 
-                <!-- FINAL STEP: Primary Encode Command Output Area -->
-                <div class="mt-4">
+                <!-- MAIN STEP: Primary Encode + Automatic HDR10+ / DV Injection Output Area -->
+                <div class="mt-4 pb-3 border-bottom" id="mainEncodeContainer">
                     <label class="font-weight-bold text-primary" id="mainCommandLabel">Step 2: Generated Pipeline (Main Encode Command)</label>
-                    <p class="text-muted small mb-2">Paste this directly into your terminal. It writes the VapourSynth script, pipes the frames into x265, cleans up temporary files, and validates hardware playback.</p>
+                    <p class="text-muted small mb-2" id="mainCommandDesc">Paste this directly into your terminal. It writes the VapourSynth script, pipes the frames into x265, injects dynamic HDR metadata onto every frame, cleans up temporary files, and verifies playback.</p>
                     <pre class="cmd-box"><code id="finalCommandOutput"></code></pre>
                     <button type="button" class="btn btn-primary px-4 shadow-sm font-weight-bold" onclick="copyTextById('finalCommandOutput', this, 'Copy Encode Command', 'btn-primary')">Copy Encode Command</button>
+                </div>
+
+                <!-- UNIVERSAL PACKAGING STEP (Shown Automatically when Hardware Decoder Safe Mode is ON) -->
+                <div class="mt-4" id="muxCommandContainer" style="display: none;">
+                    <label class="font-weight-bold text-success" id="muxStepLabel">Step 3: Universal Apple / Smart TV MP4 Packaging &amp; Final Verify</label>
+                    <p class="text-muted small mb-2" id="muxStepDesc">Packages the encoded stream into an Apple (QuickTime / Photos / iMovie) and Sony/LG/Samsung USB-compliant <code>.mp4</code> container with fast-start indexing, universal 320 kbps AAC-LC audio, and final ASIC verification before deleting your ProRes master.</p>
+                    <pre class="cmd-box"><code id="muxCommandOutput"></code></pre>
+                    <button type="button" class="btn btn-success px-4 shadow-sm font-weight-bold" onclick="copyTextById('muxCommandOutput', this, 'Copy MP4 Mux Command', 'btn-success')">Copy MP4 Mux Command</button>
                 </div>
             </div>
 
@@ -1218,25 +1318,42 @@
                     const cropLInput = document.getElementById('cropL');
                     const cropRInput = document.getElementById('cropR');
 
-                    const genResizeToggle = document.getElementById('genResizeToggle');
-                    const genResizeAlgo = document.getElementById('genResizeAlgo');
+                    // Unified Geometry & Aspect Ratio Controls
+                    const btnMatchSource = document.getElementById('btnMatchSource');
+                    const chkSquarePixels = document.getElementById('chkSquarePixels');
                     const genResizeW = document.getElementById('genResizeW');
                     const genResizeH = document.getElementById('genResizeH');
+                    const genResizeAlgo = document.getElementById('genResizeAlgo');
+                    const resizeStatusBadge = document.getElementById('resizeStatusBadge');
+                    const nonSquareDarPanel = document.getElementById('nonSquareDarPanel');
+                    const genDarPreset = document.getElementById('genDarPreset');
+                    const customDarW = document.getElementById('customDarW');
+                    const customDarH = document.getElementById('customDarH');
+                    const darSarPreviewBadge = document.getElementById('darSarPreviewBadge');
+
+                    const hwDimWarning = document.getElementById('hwDimWarning');
+                    const hwDimText = document.getElementById('hwDimText');
 
                     const genBitDepth = document.getElementById('genBitDepth');
+                    const optBit12 = document.getElementById('optBit12');
                     const genChroma = document.getElementById('genChroma');
                     const optChroma422 = document.getElementById('optChroma422');
+                    const optChroma444 = document.getElementById('optChroma444');
+                    const pixelFormatBadge = document.getElementById('pixelFormatBadge');
 
                     const genTransfer = document.getElementById('genTransfer');
                     const genColorPrim = document.getElementById('genColorPrim');
                     const autoMatrixBadge = document.getElementById('autoMatrixBadge');
 
-                    const chkCustomDar = document.getElementById('chkCustomDar');
-                    const genDar = document.getElementById('genDar');
                     const chkCustomTune = document.getElementById('chkCustomTune');
                     const genTune = document.getElementById('genTune');
+                    const tuneFlagsBadge = document.getElementById('tuneFlagsBadge');
 
                     const genHevcLevel = document.getElementById('genHevcLevel');
+                    const optLvl52 = document.getElementById('optLvl52');
+                    const optLvl60 = document.getElementById('optLvl60');
+                    const optLvl61 = document.getElementById('optLvl61');
+                    const optLvl62 = document.getElementById('optLvl62');
                     const genHevcTier = document.getElementById('genHevcTier');
                     const levelCapBadge = document.getElementById('levelCapBadge');
                     const vbvMaxHeaderNote = document.getElementById('vbvMaxHeaderNote');
@@ -1255,8 +1372,13 @@
                     const optCpuAll = document.getElementById('optCpuAll');
 
                     const genHwSafeMode = document.getElementById('genHwSafeMode');
+                    const hwSafeCard = document.getElementById('hwSafeCard');
+                    const hwSafeLabel = document.getElementById('hwSafeLabel');
+                    const hwGuardBadge = document.getElementById('hwGuardBadge');
                     const genQualitySwitch = document.getElementById('genQualitySwitch');
                     const extremeSubtext = document.getElementById('extremeSubtext');
+                    const genScrubbing = document.getElementById('genScrubbing');
+                    const scrubbingSubtext = document.getElementById('scrubbingSubtext');
                     const genVtVerify = document.getElementById('genVtVerify');
                     const vtVerifySubtext = document.getElementById('vtVerifySubtext');
 
@@ -1264,12 +1386,161 @@
                     const genHdr10p = document.getElementById('genHdr10p');
                     const dvRpuMode = document.getElementById('dvRpuMode');
                     const activeDvProfileBadge = document.getElementById('activeDvProfileBadge');
+                    const hdr10pMode = document.getElementById('hdr10pMode');
+                    const activeHdr10pBadge = document.getElementById('activeHdr10pBadge');
+                    const hdr10pCompatWarning = document.getElementById('hdr10pCompatWarning');
+                    const hdr10pCompatReason = document.getElementById('hdr10pCompatReason');
 
                     const genMasterColor = document.getElementById('genMasterColor');
                     const genMasterMax = document.getElementById('genMasterMax');
                     const genMasterMin = document.getElementById('genMasterMin');
                     const genMaxCll = document.getElementById('genMaxCll');
                     const genMaxFall = document.getElementById('genMaxFall');
+
+                    let isOutputMatchedToSource = true;
+                    let isCustomDarMatchedToSource = true;
+
+                    function getPostCropDims() {
+                        let sW = Math.max(2, parseInt(srcWInput.value, 10) || 3840);
+                        let sH = Math.max(2, parseInt(srcHInput.value, 10) || 2160);
+                        sW -= (sW % 2);
+                        sH -= (sH % 2);
+
+                        const isCrop = chkCrop.checked;
+                        let cT = isCrop ? Math.max(0, parseInt(cropTInput.value, 10) || 0) : 0;
+                        let cB = isCrop ? Math.max(0, parseInt(cropBInput.value, 10) || 0) : 0;
+                        let cL = isCrop ? Math.max(0, parseInt(cropLInput.value, 10) || 0) : 0;
+                        let cR = isCrop ? Math.max(0, parseInt(cropRInput.value, 10) || 0) : 0;
+                        cT -= (cT % 2);
+                        cB -= (cB % 2);
+                        cL -= (cL % 2);
+                        cR -= (cR % 2);
+
+                        const croppedW = Math.max(2, sW - cL - cR);
+                        const croppedH = Math.max(2, sH - cT - cB);
+                        return { sW, sH, cT, cB, cL, cR, croppedW, croppedH };
+                    }
+
+                    function roundEven(val) {
+                        return Math.max(2, Math.round(val / 2) * 2);
+                    }
+
+                    function handleSourceGeometryChange() {
+                        const { croppedW, croppedH } = getPostCropDims();
+
+                        if (isOutputMatchedToSource) {
+                            genResizeW.value = croppedW;
+                            genResizeH.value = croppedH;
+                        } else if (chkSquarePixels.checked) {
+                            const curW = parseInt(genResizeW.value, 10);
+                            if (curW >= 2) {
+                                genResizeH.value = roundEven((curW * croppedH) / croppedW);
+                            }
+                        }
+
+                        if (isCustomDarMatchedToSource) {
+                            customDarW.value = croppedW;
+                            customDarH.value = croppedH;
+                        }
+
+                        updateCommand();
+                    }
+
+                    [srcWInput, srcHInput, cropTInput, cropBInput, cropLInput, cropRInput].forEach(el => {
+                        el.addEventListener('input', handleSourceGeometryChange);
+                        el.addEventListener('change', handleSourceGeometryChange);
+                    });
+                    chkCrop.addEventListener('change', handleSourceGeometryChange);
+
+                    btnMatchSource.addEventListener('click', function() {
+                        const { croppedW, croppedH } = getPostCropDims();
+                        isOutputMatchedToSource = true;
+                        genResizeW.value = croppedW;
+                        genResizeH.value = croppedH;
+                        if (isCustomDarMatchedToSource) {
+                            customDarW.value = croppedW;
+                            customDarH.value = croppedH;
+                        }
+                        updateCommand();
+                    });
+
+                    genResizeW.addEventListener('input', function() {
+                        const { croppedW, croppedH } = getPostCropDims();
+                        const wVal = parseInt(this.value, 10);
+                        if (!isNaN(wVal) && wVal >= 2) {
+                            if (chkSquarePixels.checked) {
+                                genResizeH.value = roundEven((wVal * croppedH) / croppedW);
+                            }
+                            const hVal = parseInt(genResizeH.value, 10);
+                            isOutputMatchedToSource = (wVal === croppedW && hVal === croppedH);
+                        }
+                        updateCommand();
+                    });
+                    genResizeW.addEventListener('change', function() {
+                        const { croppedW, croppedH } = getPostCropDims();
+                        let wVal = parseInt(this.value, 10);
+                        if (isNaN(wVal) || wVal < 2) wVal = croppedW;
+                        wVal = roundEven(wVal);
+                        this.value = wVal;
+                        if (chkSquarePixels.checked) {
+                            genResizeH.value = roundEven((wVal * croppedH) / croppedW);
+                        }
+                        const hVal = parseInt(genResizeH.value, 10);
+                        isOutputMatchedToSource = (wVal === croppedW && hVal === croppedH);
+                        updateCommand();
+                    });
+
+                    genResizeH.addEventListener('input', function() {
+                        const { croppedW, croppedH } = getPostCropDims();
+                        const hVal = parseInt(this.value, 10);
+                        if (!isNaN(hVal) && hVal >= 2) {
+                            if (chkSquarePixels.checked) {
+                                genResizeW.value = roundEven((hVal * croppedW) / croppedH);
+                            }
+                            const wVal = parseInt(genResizeW.value, 10);
+                            isOutputMatchedToSource = (wVal === croppedW && hVal === croppedH);
+                        }
+                        updateCommand();
+                    });
+                    genResizeH.addEventListener('change', function() {
+                        const { croppedW, croppedH } = getPostCropDims();
+                        let hVal = parseInt(this.value, 10);
+                        if (isNaN(hVal) || hVal < 2) hVal = croppedH;
+                        hVal = roundEven(hVal);
+                        this.value = hVal;
+                        if (chkSquarePixels.checked) {
+                            genResizeW.value = roundEven((hVal * croppedW) / croppedH);
+                        }
+                        const wVal = parseInt(genResizeW.value, 10);
+                        isOutputMatchedToSource = (wVal === croppedW && hVal === croppedH);
+                        updateCommand();
+                    });
+
+                    chkSquarePixels.addEventListener('change', function() {
+                        const { croppedW, croppedH } = getPostCropDims();
+                        if (this.checked) {
+                            const wVal = roundEven(parseInt(genResizeW.value, 10) || croppedW);
+                            genResizeW.value = wVal;
+                            const snappedH = (wVal === croppedW) ? croppedH : roundEven((wVal * croppedH) / croppedW);
+                            genResizeH.value = snappedH;
+                            isOutputMatchedToSource = (wVal === croppedW && snappedH === croppedH);
+                        } else if (isCustomDarMatchedToSource) {
+                            customDarW.value = croppedW;
+                            customDarH.value = croppedH;
+                        }
+                        updateCommand();
+                    });
+
+                    [customDarW, customDarH].forEach(el => {
+                        el.addEventListener('input', function() {
+                            isCustomDarMatchedToSource = false;
+                            updateCommand();
+                        });
+                        el.addEventListener('change', function() {
+                            isCustomDarMatchedToSource = false;
+                            updateCommand();
+                        });
+                    });
 
                     function refreshFpsDropdownLabels(selectEl, isFractional) {
                         Array.from(selectEl.options).forEach(opt => {
@@ -1307,7 +1578,6 @@
                             genSourceEngine.value = (this.value === 'win') ? 'lsmas' : 'ffms2';
                         }
 
-                        // VideoToolbox verification is macOS-specific
                         if (isMac) {
                             genVtVerify.disabled = false;
                             vtVerifySubtext.innerText = 'Runs ffmpeg -hwaccel videotoolbox to confirm zero hardware glitches';
@@ -1320,27 +1590,42 @@
                         updateCommand();
                     });
 
-                    function applyLevelTierCap() {
+                    function syncVbvBounds(resetToMax) {
                         const lvl = genHevcLevel.value;
                         const tier = genHevcTier.value;
-                        const maxRate = HEVC_LEVEL_LIMITS[lvl][tier];
+                        const rawTierMax = HEVC_LEVEL_LIMITS[lvl][tier];
+                        const isHwSafe = genHwSafeMode.checked;
+                        const effectiveMax = isHwSafe ? Math.min(rawTierMax, 100) : rawTierMax;
 
-                        genVbv.max = maxRate;
-                        genVbv.value = maxRate;
-                        genVbvManual.max = maxRate;
-                        genVbvManual.value = maxRate;
+                        genVbv.max = effectiveMax;
+                        genVbvManual.max = effectiveMax;
 
-                        vbvMidTick.innerText = Math.round(maxRate / 2) + ' Mbps';
-                        vbvMaxTick.innerText = maxRate + ' Mbps (Tier Max)';
-                        vbvMaxHeaderNote.innerText = `Tier Max: ${maxRate} Mbps`;
+                        let currentVal = parseFloat(genVbvManual.value);
+                        if (resetToMax || isNaN(currentVal) || currentVal > effectiveMax) {
+                            currentVal = effectiveMax;
+                        }
+                        if (currentVal < 1) currentVal = 1;
 
-                        const tierName = (tier === 'high') ? 'High Tier' : 'Main Tier';
-                        levelCapBadge.innerText = `Level ${lvl} ${tierName} Cap: ${maxRate} Mbps | AU Guard: 0.7`;
-                        updateCommand();
+                        genVbv.value = Math.round(currentVal);
+                        genVbvManual.value = currentVal;
+
+                        vbvMidTick.innerText = Math.round(effectiveMax / 2) + ' Mbps';
+                        vbvMaxTick.innerText = (isHwSafe && rawTierMax > 100)
+                            ? `${effectiveMax} Mbps (Universal TV Cap)`
+                            : `${effectiveMax} Mbps (Tier Max)`;
+                        vbvMaxHeaderNote.innerText = (isHwSafe && rawTierMax > 100)
+                            ? `Safe TV Cap: ${effectiveMax} Mbps (Tier ${rawTierMax})`
+                            : `Tier Max: ${effectiveMax} Mbps`;
                     }
 
-                    genHevcLevel.addEventListener('change', applyLevelTierCap);
-                    genHevcTier.addEventListener('change', applyLevelTierCap);
+                    genHevcLevel.addEventListener('change', function() {
+                        syncVbvBounds(true);
+                        updateCommand();
+                    });
+                    genHevcTier.addEventListener('change', function() {
+                        syncVbvBounds(true);
+                        updateCommand();
+                    });
 
                     genCrf.addEventListener('input', function() {
                         crfLabel.innerText = 'CRF ' + this.value;
@@ -1373,7 +1658,12 @@
 
                     const allInputs = document.querySelectorAll('#x265GeneratorForm input, #x265GeneratorForm select');
                     allInputs.forEach(el => {
-                        const skipIds = ['genHevcLevel', 'genHevcTier', 'genCrf', 'genVbv', 'genVbvManual', 'chkLockFrac', 'chkAssumeFrac', 'chkSourceFrac'];
+                        const skipIds = [
+                            'srcW', 'srcH', 'chkCrop', 'cropT', 'cropB', 'cropL', 'cropR',
+                            'chkSquarePixels', 'genResizeW', 'genResizeH', 'customDarW', 'customDarH',
+                            'genHevcLevel', 'genHevcTier', 'genCrf', 'genVbv', 'genVbvManual',
+                            'chkLockFrac', 'chkAssumeFrac', 'chkSourceFrac'
+                        ];
                         if (!skipIds.includes(el.id)) {
                             el.addEventListener('change', updateCommand);
                             if (el.type === 'text' || el.type === 'number') {
@@ -1382,7 +1672,32 @@
                         }
                     });
 
+                    function gcd(a, b) {
+                        a = Math.abs(Math.round(a));
+                        b = Math.abs(Math.round(b));
+                        while (b !== 0) {
+                            const t = b;
+                            b = a % b;
+                            a = t;
+                        }
+                        return a || 1;
+                    }
+
+                    function toReducedIntRatio(valA, valB) {
+                        const strA = String(valA);
+                        const strB = String(valB);
+                        const decA = strA.includes('.') ? strA.split('.')[1].length : 0;
+                        const decB = strB.includes('.') ? strB.split('.')[1].length : 0;
+                        const scale = Math.pow(10, Math.min(4, Math.max(decA, decB)));
+                        let num = Math.max(1, Math.round(valA * scale));
+                        let den = Math.max(1, Math.round(valB * scale));
+                        const g = gcd(num, den);
+                        return [num / g, den / g];
+                    }
+
                     function updateCommand() {
+                        const isHwSafe = genHwSafeMode.checked;
+
                         genSourceEngine.disabled = !chkCustomEngine.checked;
                         if (!chkCustomEngine.checked) {
                             genSourceEngine.value = (osSelector.value === 'win') ? 'lsmas' : 'ffms2';
@@ -1395,19 +1710,17 @@
                         genOutputRange.disabled = !isSignalOverride;
 
                         const isCrop = chkCrop.checked;
-                        const isCustomDar = chkCustomDar.checked;
-                        const isResize = genResizeToggle.checked;
-
                         cropTInput.disabled = !isCrop;
                         cropBInput.disabled = !isCrop;
                         cropLInput.disabled = !isCrop;
                         cropRInput.disabled = !isCrop;
 
-                        genResizeAlgo.disabled = !isResize;
-                        genResizeW.disabled = !isResize;
-                        genResizeH.disabled = !isResize;
+                        const isSquarePixels = chkSquarePixels.checked;
+                        nonSquareDarPanel.style.display = isSquarePixels ? 'none' : 'block';
+                        const isCustomDarMode = (!isSquarePixels && genDarPreset.value === 'custom');
+                        customDarW.disabled = !isCustomDarMode;
+                        customDarH.disabled = !isCustomDarMode;
 
-                        genDar.disabled = !isCustomDar;
                         genTune.disabled = !chkCustomTune.checked;
 
                         const isCustomCpu = chkCustomCpu.checked;
@@ -1421,29 +1734,83 @@
                         optCpuPOnly.innerText = `Use Performance Cores Only (Recommended — ${pCores} Threads)`;
                         optCpuAll.innerText = `Use All Cores (P + E — ${totalCores} Threads, May Bottleneck on E-Cores)`;
 
-                        // Hardware Safe Mode subtext update for Extreme Quality interaction
-                        const isHwSafe = genHwSafeMode.checked;
+                        // Hardware Safe Mode Constraints & UI State
                         if (isHwSafe) {
+                            optBit12.disabled = true;
+                            optBit12.style.display = 'none';
+                            if (genBitDepth.value === '12') genBitDepth.value = '10';
+
+                            optChroma422.disabled = true;
+                            optChroma422.style.display = 'none';
+                            optChroma444.disabled = true;
+                            optChroma444.style.display = 'none';
+                            if (genChroma.value !== '420') genChroma.value = '420';
+
+                            pixelFormatBadge.innerText = 'Safe Mode: 4:2:0 Main/Main 10 Only';
+                            pixelFormatBadge.className = 'badge badge-success';
+
+                            [optLvl52, optLvl60, optLvl61, optLvl62].forEach(opt => {
+                                opt.disabled = true;
+                                opt.style.display = 'none';
+                            });
+                            if (parseFloat(genHevcLevel.value) > 5.1) {
+                                genHevcLevel.value = '5.1';
+                            }
+
+                            genScrubbing.checked = true;
+                            genScrubbing.disabled = true;
+                            scrubbingSubtext.innerText = 'Locked ON by Safe Mode: Closed 2-sec GOP (--no-open-gop) for iMovie & TV USB';
+
+                            hwSafeCard.style.setProperty('border-color', '#c3e6cb', 'important');
+                            hwSafeCard.style.setProperty('background-color', '#f1fbf3', 'important');
+                            hwSafeLabel.classList.remove('text-dark');
+                            hwSafeLabel.classList.add('text-success');
+                            hwGuardBadge.innerText = 'Universal Safe Mode: ON (4:2:0, L≤5.1, ≤100M, AU 0.75, 4 Slices, 2s GOP)';
+                            hwGuardBadge.className = 'badge badge-success';
                             extremeSubtext.innerText = 'Safe Mode ON: Adds TU Depth 4 only (turn Safe Mode OFF for --bframes 8 & --hme)';
                         } else {
-                            extremeSubtext.innerText = 'Safe Mode OFF: Enables --hme, --bframes 8, --ref 5 & TU Depth 4 (software-player focus)';
+                            optBit12.disabled = false;
+                            optBit12.style.display = 'block';
+                            optChroma444.disabled = false;
+                            optChroma444.style.display = 'block';
+
+                            if (genBitDepth.value === '8') {
+                                optChroma422.style.display = 'none';
+                                optChroma422.disabled = true;
+                                if (genChroma.value === '422') genChroma.value = '420';
+                            } else {
+                                optChroma422.style.display = 'block';
+                                optChroma422.disabled = false;
+                            }
+
+                            pixelFormatBadge.innerText = 'Default: YUV420P10';
+                            pixelFormatBadge.className = 'badge badge-primary';
+
+                            [optLvl52, optLvl60, optLvl61, optLvl62].forEach(opt => {
+                                opt.disabled = false;
+                                opt.style.display = 'block';
+                            });
+
+                            genScrubbing.disabled = false;
+                            scrubbingSubtext.innerText = 'Strict --no-open-gop with 2-second keyframe ceiling & natural scene cuts';
+
+                            hwSafeCard.style.removeProperty('border-color');
+                            hwSafeCard.style.removeProperty('background-color');
+                            hwSafeLabel.classList.remove('text-success');
+                            hwSafeLabel.classList.add('text-dark');
+                            hwGuardBadge.innerText = 'Hardware Guardrails: OFF (Full Archival Mode)';
+                            hwGuardBadge.className = 'badge badge-light border text-muted';
+                            extremeSubtext.innerText = 'Safe Mode OFF: Full --hme, --bframes 8, --ref 5 & TU Depth 4';
                         }
 
-                        if (genBitDepth.value === '8') {
-                            optChroma422.style.display = 'none';
-                            optChroma422.disabled = true;
-                            if (genChroma.value === '422') {
-                                genChroma.value = '420';
-                            }
-                        } else {
-                            optChroma422.style.display = 'block';
-                            optChroma422.disabled = false;
-                        }
+                        syncVbvBounds(false);
 
                         const useDv = genDv.checked;
                         const useHdr10p = genHdr10p.checked;
                         const transfer = genTransfer.value;
                         const colorPrim = genColorPrim.value;
+                        const bitDepth = genBitDepth.value;
+                        const chroma = genChroma.value;
                         const isDvp5 = (useDv && dvRpuMode.value === 'dvp5');
 
                         let matrixFlag = 'bt2020nc';
@@ -1456,6 +1823,7 @@
                         }
                         autoMatrixBadge.innerText = `Matrix Automatically Managed (--colormatrix ${matrixFlag})`;
 
+                        // Dolby Vision status badge
                         if (!useDv) {
                             dvRpuMode.disabled = true;
                             activeDvProfileBadge.innerText = 'Dolby Vision: Disabled';
@@ -1471,6 +1839,33 @@
                             activeDvProfileBadge.className = 'rounded bg-primary text-white text-center small font-weight-bold d-flex align-items-center justify-content-center';
                         }
 
+                        // HDR10+ status badge & PQ/BT.2020 compatibility notice
+                        if (!useHdr10p) {
+                            hdr10pMode.disabled = true;
+                            activeHdr10pBadge.innerText = 'HDR10+: Disabled';
+                            activeHdr10pBadge.className = 'rounded bg-light border text-center small font-weight-bold text-muted d-flex align-items-center justify-content-center';
+                            hdr10pCompatWarning.style.display = 'none';
+                        } else {
+                            hdr10pMode.disabled = false;
+                            activeHdr10pBadge.innerText = (hdr10pMode.value === 'extract')
+                                ? 'HDR10+: Dynamic Extract (Per-Frame SEI)'
+                                : 'HDR10+: Profile B (All Frames via hdr10plus_tool)';
+                            activeHdr10pBadge.className = 'rounded bg-danger text-white text-center small font-weight-bold d-flex align-items-center justify-content-center';
+
+                            const issues = [];
+                            if (transfer !== 'pq') issues.push(transfer === 'hlg' ? 'HLG transfer' : 'SDR transfer');
+                            if (colorPrim !== 'bt2020') issues.push(`${colorPrim.toUpperCase()} primaries`);
+                            if (bitDepth !== '10') issues.push(`${bitDepth}-bit depth`);
+                            if (isDvp5) issues.push('Dolby Vision Profile 5 (ICtCp)');
+
+                            if (issues.length > 0) {
+                                hdr10pCompatReason.innerText = issues.join(', ');
+                                hdr10pCompatWarning.style.display = 'block';
+                            } else {
+                                hdr10pCompatWarning.style.display = 'none';
+                            }
+                        }
+
                         const needMasteringInputs = (transfer === 'pq' && !isDvp5) || useHdr10p || (useDv && dvRpuMode.value === 'generate' && !isDvp5);
                         genMasterColor.disabled = !needMasteringInputs;
                         genMasterMax.disabled = !needMasteringInputs;
@@ -1478,69 +1873,92 @@
                         genMaxCll.disabled = !needMasteringInputs;
                         genMaxFall.disabled = !needMasteringInputs;
 
-                        let srcW = Math.max(2, parseInt(srcWInput.value, 10) || 3840);
-                        let srcH = Math.max(2, parseInt(srcHInput.value, 10) || 2160);
-                        srcW = srcW - (srcW % 2);
-                        srcH = srcH - (srcH % 2);
+                        // Geometry, Resizing & Exact DAR/SAR Calculation
+                        const { sW, sH, cT, cB, cL, cR, croppedW, croppedH } = getPostCropDims();
 
-                        let cT = isCrop ? (Math.max(0, parseInt(cropTInput.value, 10) || 0)) : 0;
-                        let cB = isCrop ? (Math.max(0, parseInt(cropBInput.value, 10) || 0)) : 0;
-                        let cL = isCrop ? (Math.max(0, parseInt(cropLInput.value, 10) || 0)) : 0;
-                        let cR = isCrop ? (Math.max(0, parseInt(cropRInput.value, 10) || 0)) : 0;
-                        cT -= (cT % 2);
-                        cB -= (cB % 2);
-                        cL -= (cL % 2);
-                        cR -= (cR % 2);
+                        let outW = roundEven(parseInt(genResizeW.value, 10) || croppedW);
+                        let outH = roundEven(parseInt(genResizeH.value, 10) || croppedH);
 
-                        let resW = Math.max(2, parseInt(genResizeW.value, 10) || 3840);
-                        let resH = Math.max(2, parseInt(genResizeH.value, 10) || 2160);
-                        resW -= (resW % 2);
-                        resH -= (resH % 2);
+                        const isResize = (outW !== croppedW || outH !== croppedH);
+                        genResizeAlgo.disabled = !isResize;
 
-                        const croppedW = Math.max(2, srcW - cL - cR);
-                        const croppedH = Math.max(2, srcH - cT - cB);
-                        const finalVideoW = isResize ? resW : croppedW;
-                        const finalVideoH = isResize ? resH : croppedH;
+                        if (isResize) {
+                            resizeStatusBadge.innerText = `Scaling Active (${croppedW}×${croppedH} → ${outW}×${outH})`;
+                            resizeStatusBadge.className = 'badge badge-primary';
+                        } else {
+                            resizeStatusBadge.innerText = 'Pass-Through (No Scaling)';
+                            resizeStatusBadge.className = 'badge badge-light border text-muted';
+                        }
 
-                        const gcd = function(a, b) { return b === 0 ? a : gcd(b, a % b); };
+                        const finalVideoW = outW;
+                        const finalVideoH = outH;
+
+                        if (isHwSafe && (finalVideoW > 3840 || finalVideoH > 2160)) {
+                            hwDimText.innerText = `${finalVideoW}×${finalVideoH}`;
+                            hwDimWarning.style.display = 'block';
+                        } else {
+                            hwDimWarning.style.display = 'none';
+                        }
+
                         let sarFlag = '';
-                        let sarDisplay = '1:1 (Square Pixels)';
+                        let sarDisplay = '1:1 (Square)';
+                        let darDisplay = '';
 
-                        if (isCustomDar && finalVideoW > 0 && finalVideoH > 0) {
-                            const [darNumStr, darDenStr] = genDar.value.split(':');
-                            const targetDarNum = parseInt(darNumStr, 10);
-                            const targetDarDen = parseInt(darDenStr, 10);
+                        if (!isSquarePixels) {
+                            let targetDarNum, targetDarDen;
+                            if (genDarPreset.value === 'custom') {
+                                const rawDarW = parseFloat(customDarW.value) || finalVideoW;
+                                const rawDarH = parseFloat(customDarH.value) || finalVideoH;
+                                [targetDarNum, targetDarDen] = toReducedIntRatio(rawDarW, rawDarH);
+                            } else {
+                                const [darNumStr, darDenStr] = genDarPreset.value.split(':');
+                                targetDarNum = parseInt(darNumStr, 10);
+                                targetDarDen = parseInt(darDenStr, 10);
+                            }
 
                             let sarNum = targetDarNum * finalVideoH;
                             let sarDen = targetDarDen * finalVideoW;
-                            const divisor = gcd(sarNum, sarDen);
+                            let divisor = gcd(sarNum, sarDen);
                             sarNum = sarNum / divisor;
                             sarDen = sarDen / divisor;
 
+                            if (sarNum > 65535 || sarDen > 65535) {
+                                const downScale = 65535 / Math.max(sarNum, sarDen);
+                                sarNum = Math.max(1, Math.round(sarNum * downScale));
+                                sarDen = Math.max(1, Math.round(sarDen * downScale));
+                                divisor = gcd(sarNum, sarDen);
+                                sarNum = sarNum / divisor;
+                                sarDen = sarDen / divisor;
+                            }
+
+                            const darFloat = (targetDarNum / targetDarDen).toFixed(2);
+                            darDisplay = `${targetDarNum}:${targetDarDen} (${darFloat}:1)`;
+
                             if (sarNum !== sarDen) {
                                 sarFlag = `--sar ${sarNum}:${sarDen} `;
-                                sarDisplay = `${sarNum}:${sarDen} (Target DAR ${targetDarNum}:${targetDarDen})`;
+                                sarDisplay = `${sarNum}:${sarDen} (Non-Square)`;
+                                darSarPreviewBadge.innerText = `Injected Flag: --sar ${sarNum}:${sarDen}`;
                             } else {
-                                sarDisplay = `1:1 (Matches DAR ${targetDarNum}:${targetDarDen} Naturally)`;
+                                sarDisplay = `1:1 (Matches DAR Naturally)`;
+                                darSarPreviewBadge.innerText = `Auto SAR: 1:1 (No --sar Needed)`;
                             }
+                        } else {
+                            const outGcd = gcd(finalVideoW, finalVideoH);
+                            const outFloat = (finalVideoW / finalVideoH).toFixed(2);
+                            darDisplay = `${finalVideoW / outGcd}:${finalVideoH / outGcd} (${outFloat}:1)`;
                         }
 
                         const cropGcd = gcd(croppedW, croppedH);
                         const cropRatioFrac = `${croppedW / cropGcd}:${croppedH / cropGcd}`;
-                        const finalGcd = gcd(finalVideoW, finalVideoH);
-                        const finalRatioFrac = `${finalVideoW / finalGcd}:${finalVideoH / finalGcd}`;
-
                         document.getElementById('telCropped').innerText = isCrop
                             ? `${croppedW} × ${croppedH} (${cropRatioFrac} Cropped)`
-                            : `${srcW} × ${srcH} (${cropRatioFrac} Uncropped)`;
+                            : `${sW} × ${sH} (${cropRatioFrac})`;
 
-                        if (isResize) {
-                            document.getElementById('telCanvas').innerText = `${resW} × ${resH} (${finalRatioFrac} Scaled)`;
-                        } else if (isCrop) {
-                            document.getElementById('telCanvas').innerText = `${croppedW} × ${croppedH} (${cropRatioFrac} Cropped)`;
-                        } else {
-                            document.getElementById('telCanvas').innerText = `${srcW} × ${srcH} (${cropRatioFrac} Native Pass-Through)`;
-                        }
+                        document.getElementById('telCanvas').innerText = isResize
+                            ? `${finalVideoW} × ${finalVideoH} (Scaled)`
+                            : `${finalVideoW} × ${finalVideoH} (Pass-Through)`;
+
+                        document.getElementById('telDar').innerText = darDisplay;
                         document.getElementById('telSar').innerText = sarDisplay;
 
                         const rawInFile = document.getElementById('genInputFile').value || 'input.mov';
@@ -1550,9 +1968,6 @@
                         const safeInFile = rawInFile.replace(/'/g, "\\'").replace(/"/g, '\\"');
                         const safeOutFile = rawOutFile.replace(/"/g, '\\"');
                         const safeLutFile = rawLutFile.replace(/'/g, "\\'").replace(/"/g, '\\"');
-
-                        const bitDepth = genBitDepth.value;
-                        const chroma = genChroma.value;
 
                         const vsFormat = `vs.YUV${chroma}P${bitDepth}`;
                         const inputCsp = `i${chroma}`;
@@ -1610,7 +2025,7 @@
 
                         let vsResizeArgs = `clip`;
                         if (isResize) {
-                            vsResizeArgs += `, width=${resW}, height=${resH}`;
+                            vsResizeArgs += `, width=${finalVideoW}, height=${finalVideoH}`;
                         }
                         vsResizeArgs += `, format=${vsFormat}`;
 
@@ -1631,12 +2046,19 @@
                         const lvlNum = parseFloat(lvlIdc);
                         const lvlTier = genHevcTier.value;
                         const tierFlag = (lvlTier === 'high') ? '--high-tier' : '--no-high-tier';
+                        const rawTierMaxRate = HEVC_LEVEL_LIMITS[lvlIdc][lvlTier];
+                        const effectiveCapRate = isHwSafe ? Math.min(rawTierMaxRate, 100) : rawTierMaxRate;
+                        const tierName = (lvlTier === 'high') ? 'High Tier' : 'Main Tier';
 
-                        const vbvMbpsVal = parseFloat(genVbvManual.value) || parseFloat(genVbv.value) || 100;
+                        levelCapBadge.innerText = isHwSafe
+                            ? `Level ${lvlIdc} ${tierName} — Safe Cap: ${effectiveCapRate} Mbps | AU Guard: 0.75`
+                            : `Level ${lvlIdc} ${tierName} Cap: ${rawTierMaxRate} Mbps`;
+
+                        const vbvMbpsVal = Math.min(effectiveCapRate, parseFloat(genVbvManual.value) || parseFloat(genVbv.value) || effectiveCapRate);
                         const vbvKbps = Math.round(vbvMbpsVal * 1000);
                         const crfVal = genCrf.value;
                         const isExtreme = genQualitySwitch.checked;
-                        const isScrubbing = document.getElementById('genScrubbing').checked;
+                        const isScrubbing = genScrubbing.checked;
                         const embedInfo = document.getElementById('genInfoSEI').checked;
 
                         const refFrames = isHwSafe ? 4 : 5;
@@ -1644,12 +2066,16 @@
                         const gopType = isScrubbing ? '--no-open-gop' : '--open-gop';
 
                         let effectiveFps = chkSourceFrac.checked ? ((sourceBase * 1000) / 1001) : sourceBase;
+                        let activeFpsFracStr = chkSourceFrac.checked ? `${sourceBase * 1000}/1001` : `${sourceBase}`;
+
                         if (assumeBase !== 'original') {
                             const assumeInt = parseInt(assumeBase, 10);
                             effectiveFps = chkAssumeFrac.checked ? ((assumeInt * 1000) / 1001) : assumeInt;
+                            activeFpsFracStr = chkAssumeFrac.checked ? `${assumeInt * 1000}/1001` : `${assumeInt}`;
                         } else if (lockBase !== 'original') {
                             const lockInt = parseInt(lockBase, 10);
                             effectiveFps = chkLockFrac.checked ? ((lockInt * 1000) / 1001) : lockInt;
+                            activeFpsFracStr = chkLockFrac.checked ? `${lockInt * 1000}/1001` : `${lockInt}`;
                         }
                         const keyint = isScrubbing ? Math.round(effectiveFps * 2) : Math.round(effectiveFps * 10);
 
@@ -1679,8 +2105,26 @@
                         const calcMinLumInt = Math.round(masterMin * 10000);
                         const cleanMasterMax = Math.round(masterMax);
 
-                        const hdr10pMaxScl = Math.round(maxCll * 10);
-                        const hdr10pAvgRgb = Math.round(maxFall * 10);
+                        // SMPTE ST 2094-40 Luminance Scaling (0.1 cd/m² units, 17-bit max 100000)
+                        const hdr10pMaxScl = Math.min(100000, Math.max(10, Math.round(maxCll * 10)));
+                        const hdr10pAvgRgb = Math.min(hdr10pMaxScl, Math.max(10, Math.round(maxFall * 10)));
+
+                        // Monotonic 9-point luminance distribution curve [1, 5, 10, 25, 50, 75, 90, 95, 99]
+                        const distVals = [
+                            Math.max(1, Math.round(hdr10pAvgRgb * 0.02)),
+                            Math.max(2, Math.round(hdr10pAvgRgb * 0.05)),
+                            Math.max(5, Math.round(hdr10pAvgRgb * 0.12)),
+                            Math.max(10, Math.round(hdr10pAvgRgb * 0.35)),
+                            Math.max(15, Math.round(hdr10pAvgRgb * 0.75)),
+                            hdr10pAvgRgb,
+                            Math.round(hdr10pAvgRgb + (hdr10pMaxScl - hdr10pAvgRgb) * 0.45),
+                            Math.round(hdr10pAvgRgb + (hdr10pMaxScl - hdr10pAvgRgb) * 0.75),
+                            hdr10pMaxScl
+                        ];
+                        for (let i = 1; i < distVals.length; i++) {
+                            if (distVals[i] < distVals[i - 1]) distVals[i] = distVals[i - 1];
+                            if (distVals[i] > 100000) distVals[i] = 100000;
+                        }
 
                         let masterCoords = "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)";
                         switch (masterColorSpace) {
@@ -1702,6 +2146,20 @@
                         const isRawTuneGrain = useCustomTune && (tuneVal === 'grain');
                         const isSafeFilmGrain = useCustomTune && (tuneVal === 'film_grain_safe');
 
+                        if (!useCustomTune) {
+                            tuneFlagsBadge.innerText = 'Default (--preset slow psychovisuals)';
+                            tuneFlagsBadge.className = 'badge badge-light border text-muted';
+                        } else if (isSafeFilmGrain) {
+                            tuneFlagsBadge.innerText = '--no-strong-intra-smoothing --psy-rd 2.5 --psy-rdoq 2.0';
+                            tuneFlagsBadge.className = 'badge badge-primary';
+                        } else if (isRawTuneGrain) {
+                            tuneFlagsBadge.innerText = '--tune grain --qpstep 4 (AQ-3 omitted)';
+                            tuneFlagsBadge.className = 'badge badge-warning text-dark';
+                        } else {
+                            tuneFlagsBadge.innerText = `--tune ${tuneVal}`;
+                            tuneFlagsBadge.className = 'badge badge-primary';
+                        }
+
                         let args = `--preset slow --profile ${x265Profile} --level-idc ${lvlIdc} ${tierFlag} --output-depth ${bitDepth} --input-csp ${inputCsp} `;
 
                         if (useCustomTune) {
@@ -1714,15 +2172,17 @@
                             }
                         }
 
-                        // Always-on AU Size Guardrail (--max-ausize-factor 0.7) + Hardware-Safe 4-Slice CABAC Partitioning on 4K+/Level 5.0+
-                        args += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} --max-ausize-factor 0.7 `;
-                        if (isHwSafe && (lvlNum >= 5.0 || finalVideoW >= 2560)) {
-                            args += `--slices 4 `;
+                        args += `--vbv-maxrate ${vbvKbps} --vbv-bufsize ${vbvKbps} `;
+
+                        if (isHwSafe) {
+                            args += `--max-ausize-factor 0.75 `;
+                            if (lvlNum >= 5.0 || finalVideoW >= 2560) {
+                                args += `--slices 4 `;
+                            }
                         }
 
                         args += `--crf ${crfVal} `;
 
-                        // Omit --aq-mode 3 only when raw --tune grain is active (prevents rc-grain vs aq-mode 3 collision)
                         if (!isRawTuneGrain) {
                             args += `--aq-mode 3 `;
                         }
@@ -1753,7 +2213,7 @@
                             args += `--atc-sei 18 --pic-struct 0 `;
                         }
 
-                        // Inject Static HDR10 Mastering Display & MaxCLL only for PQ (non-DVP5) or when HDR10+ is active
+                        // Static HDR10 SEI is mandatory for PQ and required by HDR10+ LLC Spec Part 1
                         if ((transfer === 'pq' && !isDvp5) || useHdr10p) {
                             const hdr10OptFlag = (transfer === 'pq' && !isDvp5 && colorPrim === 'bt2020' && chroma === '420' && bitDepth === '10')
                                 ? '--hdr10 --hdr10-opt '
@@ -1761,9 +2221,9 @@
                             args += `${hdr10OptFlag}--master-display "${masterDisplayString}" --max-cll "${maxCll},${maxFall}" `;
                         }
 
-                        if (useHdr10p) {
-                            args += `--dhdr10-info fake_hdr10plus.json --dhdr10-opt `;
-                        }
+                        // NOTE: --dhdr10-info / --dhdr10-opt intentionally omitted here;
+                        // hdr10plus_tool injects valid per-frame Profile B SMPTE ST 2094-40 SEI right after x265
+                        // so every frame carries HDR10+ alongside Dolby Vision on all x265 builds.
 
                         args += `--videoformat component --repeat-headers --hrd --aud ${gopType} --min-keyint 1 --keyint ${keyint} --max-luma ${maxLuma} `;
                         args += embedInfo ? `--info ` : `--no-info `;
@@ -1782,22 +2242,63 @@
                             }
                         }
 
-                        // Step Sequencing for HDR10+ JSON & Dolby Vision RPU
+                        // Step Sequencing
                         let stepCount = 1;
                         const hdr10pContainer = document.getElementById('hdr10pCommandContainer');
+                        const hdr10pStepLabel = document.getElementById('hdr10pStepLabel');
+                        const hdr10pStepDesc = document.getElementById('hdr10pStepDesc');
+                        const hdr10pCommandOutput = document.getElementById('hdr10pCommandOutput');
                         const dvContainer = document.getElementById('dvCommandContainer');
+                        const mainEncodeContainer = document.getElementById('mainEncodeContainer');
                         const mainCommandLabel = document.getElementById('mainCommandLabel');
+                        const muxCommandContainer = document.getElementById('muxCommandContainer');
+                        const muxStepLabel = document.getElementById('muxStepLabel');
+                        const muxStepDesc = document.getElementById('muxStepDesc');
+                        const muxCommandOutput = document.getElementById('muxCommandOutput');
+
+                        const rmCmd = (osSelector.value === 'win') ? 'del' : 'rm';
 
                         if (useHdr10p) {
-                            let hdr10pColorStr = "DisplayP3";
-                            if (masterColorSpace === 'bt2020') hdr10pColorStr = "Rec2020";
-                            else if (masterColorSpace === 'bt709') hdr10pColorStr = "Rec709";
-
-                            const pqJsonString = `{"JSONInfo":{"HDR10plusProfile":"B","Version":"1.0"},"MasteringDisplay":{"ColorSpace":"${hdr10pColorStr}","MaxLuminance":${cleanMasterMax},"MinLuminance":${masterMin}},"ContentLightLevel":{"MaxCLL":${maxCll},"MaxFALL":${maxFall}},"SceneInfo":[{"SceneFrameIndex":0,"Sequence":0,"LuminanceParameters":{"AverageRGB":${hdr10pAvgRgb},"MaxScl":[${hdr10pMaxScl},${hdr10pMaxScl},${hdr10pMaxScl}]}}]}`;
-
                             hdr10pContainer.style.display = 'block';
-                            document.getElementById('hdr10pStepLabel').innerText = `Step ${stepCount}: HDR10+ Dynamic JSON Creator Command`;
-                            document.getElementById('hdr10pCommandOutput').innerText = `echo '${pqJsonString}' > fake_hdr10plus.json`;
+                            if (hdr10pMode.value === 'extract') {
+                                hdr10pStepLabel.innerText = `Step ${stepCount}: Extract Existing Dynamic HDR10+ JSON from Source`;
+                                hdr10pStepDesc.innerHTML = `Extracts native per-frame SMPTE ST 2094-40 HDR10+ dynamic metadata into <code>hdr10plus.json</code>.`;
+                                hdr10pCommandOutput.innerText = `ffmpeg -loglevel error -i "${safeInFile}" -map 0:v:0 -c:v copy -bsf:v hevc_mp4toannexb -f hevc - | hdr10plus_tool extract -o hdr10plus.json -`;
+                            } else {
+                                // Complete SMPTE ST 2094-40 Profile B JSON schema (automatically padded to every frame by hdr10plus_tool inject)
+                                const hdr10pJsonObj = {
+                                    JSONInfo: { HDR10plusProfile: "B", Version: "1.0" },
+                                    SceneInfo: [{
+                                        BezierCurveData: {
+                                            Anchors: [102, 205, 307, 410, 512, 614, 717, 819, 922],
+                                            KneePointX: 0,
+                                            KneePointY: 0
+                                        },
+                                        LuminanceParameters: {
+                                            AverageRGB: hdr10pAvgRgb,
+                                            LuminanceDistributions: {
+                                                DistributionIndex: [1, 5, 10, 25, 50, 75, 90, 95, 99],
+                                                DistributionValues: distVals
+                                            },
+                                            MaxScl: [hdr10pMaxScl, hdr10pMaxScl, hdr10pMaxScl]
+                                        },
+                                        NumberOfWindows: 1,
+                                        SceneFrameIndex: 0,
+                                        SceneId: 0,
+                                        SequenceFrameIndex: 0,
+                                        TargetedSystemDisplayMaximumLuminance: 400
+                                    }],
+                                    SceneInfoSummary: {
+                                        SceneFirstFrameIndex: [0],
+                                        SceneFrameNumbers: [1]
+                                    },
+                                    ToolInfo: { Tool: "hdr10plus_tool", Version: "1.7.0" }
+                                };
+                                const pqJsonString = JSON.stringify(hdr10pJsonObj);
+                                hdr10pStepLabel.innerText = `Step ${stepCount}: HDR10+ Profile B Metadata Creator Command`;
+                                hdr10pStepDesc.innerHTML = `Generates a spec-compliant SMPTE ST 2094-40 Profile B <code>hdr10plus.json</code> file. The main encode command below chains <code>hdr10plus_tool inject</code> to apply it to every frame alongside Dolby Vision.`;
+                                hdr10pCommandOutput.innerText = `echo '${pqJsonString}' > hdr10plus.json`;
+                            }
                             stepCount++;
                         } else {
                             hdr10pContainer.style.display = 'none';
@@ -1811,40 +2312,91 @@
 
                             if (isDvp5 || dvRpuMode.value === 'extract') {
                                 dvStepLabel.innerText = `Step ${stepCount}: Extract Existing Dolby Vision RPU from Source`;
-                                dvStepDesc.innerHTML = `Run this command first to demux and extract the native dynamic <code>RPU.bin</code> directly from your input file.`;
+                                dvStepDesc.innerHTML = `Demuxes and extracts the native dynamic <code>RPU.bin</code> directly from your input file.`;
                                 dvCommandOutput.innerText = `ffmpeg -loglevel error -i "${safeInFile}" -c:v copy -bsf:v hevc_mp4toannexb -f hevc - | dovi_tool extract-rpu - -o RPU.bin`;
                             } else {
                                 const targetDvProf = (transfer === 'hlg') ? '8.4' : '8.1';
                                 const dvConfigString = `{"length":999999,"mode":0,"algorithm":0,"level6":{"max_display_mastering_luminance":${cleanMasterMax},"min_display_mastering_luminance":${calcMinLumInt},"max_content_light_level":${maxCll},"max_frame_average_light_level":${maxFall}}}`;
                                 dvStepLabel.innerText = `Step ${stepCount}: Dolby Vision Profile ${targetDvProf} Static RPU Generator`;
-                                dvStepDesc.innerHTML = `Run this command first to generate a Profile ${targetDvProf} <code>RPU.bin</code> file using your Mastering Display and MaxCLL/MaxFALL parameters.`;
-                                dvCommandOutput.innerText = `echo '${dvConfigString}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile ${targetDvProf} -o RPU.bin && rm fake_dv.json`;
+                                dvStepDesc.innerHTML = `Generates a Profile ${targetDvProf} <code>RPU.bin</code> file using your Mastering Display and MaxCLL/MaxFALL parameters.`;
+                                dvCommandOutput.innerText = `echo '${dvConfigString}' > fake_dv.json && dovi_tool generate -j fake_dv.json --profile ${targetDvProf} -o RPU.bin && ${rmCmd} fake_dv.json`;
                             }
                             stepCount++;
                         } else {
                             dvContainer.style.display = 'none';
                         }
 
-                        if (stepCount > 1) {
-                            mainCommandLabel.innerText = `Step ${stepCount}: Generated Pipeline (Main Encode Command)`;
+                        // Final Single-Line Encode + Seamless Post-Encode Bitstream Injection Pipeline
+                        const tempEncoded = "temp_encoded.hevc";
+                        const tempDv = "temp_dv.hevc";
+                        let singleLineCommand = '';
+
+                        if (usePostDvInjection && useHdr10p) {
+                            singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${tempEncoded}" ${args.trim()} && ${rmCmd} render_script.vpy && dovi_tool inject-rpu -i "${tempEncoded}" --rpu-in RPU.bin -o "${tempDv}" && ${rmCmd} "${tempEncoded}" && hdr10plus_tool inject -i "${tempDv}" -j hdr10plus.json -o "${safeOutFile}" && ${rmCmd} "${tempDv}"`;
+                        } else if (useHdr10p) {
+                            singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${tempEncoded}" ${args.trim()} && ${rmCmd} render_script.vpy && hdr10plus_tool inject -i "${tempEncoded}" -j hdr10plus.json -o "${safeOutFile}" && ${rmCmd} "${tempEncoded}"`;
+                        } else if (usePostDvInjection) {
+                            singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${tempEncoded}" ${args.trim()} && ${rmCmd} render_script.vpy && dovi_tool inject-rpu -i "${tempEncoded}" --rpu-in RPU.bin -o "${safeOutFile}" && ${rmCmd} "${tempEncoded}"`;
                         } else {
-                            mainCommandLabel.innerText = `Generated Pipeline (Main Encode Command):`;
+                            singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && ${rmCmd} render_script.vpy`;
                         }
 
-                        // Final Single-Line Command Output (with automatic post-encode dovi_tool inject-rpu for experimental color spaces)
-                        let singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${safeOutFile}" ${args.trim()} && rm render_script.vpy`;
-                        
-                        if (usePostDvInjection) {
-                            const tempOut = "temp_encoded.hevc";
-                            singleLineCommand = `echo "${pyString}" > render_script.vpy && vspipe -c y4m render_script.vpy - | x265 - --y4m -o "${tempOut}" ${args.trim()} && rm render_script.vpy && dovi_tool inject-rpu -i "${tempOut}" --rpu-in RPU.bin -o "${safeOutFile}" && rm "${tempOut}"`;
+                        // Verify HDR10+ SEI presence in output bitstream
+                        if (useHdr10p) {
+                            singleLineCommand += ` && hdr10plus_tool --verify extract "${safeOutFile}"`;
                         }
 
-                        // Optional macOS VideoToolbox Hardware Decode Verification
+                        // Optional macOS VideoToolbox ASIC Hardware Verification
                         if (osSelector.value === 'mac' && genVtVerify.checked) {
                             singleLineCommand += ` && ffmpeg -v error -hwaccel videotoolbox -i "${safeOutFile}" -f null -`;
                         }
 
+                        if (stepCount > 1 || isHwSafe) {
+                            mainCommandLabel.innerText = `Step ${stepCount}: Generated Pipeline (Main Encode${useHdr10p ? ' + HDR10+ Injection' : ''} Command)`;
+                        } else {
+                            mainCommandLabel.innerText = `Generated Pipeline (Main Encode Command):`;
+                        }
                         document.getElementById('finalCommandOutput').innerText = singleLineCommand;
+
+                        // Universal MP4 Muxing & Final Verification Step (Shown when Hardware Safe Mode is ON)
+                        if (isHwSafe) {
+                            stepCount++;
+                            mainEncodeContainer.classList.add('pb-3', 'border-bottom');
+                            muxCommandContainer.style.display = 'block';
+                            muxStepLabel.innerText = `Step ${stepCount}: Universal Apple / iMovie / Smart TV MP4 Packaging & Final Verify`;
+
+                            const mp4OutFile = /\.mp4$/i.test(safeOutFile)
+                                ? safeOutFile
+                                : safeOutFile.replace(/\.(hevc|h265|265)$/i, '') + '.mp4';
+
+                            let muxCmd = '';
+                            if (useDv || useHdr10p) {
+                                const mp4BrandFlags = useDv ? '-brand mp42 -ab dby1' : '-brand mp42';
+                                const formatDesc = (useDv && useHdr10p)
+                                    ? 'both <b>Dolby Vision</b> (<code>hvc1</code>/<code>dvh1</code> + <code>dvvC</code>) and per-frame <b>HDR10+ Profile B</b> SEI'
+                                    : (useDv ? '<b>Dolby Vision</b> (<code>hvc1</code>/<code>dvh1</code> + <code>dvvC</code>)' : 'per-frame <b>HDR10+ Profile B</b> SEI');
+
+                                muxStepDesc.innerHTML = `Uses <code>MP4Box</code> to preserve ${formatDesc} with fast-start indexing and universal 320 kbps AAC-LC audio for Apple devices and Samsung/Sony/LG TVs.`;
+
+                                if (osSelector.value === 'win') {
+                                    muxCmd = `ffmpeg -y -loglevel error -i "${safeInFile}" -vn -map 0:a:0? -c:a aac -b:a 320k temp_audio.m4a && MP4Box -add "${safeOutFile}":fps=${activeFpsFracStr} -add temp_audio.m4a ${mp4BrandFlags} -new "${mp4OutFile}" && del temp_audio.m4a`;
+                                } else {
+                                    muxCmd = `ffmpeg -y -loglevel error -i "${safeInFile}" -vn -map 0:a:0? -c:a aac -b:a 320k temp_audio.m4a 2>/dev/null; if [ -s temp_audio.m4a ]; then MP4Box -add "${safeOutFile}":fps=${activeFpsFracStr} -add temp_audio.m4a ${mp4BrandFlags} -new "${mp4OutFile}" && rm -f temp_audio.m4a; else MP4Box -add "${safeOutFile}":fps=${activeFpsFracStr} ${mp4BrandFlags} -new "${mp4OutFile}"; fi`;
+                                }
+                            } else {
+                                muxStepDesc.innerHTML = `Uses <code>ffmpeg</code> to mux the HEVC stream with <code>-tag:v hvc1</code>, <code>+faststart</code> (moov atom at file start), and universal 320 kbps AAC-LC audio for QuickTime, iMovie, Sony Bravia, and LG/Samsung USB.`;
+                                muxCmd = `ffmpeg -y -r ${activeFpsFracStr} -i "${safeOutFile}" -i "${safeInFile}" -map 0:v:0 -map 1:a:0? -c:v copy -tag:v hvc1 -c:a aac -b:a 320k -movflags +faststart "${mp4OutFile}"`;
+                            }
+
+                            if (osSelector.value === 'mac' && genVtVerify.checked) {
+                                muxCmd += ` && ffmpeg -v error -hwaccel videotoolbox -i "${mp4OutFile}" -f null -`;
+                            }
+
+                            muxCommandOutput.innerText = muxCmd;
+                        } else {
+                            mainEncodeContainer.classList.remove('pb-3', 'border-bottom');
+                            muxCommandContainer.style.display = 'none';
+                        }
                     }
 
                     updateCommand();
